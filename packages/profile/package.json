@@ -1,5 +1,5 @@
 {
-  "name": "@us3r-network/data-model-profile",
+  "name": "@us3r-network/profile",
   "version": "0.1.0",
   "description": "the us3r data model",
   "type": "module",
