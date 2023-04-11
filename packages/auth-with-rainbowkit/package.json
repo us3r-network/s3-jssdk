@@ -1,0 +1,49 @@
+{
+  "name": "@us3r-network/auth-with-rainbowkit",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rimraf ./dist && rollup -c",
+    "pub": "npm publish --access public --tag latest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@rainbow-me/rainbowkit": "^0.12.7"
+  },
+  "peerDependencies": {
+    "@us3r-network/auth": "^0.2.0",
+    "ethers": "^5.0.0",
+    "react": "^18.2.0",
+    "wagmi": "^0.12.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.0",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-image": "^3.0.2",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.1.0",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@types/react": "^18.0.28",
+    "babel-loader": "^8.3.0",
+    "postcss": "^8.4.21",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rimraf": "^4.4.0",
+    "rollup": "^3.19.0",
+    "rollup-plugin-dts": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "tslib": "^2.5.0",
+    "typescript": "^4.9.5"
+  }
+}
