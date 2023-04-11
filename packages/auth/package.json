@@ -1,0 +1,36 @@
+{
+  "name": "@us3r-network/auth",
+  "version": "0.1.3",
+  "description": "",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pub": "npm publish --access public --tag latest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=v16.16"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "rollup": "^3.14.0",
+    "rollup-plugin-dts": "^5.1.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "@didtools/pkh-ethereum": "^0.2.1",
+    "@didtools/pkh-solana": "^0.1.0",
+    "did-session": "^2.0.0"
+  }
+}

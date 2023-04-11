@@ -1,0 +1,21 @@
+{
+  "name": "@us3r/s3-jssdk",
+  "version": "0.0.1",
+  "description": "a open source ceramic explorer",
+  "workspaces": [
+    "*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/us3r-network/s3-jssdk.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/us3r-network/s3-jssdk/issues"
+  },
+  "homepage": "https://github.com/us3r-network/s3-jssdk#readme"
+}
