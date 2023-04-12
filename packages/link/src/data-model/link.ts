@@ -4,6 +4,9 @@ import S3Model from "@us3r-network/data-model";
 import { Page } from "@ceramicnetwork/common";
 
 import { definition as linkDefinition } from "./link-runtime-composite";
+import { Vote } from "./vote";
+import { Favor } from "./favor";
+import { Score } from "./score";
 
 export type Creator = {
   id: string;
@@ -20,6 +23,14 @@ export type Link = {
   data?: string;
   createAt?: DateTime;
   modifiedAt?: DateTime;
+  votesCount?: number;
+  commentsCount?: number;
+  favorsCount?: number;
+  scoresCount?: number;
+  votes?: Page<Vote>;
+  comments?: Page<Comment>;
+  favors?: Page<Favor>;
+  scores?: Page<Score>;
 };
 
 export class S3LinkModel extends S3Model {
@@ -64,6 +75,10 @@ export class S3LinkModel extends S3Model {
                 title
                 createAt
                 modifiedAt
+                votesCount
+                commentsCount
+                favorsCount
+                scoresCount
               }
             }
             pageInfo {
@@ -88,10 +103,10 @@ export class S3LinkModel extends S3Model {
   }) {
     const composeClient = this.composeClient;
     const res = await composeClient.executeQuery<{
-      linkList: Page<Link>;
+      linkIndex: Page<Link>;
     }>(`
       query {
-        linkList(first: ${first}, after: "${after}") {
+        linkIndex(first: ${first}, after: "${after}") {
           edges {
             node {
               id
@@ -104,6 +119,10 @@ export class S3LinkModel extends S3Model {
               title
               createAt
               modifiedAt
+              votesCount
+              commentsCount
+              favorsCount
+              scoresCount
             }
           }
           pageInfo {
@@ -183,6 +202,66 @@ export class S3LinkModel extends S3Model {
             title
             createAt
             modifiedAt
+            votesCount
+            commentsCount
+            favorsCount
+            scoresCount
+            votes (first: 1000) {
+              edges {
+                node {
+                  id
+                  type
+                  revoke
+                  createAt
+                  modifiedAt
+                  creator {
+                    id
+                  }
+                }
+              }
+            }
+            comments (first: 1000) {
+              edges {
+                node {
+                  id
+                  text
+                  revoke
+                  createAt
+                  modifiedAt
+                  creator {
+                    id
+                  }
+                }
+              }
+            }
+            favors (first: 1000) {
+              edges {
+                node {
+                  id
+                  revoke
+                  createAt
+                  modifiedAt
+                  creator {
+                    id
+                  }
+                }
+              }
+            }
+            scores (first: 1000) {
+              edges {
+                node {
+                  id
+                  text
+                  value
+                  revoke
+                  createAt
+                  modifiedAt
+                  creator {
+                    id
+                  }
+                }
+              }
+            }
           }
         }
       }
