@@ -1,6 +1,12 @@
+// import { RuntimeCompositeDefinition } from "@composedb/types";
+// import type { CeramicApi } from "@ceramicnetwork/common";
+// import { S3Model, modelName } from "@us3r-network/data-model";
+
+import { ComposeClient } from "@composedb/client";
 import { RuntimeCompositeDefinition } from "@composedb/types";
+import { DIDSession } from "did-session";
 import type { CeramicApi } from "@ceramicnetwork/common";
-import S3Model from "@us3r-network/data-model";
+import { DID } from "dids";
 
 import { definition as profileDefinition } from "./profile-runtime-composite";
 
@@ -18,15 +24,29 @@ export type Wallet = {
   primary: boolean;
 };
 
-export default class S3ProfileModel extends S3Model {
+export class S3ProfileModel {
+  composeClient: ComposeClient;
+
   constructor(
     ceramic: CeramicApi | string,
     definition?: RuntimeCompositeDefinition
   ) {
-    super(
-      ceramic,
-      definition ?? (profileDefinition as RuntimeCompositeDefinition)
-    );
+    this.composeClient = new ComposeClient({
+      ceramic: ceramic,
+      definition:
+        definition || (profileDefinition as RuntimeCompositeDefinition),
+    });
+  }
+  public authComposeClient(session: DIDSession) {
+    if (!session || (session.hasSession && session.isExpired)) {
+      throw new Error("Please login with wallet first!");
+    }
+    this.composeClient.setDID(session.did);
+  }
+
+  public resetComposeClient() {
+    const did = new DID();
+    this.composeClient.setDID(did);
   }
   public async queryPersonalProfile() {
     const profileComposeClient = this.composeClient;
