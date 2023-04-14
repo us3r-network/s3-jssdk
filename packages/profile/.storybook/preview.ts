@@ -17,7 +17,7 @@ const preview: Preview = {
       React.createElement(
         ProfileProvider,
         {
-          ceramicHost: "http://13.215.254.225:7007",
+          ceramicHost: process.env.STORYBOOK_CERAMIC_HOST as string,
           themeConfig: {
             mode: "dark",
           },
