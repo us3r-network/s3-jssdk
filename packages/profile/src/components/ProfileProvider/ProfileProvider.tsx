@@ -1,21 +1,20 @@
-import { ReactNode } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 import { ThemeProvider } from "styled-components";
 
-import { getTheme, Theme, ThemeType } from "../../themes";
+import { getTheme, Theme, ThemeMode } from "../../themes";
 import AuthenticationProvider, {
   AuthenticationContextValue,
 } from "./AuthenticationContext";
 import ProfileStateProvider from "./ProfileStateContext";
 
-export interface ProfileProviderProps {
-  children: ReactNode;
+export interface ProfileProviderProps extends PropsWithChildren {
   // ceramic host
   ceramicHost: string;
   // authorization adapter
   authAdapter?: AuthenticationContextValue;
   // theme config
   themeConfig?: {
-    themeType?: ThemeType;
+    mode?: ThemeMode;
     darkTheme?: Theme;
     lightTheme?: Theme;
   };

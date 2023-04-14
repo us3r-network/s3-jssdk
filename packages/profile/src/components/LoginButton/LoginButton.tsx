@@ -8,9 +8,20 @@ import {
   useSession,
 } from "../ProfileProvider/AuthenticationContext";
 
-export type LoginButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
+export type LoginButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  avatarClassName?: string;
+  textClassName?: string;
+  nameTextClassName?: string;
+  loginTextClassName?: string;
+};
 
-function LoginButton({ onClick, ...otherProps }: LoginButtonProps) {
+function LoginButton({
+  onClick,
+  avatarClassName = "us3r-LoginButton__avatar",
+  nameTextClassName = "us3r-LoginButton__text--name",
+  loginTextClassName = "us3r-LoginButton__text--login",
+  ...otherProps
+}: LoginButtonProps) {
   const { signIn } = useAuthentication();
   const session = useSession();
   return (
@@ -21,23 +32,19 @@ function LoginButton({ onClick, ...otherProps }: LoginButtonProps) {
           onClick(e);
           return;
         }
-        signIn();
+        if (!session) {
+          signIn();
+        }
       }}
-      className="us3r-LoginButton"
       {...otherProps}
     >
       {session ? (
         <>
-          <UserAvatar did={session.id} className="us3r-LoginButton__avatar" />
-          <Text className="us3r-LoginButton__text us3r-LoginButton__text--login">
-            <Username did={session.id} />
-          </Text>
+          <UserAvatar did={session.id} className={avatarClassName} />
+          <Username did={session.id} className={nameTextClassName} />
         </>
       ) : (
-        <Text
-          variant={"heading"}
-          className="us3r-LoginButton__text us3r-LoginButton__text--logout"
-        >
+        <Text variant={"heading"} className={loginTextClassName}>
           Login
         </Text>
       )}

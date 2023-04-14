@@ -83,7 +83,7 @@ export interface Us3rAuthContextValue {
   // session ready
   ready: boolean;
   // sign in action to open rainbowkit modal
-  signIn: () => void;
+  signIn: () => Promise<void>;
   // sign out action
   signOut: () => void;
 }
@@ -92,7 +92,7 @@ const defaultContextValue: Us3rAuthContextValue = {
   session: undefined,
   status: "unauthenticated",
   ready: false,
-  signIn: () => {},
+  signIn: async () => {},
   signOut: () => {},
 };
 
@@ -138,7 +138,7 @@ function Us3rAuthWrap({ children }: PropsWithChildren) {
     },
   });
 
-  const signIn = useCallback(() => {
+  const signIn = useCallback(async () => {
     if (openConnectModal) openConnectModal();
   }, [openConnectModal]);
 

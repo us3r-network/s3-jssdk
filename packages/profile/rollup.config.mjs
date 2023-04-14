@@ -39,7 +39,11 @@ export default [
       image(),
       typescript({
         tsconfig: "./tsconfig.json",
-        exclude: ["src/stories/**/*"],
+        exclude: [
+          "src/stories/**/*",
+          "src/**/*.mdx",
+          "src/**/*.stories.@(js|jsx|ts|tsx)",
+        ],
       }),
       postcss(),
       terser(),

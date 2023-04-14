@@ -1,11 +1,16 @@
 import { ButtonHTMLAttributes } from "react";
-import { Text } from "rebass/styled-components";
-import { Button } from "rebass/styled-components";
+import { Button, Text } from "rebass/styled-components";
 import { useAuthentication } from "../ProfileProvider/AuthenticationContext";
 
-export type LogoutButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
+export type LogoutButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  textClassName?: string;
+};
 
-function LogoutButton({ onClick, ...otherProps }: LogoutButtonProps) {
+function LogoutButton({
+  onClick,
+  textClassName = "us3r-LogoutButton__text",
+  ...otherProps
+}: LogoutButtonProps) {
   const { signOut } = useAuthentication();
   return (
     <Button
@@ -17,11 +22,10 @@ function LogoutButton({ onClick, ...otherProps }: LogoutButtonProps) {
         }
         signOut();
       }}
-      className="us3r-LogoutButton"
       {...otherProps}
     >
-      <Text variant={"heading"} className="us3r-LogoutButton__text">
-        Login
+      <Text variant={"heading"} className={textClassName}>
+        Logout
       </Text>
     </Button>
   );

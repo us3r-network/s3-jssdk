@@ -6,6 +6,7 @@ export {
   useProfileState,
   useProfileForDid,
 } from "./components/ProfileProvider/ProfileStateContext";
+
 export {
   useAuthentication,
   useIsAuthenticated,

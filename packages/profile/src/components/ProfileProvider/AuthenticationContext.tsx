@@ -22,7 +22,7 @@ export interface AuthenticationContextValue {
   status: AuthenticationStatus;
   // session ready
   ready: boolean;
-  // sign in action to open rainbowkit modal
+  // sign in action
   signIn: () => Promise<void>;
   // sign out action
   signOut: () => void;

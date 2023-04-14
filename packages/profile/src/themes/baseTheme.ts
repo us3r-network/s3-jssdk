@@ -1,8 +1,4 @@
 export default {
-  colors: {
-    metamaskWallet: "#F6851B",
-    phantomWallet: "#551FF4",
-  },
   fonts: {
     body: "system-ui, sans-serif",
     heading: "inherit",
@@ -44,19 +40,6 @@ export default {
       textTransform: "uppercase",
       letterSpacing: "0.1em",
     },
-    metamaskWallet: {
-      color: "white",
-      fontWeight: "heading",
-    },
-    phantomWallet: {
-      color: "white",
-      fontWeight: "heading",
-    },
-    loginLastText: {
-      fontSize: 2,
-      color: "gray",
-      fontWeight: "body",
-    },
   },
   variants: {
     avatar: {
@@ -97,16 +80,6 @@ export default {
       variant: "buttons.primary",
       color: "background",
       bg: "secondary",
-    },
-    metamaskWallet: {
-      variant: "buttons.primary",
-      bg: "metamaskWallet",
-      color: "text",
-    },
-    phantomWallet: {
-      variant: "buttons.primary",
-      bg: "phantomWallet",
-      color: "text",
     },
   },
   styles: {

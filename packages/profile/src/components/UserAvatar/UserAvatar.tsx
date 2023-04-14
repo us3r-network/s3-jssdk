@@ -3,26 +3,30 @@ import { StyledComponentPropsWithRef } from "styled-components";
 import multiavatar from "@multiavatar/multiavatar";
 import { Image } from "rebass/styled-components";
 import { useProfileForDidOrSession } from "../ProfileProvider/ProfileStateContext";
+import { useSession } from "../ProfileProvider/AuthenticationContext";
 
 type UserAvatarProps = StyledComponentPropsWithRef<"img"> & {
-  did: string;
+  did?: string;
 };
 const getUserAvatarSrc = (did: string) =>
   `data:image/svg+xml;utf-8,${encodeURIComponent(multiavatar(did))}`;
 
-export default function UserAvatar({ did, ...otherProps }: UserAvatarProps) {
-  const defaultAvatarUrl = getUserAvatarSrc(did || "did:pkh:0");
-  const profile = useProfileForDidOrSession(did);
+export default function UserAvatar(props: UserAvatarProps) {
+  const session = useSession();
+  const avatarDid =
+    (props.hasOwnProperty("did") ? props.did : session?.id) || "";
+  const defaultAvatarUrl = getUserAvatarSrc(avatarDid || "did:pkh:0");
+
+  const profile = useProfileForDidOrSession(avatarDid);
   const avatarSrc = profile?.avatar || defaultAvatarUrl;
   return (
     <Image
       variant={"avatar"}
-      className="us3r-User__avatar"
       src={avatarSrc}
       onError={(el: React.SyntheticEvent<HTMLImageElement, Event>) => {
         el.currentTarget.src = defaultAvatarUrl;
       }}
-      {...otherProps}
+      {...props}
     />
   );
 }

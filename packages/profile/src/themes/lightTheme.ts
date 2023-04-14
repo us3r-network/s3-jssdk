@@ -3,7 +3,6 @@ import baseTheme from "./baseTheme";
 export default {
   ...baseTheme,
   colors: {
-    ...baseTheme?.colors,
     text: "#000",
     background: "#fff",
     primary: "#07c",
