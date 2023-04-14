@@ -1,6 +1,7 @@
 import type { Preview } from "@storybook/react";
 import ProfileStateProvider from "../src/ProfileStateProvider";
 import React from "react";
+import { Us3rAuthProvider } from "@us3r-network/auth";
 
 const preview: Preview = {
   parameters: {
@@ -15,14 +16,18 @@ const preview: Preview = {
   decorators: [
     (Story) =>
       React.createElement(
-        ProfileStateProvider,
-        {
-          ceramicHost: process.env.STORYBOOK_CERAMIC_HOST as string,
-          themeConfig: {
-            mode: "dark",
+        Us3rAuthProvider,
+        null,
+        React.createElement(
+          ProfileStateProvider,
+          {
+            ceramicHost: process.env.STORYBOOK_CERAMIC_HOST as string,
+            themeConfig: {
+              mode: "dark",
+            },
           },
-        },
-        React.createElement(Story, null)
+          React.createElement(Story, null)
+        )
       ),
   ],
 };
