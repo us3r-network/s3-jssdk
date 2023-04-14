@@ -10,7 +10,8 @@ import {
 } from "react";
 import { useSession } from "@us3r-network/auth";
 import S3ProfileModel, { Profile } from "./data-model";
-import { Theme, ThemeMode } from "./themes";
+import { Theme, ThemeMode, getTheme } from "./themes";
+import { ThemeProvider } from "styled-components";
 
 let s3ProfileModel: S3ProfileModel | null = null;
 export const getS3ProfileModel = () => s3ProfileModel;
@@ -39,6 +40,7 @@ export interface ProfileStateProviderProps extends PropsWithChildren {
 export default function ProfileStateProvider({
   children,
   ceramicHost,
+  themeConfig,
 }: ProfileStateProviderProps) {
   if (!ceramicHost) throw Error("ceramicHost is required");
 
@@ -85,7 +87,7 @@ export default function ProfileStateProvider({
         [profile, getProfileWithDid]
       )}
     >
-      {children}
+      <ThemeProvider theme={getTheme(themeConfig)}>{children}</ThemeProvider>
     </ProfileStateContext.Provider>
   );
 }
