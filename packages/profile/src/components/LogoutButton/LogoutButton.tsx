@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes } from "react";
 import { Button, Text } from "rebass/styled-components";
-import { useAuthentication } from "../ProfileProvider/AuthenticationContext";
+import { useAuthentication } from "@us3r-network/auth";
 
 export type LogoutButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   textClassName?: string;

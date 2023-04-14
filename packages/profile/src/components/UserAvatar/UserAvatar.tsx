@@ -2,8 +2,8 @@ import React from "react";
 import { StyledComponentPropsWithRef } from "styled-components";
 import multiavatar from "@multiavatar/multiavatar";
 import { Image } from "rebass/styled-components";
-import { useProfileForDidOrSession } from "../ProfileProvider/ProfileStateContext";
-import { useSession } from "../ProfileProvider/AuthenticationContext";
+import { useProfileForDidOrSession } from "../../ProfileStateProvider";
+import { useSession } from "@us3r-network/auth";
 
 type UserAvatarProps = StyledComponentPropsWithRef<"img"> & {
   did?: string;

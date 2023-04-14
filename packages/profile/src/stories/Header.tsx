@@ -1,9 +1,9 @@
 import LoginButton from "../components/LoginButton/LoginButton";
 import LogoutButton from "../components/LogoutButton/LogoutButton";
-import { useSession } from "../components/ProfileProvider/AuthenticationContext";
 import styled from "styled-components";
 import UserName from "../components/UserName/UserName";
 import { UserAvatar } from "../components";
+import { useSession } from "@us3r-network/auth";
 
 export default function Header() {
   const session = useSession();

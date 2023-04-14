@@ -1,5 +1,4 @@
 import {
-  ReactNode,
   useEffect,
   useMemo,
   useState,
@@ -7,9 +6,11 @@ import {
   useContext,
   useCallback,
   useRef,
+  PropsWithChildren,
 } from "react";
-import { useSession } from "./AuthenticationContext";
-import S3ProfileModel, { Profile } from "../../data-model";
+import { useSession } from "@us3r-network/auth";
+import S3ProfileModel, { Profile } from "./data-model";
+import { Theme, ThemeMode } from "./themes";
 
 let s3ProfileModel: S3ProfileModel | null = null;
 export const getS3ProfileModel = () => s3ProfileModel;
@@ -24,15 +25,23 @@ const defaultContextValue: ProfileStateContextValue = {
 };
 const ProfileStateContext = createContext(defaultContextValue);
 
-export interface ProfileStateProviderProps {
-  children: ReactNode;
+export interface ProfileStateProviderProps extends PropsWithChildren {
+  // ceramic host
   ceramicHost: string;
+  // theme config
+  themeConfig?: {
+    mode?: ThemeMode;
+    darkTheme?: Theme;
+    lightTheme?: Theme;
+  };
 }
 
 export default function ProfileStateProvider({
   children,
   ceramicHost,
 }: ProfileStateProviderProps) {
+  if (!ceramicHost) throw Error("ceramicHost is required");
+
   // TODO: Whether ceramicHost allows switching
   useEffect(() => {
     if (!s3ProfileModel) {

@@ -21,7 +21,7 @@
     "@composedb/devtools": "^0.4.3",
     "@composedb/types": "^0.4.3",
     "@multiavatar/multiavatar": "^1.0.7",
-    "@us3r-network/auth": "^0.2.0",
+    "@us3r-network/auth": "^0.2.1",
     "@us3r-network/data-model": "^0.1.0",
     "did-session": "^2.0.0",
     "rebass": "^4.0.7",
@@ -51,8 +51,6 @@
     "@types/jest": "^29.5.0",
     "@types/react": "^18.0.28",
     "@types/rebass": "^4.0.10",
-    "@us3r-network/auth-with-rainbowkit": "^0.1.0",
-    "ethers": "^6.3.0",
     "jest": "^29.5.0",
     "prop-types": "15.8.1",
     "react": "^18.2.0",
@@ -64,7 +62,6 @@
     "storybook": "7.0.4",
     "ts-jest": "^29.1.0",
     "tslib": "^2.5.0",
-    "typescript": "^5.0.4",
-    "wagmi": "^0.12.10"
+    "typescript": "^5.0.4"
   }
 }

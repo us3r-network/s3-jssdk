@@ -1,5 +1,5 @@
 import type { Preview } from "@storybook/react";
-import ProfileProvider from "../src/components/ProfileProvider/ProfileProvider";
+import ProfileStateProvider from "../src/ProfileStateProvider";
 import React from "react";
 
 const preview: Preview = {
@@ -15,7 +15,7 @@ const preview: Preview = {
   decorators: [
     (Story) =>
       React.createElement(
-        ProfileProvider,
+        ProfileStateProvider,
         {
           ceramicHost: process.env.STORYBOOK_CERAMIC_HOST as string,
           themeConfig: {

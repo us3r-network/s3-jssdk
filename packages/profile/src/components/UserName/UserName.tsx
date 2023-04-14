@@ -1,9 +1,9 @@
 import { StyledComponentPropsWithRef } from "styled-components";
 import { Text } from "rebass/styled-components";
 import { useMemo } from "react";
-import { useProfileForDidOrSession } from "../ProfileProvider/ProfileStateContext";
+import { useProfileForDidOrSession } from "../../ProfileStateProvider";
 import { shortDid } from "../../utils/short";
-import { useSession } from "../ProfileProvider/AuthenticationContext";
+import { useSession } from "@us3r-network/auth";
 
 type Props = StyledComponentPropsWithRef<"div"> & {
   did?: string;

@@ -29,7 +29,11 @@ import {
   omniWallet,
   imTokenWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { Us3rAuth } from "@us3r-network/auth";
+import {
+  AuthenticationStatus,
+  defaultAuthenticationContext,
+  Us3rAuth,
+} from "@us3r-network/auth";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -70,33 +74,9 @@ const wagmiClient = createClient({
 const us3rAuthInstance = new Us3rAuth();
 type Session = typeof us3rAuthInstance.session;
 
-export type AuthenticationStatus =
-  | "loading"
-  | "unauthenticated"
-  | "authenticated";
-
-export interface Us3rAuthContextValue {
-  // did-session
-  session: Session;
-  // authorization status
-  status: AuthenticationStatus;
-  // session ready
-  ready: boolean;
-  // sign in action to open rainbowkit modal
-  signIn: () => Promise<void>;
-  // sign out action
-  signOut: () => void;
-}
-
-const defaultContextValue: Us3rAuthContextValue = {
-  session: undefined,
-  status: "unauthenticated",
-  ready: false,
-  signIn: async () => {},
-  signOut: () => {},
-};
-
-const Us3rAuthContext = createContext(defaultContextValue);
+const Us3rAuthWithRainbowkitContext = createContext(
+  defaultAuthenticationContext
+);
 
 function Us3rAuthWrap({ children }: PropsWithChildren) {
   const { openConnectModal } = useConnectModal();
@@ -150,7 +130,7 @@ function Us3rAuthWrap({ children }: PropsWithChildren) {
   }, [disconnect]);
 
   return (
-    <Us3rAuthContext.Provider
+    <Us3rAuthWithRainbowkitContext.Provider
       value={useMemo(
         () => ({
           session,
@@ -163,11 +143,13 @@ function Us3rAuthWrap({ children }: PropsWithChildren) {
       )}
     >
       {children}
-    </Us3rAuthContext.Provider>
+    </Us3rAuthWithRainbowkitContext.Provider>
   );
 }
 
-export default function Us3rAuthProvider({ children }: PropsWithChildren) {
+export default function Us3rAuthWithRainbowkitProvider({
+  children,
+}: PropsWithChildren) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
@@ -177,11 +159,11 @@ export default function Us3rAuthProvider({ children }: PropsWithChildren) {
   );
 }
 
-export function useUs3rAuth() {
-  const context = useContext(Us3rAuthContext);
+export function useUs3rAuthWithRainbowkit() {
+  const context = useContext(Us3rAuthWithRainbowkitContext);
   if (!context) {
     throw Error(
-      "useUs3rAuth can only be used within the Us3rAuthProvider component"
+      "useUs3rAuthWithRainbowkit can only be used within the Us3rAuthWithRainbowkitProvider component"
     );
   }
   return context;
