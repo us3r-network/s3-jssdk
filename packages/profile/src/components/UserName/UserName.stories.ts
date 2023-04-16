@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import UserName from "./UserName";
+import UserNameComponent from "./UserName";
 const meta = {
   title: "Components/UserName",
-  component: UserName,
+  component: UserNameComponent,
   tags: ["autodocs"],
-} satisfies Meta<typeof UserName>;
+} satisfies Meta<typeof UserNameComponent>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;

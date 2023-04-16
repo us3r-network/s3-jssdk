@@ -1,8 +1,10 @@
 {
-	"extends": "../../tsconfig.json",
-	"compilerOptions": {
-	},
-	"include": ["src"],
-	"exclude": ["node_modules", "build"]
-  }
-  
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@us3r-network/profile": ["./src/index.ts"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "build"]
+}

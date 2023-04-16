@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import LogoutButton from "./LogoutButton";
+import LogoutButtonComponent from "./LogoutButton";
 const meta = {
   title: "Components/LogoutButton",
-  component: LogoutButton,
+  component: LogoutButtonComponent,
   tags: ["autodocs"],
-} satisfies Meta<typeof LogoutButton>;
+} satisfies Meta<typeof LogoutButtonComponent>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
-export const Primary: Story = {};
+export const LogoutButton: Story = {};

@@ -1,8 +1,86 @@
-import { Meta } from "@storybook/blocks";
-import Logo from "./assets/logo.svg";
+import { Meta, Canvas, Source } from "@storybook/blocks";
+import App from "!!raw-loader!./App";
+import * as HeaderStories from "./Header.stories";
 
-<Meta title="S3 Introduction" />
+<Meta title="Introduction" />
 
-# Welcome to Us3r-network
+# @us3r-network/profile
 
-<img src={Logo} alt="logo" />
+We created a data model about user profile based on ceramic, and provided crud SDK for the model, and commonly used react components related to profile
+
+[![License](https://img.shields.io/badge/License-MIT.svg)](https://opensource.org/licenses/MIT)
+[![npm version](https://badge.fury.io/js/%40us3r-network%2Fprofile.svg)](https://badge.fury.io/js/%40us3r-network%2Fprofile)
+[![npm downloads](https://img.shields.io/npm/dm/%40us3r-network%2Fprofile.svg)](https://www.npmjs.com/package/@us3r-network/profile)
+
+## Install
+
+npm
+
+```bash
+npm install @us3r-network/auth @us3r-network/profile
+```
+
+yarn
+
+```bash
+yarn add @us3r-network/auth @us3r-network/profile
+```
+
+## Usage (react components)
+
+/src/App.tsx
+
+<Source code={App} />
+
+/src/components/Header.tsx
+
+<Canvas of={HeaderStories.Header} />
+
+## Usage (JsSDK)
+
+### Init Profile instance
+
+```ts
+...
+import { S3ProfileModel } from "@us3r-network/profile";
+
+const CERAMIC_HOST = process.env.CERAMIC_HOST
+
+const s3Profile = new S3ProfileModel(CERAMIC_HOST)
+...
+```
+
+### Auth Profile instance with did-session
+
+```ts
+const didSession = "...";
+s3Profile.authModelWithSess(didSession);
+```
+
+### S3Profile Read & Write
+
+after authorization, the profile can write with method
+
+```ts
+
+...
+await s3Profile.mutationPersonalProfile(/** {...profile} */)
+...
+
+```
+
+and read the profile with
+
+```ts
+...
+await s3Profile.queryPersonalProfile()
+...
+```
+
+or get others profile with a did
+
+```ts
+...
+await s3Profile.queryProfileWithDid(/** did */)
+...
+```

@@ -1,22 +1,27 @@
+import HeaderExample from "./Header";
 import type { Meta, StoryObj } from "@storybook/react";
-import Header from "./Header";
+
+import code from "!!raw-loader!./Header";
 
 const meta = {
-  title: "Example/Header",
-  component: Header,
+  title: "Examples/Header",
+  component: HeaderExample,
   parameters: {
     // More on how to position stories at: https://storybook.js.org/docs/react/configure/story-layout
     layout: "fullscreen",
   },
-} satisfies Meta<typeof Header>;
+} satisfies Meta<typeof HeaderExample>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const ExampleHeader: Story = {
+export const Header: Story = {
   parameters: {
-    SourceBuffer: {
-      code: ``,
+    docs: {
+      source: {
+        code,
+      },
+      canvas: { sourceState: "shown" },
     },
   },
 };
