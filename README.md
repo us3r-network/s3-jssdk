@@ -8,7 +8,7 @@ To get started with S3-JSSDK for the Ceramic Network, simply install the package
 
 ## Usage
 
-S3-JSSDK for the Ceramic Network provides a simple API for interacting with data on the Ceramic network. Here are some examples:
+S3-JSSDK for the Ceramic Network provides ......
 
 ## Contributing
 
