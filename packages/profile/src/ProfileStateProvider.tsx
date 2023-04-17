@@ -105,30 +105,43 @@ export function useProfileState() {
 export function useProfileForDid(did: string) {
   const { getProfileWithDid } = useProfileState();
   const [data, setData] = useState<Profile>();
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getProfileWithDid(did)
-      .then((data) => {
-        if (data) setData(data);
-      })
-      .catch(console.error);
-  }, [did, getProfileWithDid]);
-  return data;
-}
-
-export function useProfileForDidOrSession(did: string) {
-  const session = useSession();
-  const { profile, getProfileWithDid } = useProfileState();
-  const [data, setData] = useState<Profile>();
-  useEffect(() => {
-    if (did === session?.id) {
-      setData({ ...profile });
+    setLoading(true);
+    if (!did) {
       return;
     }
     getProfileWithDid(did)
       .then((data) => {
         if (data) setData(data);
       })
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, [did, getProfileWithDid]);
+  return { data, loading };
+}
+
+export function useProfileForDidOrSession(did: string) {
+  const session = useSession();
+  const { profile, getProfileWithDid } = useProfileState();
+  const [data, setData] = useState<Profile>();
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    setLoading(true);
+    if (!did) {
+      return;
+    }
+    if (did === session?.id) {
+      setData({ ...profile });
+      setLoading(false);
+      return;
+    }
+    getProfileWithDid(did)
+      .then((data) => {
+        if (data) setData(data);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, [did, profile, session, getProfileWithDid]);
-  return data;
+  return { data, loading };
 }

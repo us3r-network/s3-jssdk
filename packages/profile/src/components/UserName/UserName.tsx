@@ -13,9 +13,9 @@ export default function UserName({ name, ...otherProps }: Props) {
   const session = useSession();
   const nameDid =
     (otherProps.hasOwnProperty("did") ? otherProps.did : session?.id) || "";
-  const profile = useProfileForDidOrSession(nameDid);
+  const { data } = useProfileForDidOrSession(nameDid);
 
   const pubkey = useMemo(() => shortDid(nameDid), [nameDid]);
 
-  return <Text {...otherProps}>{name || profile?.name || pubkey}</Text>;
+  return <Text {...otherProps}>{name || data?.name || pubkey}</Text>;
 }
