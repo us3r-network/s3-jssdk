@@ -1,10 +1,27 @@
 # S3-JSSDK (for the Ceramic Network)
 
 S3-JSSDK for the Ceramic Network is a library that allows you to manipulate data on the Ceramic network easily and securely.
+It enables you to easily add user authentication, session management, and more to your dapp.
 
 ## Getting Started
 
 To get started with S3-JSSDK for the Ceramic Network, simply install the package using npm:
+
+```
+npm install @us3r-network/auth @us3r-network/profile @us3r-network/link
+```
+
+Then, include the library in your project:
+
+```javascript
+import { Us3rAuthProvider } from "@us3r-network/auth";
+import { ProfileStateProvider } from "@us3r-network/profile";
+import { Us3rLinkProvider } from "@us3r-network/link";
+```
+
+## Documentation
+
+https://docs.s3.xyz
 
 ## SDKs
 
