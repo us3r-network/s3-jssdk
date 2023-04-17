@@ -1,0 +1,23 @@
+{
+  "name": "jest-environment-s3network",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.mjs",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ceramicnetwork/core": "^2.31.0",
+    "dids": "^4.0.0",
+    "ipfs-core": "0.17",
+    "jest-environment-node": "^29.5.0",
+    "key-did-provider-ed25519": "^3.0.0",
+    "key-did-resolver": "^3.0.0",
+    "tmp-promise": "^3.0.3",
+    "uint8arrays": "^4.0.3"
+  }
+}

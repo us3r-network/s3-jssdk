@@ -1,6 +1,6 @@
 import { RuntimeCompositeDefinition } from "@composedb/types";
 import type { CeramicApi } from "@ceramicnetwork/common";
-import S3Model from "@us3r-network/data-model";
+import { S3Model } from "@us3r-network/data-model";
 
 import { definition as profileDefinition } from "./profile-runtime-composite";
 
@@ -18,7 +18,7 @@ export type Wallet = {
   primary: boolean;
 };
 
-export default class S3ProfileModel extends S3Model {
+export class S3ProfileModel extends S3Model {
   constructor(
     ceramic: CeramicApi | string,
     definition?: RuntimeCompositeDefinition
