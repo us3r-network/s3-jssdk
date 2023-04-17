@@ -1,4 +1,4 @@
-# S3-JSSDK (for the Ceramic Network)
+# S3-JSSDK
 
 S3-JSSDK is a library that allows you to manipulate data on the Ceramic network easily and securely.
 It enables you to easily add user authentication, session management, and more to your dapp.
