@@ -6,9 +6,13 @@ S3-JSSDK for the Ceramic Network is a library that allows you to manipulate data
 
 To get started with S3-JSSDK for the Ceramic Network, simply install the package using npm:
 
-## Usage
+## SDKs
 
-S3-JSSDK for the Ceramic Network provides ......
+TODO
+
+## Components
+
+TODO
 
 ## Contributing
 
