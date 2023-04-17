@@ -3,7 +3,10 @@ import { Text } from "rebass/styled-components";
 import UserAvatar from "../UserAvatar/UserAvatar";
 import { Button } from "rebass/styled-components";
 import Username from "../UserName/UserName";
-import { useAuthentication, useSession } from "@us3r-network/auth";
+import {
+  useAuthentication,
+  useSession,
+} from "@us3r-network/auth-with-rainbowkit";
 
 export type LoginButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   avatarClassName?: string;

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useSession } from "@us3r-network/auth";
+import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import {
   LoginButton,
   LogoutButton,

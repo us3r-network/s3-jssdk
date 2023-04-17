@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/auth-with-rainbowkit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -20,10 +20,10 @@
   "dependencies": {
     "ethers": "^5.0.0",
     "wagmi": "^0.12.0",
-    "@rainbow-me/rainbowkit": "^0.12.7"
+    "@rainbow-me/rainbowkit": "^0.12.7",
+    "@us3r-network/auth": "^0.2.2"
   },
   "peerDependencies": {
-    "@us3r-network/auth": "^0.2.1",
     "react": "^18.2.0"
   },
   "devDependencies": {
@@ -44,7 +44,6 @@
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
     "tslib": "^2.5.0",
-    "typescript": "^4.9.5",
-    "@us3r-network/auth": "^0.2.1"
+    "typescript": "^4.9.5"
   }
 }

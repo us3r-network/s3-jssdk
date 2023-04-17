@@ -31,7 +31,7 @@
     "styled-components": "^5.3.8"
   },
   "peerDependencies": {
-    "@us3r-network/auth": "^0.2.1",
+    "@us3r-network/auth-with-rainbowkit": "^0.1.2",
     "react": "^18.2.0"
   },
   "devDependencies": {
@@ -71,7 +71,8 @@
     "ts-jest": "^29.1.0",
     "tslib": "^2.5.0",
     "typescript": "^5.0.4",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "@us3r-network/auth-with-rainbowkit": "^0.1.2"
   },
   "jest": {
     "extensionsToTreatAsEsm": [

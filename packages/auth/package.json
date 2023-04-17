@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/auth",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -32,10 +32,6 @@
   "dependencies": {
     "@didtools/pkh-ethereum": "^0.2.1",
     "@didtools/pkh-solana": "^0.1.0",
-    "did-session": "^2.0.0",
-    "@us3r-network/auth-with-rainbowkit": "^0.1.0"
-  },
-  "peerDependencies": {
-    "react": "^18.2.0"
+    "did-session": "^2.0.0"
   }
 }

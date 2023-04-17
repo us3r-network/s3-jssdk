@@ -3,7 +3,7 @@ import { Text } from "rebass/styled-components";
 import { useMemo } from "react";
 import { useProfileForDidOrSession } from "../../ProfileStateProvider";
 import { shortDid } from "../../utils/short";
-import { useSession } from "@us3r-network/auth";
+import { useSession } from "@us3r-network/auth-with-rainbowkit";
 
 type Props = StyledComponentPropsWithRef<"div"> & {
   did?: string;

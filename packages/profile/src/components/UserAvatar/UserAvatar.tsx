@@ -3,7 +3,7 @@ import { StyledComponentPropsWithRef } from "styled-components";
 import multiavatar from "@multiavatar/multiavatar";
 import { Image } from "rebass/styled-components";
 import { useProfileForDidOrSession } from "../../ProfileStateProvider";
-import { useSession } from "@us3r-network/auth";
+import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import AvatarLoadingSvg from "./avatar-loading.svg";
 
 type UserAvatarProps = StyledComponentPropsWithRef<"img"> & {

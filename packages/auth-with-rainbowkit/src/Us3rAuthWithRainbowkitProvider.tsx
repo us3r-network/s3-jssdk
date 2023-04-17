@@ -29,11 +29,7 @@ import {
   omniWallet,
   imTokenWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import {
-  AuthenticationStatus,
-  defaultAuthenticationContext,
-  Us3rAuth,
-} from "@us3r-network/auth";
+import { Us3rAuth } from "@us3r-network/auth";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -76,6 +72,31 @@ export const getUs3rAuthInstance = () => us3rAuthInstance;
 
 type Session = Us3rAuth["session"];
 
+export type AuthenticationStatus =
+  | "loading"
+  | "unauthenticated"
+  | "authenticated";
+
+export interface AuthenticationContextValue {
+  // did-session
+  session: Session;
+  // authorization status
+  status: AuthenticationStatus;
+  // session ready
+  ready: boolean;
+  // sign in action
+  signIn: () => Promise<void>;
+  // sign out action
+  signOut: () => void;
+}
+
+const defaultAuthenticationContext: AuthenticationContextValue = {
+  session: undefined,
+  status: "unauthenticated",
+  ready: false,
+  signIn: async () => {},
+  signOut: () => {},
+};
 const Us3rAuthWithRainbowkitContext = createContext(
   defaultAuthenticationContext
 );
@@ -166,12 +187,23 @@ export default function Us3rAuthWithRainbowkitProvider({
   );
 }
 
-export function useUs3rAuthWithRainbowkit() {
+export function useAuthentication() {
   const context = useContext(Us3rAuthWithRainbowkitContext);
   if (!context) {
     throw Error(
-      "useUs3rAuthWithRainbowkit can only be used within the Us3rAuthWithRainbowkitProvider component"
+      "useAuthentication can only be used within the Us3rAuthWithRainbowkitProvider component"
     );
   }
   return context;
+}
+
+export function useIsAuthenticated() {
+  const { status, session } = useAuthentication();
+  return status === "authenticated" && !!session && session?.isAuthorized();
+}
+
+export function useSession() {
+  const isAuthenticated = useIsAuthenticated();
+  const { session } = useAuthentication();
+  return isAuthenticated ? session : undefined;
 }

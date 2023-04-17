@@ -8,7 +8,7 @@ import {
   useRef,
   PropsWithChildren,
 } from "react";
-import { useSession } from "@us3r-network/auth";
+import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { S3ProfileModel, Profile } from "./data-model";
 import { Theme, ThemeMode, getTheme } from "./themes";
 import { ThemeProvider } from "styled-components";
