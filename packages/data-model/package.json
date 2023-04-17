@@ -2,15 +2,20 @@
   "name": "@us3r-network/data-model",
   "version": "0.1.0",
   "description": "",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "type": "module",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "files": [
     "dist",
     "package.json"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build:js": "swc src -d ./dist",
+    "build:types": "tsc --emitDeclarationOnly --skipLibCheck",
+    "build": "yarn run build:types && yarn run build:js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -29,6 +34,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-typescript": "^11.1.0",
+    "@swc/cli": "^0.1.62",
     "rollup": "^3.20.2",
     "rollup-plugin-dts": "^5.3.0",
     "typescript": "^5.0.4"

@@ -9,7 +9,7 @@ import {
   PropsWithChildren,
 } from "react";
 import { useSession } from "@us3r-network/auth";
-import S3ProfileModel, { Profile } from "./data-model";
+import { S3ProfileModel, Profile } from "./data-model";
 import { Theme, ThemeMode, getTheme } from "./themes";
 import { ThemeProvider } from "styled-components";
 
