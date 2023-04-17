@@ -33,22 +33,39 @@ type Profile
 }`;
 
 describe("client", () => {
-  test("adds 1 + 2 to equal 3", async () => {
-    // const ceramic = (global as any).ceramic;
-    const composite = await Composite.create({
+  const testName = "name";
+  const testAvatar = "testAvatar";
+  let profileId = "";
+
+  let composite: Composite;
+  let s3Profile: S3ProfileModel;
+  beforeAll(async () => {
+    composite = await Composite.create({
       ceramic,
       schema: profilesSchema,
     });
-    const s3Profile = new S3ProfileModel(ceramic, composite.toRuntime());
+    s3Profile = new S3ProfileModel(ceramic, composite.toRuntime());
+  });
+
+  test("create profile success", async () => {
     const resp = await s3Profile.mutationPersonalProfile({
-      name: "name",
-      avatar: "avatar",
+      name: testName,
+      avatar: testAvatar,
       wallets: [],
       bio: "bio",
       tags: ["tag", "s"],
     });
 
     expect(resp.data?.createProfile.document.id).not.toBeNull();
-    expect(1 + 2).toBe(3);
+    profileId = resp.data?.createProfile.document.id || "";
+    expect(profileId).not.toBe("");
+  });
+
+  test("query profile success", async () => {
+    const resp = await s3Profile.queryPersonalProfile();
+    const profile = resp.data?.viewer.profile;
+    expect(profile).not.toBeNull();
+    expect(profile).toHaveProperty("name", testName);
+    expect(profile).toHaveProperty("avatar", testAvatar);
   });
 });

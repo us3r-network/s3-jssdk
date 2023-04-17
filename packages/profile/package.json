@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest "
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --forceExit"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +21,8 @@
     "@composedb/devtools": "^0.4.3",
     "@composedb/types": "^0.4.3",
     "@us3r-network/data-model": "^0.1.0",
-    "did-session": "^2.0.0"
+    "did-session": "^2.0.0",
+    "ts-node": "^10.9.1"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.1",
@@ -43,7 +44,12 @@
       "^(\\.{1,2}/.*)\\.js$": "$1"
     },
     "transform": {
-      "^.+\\.(t|j)s$": "@swc/jest"
+      "^.+\\.(t|j)s$": [
+        "@swc/jest",
+        {
+          "root": "../.."
+        }
+      ]
     }
   }
 }

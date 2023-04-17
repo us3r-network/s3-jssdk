@@ -21,7 +21,6 @@ class CustomEnvironment extends NodeEnvironment {
     };
   }
   async setup() {
-    console.log("setup....");
     this.tmpFolder = await dir({ unsafeCleanup: true });
 
     this.global.ipfs = await create({
@@ -61,7 +60,6 @@ class CustomEnvironment extends NodeEnvironment {
     await this.global.ipfs.stop();
     await this.tmpFolder.cleanup();
     await super.teardown();
-    console.log("teardown...");
   }
 
   getVmContext() {
