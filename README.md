@@ -16,7 +16,7 @@ Then, include the library in your project:
 ```javascript
 import { Us3rAuthProvider } from "@us3r-network/auth";
 import { ProfileStateProvider } from "@us3r-network/profile";
-import { Us3rLinkProvider } from "@us3r-network/link";
+import { LinkStateProvider } from "@us3r-network/link";
 ```
 
 ## Documentation
