@@ -652,7 +652,6 @@ export class S3LinkModel extends S3Model {
                 link {
                   id
                   url
-                  date
                   type
                   creator {
                     id

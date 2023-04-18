@@ -86,7 +86,7 @@ describe("client", () => {
     await new Promise<void>((resolve) => {
       setTimeout(() => {
         resolve();
-      }, 1500);
+      }, 2500);
     });
   });
 
@@ -137,5 +137,108 @@ describe("client", () => {
     const voteList = resp.data?.viewer.voteList;
     expect(voteList).not.toBeNull();
     expect(voteList?.edges.length).toBe(1);
+  });
+
+  // favor
+  test("create link favor success", async () => {
+    const resp = await s3Link.createFavor({
+      linkID: linkId,
+      revoke: false,
+    });
+
+    expect(resp.errors).not.toBeDefined();
+    const createFavor = resp.data?.createFavor;
+    expect(createFavor).not.toBeNull();
+
+    const favorId = createFavor?.document.id || "";
+
+    const updateResp = await s3Link.updateFavor(favorId, {
+      revoke: true,
+    });
+    console.log(updateResp.errors);
+    expect(updateResp.errors).not.toBeDefined();
+  });
+
+  test("query link success with favor", async () => {
+    const resp = await s3Link.queryLink(linkId);
+    const link = resp.data?.node;
+    expect(link).not.toBeNull();
+    expect(link).toHaveProperty("favorsCount", 1);
+  });
+
+  test("query personal favors success", async () => {
+    const resp = await s3Link.queryPersonalFavors({ first: 10 });
+    const favorList = resp.data?.viewer.favorList;
+    expect(resp.errors).not.toBeDefined();
+    expect(favorList).not.toBeNull();
+    expect(favorList?.edges.length).toBe(1);
+  });
+
+  // score
+  test("create link score success", async () => {
+    const resp = await s3Link.createScore({
+      linkID: linkId,
+      text: "string",
+      value: 10,
+    });
+
+    expect(resp.errors).not.toBeDefined();
+    const createScore = resp.data?.createScore;
+    expect(createScore).not.toBeNull();
+
+    let scoreId = createScore?.document.id || "";
+
+    const updateResp = await s3Link.updateScore(scoreId, {
+      text: "update",
+    });
+    expect(updateResp.errors).not.toBeDefined();
+  });
+
+  test("query link success with score", async () => {
+    const resp = await s3Link.queryLink(linkId);
+    const link = resp.data?.node;
+    expect(link).not.toBeNull();
+    expect(link).toHaveProperty("scoresCount", 1);
+  });
+
+  test("query personal scores success", async () => {
+    const resp = await s3Link.queryPersonalScores({ first: 10 });
+    const scoreList = resp.data?.viewer.scoreList;
+    expect(resp.errors).not.toBeDefined();
+    expect(scoreList).not.toBeNull();
+    expect(scoreList?.edges.length).toBe(1);
+  });
+
+  // comment
+  test("create link comment success", async () => {
+    const resp = await s3Link.createComment({
+      linkID: linkId,
+      text: "string",
+    });
+
+    expect(resp.errors).not.toBeDefined();
+    const createComment = resp.data?.createComment;
+    expect(createComment).not.toBeNull();
+    let commentId = createComment?.document.id || "";
+
+    const updateResp = await s3Link.updateComment(commentId, {
+      text: "update",
+    });
+    expect(updateResp.errors).not.toBeDefined();
+  });
+
+  test("query link success with comment", async () => {
+    const resp = await s3Link.queryLink(linkId);
+    const link = resp.data?.node;
+    expect(link).not.toBeNull();
+    expect(link).toHaveProperty("commentsCount", 1);
+  });
+
+  test("query personal comments success", async () => {
+    const resp = await s3Link.queryPersonalComments({ first: 10 });
+    const commentList = resp.data?.viewer.commentList;
+    expect(resp.errors).not.toBeDefined();
+    expect(commentList).not.toBeNull();
+    expect(commentList?.edges.length).toBe(1);
   });
 });
