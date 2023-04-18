@@ -18,10 +18,12 @@ export const getS3ProfileModel = () => s3ProfileModel;
 
 export interface ProfileStateContextValue {
   profile: Profile | null;
+  profileLoading: boolean;
   getProfileWithDid: (did: string) => Promise<Profile | null>;
 }
 const defaultContextValue: ProfileStateContextValue = {
   profile: null,
+  profileLoading: false,
   getProfileWithDid: async () => null,
 };
 const ProfileStateContext = createContext(defaultContextValue);
@@ -54,13 +56,20 @@ export default function ProfileStateProvider({
   // When the authorization is complete, query and store the profile
   const session = useSession();
   const [profile, setProfile] = useState(defaultContextValue.profile);
+  const [profileLoading, setProfileLoading] = useState(true);
   useEffect(() => {
     if (!s3ProfileModel) return;
     if (session) {
       s3ProfileModel.authComposeClient(session);
-      s3ProfileModel.queryPersonalProfile().then((res) => {
-        setProfile(res.data?.viewer?.profile || null);
-      });
+      setProfileLoading(true);
+      s3ProfileModel
+        .queryPersonalProfile()
+        .then((res) => {
+          setProfile(res.data?.viewer?.profile || null);
+        })
+        .finally(() => {
+          setProfileLoading(false);
+        });
     } else {
       setProfile(null);
       s3ProfileModel.resetComposeClient();
@@ -82,9 +91,10 @@ export default function ProfileStateProvider({
       value={useMemo(
         () => ({
           profile,
+          profileLoading,
           getProfileWithDid,
         }),
-        [profile, getProfileWithDid]
+        [profile, profileLoading, getProfileWithDid]
       )}
     >
       <ThemeProvider theme={getTheme(themeConfig)}>{children}</ThemeProvider>
@@ -100,48 +110,4 @@ export function useProfileState() {
     );
   }
   return context;
-}
-
-export function useProfileForDid(did: string) {
-  const { getProfileWithDid } = useProfileState();
-  const [data, setData] = useState<Profile>();
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    setLoading(true);
-    if (!did) {
-      return;
-    }
-    getProfileWithDid(did)
-      .then((data) => {
-        if (data) setData(data);
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, [did, getProfileWithDid]);
-  return { data, loading };
-}
-
-export function useProfileForDidOrSession(did: string) {
-  const session = useSession();
-  const { profile, getProfileWithDid } = useProfileState();
-  const [data, setData] = useState<Profile>();
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    setLoading(true);
-    if (!did) {
-      return;
-    }
-    if (did === session?.id) {
-      setData({ ...profile });
-      setLoading(false);
-      return;
-    }
-    getProfileWithDid(did)
-      .then((data) => {
-        if (data) setData(data);
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, [did, profile, session, getProfileWithDid]);
-  return { data, loading };
 }
