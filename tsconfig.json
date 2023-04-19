@@ -23,6 +23,11 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "paths": {
+      "@us3r-network/auth": ["./packages/profile/auth/index.ts"],
+      "@us3r-network/auth-with-rainbowkit": [
+        "./packages/profile/auth-with-rainbowkit/index.ts"
+      ],
+      "@us3r-network/data-model": ["./packages/data-model/src/index.ts"],
       "@us3r-network/profile": ["./packages/profile/src/index.ts"]
     }
   }
