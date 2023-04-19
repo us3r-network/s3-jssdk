@@ -8,10 +8,10 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "pnpm -r run build",
+    "build": "npx pnpm -r run build",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "pnpm build && pnpm release:only",
+    "release": "npx pnpm build && npx pnpm release:only",
     "release:only": "changeset publish --registry=https://registry.npmjs.com/",
     "storybook": "storybook dev -p 6006",
     "storybook-docs": "storybook dev --docs",
