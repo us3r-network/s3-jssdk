@@ -1,7 +1,9 @@
 import "@rainbow-me/rainbowkit/styles.css";
 import {
   connectorsForWallets,
+  darkTheme,
   getDefaultWallets,
+  lightTheme,
   RainbowKitProvider,
   useConnectModal,
 } from "@rainbow-me/rainbowkit";
@@ -175,12 +177,36 @@ function Us3rAuthWrap({ children }: PropsWithChildren) {
   );
 }
 
+const defaultDarkTheme = darkTheme();
+const defaultLightTheme = lightTheme();
+type ThemeMode = "light" | "dark";
+type ThemeVars = typeof defaultDarkTheme | typeof defaultLightTheme;
+export interface Us3rAuthWithRainbowkitProviderProps extends PropsWithChildren {
+  appName?: string;
+  themeConfig?: {
+    mode: ThemeMode;
+    darkTheme?: ThemeVars;
+    lightTheme?: ThemeVars;
+  };
+}
 export default function Us3rAuthWithRainbowkitProvider({
   children,
-}: PropsWithChildren) {
+  appName,
+  themeConfig,
+}: Us3rAuthWithRainbowkitProviderProps) {
+  const mode = themeConfig?.mode || "dark";
+  const darkVars = themeConfig?.darkTheme || defaultDarkTheme;
+  const lightVars = themeConfig?.lightTheme || defaultLightTheme;
+  const rainbowkitTheme = useMemo(() => {
+    return mode === "dark" ? darkVars : lightVars;
+  }, [mode, darkVars, lightVars]);
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>
+      <RainbowKitProvider
+        chains={chains}
+        appInfo={{ appName }}
+        theme={rainbowkitTheme}
+      >
         <Us3rAuthWrap>{children}</Us3rAuthWrap>
       </RainbowKitProvider>
     </WagmiConfig>
