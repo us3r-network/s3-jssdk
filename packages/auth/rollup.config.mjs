@@ -23,7 +23,7 @@ export default [
     external: ["did-session", "@didtools/pkh-solana", "@didtools/pkh-ethereum"],
   },
   {
-    input: "dist/esm/index.d.ts",
+    input: "src/index.ts",
     output: [{ file: "dist/index.d.ts", format: "esm" }],
     plugins: [dts()],
   },

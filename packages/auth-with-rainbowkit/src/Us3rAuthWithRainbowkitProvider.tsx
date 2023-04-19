@@ -67,36 +67,39 @@ const wagmiClient = createClient({
   webSocketProvider,
 });
 
-const us3rAuthInstance = new Us3rAuth();
-type Session = typeof us3rAuthInstance.session;
+let us3rAuthInstance: Us3rAuth | null = null;
+export const getUs3rAuthInstance = () => us3rAuthInstance;
+
+type Session = Us3rAuth["session"];
 
 export type AuthenticationStatus =
   | "loading"
   | "unauthenticated"
   | "authenticated";
 
-export interface Us3rAuthContextValue {
+export interface AuthenticationContextValue {
   // did-session
   session: Session;
   // authorization status
   status: AuthenticationStatus;
   // session ready
   ready: boolean;
-  // sign in action to open rainbowkit modal
-  signIn: () => void;
+  // sign in action
+  signIn: () => Promise<void>;
   // sign out action
   signOut: () => void;
 }
 
-const defaultContextValue: Us3rAuthContextValue = {
+const defaultAuthenticationContext: AuthenticationContextValue = {
   session: undefined,
   status: "unauthenticated",
   ready: false,
-  signIn: () => {},
+  signIn: async () => {},
   signOut: () => {},
 };
-
-const Us3rAuthContext = createContext(defaultContextValue);
+const Us3rAuthWithRainbowkitContext = createContext(
+  defaultAuthenticationContext
+);
 
 function Us3rAuthWrap({ children }: PropsWithChildren) {
   const { openConnectModal } = useConnectModal();
@@ -106,6 +109,9 @@ function Us3rAuthWrap({ children }: PropsWithChildren) {
   const [ready, setReady] = useState(false);
   useEffect(() => {
     (async () => {
+      if (!us3rAuthInstance) {
+        us3rAuthInstance = new Us3rAuth();
+      }
       await us3rAuthInstance.init();
       setSession(us3rAuthInstance.session);
       setStatus(
@@ -119,7 +125,7 @@ function Us3rAuthWrap({ children }: PropsWithChildren) {
 
   useAccount({
     async onConnect({ connector, isReconnected }) {
-      if (isReconnected) {
+      if (!us3rAuthInstance || isReconnected) {
         return;
       }
       setStatus("loading");
@@ -138,19 +144,21 @@ function Us3rAuthWrap({ children }: PropsWithChildren) {
     },
   });
 
-  const signIn = useCallback(() => {
+  const signIn = useCallback(async () => {
     if (openConnectModal) openConnectModal();
   }, [openConnectModal]);
 
   const signOut = useCallback(() => {
-    us3rAuthInstance.removeSession();
-    setSession(us3rAuthInstance.session);
+    if (us3rAuthInstance) {
+      us3rAuthInstance.removeSession();
+    }
+    setSession(undefined);
     setStatus("unauthenticated");
     disconnect();
   }, [disconnect]);
 
   return (
-    <Us3rAuthContext.Provider
+    <Us3rAuthWithRainbowkitContext.Provider
       value={useMemo(
         () => ({
           session,
@@ -163,11 +171,13 @@ function Us3rAuthWrap({ children }: PropsWithChildren) {
       )}
     >
       {children}
-    </Us3rAuthContext.Provider>
+    </Us3rAuthWithRainbowkitContext.Provider>
   );
 }
 
-export default function Us3rAuthProvider({ children }: PropsWithChildren) {
+export default function Us3rAuthWithRainbowkitProvider({
+  children,
+}: PropsWithChildren) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
@@ -177,12 +187,23 @@ export default function Us3rAuthProvider({ children }: PropsWithChildren) {
   );
 }
 
-export function useUs3rAuth() {
-  const context = useContext(Us3rAuthContext);
+export function useAuthentication() {
+  const context = useContext(Us3rAuthWithRainbowkitContext);
   if (!context) {
     throw Error(
-      "useUs3rAuth can only be used within the Us3rAuthProvider component"
+      "useAuthentication can only be used within the Us3rAuthWithRainbowkitProvider component"
     );
   }
   return context;
+}
+
+export function useIsAuthenticated() {
+  const { status, session } = useAuthentication();
+  return status === "authenticated" && !!session && session?.isAuthorized();
+}
+
+export function useSession() {
+  const isAuthenticated = useIsAuthenticated();
+  const { session } = useAuthentication();
+  return isAuthenticated ? session : undefined;
 }

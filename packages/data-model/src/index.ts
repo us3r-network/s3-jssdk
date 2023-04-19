@@ -7,7 +7,7 @@ import { DID } from "dids";
 /**
  *
  */
-export default class Model {
+export class S3Model {
   composeClient: ComposeClient;
 
   constructor(
@@ -31,3 +31,7 @@ export default class Model {
     this.composeClient.setDID(did);
   }
 }
+
+export const modelName = "base";
+
+export class S3ExModel {}

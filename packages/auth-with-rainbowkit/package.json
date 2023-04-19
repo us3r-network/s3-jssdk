@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/auth-with-rainbowkit",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -18,13 +18,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@rainbow-me/rainbowkit": "^0.12.7"
+    "ethers": "^5.0.0",
+    "wagmi": "^0.12.0",
+    "@rainbow-me/rainbowkit": "^0.12.7",
+    "@us3r-network/auth": "^0.2.2"
   },
   "peerDependencies": {
-    "@us3r-network/auth": "^0.2.0",
-    "ethers": "^5.0.0",
-    "react": "^18.2.0",
-    "wagmi": "^0.12.0"
+    "react": "^18.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
