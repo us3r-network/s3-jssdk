@@ -12,7 +12,8 @@
   ],
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --forceExit",
-    "build": "rimraf ./dist && rollup -c"
+    "build": "rimraf ./dist && rollup -c",
+    "pub": "npm publish --access public --tag latest"
   },
   "keywords": [],
   "author": "",

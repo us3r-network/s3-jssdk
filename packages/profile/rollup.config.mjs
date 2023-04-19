@@ -40,7 +40,7 @@ export default [
       typescript({
         tsconfig: "./tsconfig.json",
         exclude: [
-          "src/stories/**/*",
+          "stories/**/*",
           "src/**/*.mdx",
           "src/**/*.stories.@(js|jsx|ts|tsx)",
         ],
