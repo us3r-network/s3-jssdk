@@ -1,9 +1,9 @@
 {
-	"extends": "../../tsconfig.json",
-	"compilerOptions": {
-	  "outDir": "./dist"
-	},
-	"include": ["src"],
-	"exclude": ["node_modules", "build"]
-  }
-  
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "files": ["./image.d.ts"],
+  "include": ["src", "stories"],
+  "exclude": ["node_modules", "dist"]
+}

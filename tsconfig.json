@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "outDir": "build",
     "module": "esnext",
     "target": "es5",
@@ -21,6 +21,9 @@
     // "noUnusedParameters": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": {
+      "@us3r-network/profile": ["./packages/profile/src/index.ts"]
+    }
   }
 }

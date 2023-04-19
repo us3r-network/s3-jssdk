@@ -1,6 +1,11 @@
-import { useUs3rAuth } from "./provider/Us3rAuthProvider";
-
-// provider
-export { default as Us3rAuthProvider } from "./provider/Us3rAuthProvider";
-// hooks
-export { useUs3rAuth };
+export { default as Us3rAuthWithRainbowkitProvider } from "./Us3rAuthWithRainbowkitProvider";
+export {
+  useAuthentication,
+  useIsAuthenticated,
+  useSession,
+} from "./Us3rAuthWithRainbowkitProvider";
+export { getUs3rAuthInstance } from "./Us3rAuthWithRainbowkitProvider";
+export type {
+  AuthenticationStatus,
+  AuthenticationContextValue,
+} from "./Us3rAuthWithRainbowkitProvider";

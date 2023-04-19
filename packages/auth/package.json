@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/auth",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -10,7 +10,7 @@
     "package.json"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "rimraf ./dist && rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1",
     "pub": "npm publish --access public --tag latest"
   },
@@ -26,7 +26,8 @@
     "rollup": "^3.14.0",
     "rollup-plugin-dts": "^5.1.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
-    "typescript": "^4.9.5"
+    "typescript": "^4.9.5",
+    "rimraf": "^4.4.0"
   },
   "dependencies": {
     "@didtools/pkh-ethereum": "^0.2.1",

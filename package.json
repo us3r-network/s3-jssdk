@@ -1,5 +1,5 @@
 {
-  "name": "@us3r/s3-jssdk",
+  "name": "@us3r-network/s3-jssdk",
   "version": "0.0.1",
   "description": "S3 Javascript SDK",
   "private": true,
@@ -7,7 +7,11 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "storybook dev -p 6006",
+    "storybook-docs": "storybook dev --docs",
+    "build-storybook": "storybook build",
+    "build-storybook-docs": "storybook build --docs"
   },
   "repository": {
     "type": "git",
@@ -18,5 +22,24 @@
   "bugs": {
     "url": "https://github.com/us3r-network/s3-jssdk/issues"
   },
-  "homepage": "https://github.com/us3r-network/s3-jssdk#readme"
+  "homepage": "https://github.com/us3r-network/s3-jssdk#readme",
+  "devDependencies": {
+    "@babel/preset-env": "^7.21.4",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.21.4",
+    "@storybook/addon-essentials": "7.0.5",
+    "@storybook/addon-interactions": "7.0.5",
+    "@storybook/addon-links": "7.0.5",
+    "@storybook/blocks": "7.0.5",
+    "@storybook/manager-api": "^7.0.5",
+    "@storybook/react": "7.0.4",
+    "@storybook/react-webpack5": "7.0.4",
+    "@storybook/testing-library": "0.0.14-next.2",
+    "@storybook/theming": "^7.0.5",
+    "prop-types": "15.8.1",
+    "raw-loader": "^4.0.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "storybook": "7.0.5"
+  }
 }
