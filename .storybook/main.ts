@@ -37,6 +37,25 @@ const stories = packageDirs
   })
   .reduce((acc, val) => acc.concat(val), []);
 
+const webpackAlias = [
+  {
+    name: "@us3r-network/auth",
+    path: "../packages/auth/src/index.ts",
+  },
+  {
+    name: "@us3r-network/auth-with-rainbowkit",
+    path: "../packages/auth-with-rainbowkit/src/index.ts",
+  },
+  {
+    name: "@us3r-network/data-model",
+    path: "../packages/data-model/src/index.ts",
+  },
+  {
+    name: "@us3r-network/profile",
+    path: "../packages/profile/src/index.ts",
+  },
+];
+
 const config: StorybookConfig = {
   stories,
   addons: [
@@ -52,13 +71,11 @@ const config: StorybookConfig = {
     autodocs: "tag",
   },
   webpackFinal(config, options) {
-    // I want to perform the import using @us3r-network/profile directly in the example file
-    // Add the `@us3r-network/profile` alias to the Storybook Webpack config.
     config.resolve = config.resolve || {};
     config.resolve.alias = config.resolve.alias || {};
-    config.resolve.alias["@us3r-network/profile"] = require.resolve(
-      "../packages/profile/src/index.ts"
-    );
+    for (const alias of webpackAlias) {
+      config.resolve.alias[alias.name] = require.resolve(alias.path);
+    }
 
     return config;
   },
