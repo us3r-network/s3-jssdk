@@ -1,12 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist",
-    "paths": {
-      "@us3r-network/profile": ["./src/index.ts"]
-    }
+    "outDir": "./dist"
   },
   "files": ["./image.d.ts"],
-  "include": ["src"],
-  "exclude": ["node_modules", "build"]
+  "include": ["src", "stories"],
+  "exclude": ["node_modules", "dist"]
 }

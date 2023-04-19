@@ -78,13 +78,22 @@ export default function ProfileStateProvider({
 
   // Create a cache when fetching other users' profiles
   const cacheOtherProfiles = useRef<Record<string, Profile | null>>({}).current;
-  const getProfileWithDid = useCallback(async (did: string) => {
-    if (cacheOtherProfiles[did]) return cacheOtherProfiles[did];
-    const res = await s3ProfileModel?.queryProfileWithDid(did);
-    const profile = res?.data?.node?.profile || null;
-    if (profile) cacheOtherProfiles[did] = profile;
-    return profile;
-  }, []);
+  const getProfileWithDid = useCallback(
+    async (
+      did: string,
+      opts?: {
+        nocache?: boolean;
+      }
+    ) => {
+      const { nocache } = opts || {};
+      if (!nocache && cacheOtherProfiles[did]) return cacheOtherProfiles[did];
+      const res = await s3ProfileModel?.queryProfileWithDid(did);
+      const profile = res?.data?.node?.profile || null;
+      if (profile) cacheOtherProfiles[did] = profile;
+      return profile;
+    },
+    []
+  );
 
   return (
     <ProfileStateContext.Provider

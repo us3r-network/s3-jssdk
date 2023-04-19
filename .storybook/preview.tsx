@@ -1,6 +1,6 @@
 import type { Preview } from "@storybook/react";
 import React from "react";
-import App from "../src/stories/App";
+import App from "../packages/profile/stories/App";
 
 const preview: Preview = {
   parameters: {
@@ -9,11 +9,6 @@ const preview: Preview = {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/,
-      },
-    },
-    options: {
-      storySort: {
-        order: ["Introduction", "Components", "Examples"],
       },
     },
   },
