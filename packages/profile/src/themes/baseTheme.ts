@@ -81,12 +81,6 @@ export default {
       color: "background",
       bg: "secondary",
     },
-    favor: {
-      variant: "buttons.primary",
-    },
-    vote: {
-      variant: "buttons.primary",
-    },
   },
   styles: {
     root: {

@@ -62,7 +62,7 @@ export default {
     primary: {
       fontSize: 2,
       fontWeight: "bold",
-      color: "background",
+      color: "text",
       bg: "primary",
       borderRadius: "default",
       cursor: "pointer",
@@ -80,6 +80,12 @@ export default {
       variant: "buttons.primary",
       color: "background",
       bg: "secondary",
+    },
+    favor: {
+      variant: "buttons.primary",
+    },
+    vote: {
+      variant: "buttons.primary",
     },
   },
   styles: {
