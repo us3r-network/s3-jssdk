@@ -1,7 +1,7 @@
 import type { StorybookConfig } from "@storybook/react-webpack5";
 
 // Which package directories need to generate storybook
-const packageDirs = ["profile"];
+const packageDirs = ["profile", "link"];
 
 const stories = packageDirs
   .map((dir) => {
@@ -53,6 +53,10 @@ const webpackAlias = [
   {
     name: "@us3r-network/profile",
     path: "../packages/profile/src/index.ts",
+  },
+  {
+    name: "@us3r-network/link",
+    path: "../packages/link/src/index.ts",
   },
 ];
 

@@ -6,7 +6,7 @@ export type Favor = {
   revoke: boolean;
   createAt: DateTime;
   modifiedAt: DateTime;
-  link: Link;
+  link?: Link;
   creator: Creator;
 };
 
