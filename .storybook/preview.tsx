@@ -18,10 +18,16 @@ const preview: Preview = {
     (Story) => (
       <Us3rAuthWithRainbowkitProvider>
         <ProfileStateProvider
-          ceramicHost={process.env.REACT_APP_CERAMIC_HOST as string}
+          ceramicHost={
+            (process.env.REACT_APP_CERAMIC_HOST as string) ||
+            "https://ceramic.s3.xyz"
+          }
         >
           <LinkStateProvider
-            ceramicHost={process.env.REACT_APP_CERAMIC_HOST as string}
+            ceramicHost={
+              (process.env.REACT_APP_CERAMIC_HOST as string) ||
+              "https://ceramic.s3.xyz"
+            }
           >
             <Story />
           </LinkStateProvider>

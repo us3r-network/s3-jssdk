@@ -11,13 +11,17 @@ type Post = {
 export default function Posts() {
   const posts = [
     {
-      linkId: process.env.REACT_APP_EXAMPLE_POST_LINKID_1 as string,
+      linkId:
+        (process.env.REACT_APP_EXAMPLE_POST_LINKID_1 as string) ||
+        "kjzl6kcym7w8y8n1yxa1xihla0bi22lr2ewxpzpkaxdtreahmgly8dx40x3v82a",
       title: "example post 1 title",
       content: "example post 1 content",
       img: "https://picsum.photos/600/300",
     },
     {
-      linkId: process.env.REACT_APP_EXAMPLE_POST_LINKID_2 as string,
+      linkId:
+        (process.env.REACT_APP_EXAMPLE_POST_LINKID_2 as string) ||
+        "kjzl6kcym7w8y90skdqkmjn34wk0ovsx8bns5fdq00j979c6t3leving086ngag",
       title: "example post 2 title",
       content: "example post 2 content",
       img: "https://picsum.photos/500/200",

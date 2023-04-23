@@ -6,7 +6,10 @@ export default function App({ children }: PropsWithChildren) {
   return (
     <Us3rAuthWithRainbowkitProvider>
       <ProfileStateProvider
-        ceramicHost={process.env.REACT_APP_CERAMIC_HOST as string}
+        ceramicHost={
+          (process.env.REACT_APP_CERAMIC_HOST as string) ||
+          "https://ceramic.s3.xyz"
+        }
       >
         {children}
       </ProfileStateProvider>
