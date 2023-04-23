@@ -1,20 +1,21 @@
 import { ButtonHTMLAttributes } from "react";
-import { Button, Text } from "rebass/styled-components";
 import { useAuthentication } from "@us3r-network/auth-with-rainbowkit";
 
 export type LogoutButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  className?: string;
   textClassName?: string;
 };
 
 function LogoutButton({
   onClick,
+  className = "us3r-LogoutButton",
   textClassName = "us3r-LogoutButton__text",
   ...otherProps
 }: LogoutButtonProps) {
   const { signOut } = useAuthentication();
   return (
-    <Button
-      variant="primary"
+    <button
+      className={className}
       onClick={(e) => {
         if (onClick) {
           onClick(e);
@@ -24,10 +25,8 @@ function LogoutButton({
       }}
       {...otherProps}
     >
-      <Text variant={"heading"} className={textClassName}>
-        Logout
-      </Text>
-    </Button>
+      <span className={textClassName}>Logout</span>
+    </button>
   );
 }
 export default LogoutButton;

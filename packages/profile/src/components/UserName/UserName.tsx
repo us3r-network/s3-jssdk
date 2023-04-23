@@ -1,11 +1,9 @@
-import { StyledComponentPropsWithRef } from "styled-components";
-import { Text } from "rebass/styled-components";
-import { useEffect, useState } from "react";
+import { HtmlHTMLAttributes, useEffect, useState } from "react";
 import { useProfileState } from "../../ProfileStateProvider";
 import { shortDid } from "../../utils/short";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 
-type Props = StyledComponentPropsWithRef<"div"> & {
+type Props = HtmlHTMLAttributes<HTMLDivElement> & {
   did?: string;
   name?: string;
 };
@@ -50,5 +48,5 @@ export default function UserName({ name, ...props }: Props) {
     }
   }, [name, isLoginUser, did, getProfileWithDid]);
 
-  return <Text {...props}>{!loading && username}</Text>;
+  return <span {...props}>{!loading && username}</span>;
 }
