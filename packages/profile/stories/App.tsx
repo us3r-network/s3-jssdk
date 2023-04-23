@@ -7,7 +7,6 @@ export default function App({ children }: PropsWithChildren) {
     <Us3rAuthWithRainbowkitProvider>
       <ProfileStateProvider
         ceramicHost={process.env.REACT_APP_CERAMIC_HOST as string}
-        themeConfig={{ mode: "dark" }}
       >
         {children}
       </ProfileStateProvider>

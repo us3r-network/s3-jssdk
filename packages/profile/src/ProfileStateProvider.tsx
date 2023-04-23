@@ -10,18 +10,20 @@ import {
 } from "react";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { S3ProfileModel, Profile } from "./data-model";
-import { Theme, ThemeMode, getTheme } from "./themes";
-import { ThemeProvider } from "styled-components";
 
 let s3ProfileModel: S3ProfileModel | null = null;
 export const getS3ProfileModel = () => s3ProfileModel;
 
 export interface ProfileStateContextValue {
+  s3ProfileModalInitialed: boolean;
+  s3ProfileModalAuthed: boolean;
   profile: Profile | null;
   profileLoading: boolean;
   getProfileWithDid: (did: string) => Promise<Profile | null>;
 }
 const defaultContextValue: ProfileStateContextValue = {
+  s3ProfileModalInitialed: false,
+  s3ProfileModalAuthed: false,
   profile: null,
   profileLoading: false,
   getProfileWithDid: async () => null,
@@ -31,36 +33,34 @@ const ProfileStateContext = createContext(defaultContextValue);
 export interface ProfileStateProviderProps extends PropsWithChildren {
   // ceramic host
   ceramicHost: string;
-  // theme config
-  themeConfig?: {
-    mode?: ThemeMode;
-    darkTheme?: Theme;
-    lightTheme?: Theme;
-  };
 }
 
 export default function ProfileStateProvider({
   children,
   ceramicHost,
-  themeConfig,
 }: ProfileStateProviderProps) {
   if (!ceramicHost) throw Error("ceramicHost is required");
 
+  const [s3ProfileModalInitialed, setS3ProfileModalInitialed] = useState(false);
+  const [s3ProfileModalAuthed, setS3ProfileModalAuthed] = useState(false);
   // TODO: Whether ceramicHost allows switching
   useEffect(() => {
     if (!s3ProfileModel) {
       s3ProfileModel = new S3ProfileModel(ceramicHost);
+      setS3ProfileModalInitialed(true);
     }
   }, [ceramicHost]);
 
   // When the authorization is complete, query and store the profile
   const session = useSession();
+
   const [profile, setProfile] = useState(defaultContextValue.profile);
   const [profileLoading, setProfileLoading] = useState(true);
   useEffect(() => {
     if (!s3ProfileModel) return;
     if (session) {
       s3ProfileModel.authComposeClient(session);
+      setS3ProfileModalAuthed(true);
       setProfileLoading(true);
       s3ProfileModel
         .queryPersonalProfile()
@@ -73,6 +73,7 @@ export default function ProfileStateProvider({
     } else {
       setProfile(null);
       s3ProfileModel.resetComposeClient();
+      setS3ProfileModalAuthed(false);
     }
   }, [session]);
 
@@ -99,14 +100,22 @@ export default function ProfileStateProvider({
     <ProfileStateContext.Provider
       value={useMemo(
         () => ({
+          s3ProfileModalInitialed,
+          s3ProfileModalAuthed,
           profile,
           profileLoading,
           getProfileWithDid,
         }),
-        [profile, profileLoading, getProfileWithDid]
+        [
+          s3ProfileModalInitialed,
+          s3ProfileModalAuthed,
+          profile,
+          profileLoading,
+          getProfileWithDid,
+        ]
       )}
     >
-      <ThemeProvider theme={getTheme(themeConfig)}>{children}</ThemeProvider>
+      {children}
     </ProfileStateContext.Provider>
   );
 }

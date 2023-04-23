@@ -8,8 +8,6 @@ import {
 } from "react";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { S3LinkModel } from "./data-model";
-import { Theme, ThemeMode, getTheme } from "./themes";
-import { ThemeProvider } from "styled-components";
 
 let s3LinkModel: S3LinkModel | null = null;
 export const getS3LinkModel = () => s3LinkModel;
@@ -27,20 +25,12 @@ const LinkStateContext = createContext(defaultContextValue);
 export interface LinkStateProviderProps extends PropsWithChildren {
   // ceramic host
   ceramicHost: string;
-  // theme config
-  themeConfig?: {
-    mode?: ThemeMode;
-    darkTheme?: Theme;
-    lightTheme?: Theme;
-  };
 }
 
 export default function LinkStateProvider({
   children,
   ceramicHost,
-  themeConfig,
 }: LinkStateProviderProps) {
-  console.log("ceramicHost", ceramicHost);
   if (!ceramicHost) throw Error("ceramicHost is required");
 
   const [s3LinkModalInitialed, setS3LinkModalInitialed] = useState(false);
@@ -76,7 +66,7 @@ export default function LinkStateProvider({
         [s3LinkModalInitialed, s3LinkModalAuthed]
       )}
     >
-      <ThemeProvider theme={getTheme(themeConfig)}>{children}</ThemeProvider>
+      {children}
     </LinkStateContext.Provider>
   );
 }

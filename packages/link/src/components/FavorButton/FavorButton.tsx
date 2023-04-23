@@ -1,12 +1,4 @@
-import {
-  ButtonHTMLAttributes,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import styled from "styled-components";
-import { Box, Button } from "rebass/styled-components";
+import { ButtonHTMLAttributes, useCallback, useEffect, useMemo } from "react";
 import ButtonLoading from "../common/ButtonLoading/ButtonLoading";
 import { getS3LinkModel, useLinkState } from "../../LinkStateProvider";
 import {
@@ -17,12 +9,22 @@ import { useStore } from "../../store";
 
 export type FavorButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   linkId: string;
-  loadingComponent?: React.ComponentType;
-  favoredIconComponent?: React.ComponentType;
-  unFavoredIconComponent?: React.ComponentType;
+  className?: string;
+  loadingClassName?: string;
+  favorClassName?: string;
+  unfavorClassName?: string;
+  countClassName?: string;
 };
 
-export default function FavorButton({ linkId, ...props }: FavorButtonProps) {
+export default function FavorButton({
+  linkId,
+  className = "us3r-FavorButton",
+  loadingClassName = "us3r-FavorButton__loading",
+  favorClassName = "us3r-FavorButton__favor",
+  unfavorClassName = "us3r-FavorButton__unfavor",
+  countClassName = "us3r-FavorButton__count",
+  ...otherProps
+}: FavorButtonProps) {
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
   const session = useSession();
@@ -120,23 +122,28 @@ export default function FavorButton({ linkId, ...props }: FavorButtonProps) {
     updateFavorInCacheLinks,
   ]);
 
+  const isFavored = useMemo(() => {
+    if (!findCurrUserFavor) return false;
+    return !findCurrUserFavor?.node.revoke;
+  }, [findCurrUserFavor]);
+
   return (
-    <Button variant="favor" onClick={onFavor} {...props}>
-      {(loading && <ButtonLoading />) || (
+    <button className={className} onClick={onFavor} {...otherProps}>
+      {(loading && <ButtonLoading className={loadingClassName} />) || (
         <>
-          {!findCurrUserFavor || findCurrUserFavor?.node.revoke ? (
-            <FavorIcon />
+          {isFavored ? (
+            <FavorWhiteIcon className={unfavorClassName} />
           ) : (
-            <FavorWhiteIcon />
+            <FavorIcon className={favorClassName} />
           )}
         </>
       )}
-      <span>{link?.favorsCount || 0}</span>
-    </Button>
+      <span className={countClassName}>{link?.favorsCount || 0}</span>
+    </button>
   );
 }
 
-function FavorIcon() {
+function FavorIcon({ ...props }: ButtonHTMLAttributes<HTMLOrSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -144,6 +151,7 @@ function FavorIcon() {
       viewBox="0 0 24 24"
       width="24px"
       fill="#FFFFFF"
+      {...props}
     >
       <path d="M0 0h24v24H0V0z" fill="none" />
       <path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z" />
@@ -151,7 +159,7 @@ function FavorIcon() {
   );
 }
 
-function FavorWhiteIcon() {
+function FavorWhiteIcon({ ...props }: ButtonHTMLAttributes<HTMLOrSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -159,6 +167,7 @@ function FavorWhiteIcon() {
       viewBox="0 0 24 24"
       width="24px"
       fill="#FFFFFF"
+      {...props}
     >
       <path d="M0 0h24v24H0V0z" fill="none" />
       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />

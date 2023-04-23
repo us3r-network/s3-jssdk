@@ -19,11 +19,9 @@ const preview: Preview = {
       <Us3rAuthWithRainbowkitProvider>
         <ProfileStateProvider
           ceramicHost={process.env.REACT_APP_CERAMIC_HOST as string}
-          themeConfig={{ mode: "dark" }}
         >
           <LinkStateProvider
             ceramicHost={process.env.REACT_APP_CERAMIC_HOST as string}
-            themeConfig={{ mode: "dark" }}
           >
             <Story />
           </LinkStateProvider>

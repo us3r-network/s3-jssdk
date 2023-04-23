@@ -1,10 +1,6 @@
-import styled from "styled-components";
+import { ButtonHTMLAttributes } from "react";
 import LoadingGif from "./loading.gif";
-
-const ButtonLoading = styled.img.attrs({
-  src: LoadingGif,
-})`
-  width: 20px;
-  height: 20px;
-`;
+function ButtonLoading({ ...props }: ButtonHTMLAttributes<HTMLImageElement>) {
+  return <img src={LoadingGif} width={"20px"} height={"20px"} {...props} />;
+}
 export default ButtonLoading;

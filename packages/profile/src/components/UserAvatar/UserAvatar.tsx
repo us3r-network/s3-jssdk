@@ -1,12 +1,15 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { StyledComponentPropsWithRef } from "styled-components";
+import React, {
+  ButtonHTMLAttributes,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import multiavatar from "@multiavatar/multiavatar";
-import { Image } from "rebass/styled-components";
 import { useProfileState } from "../../ProfileStateProvider";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import AvatarLoadingSvg from "./avatar-loading.svg";
 
-type UserAvatarProps = StyledComponentPropsWithRef<"img"> & {
+type UserAvatarProps = ButtonHTMLAttributes<HTMLImageElement> & {
   did?: string;
 };
 const getUserAvatarSrc = (did: string) =>
@@ -50,8 +53,9 @@ export default function UserAvatar(props: UserAvatarProps) {
   }, [isLoginUser, did, defaultAvatarUrl, getProfileWithDid]);
 
   return (
-    <Image
-      variant={"avatar"}
+    <img
+      width={32}
+      height={32}
       src={loading ? AvatarLoadingSvg : avatarSrc}
       onError={(el: React.SyntheticEvent<HTMLImageElement, Event>) => {
         el.currentTarget.src = defaultAvatarUrl;

@@ -1,7 +1,5 @@
 import { ButtonHTMLAttributes } from "react";
-import { Text } from "rebass/styled-components";
 import UserAvatar from "../UserAvatar/UserAvatar";
-import { Button } from "rebass/styled-components";
 import Username from "../UserName/UserName";
 import {
   useAuthentication,
@@ -9,14 +7,15 @@ import {
 } from "@us3r-network/auth-with-rainbowkit";
 
 export type LoginButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  className?: string;
   avatarClassName?: string;
-  textClassName?: string;
   nameTextClassName?: string;
   loginTextClassName?: string;
 };
 
 function LoginButton({
   onClick,
+  className = "us3r-LoginButton",
   avatarClassName = "us3r-LoginButton__avatar",
   nameTextClassName = "us3r-LoginButton__text--name",
   loginTextClassName = "us3r-LoginButton__text--login",
@@ -25,8 +24,8 @@ function LoginButton({
   const { signIn } = useAuthentication();
   const session = useSession();
   return (
-    <Button
-      variant="primary"
+    <button
+      className={className}
       onClick={(e) => {
         if (onClick) {
           onClick(e);
@@ -44,11 +43,9 @@ function LoginButton({
           <Username did={session.id} className={nameTextClassName} />
         </>
       ) : (
-        <Text variant={"heading"} className={loginTextClassName}>
-          Login
-        </Text>
+        <span className={loginTextClassName}>Login</span>
       )}
-    </Button>
+    </button>
   );
 }
 export default LoginButton;
