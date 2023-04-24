@@ -115,7 +115,6 @@ export const createLinkSlice: StateCreator<LinkSlice, [], [], LinkSlice> = (
         newLink.votesCount++;
       }
     }
-    console.log({ newLink });
     set((state) => ({
       cacheLinks: new Map(state.cacheLinks).set(linkId, newLink),
     }));

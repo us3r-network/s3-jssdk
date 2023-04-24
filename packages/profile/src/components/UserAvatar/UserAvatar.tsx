@@ -8,6 +8,7 @@ import multiavatar from "@multiavatar/multiavatar";
 import { useProfileState } from "../../ProfileStateProvider";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import AvatarLoadingSvg from "./avatar-loading.svg";
+import { DEFAULT_DID } from "../../utils/constants";
 
 type UserAvatarProps = ButtonHTMLAttributes<HTMLImageElement> & {
   did?: string;
@@ -21,7 +22,7 @@ export default function UserAvatar(props: UserAvatarProps) {
   const isLoginUser = !props.hasOwnProperty("did");
   const did = (isLoginUser ? session?.id : props.did) || "";
   const defaultAvatarUrl = useMemo(
-    () => getUserAvatarSrc(did || "did:pkh:0"),
+    () => getUserAvatarSrc(did || DEFAULT_DID),
     [did]
   );
   const [loading, setLoading] = useState(true);

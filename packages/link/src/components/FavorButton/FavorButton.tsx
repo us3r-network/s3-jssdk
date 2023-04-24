@@ -122,10 +122,7 @@ export default function FavorButton({
     updateFavorInCacheLinks,
   ]);
 
-  const isFavored = useMemo(() => {
-    if (!findCurrUserFavor) return false;
-    return !findCurrUserFavor?.node.revoke;
-  }, [findCurrUserFavor]);
+  const isFavored = findCurrUserFavor && !findCurrUserFavor?.node?.revoke;
 
   return (
     <button className={className} onClick={onFavor} {...otherProps}>

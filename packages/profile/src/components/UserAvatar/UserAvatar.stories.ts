@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import UserAvatarComponent from "./UserAvatar";
+import { DEFAULT_DID } from "../../utils/constants";
 const meta = {
   title: "Components/UserAvatar",
   component: UserAvatarComponent,
@@ -14,6 +15,6 @@ export const LoginUserAvatar: Story = {};
 
 export const OtherUserAvatar: Story = {
   args: {
-    did: "did:pkh:0",
+    did: DEFAULT_DID,
   },
 };

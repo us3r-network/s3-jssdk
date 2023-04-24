@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import UserNameComponent from "./UserName";
+import { DEFAULT_DID } from "../../utils/constants";
 const meta = {
   title: "Components/UserName",
   component: UserNameComponent,
@@ -14,7 +15,7 @@ export const LoginUserName: Story = {};
 
 export const OtherUserName: Story = {
   args: {
-    did: "did:pkh:0",
+    did: DEFAULT_DID,
   },
 };
 
