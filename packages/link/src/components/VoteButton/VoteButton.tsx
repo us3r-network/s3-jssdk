@@ -131,10 +131,7 @@ export default function VoteButton({
     addVoteToCacheLinks,
     updateVoteInCacheLinks,
   ]);
-  const isVoted = useMemo(() => {
-    if (!findCurrUserVote) return false;
-    return !findCurrUserVote.node.revoke;
-  }, [findCurrUserVote]);
+  const isVoted = findCurrUserVote && !findCurrUserVote?.node?.revoke;
   return (
     <button onClick={onVote} className={className} {...props}>
       {(loading && <ButtonLoading className={loadingClassName} />) || (
