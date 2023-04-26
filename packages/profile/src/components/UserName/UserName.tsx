@@ -1,13 +1,25 @@
-import { HtmlHTMLAttributes, useEffect, useState } from "react";
+import { HTMLAttributes, useEffect, useState } from "react";
 import { useProfileState } from "../../ProfileStateProvider";
 import { shortDid } from "../../utils/short";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
-
-type Props = HtmlHTMLAttributes<HTMLDivElement> & {
+import { RenderProps, useRenderProps } from "../../utils/props";
+export interface UserNameIncomingProps {
   did?: string;
   name?: string;
-};
-export default function UserName({ name, ...props }: Props) {
+}
+export interface UserNameRenderProps {
+  loading: boolean;
+  username: string;
+}
+export interface UserNameProps
+  extends Omit<
+      HTMLAttributes<HTMLSpanElement>,
+      "children" | "style" | "className"
+    >,
+    RenderProps<UserNameRenderProps>,
+    UserNameIncomingProps {}
+
+export function UserName({ name, ...props }: UserNameProps) {
   const session = useSession();
   const { profile, profileLoading, getProfileWithDid } = useProfileState();
   const isLoginUser = !props.hasOwnProperty("did");
@@ -48,5 +60,28 @@ export default function UserName({ name, ...props }: Props) {
     }
   }, [name, isLoginUser, did, getProfileWithDid]);
 
-  return <span {...props}>{!loading && username}</span>;
+  // TODO: Use react-aria to complete cross-platform barrier-free interaction
+  const baseProps = {
+    ...props,
+  };
+
+  // The business state that the component cares about
+  const businessProps = {
+    "data-loading": loading || undefined,
+  };
+
+  // Subcomponent rendering function and props used
+  const baseRenderProps = {};
+  const businessRenderProps = {
+    loading,
+    username,
+  };
+
+  //
+  const renderProps = useRenderProps({
+    ...props,
+    values: { ...baseRenderProps, ...businessRenderProps },
+  });
+
+  return <span {...baseProps} {...businessProps} {...renderProps} />;
 }

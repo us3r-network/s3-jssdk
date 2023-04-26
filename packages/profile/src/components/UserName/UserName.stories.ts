@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import UserNameComponent from "./UserName";
+import { UserName as UserNameComponent } from ".";
 import { DEFAULT_DID } from "../../utils/constants";
 const meta = {
   title: "Components/UserName",

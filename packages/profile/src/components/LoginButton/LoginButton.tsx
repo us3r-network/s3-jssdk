@@ -1,51 +1,82 @@
-import { ButtonHTMLAttributes } from "react";
-import UserAvatar from "../UserAvatar/UserAvatar";
-import Username from "../UserName/UserName";
 import {
   useAuthentication,
-  useSession,
+  useIsAuthenticated,
 } from "@us3r-network/auth-with-rainbowkit";
+import { useCallback, useRef } from "react";
+import {
+  AriaButtonProps,
+  mergeProps,
+  useButton,
+  useFocusRing,
+  useHover,
+} from "react-aria";
+import { RenderProps, useRenderProps } from "../../utils/props";
 
-export type LoginButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  className?: string;
-  avatarClassName?: string;
-  nameTextClassName?: string;
-  loginTextClassName?: string;
-};
+export interface LoginButtonRenderProps {
+  isAuthenticated: boolean;
+  loading: boolean;
+  disabled: boolean;
+}
+export interface LoginButtonProps
+  extends Omit<
+      AriaButtonProps,
+      "children" | "href" | "target" | "rel" | "elementType"
+    >,
+    RenderProps<LoginButtonRenderProps> {}
 
-function LoginButton({
-  onClick,
-  className = "us3r-LoginButton",
-  avatarClassName = "us3r-LoginButton__avatar",
-  nameTextClassName = "us3r-LoginButton__text--name",
-  loginTextClassName = "us3r-LoginButton__text--login",
-  ...otherProps
-}: LoginButtonProps) {
-  const { signIn } = useAuthentication();
-  const session = useSession();
+export function LoginButton({ ...props }: LoginButtonProps) {
+  const ref = useRef(null);
+
+  // Use react-aria to complete cross-platform barrier-free interaction
+  const { buttonProps, isPressed } = useButton(props as AriaButtonProps, ref);
+  const { focusProps, isFocused, isFocusVisible } = useFocusRing(props);
+  const { hoverProps, isHovered } = useHover(props);
+  const baseProps = {
+    ...mergeProps(buttonProps, focusProps, hoverProps),
+    "data-pressed": isPressed || undefined,
+    "data-focused": isFocused || undefined,
+    "data-focus-visible": isFocusVisible || undefined,
+    "data-hovered": isHovered || undefined,
+  };
+
+  // The business state that the component cares about
+  const { ready, status, signIn } = useAuthentication();
+  const isAuthenticated = useIsAuthenticated();
+  const loading = ready && status === "loading";
+  const disabled = !ready || loading || isAuthenticated;
+  const onClick = useCallback(() => {
+    if (!disabled && !isAuthenticated) {
+      signIn();
+    }
+  }, [disabled, isAuthenticated, signIn]);
+  const businessProps = {
+    "data-authenticated": isAuthenticated || undefined,
+    "data-loading": loading || undefined,
+    "data-disabled": disabled || undefined,
+    onClick,
+  };
+
+  // Subcomponent rendering function and props used
+  const baseRenderProps = {
+    isHovered,
+    isPressed,
+    isFocused,
+    isFocusVisible,
+    isDisabled: props.isDisabled || false,
+  };
+  const businessRenderProps = {
+    isAuthenticated,
+    loading,
+    disabled,
+  };
+
+  //
+  const renderProps = useRenderProps({
+    ...props,
+    values: { ...baseRenderProps, ...businessRenderProps },
+  });
+
   return (
-    <button
-      className={className}
-      onClick={(e) => {
-        if (onClick) {
-          onClick(e);
-          return;
-        }
-        if (!session) {
-          signIn();
-        }
-      }}
-      {...otherProps}
-    >
-      {session ? (
-        <>
-          <UserAvatar did={session.id} className={avatarClassName} />
-          <Username did={session.id} className={nameTextClassName} />
-        </>
-      ) : (
-        <span className={loginTextClassName}>Login</span>
-      )}
-    </button>
+    <button ref={ref} {...baseProps} {...businessProps} {...renderProps} />
   );
 }
-export default LoginButton;
