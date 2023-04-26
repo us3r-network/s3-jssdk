@@ -3,7 +3,7 @@ import multiavatar from "@multiavatar/multiavatar";
 import { useProfileState } from "../../ProfileStateProvider";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { DEFAULT_DID } from "../../utils/constants";
-import { RenderProps, useRenderProps } from "../../utils/props";
+import { ChildrenRenderProps, childrenRender } from "../../utils/props";
 
 export interface UserAvatarIncomingProps {
   did?: string;
@@ -13,17 +13,17 @@ export interface UserAvatarRenderProps {
   avatarSrc: string;
 }
 export interface UserAvatarProps
-  extends Omit<
+  extends ChildrenRenderProps<
       HTMLAttributes<HTMLSpanElement>,
-      "children" | "style" | "className"
+      {},
+      UserAvatarRenderProps
     >,
-    RenderProps<UserAvatarRenderProps>,
     UserAvatarIncomingProps {}
 
 const getUserAvatarSrc = (did: string) =>
   `data:image/svg+xml;utf-8,${encodeURIComponent(multiavatar(did))}`;
 
-export function UserAvatar({ ...props }: UserAvatarProps) {
+export function UserAvatar({ children, ...props }: UserAvatarProps) {
   const session = useSession();
   const { profile, profileLoading, getProfileWithDid } = useProfileState();
   const isLoginUser = !props.hasOwnProperty("did");
@@ -60,28 +60,17 @@ export function UserAvatar({ ...props }: UserAvatarProps) {
     }
   }, [isLoginUser, did, defaultAvatarUrl, getProfileWithDid]);
 
-  // TODO: Use react-aria to complete cross-platform barrier-free interaction
-  const baseProps = {
-    ...props,
-  };
-
-  // The business state that the component cares about
   const businessProps = {
     "data-loading": loading || undefined,
   };
-
-  // Subcomponent rendering function and props used
-  const baseRenderProps = {};
   const businessRenderProps = {
     loading,
     avatarSrc,
   };
 
-  //
-  const renderProps = useRenderProps({
-    ...props,
-    values: { ...baseRenderProps, ...businessRenderProps },
-  });
-
-  return <span {...baseProps} {...businessProps} {...renderProps} />;
+  return (
+    <span {...props} {...businessProps}>
+      {childrenRender(children, {}, businessRenderProps)}
+    </span>
+  );
 }

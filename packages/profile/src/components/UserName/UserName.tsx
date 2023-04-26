@@ -2,7 +2,7 @@ import { HTMLAttributes, useEffect, useState } from "react";
 import { useProfileState } from "../../ProfileStateProvider";
 import { shortDid } from "../../utils/short";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
-import { RenderProps, useRenderProps } from "../../utils/props";
+import { ChildrenRenderProps, childrenRender } from "../../utils/props";
 export interface UserNameIncomingProps {
   did?: string;
   name?: string;
@@ -12,14 +12,14 @@ export interface UserNameRenderProps {
   username: string;
 }
 export interface UserNameProps
-  extends Omit<
+  extends ChildrenRenderProps<
       HTMLAttributes<HTMLSpanElement>,
-      "children" | "style" | "className"
+      {},
+      UserNameRenderProps
     >,
-    RenderProps<UserNameRenderProps>,
     UserNameIncomingProps {}
 
-export function UserName({ name, ...props }: UserNameProps) {
+export function UserName({ name, children, ...props }: UserNameProps) {
   const session = useSession();
   const { profile, profileLoading, getProfileWithDid } = useProfileState();
   const isLoginUser = !props.hasOwnProperty("did");
@@ -59,29 +59,17 @@ export function UserName({ name, ...props }: UserNameProps) {
         .finally(() => setLoading(false));
     }
   }, [name, isLoginUser, did, getProfileWithDid]);
-
-  // TODO: Use react-aria to complete cross-platform barrier-free interaction
-  const baseProps = {
-    ...props,
-  };
-
-  // The business state that the component cares about
   const businessProps = {
     "data-loading": loading || undefined,
   };
-
-  // Subcomponent rendering function and props used
-  const baseRenderProps = {};
   const businessRenderProps = {
     loading,
     username,
   };
 
-  //
-  const renderProps = useRenderProps({
-    ...props,
-    values: { ...baseRenderProps, ...businessRenderProps },
-  });
-
-  return <span {...baseProps} {...businessProps} {...renderProps} />;
+  return (
+    <span {...props} {...businessProps}>
+      {childrenRender(children, {}, businessRenderProps)}
+    </span>
+  );
 }

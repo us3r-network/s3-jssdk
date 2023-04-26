@@ -26,6 +26,7 @@
     "did-session": "^2.0.0",
     "lodash.isfunction": "^3.0.9",
     "react-aria": "^3.24.0",
+    "react-aria-components": "^1.0.0-alpha.3",
     "styled-components": "^5.3.10"
   },
   "peerDependencies": {
