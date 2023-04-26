@@ -14,7 +14,6 @@ export interface UserNameRenderProps {
 export interface UserNameProps
   extends ChildrenRenderProps<
       HTMLAttributes<HTMLSpanElement>,
-      {},
       UserNameRenderProps
     >,
     UserNameIncomingProps {}
@@ -69,7 +68,7 @@ export function UserName({ name, children, ...props }: UserNameProps) {
 
   return (
     <span {...props} {...businessProps}>
-      {childrenRender(children, {}, businessRenderProps)}
+      {childrenRender(children, businessRenderProps)}
     </span>
   );
 }

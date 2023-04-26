@@ -15,7 +15,6 @@ export interface UserAvatarRenderProps {
 export interface UserAvatarProps
   extends ChildrenRenderProps<
       HTMLAttributes<HTMLSpanElement>,
-      {},
       UserAvatarRenderProps
     >,
     UserAvatarIncomingProps {}
@@ -70,7 +69,7 @@ export function UserAvatar({ children, ...props }: UserAvatarProps) {
 
   return (
     <span {...props} {...businessProps}>
-      {childrenRender(children, {}, businessRenderProps)}
+      {childrenRender(children, businessRenderProps)}
     </span>
   );
 }

@@ -7,14 +7,14 @@ export interface StyleProps {
   style?: CSSProperties;
 }
 
-export type ChildrenRenderProps<T, O, N> = Omit<T, "children"> &
+export type ChildrenRenderProps<T, V> = Omit<T, "children"> &
   StyleProps & {
-    children?: React.ReactNode | ((values: O & N) => ReactNode);
+    children?: React.ReactNode | ((values: V) => ReactNode);
   };
 
-export function childrenRender<T, O, N>(children: T, oValues: O, nValues: N) {
+export function childrenRender<T, V>(children: T, values: V) {
   if (typeof children === "function") {
-    return children({ ...oValues, ...nValues });
+    return children(values);
   } else {
     return children;
   }

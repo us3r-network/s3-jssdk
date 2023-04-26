@@ -15,8 +15,7 @@ export interface LoginButtonRenderProps {
 export interface LoginButtonProps
   extends ChildrenRenderProps<
     AriaButtonProps,
-    ButtonRenderProps,
-    LoginButtonRenderProps
+    ButtonRenderProps & LoginButtonRenderProps
   > {}
 
 export function LoginButton({ children, ...props }: LoginButtonProps) {
@@ -45,7 +44,7 @@ export function LoginButton({ children, ...props }: LoginButtonProps) {
   return (
     <Button {...props} {...businessProps}>
       {(buttonProps) =>
-        childrenRender(children, buttonProps, businessRenderProps)
+        childrenRender(children, { ...buttonProps, ...businessRenderProps })
       }
     </Button>
   );
