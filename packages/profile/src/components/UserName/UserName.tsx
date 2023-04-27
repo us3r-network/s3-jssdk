@@ -65,6 +65,7 @@ export function UserName({ name, children, ...props }: UserNameProps) {
     loading,
     username,
   };
+  console.log({ loading, username });
 
   return (
     <span {...props} {...businessProps}>

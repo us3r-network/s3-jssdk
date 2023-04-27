@@ -19,6 +19,5 @@ export function UserNameExample({
 const StyledUserName = styled(UserName)`
   font-size: 16px;
   line-height: 19px;
-  color: #ffffff;
-  opacity: 0.8;
+  color: #999;
 `;
