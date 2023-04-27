@@ -4,7 +4,6 @@ import { LoginButton as LoginButtonComponent } from ".";
 const meta = {
   title: "Components/LoginButton",
   component: LoginButtonComponent,
-  tags: ["autodocs"],
 } satisfies Meta<typeof LoginButtonComponent>;
 export default meta;
 
