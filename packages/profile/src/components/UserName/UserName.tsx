@@ -1,8 +1,9 @@
-import { HTMLAttributes, useEffect, useState } from "react";
+import { HTMLAttributes, useEffect, useMemo, useState } from "react";
 import { useProfileState } from "../../ProfileStateProvider";
 import { shortDid } from "../../utils/short";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
+import { UserNameChildren } from "./default-ui/UserNameChildren";
 export interface UserNameIncomingProps {
   did?: string;
   name?: string;
@@ -59,17 +60,21 @@ export function UserName({ name, children, ...props }: UserNameProps) {
     }
   }, [name, isLoginUser, did, getProfileWithDid]);
   const businessProps = {
+    "data-us3r-username": "",
     "data-loading": loading || undefined,
   };
   const businessRenderProps = {
     loading,
     username,
   };
-  console.log({ loading, username });
 
+  const defaultChildren = useMemo(
+    () => <UserNameChildren {...businessRenderProps} />,
+    [businessRenderProps]
+  );
   return (
     <span {...props} {...businessProps}>
-      {childrenRender(children, businessRenderProps)}
+      {childrenRender(children, businessRenderProps, defaultChildren)}
     </span>
   );
 }

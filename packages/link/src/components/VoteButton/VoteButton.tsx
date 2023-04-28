@@ -1,32 +1,36 @@
-import { ButtonHTMLAttributes, useCallback, useEffect, useMemo } from "react";
-import ButtonLoading from "../common/ButtonLoading/ButtonLoading";
+import { useCallback, useEffect, useMemo } from "react";
 import { getS3LinkModel, useLinkState } from "../../LinkStateProvider";
 import {
   useAuthentication,
+  useIsAuthenticated,
   useSession,
 } from "@us3r-network/auth-with-rainbowkit";
 import { useStore } from "../../store";
+import { Button, ButtonRenderProps } from "react-aria-components";
+import { ChildrenRenderProps, childrenRender } from "../../utils/props";
+import { AriaButtonProps } from "react-aria";
+import { VoteButtonChildren } from "./default-ui/VoteButtonChildren";
 
-export type VoteButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export interface VoteButtonIncomingProps {
   linkId: string;
-  className?: string;
-  loadingClassName?: string;
-  upvoteClassName?: string;
-  downvoteClassName?: string;
-  countClassName?: string;
-};
+}
+export interface VoteButtonRenderProps {
+  isAuthenticated: boolean;
+  isVoted: boolean;
+  loading: boolean;
+  votesCount: number;
+}
+export interface VoteButtonProps
+  extends ChildrenRenderProps<
+      AriaButtonProps,
+      ButtonRenderProps & VoteButtonRenderProps
+    >,
+    VoteButtonIncomingProps {}
 
-export default function VoteButton({
-  linkId,
-  className = "us3r-VoteButton",
-  loadingClassName = "us3r-VoteButton__loading",
-  upvoteClassName = "us3r-VoteButton__upvote",
-  downvoteClassName = "us3r-VoteButton__downvote",
-  countClassName = "us3r-VoteButton__count",
-  ...props
-}: VoteButtonProps) {
+export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
+  const isAuthenticated = useIsAuthenticated();
   const session = useSession();
   const { s3LinkModalInitialed, s3LinkModalAuthed } = useLinkState();
 
@@ -131,50 +135,36 @@ export default function VoteButton({
     addVoteToCacheLinks,
     updateVoteInCacheLinks,
   ]);
-  const isVoted = findCurrUserVote && !findCurrUserVote?.node?.revoke;
-  return (
-    <button onClick={onVote} className={className} {...props}>
-      {(loading && <ButtonLoading className={loadingClassName} />) || (
-        <>
-          {isVoted ? (
-            <VoteWhiteIcon className={upvoteClassName} />
-          ) : (
-            <VoteIcon className={downvoteClassName} />
-          )}
-        </>
-      )}
-      <span>{link?.votesCount || 0}</span>
-    </button>
-  );
-}
+  const isVoted = !!findCurrUserVote && !findCurrUserVote?.node?.revoke;
 
-function VoteIcon({ ...props }: ButtonHTMLAttributes<HTMLOrSVGElement>) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      height="24px"
-      viewBox="0 0 24 24"
-      width="24px"
-      fill="#FFFFFF"
-      {...props}
-    >
-      <path d="M0 0h24v24H0V0zm0 0h24v24H0V0z" fill="none" />
-      <path d="M9 21h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.58 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2zM9 9l4.34-4.34L12 10h9v2l-3 7H9V9zM1 9h4v12H1z" />
-    </svg>
-  );
-}
+  const businessProps = {
+    "data-us3r-votebutton": "",
+    "data-authenticated": isAuthenticated || undefined,
+    "data-voted": isVoted || undefined,
+    "data-loading": loading || undefined,
+    onClick: onVote,
+  };
 
-function VoteWhiteIcon({ ...props }: ButtonHTMLAttributes<HTMLOrSVGElement>) {
+  const businessRenderProps = {
+    isAuthenticated,
+    isVoted,
+    loading,
+    votesCount: link?.votesCount || 0,
+  };
+
+  const defaultChildren = useMemo(
+    () => <VoteButtonChildren {...businessRenderProps} />,
+    [businessRenderProps]
+  );
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      height="24px"
-      viewBox="0 0 24 24"
-      width="24px"
-      fill="#FFFFFF"
-      {...props}
-    >
-      <path d="M18 21H8V8l7-7 1.25 1.25q.175.175.288.475.112.3.112.575v.35L15.55 8H21q.8 0 1.4.6.6.6.6 1.4v2q0 .175-.038.375-.037.2-.112.375l-3 7.05q-.225.5-.75.85T18 21ZM6 8v13H2V8Z" />
-    </svg>
+    <Button {...props} {...businessProps}>
+      {(buttonProps) =>
+        childrenRender(
+          children,
+          { ...buttonProps, ...businessRenderProps },
+          defaultChildren
+        )
+      }
+    </Button>
   );
 }

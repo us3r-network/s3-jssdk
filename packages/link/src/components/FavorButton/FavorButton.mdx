@@ -1,0 +1,28 @@
+import { Canvas, Meta, Story, ArgTypes } from "@storybook/blocks";
+
+import * as FavorButtonStories from "./FavorButton.stories";
+import * as FavorButtonExampleStories from "../../../stories/FavorButton/FavorButtonExample.stories";
+
+<Meta of={FavorButtonStories} />
+
+# FavorButton
+
+The login button allows users to perform login authorization actions through mouse, touch, and keyboard interactions.
+
+<Canvas of={FavorButtonStories.FavorButton} />
+
+<ArgTypes />
+
+# Example
+
+## Import Css
+
+<Canvas of={FavorButtonExampleStories.FavorButtonImportCss} />
+
+## Css Moudle
+
+<Canvas of={FavorButtonExampleStories.FavorButtonCssModule} />
+
+## Styled
+
+<Canvas of={FavorButtonExampleStories.FavorButtonStyled} />

@@ -2,10 +2,11 @@ import {
   useAuthentication,
   useIsAuthenticated,
 } from "@us3r-network/auth-with-rainbowkit";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { AriaButtonProps } from "react-aria";
 import { Button, ButtonRenderProps } from "react-aria-components";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
+import { LoginButtonChildren } from "./default-ui/LoginButtonChildren";
 
 export interface LoginButtonRenderProps {
   isAuthenticated: boolean;
@@ -29,6 +30,7 @@ export function LoginButton({ children, ...props }: LoginButtonProps) {
     }
   }, [disabled, isAuthenticated, signIn]);
   const businessProps = {
+    "data-us3r-loginbutton": "",
     "data-authenticated": isAuthenticated || undefined,
     "data-loading": loading || undefined,
     "data-disabled": disabled || undefined,
@@ -41,10 +43,19 @@ export function LoginButton({ children, ...props }: LoginButtonProps) {
     disabled,
   };
 
+  const defaultChildren = useMemo(
+    () => <LoginButtonChildren {...businessRenderProps} />,
+    [businessRenderProps]
+  );
+
   return (
     <Button {...props} {...businessProps}>
       {(buttonProps) =>
-        childrenRender(children, { ...buttonProps, ...businessRenderProps })
+        childrenRender(
+          children,
+          { ...buttonProps, ...businessRenderProps },
+          defaultChildren
+        )
       }
     </Button>
   );

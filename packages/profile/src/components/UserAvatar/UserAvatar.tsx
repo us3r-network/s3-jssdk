@@ -4,6 +4,7 @@ import { useProfileState } from "../../ProfileStateProvider";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { DEFAULT_DID } from "../../utils/constants";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
+import { UserAvatarChildren } from "./default-ui/UserAvatarChildren";
 
 export interface UserAvatarIncomingProps {
   did?: string;
@@ -60,6 +61,7 @@ export function UserAvatar({ children, ...props }: UserAvatarProps) {
   }, [isLoginUser, did, defaultAvatarUrl, getProfileWithDid]);
 
   const businessProps = {
+    "data-us3r-useravatar": "",
     "data-loading": loading || undefined,
   };
   const businessRenderProps = {
@@ -67,9 +69,14 @@ export function UserAvatar({ children, ...props }: UserAvatarProps) {
     avatarSrc,
   };
 
+  const defaultChildren = useMemo(
+    () => <UserAvatarChildren {...businessRenderProps} />,
+    [businessRenderProps]
+  );
+
   return (
     <span {...props} {...businessProps}>
-      {childrenRender(children, businessRenderProps)}
+      {childrenRender(children, businessRenderProps, defaultChildren)}
     </span>
   );
 }
