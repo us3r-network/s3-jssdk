@@ -1,5 +1,4 @@
 import type { UserNameRenderProps } from "../UserName";
-import "./default.css";
 
 export interface UserNameChildrenProps extends UserNameRenderProps {}
 
