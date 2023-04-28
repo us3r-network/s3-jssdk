@@ -6,7 +6,7 @@
       "@us3r-network/profile": ["./src/index.ts"]
     }
   },
-  "files": ["./image.d.ts"],
+  "files": ["typings.d.ts"],
   "include": ["src", "stories"],
   "exclude": ["node_modules", "dist"]
 }

@@ -1,4 +1,4 @@
-export { default as LoginButton } from "./LoginButton/LoginButton";
-export { default as LogoutButton } from "./LogoutButton/LogoutButton";
-export { default as UserAvatar } from "./UserAvatar/UserAvatar";
-export { default as UserName } from "./UserName/UserName";
+export * from "./LoginButton";
+export * from "./LogoutButton";
+export * from "./UserAvatar";
+export * from "./UserName";

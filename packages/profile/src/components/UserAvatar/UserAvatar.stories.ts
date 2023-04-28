@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import UserAvatarComponent from "./UserAvatar";
+import { UserAvatar as UserAvatarComponent } from ".";
 import { DEFAULT_DID } from "../../utils/constants";
 const meta = {
   title: "Components/UserAvatar",
   component: UserAvatarComponent,
-  tags: ["autodocs"],
 } satisfies Meta<typeof UserAvatarComponent>;
 export default meta;
 
