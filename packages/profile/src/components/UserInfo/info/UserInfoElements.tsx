@@ -1,7 +1,7 @@
 import { HTMLAttributes } from "react";
 import { UserAvatar, UserAvatarProps } from "../../UserAvatar";
 import { UserName, UserNameProps } from "../../UserName";
-import { useUserInfoState } from "../contexts";
+import { useUserInfoState } from "./UserInfoContext";
 
 export function Avatar(props: UserAvatarProps) {
   const { isLoginUser, did } = useUserInfoState();

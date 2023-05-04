@@ -1,38 +1,27 @@
 import {
   HTMLAttributes,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
-import { useProfileState } from "../../ProfileStateProvider";
-import { ChildrenRenderProps, childrenRender } from "../../utils/props";
-import { UserInfoEditFormChildren } from "./default-ui/UserInfoEditFormChildren";
+import { useProfileState } from "../../../ProfileStateProvider";
+import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
+import * as UserInfoEditFormElements from "./UserInfoEditFormElements";
 import {
   UserInfoEditFormContext,
   UserInfoEditFormContextValue,
-  UserInfoEditModalContext,
-  useUserInfoState,
-} from "./contexts";
-import * as UserInfoEditFormElements from "./elements/UserInfoEditForm";
-
-export interface UserInfoEditFormIncomingProps {
-  onCancelEdit?: () => void;
-}
+} from "./UserInfoEditFormContext";
+import { useUserInfoState } from "../info";
+import { UserInfoEditFormDefaultChildren } from "./UserInfoEditFormDefaultChildren";
 
 export interface UserInfoEditFormProps
   extends ChildrenRenderProps<
-      HTMLAttributes<HTMLFormElement>,
-      UserInfoEditFormContextValue
-    >,
-    UserInfoEditFormIncomingProps {}
+    HTMLAttributes<HTMLFormElement>,
+    UserInfoEditFormContextValue
+  > {}
 
-function UserInfoEditForm({
-  children,
-  onCancelEdit,
-  ...props
-}: UserInfoEditFormProps) {
+function UserInfoEditForm({ children, ...props }: UserInfoEditFormProps) {
   const { isLoginUser, info } = useUserInfoState();
   const { updateProfile } = useProfileState();
 
@@ -57,19 +46,6 @@ function UserInfoEditForm({
   useEffect(() => {
     setErrMsg("");
   }, [avatar, name, bio]);
-
-  let editModalContext = useContext(UserInfoEditModalContext);
-  const cancelEdit = useCallback(() => {
-    if (onCancelEdit) {
-      onCancelEdit();
-    } else if (editModalContext?.setIsOpen) {
-      editModalContext.setIsOpen(false);
-    } else {
-      throw new Error(
-        "UserInfoEditForm: onCancelEdit or UserInfoEditModalContext is required"
-      );
-    }
-  }, [onCancelEdit, editModalContext?.setIsOpen]);
 
   const submitEdit = useCallback(async () => {
     try {
@@ -103,12 +79,15 @@ function UserInfoEditForm({
     errMsg,
     disabled,
     submitEdit,
-    cancelEdit,
   };
   return (
     <UserInfoEditFormContext.Provider value={contextValue}>
       <form {...props} {...businessProps}>
-        {childrenRender(children, contextValue, <UserInfoEditFormChildren />)}
+        {childrenRender(
+          children,
+          contextValue,
+          <UserInfoEditFormDefaultChildren />
+        )}
       </form>
     </UserInfoEditFormContext.Provider>
   );

@@ -11,7 +11,6 @@ export interface UserInfoEditFormContextValue {
   errMsg: string;
   disabled: boolean;
   submitEdit: () => void;
-  cancelEdit: () => void;
 }
 
 export const UserInfoEditFormContext =

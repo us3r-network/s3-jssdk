@@ -1,11 +1,11 @@
 import { HTMLAttributes, useEffect, useState } from "react";
-import { useProfileState } from "../../ProfileStateProvider";
+import { useProfileState } from "../../../ProfileStateProvider";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
-import { ChildrenRenderProps, childrenRender } from "../../utils/props";
-import { UserInfoChildren } from "./default-ui/UserInfoChildren";
-import { Profile } from "../../data-model";
-import { UserInfoContext, UserInfoContextValue } from "./contexts";
-import * as UserInfoElements from "./elements/UserInfo";
+import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
+import { Profile } from "../../../data-model";
+import * as UserInfoElements from "./UserInfoElements";
+import { UserInfoContext, UserInfoContextValue } from "./UserInfoContext";
+import { UserInfoDefaultChildren } from "./UserInfoDefaultChildren";
 export interface UserInfoIncomingProps {
   did?: string;
 }
@@ -63,7 +63,7 @@ function UserInfo({ children, ...props }: UserInfoProps) {
   return (
     <UserInfoContext.Provider value={contextValue}>
       <div {...props} {...businessProps}>
-        {childrenRender(children, contextValue, <UserInfoChildren />)}
+        {childrenRender(children, contextValue, <UserInfoDefaultChildren />)}
       </div>
     </UserInfoContext.Provider>
   );

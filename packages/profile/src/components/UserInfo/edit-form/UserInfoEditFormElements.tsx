@@ -9,7 +9,7 @@ import {
   TextFieldProps,
 } from "react-aria-components";
 import { uploadImage } from "../../../utils/updateFile";
-import { useUserInfoEditFormState } from "../contexts";
+import { useUserInfoEditFormState } from ".";
 import { HTMLAttributes } from "react";
 
 export function FormField(props: TextFieldProps) {
@@ -74,22 +74,9 @@ export function BioInput(props: InputProps) {
   );
 }
 
-export function CancelButton(props: ButtonProps) {
-  const { disabled, cancelEdit } = useUserInfoEditFormState();
-  return (
-    <Button onPress={cancelEdit} isDisabled={disabled} {...props}>
-      Cancel
-    </Button>
-  );
-}
-
 export function SubmitButton(props: ButtonProps) {
   const { disabled, submitEdit } = useUserInfoEditFormState();
-  return (
-    <Button onPress={submitEdit} isDisabled={disabled} {...props}>
-      Submit
-    </Button>
-  );
+  return <Button onPress={submitEdit} isDisabled={disabled} {...props} />;
 }
 
 export function ErrorMessage(props: HTMLAttributes<HTMLSpanElement>) {

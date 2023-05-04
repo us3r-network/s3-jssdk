@@ -1,7 +1,7 @@
-import { Heading } from "react-aria-components";
-import * as UserInfoEditForm from "../elements/UserInfoEditForm";
+import { Button, Heading } from "react-aria-components";
+import * as UserInfoEditForm from "./UserInfoEditFormElements";
 
-export function UserInfoEditFormChildren() {
+export function UserInfoEditFormDefaultChildren() {
   return (
     <>
       <Heading>Edit Info</Heading>
@@ -23,7 +23,6 @@ export function UserInfoEditFormChildren() {
         <UserInfoEditForm.BioInput />
       </UserInfoEditForm.FormField>
 
-      <UserInfoEditForm.CancelButton>Cancel</UserInfoEditForm.CancelButton>
       <UserInfoEditForm.SubmitButton>Submit</UserInfoEditForm.SubmitButton>
 
       <UserInfoEditForm.ErrorMessage />
