@@ -5,20 +5,26 @@ import { useUserInfoState } from "./UserInfoContext";
 
 export function Avatar(props: UserAvatarProps) {
   const { isLoginUser, did } = useUserInfoState();
-  return isLoginUser ? (
-    <UserAvatar {...props} />
-  ) : (
-    <UserAvatar did={did} {...props} />
-  );
+  const avatarProps = {
+    "data-avatar": "",
+    ...props,
+  };
+  if (!isLoginUser) {
+    Object.assign(avatarProps, { did });
+  }
+  return <UserAvatar {...avatarProps} />;
 }
 
 export function Name(props: UserNameProps) {
   const { isLoginUser, did } = useUserInfoState();
-  return isLoginUser ? (
-    <UserName {...props} />
-  ) : (
-    <UserName did={did} {...props} />
-  );
+  const nameProps = {
+    "data-name": "",
+    ...props,
+  };
+  if (!isLoginUser) {
+    Object.assign(nameProps, { did });
+  }
+  return <UserName {...nameProps} />;
 }
 
 export function Bio(props: HTMLAttributes<HTMLSpanElement>) {

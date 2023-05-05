@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { UserInfo as UserInfoComponent } from ".";
-import { DEFAULT_DID } from "../../utils/constants";
+import { UserInfo as UserInfoComponent } from "./UserInfo";
+import { DEFAULT_DID } from "../../../utils/constants";
 const meta = {
   title: "Components/UserInfo",
   component: UserInfoComponent,

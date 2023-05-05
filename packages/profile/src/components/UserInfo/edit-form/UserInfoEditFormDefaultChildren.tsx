@@ -1,27 +1,25 @@
-import { Button, Heading } from "react-aria-components";
+import { Label, TextField } from "react-aria-components";
 import * as UserInfoEditForm from "./UserInfoEditFormElements";
 
 export function UserInfoEditFormDefaultChildren() {
   return (
     <>
-      <Heading>Edit Info</Heading>
-
       <UserInfoEditForm.AvatarPreview />
 
-      <UserInfoEditForm.FormField autoFocus>
-        <UserInfoEditForm.FormLabel>Select Image</UserInfoEditForm.FormLabel>
+      <TextField autoFocus>
+        <Label>Select Image</Label>
         <UserInfoEditForm.AvatarUploadInput />
-      </UserInfoEditForm.FormField>
+      </TextField>
 
-      <UserInfoEditForm.FormField>
-        <UserInfoEditForm.FormLabel>Name</UserInfoEditForm.FormLabel>
+      <TextField>
+        <Label>Name</Label>
         <UserInfoEditForm.NameInput />
-      </UserInfoEditForm.FormField>
+      </TextField>
 
-      <UserInfoEditForm.FormField>
-        <UserInfoEditForm.FormLabel>Bio</UserInfoEditForm.FormLabel>
-        <UserInfoEditForm.BioInput />
-      </UserInfoEditForm.FormField>
+      <TextField>
+        <Label htmlFor="bio-textarea">Bio</Label>
+        <UserInfoEditForm.BioTextArea id="bio-textarea" />
+      </TextField>
 
       <UserInfoEditForm.SubmitButton>Submit</UserInfoEditForm.SubmitButton>
 

@@ -1,33 +1,28 @@
-import {
-  Button,
-  ButtonProps,
-  Input,
-  InputProps,
-  Label,
-  LabelProps,
-  TextField,
-  TextFieldProps,
-} from "react-aria-components";
-import { uploadImage } from "../../../utils/updateFile";
+import { Button, ButtonProps, Input, InputProps } from "react-aria-components";
+import { uploadImage } from "../../../utils/uploadFile";
 import { useUserInfoEditFormState } from ".";
 import { HTMLAttributes } from "react";
-
-export function FormField(props: TextFieldProps) {
-  return <TextField {...props} />;
-}
-export function FormLabel(props: LabelProps) {
-  return <Label {...props} />;
-}
+import { TextArea, TextAreaProps } from "../../common/TextArea";
 
 export function AvatarPreview(props: HTMLAttributes<HTMLImageElement>) {
   const { avatar } = useUserInfoEditFormState();
-  return <img src={avatar} alt="" width={32} height={32} {...props} />;
+  return (
+    <img
+      data-avatar-preview=""
+      src={avatar}
+      alt=""
+      width={32}
+      height={32}
+      {...props}
+    />
+  );
 }
 
 export function AvatarUploadInput(props: InputProps) {
   const { setAvatar, disabled } = useUserInfoEditFormState();
   return (
     <Input
+      data-avatar-upload=""
       disabled={disabled}
       placeholder="avatar"
       type="file"
@@ -48,6 +43,7 @@ export function NameInput(props: InputProps) {
   const { name, setName, disabled } = useUserInfoEditFormState();
   return (
     <Input
+      data-name-input=""
       disabled={disabled}
       placeholder="name"
       value={name}
@@ -59,10 +55,11 @@ export function NameInput(props: InputProps) {
   );
 }
 
-export function BioInput(props: InputProps) {
+export function BioTextArea(props: TextAreaProps) {
   const { bio, setBio, disabled } = useUserInfoEditFormState();
   return (
-    <Input
+    <TextArea
+      data-bio-textarea=""
       disabled={disabled}
       placeholder="bio"
       value={bio}
@@ -76,7 +73,14 @@ export function BioInput(props: InputProps) {
 
 export function SubmitButton(props: ButtonProps) {
   const { disabled, submitEdit } = useUserInfoEditFormState();
-  return <Button onPress={submitEdit} isDisabled={disabled} {...props} />;
+  return (
+    <Button
+      data-submit-button=""
+      onPress={submitEdit}
+      isDisabled={disabled}
+      {...props}
+    />
+  );
 }
 
 export function ErrorMessage(props: HTMLAttributes<HTMLSpanElement>) {

@@ -61,11 +61,11 @@ function UserInfo({ children, ...props }: UserInfoProps) {
   };
 
   return (
-    <UserInfoContext.Provider value={contextValue}>
-      <div {...props} {...businessProps}>
+    <div {...props} {...businessProps}>
+      <UserInfoContext.Provider value={contextValue}>
         {childrenRender(children, contextValue, <UserInfoDefaultChildren />)}
-      </div>
-    </UserInfoContext.Provider>
+      </UserInfoContext.Provider>
+    </div>
   );
 }
 const _UserInfo = Object.assign(UserInfo, {

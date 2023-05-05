@@ -12,7 +12,6 @@ import {
   UserInfoEditFormContext,
   UserInfoEditFormContextValue,
 } from "./UserInfoEditFormContext";
-import { useUserInfoState } from "../info";
 import { UserInfoEditFormDefaultChildren } from "./UserInfoEditFormDefaultChildren";
 
 export interface UserInfoEditFormProps
@@ -22,7 +21,7 @@ export interface UserInfoEditFormProps
   > {}
 
 function UserInfoEditForm({ children, ...props }: UserInfoEditFormProps) {
-  const { isLoginUser, info } = useUserInfoState();
+  const { profile, profileLoading } = useProfileState();
   const { updateProfile } = useProfileState();
 
   const [avatar, setAvatar] = useState("");
@@ -33,15 +32,15 @@ function UserInfoEditForm({ children, ...props }: UserInfoEditFormProps) {
   const [errMsg, setErrMsg] = useState("");
 
   const disabled = useMemo(
-    () => !isLoginUser || updating,
-    [isLoginUser, updating]
+    () => profileLoading || !profile || updating,
+    [profileLoading, profile, updating]
   );
 
   useEffect(() => {
-    setAvatar(info?.avatar || "");
-    setName(info?.name || "");
-    setBio(info?.bio || "");
-  }, [info?.avatar, info?.name, info?.bio]);
+    setAvatar(profile?.avatar || "");
+    setName(profile?.name || "");
+    setBio(profile?.bio || "");
+  }, [profile?.avatar, profile?.name, profile?.bio]);
 
   useEffect(() => {
     setErrMsg("");
@@ -81,15 +80,15 @@ function UserInfoEditForm({ children, ...props }: UserInfoEditFormProps) {
     submitEdit,
   };
   return (
-    <UserInfoEditFormContext.Provider value={contextValue}>
-      <form {...props} {...businessProps}>
+    <form {...props} {...businessProps}>
+      <UserInfoEditFormContext.Provider value={contextValue}>
         {childrenRender(
           children,
           contextValue,
           <UserInfoEditFormDefaultChildren />
         )}
-      </form>
-    </UserInfoEditFormContext.Provider>
+      </UserInfoEditFormContext.Provider>
+    </form>
   );
 }
 

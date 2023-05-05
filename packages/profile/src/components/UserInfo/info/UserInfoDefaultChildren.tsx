@@ -1,6 +1,12 @@
 import { useState } from "react";
 import * as UserInfo from "./UserInfoElements";
-import { Button, Heading, Modal } from "react-aria-components";
+import {
+  Button,
+  Heading,
+  Label,
+  Modal,
+  TextField,
+} from "react-aria-components";
 import { UserInfoEditForm } from "../edit-form/UserInfoEditForm";
 import { useUserInfoState } from "./UserInfoContext";
 
@@ -27,50 +33,54 @@ export function UserInfoDefaultChildren() {
       <section data-bio-box="">
         <UserInfo.Bio />
       </section>
-      <Modal isOpen={isOpenEdit} onOpenChange={setIsOpenEdit}>
-        <UserInfoEditForm>
-          {({ disabled }) => {
-            return (
-              <>
-                <Heading>Edit Info</Heading>
+      {isLoginUser && (
+        <Modal data-modal="" isOpen={isOpenEdit} onOpenChange={setIsOpenEdit}>
+          <Heading data-heading="">Edit Info</Heading>
+          <UserInfoEditForm>
+            {({ disabled }) => {
+              return (
+                <>
+                  <UserInfoEditForm.AvatarPreview />
 
-                <UserInfoEditForm.AvatarPreview />
+                  <TextField autoFocus data-field="">
+                    <Label data-label="">Select Image</Label>
+                    <UserInfoEditForm.AvatarUploadInput />
+                  </TextField>
 
-                <UserInfoEditForm.FormField autoFocus>
-                  <UserInfoEditForm.FormLabel>
-                    Select Image
-                  </UserInfoEditForm.FormLabel>
-                  <UserInfoEditForm.AvatarUploadInput />
-                </UserInfoEditForm.FormField>
+                  <TextField data-field="">
+                    <Label data-label="">Name</Label>
+                    <UserInfoEditForm.NameInput />
+                  </TextField>
 
-                <UserInfoEditForm.FormField>
-                  <UserInfoEditForm.FormLabel>Name</UserInfoEditForm.FormLabel>
-                  <UserInfoEditForm.NameInput />
-                </UserInfoEditForm.FormField>
+                  <TextField data-field="">
+                    <Label htmlFor="bio-textarea" data-label="">
+                      Bio
+                    </Label>
+                    <UserInfoEditForm.BioTextArea id="bio-textarea" />
+                  </TextField>
 
-                <UserInfoEditForm.FormField>
-                  <UserInfoEditForm.FormLabel>Bio</UserInfoEditForm.FormLabel>
-                  <UserInfoEditForm.BioInput />
-                </UserInfoEditForm.FormField>
+                  <section data-btns="">
+                    <Button
+                      data-cancel-button=""
+                      isDisabled={disabled}
+                      onPress={() => {
+                        setIsOpenEdit(false);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <UserInfoEditForm.SubmitButton>
+                      Submit
+                    </UserInfoEditForm.SubmitButton>
+                  </section>
 
-                <Button
-                  isDisabled={disabled}
-                  onPress={() => {
-                    setIsOpenEdit(false);
-                  }}
-                >
-                  Cancel
-                </Button>
-                <UserInfoEditForm.SubmitButton>
-                  Submit
-                </UserInfoEditForm.SubmitButton>
-
-                <UserInfoEditForm.ErrorMessage />
-              </>
-            );
-          }}
-        </UserInfoEditForm>
-      </Modal>
+                  <UserInfoEditForm.ErrorMessage />
+                </>
+              );
+            }}
+          </UserInfoEditForm>
+        </Modal>
+      )}
     </>
   );
 }
