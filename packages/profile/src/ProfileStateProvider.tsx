@@ -20,6 +20,7 @@ export interface ProfileStateContextValue {
   profile: Profile | null;
   profileLoading: boolean;
   getProfileWithDid: (did: string) => Promise<Profile | null>;
+  updateProfile: (profile: Profile) => Promise<void>;
 }
 const defaultContextValue: ProfileStateContextValue = {
   s3ProfileModalInitialed: false,
@@ -27,6 +28,7 @@ const defaultContextValue: ProfileStateContextValue = {
   profile: null,
   profileLoading: false,
   getProfileWithDid: async () => null,
+  updateProfile: async () => {},
 };
 const ProfileStateContext = createContext(defaultContextValue);
 
@@ -96,6 +98,24 @@ export default function ProfileStateProvider({
     []
   );
 
+  const updateProfile = useCallback(
+    async (data: Profile) => {
+      if (!session || !s3ProfileModalAuthed || !s3ProfileModel) {
+        throw Error("updateProfile: not authed");
+      }
+      const newProfile = { ...profile, ...data };
+      await s3ProfileModel.mutationPersonalProfile({
+        name: newProfile.name || "",
+        avatar: newProfile.avatar || "",
+        bio: newProfile.bio || "",
+        tags: [...(newProfile.tags || [])],
+        wallets: [...(newProfile.wallets || [])],
+      });
+      setProfile(newProfile);
+    },
+    [session, s3ProfileModalAuthed, profile]
+  );
+
   return (
     <ProfileStateContext.Provider
       value={useMemo(
@@ -105,6 +125,7 @@ export default function ProfileStateProvider({
           profile,
           profileLoading,
           getProfileWithDid,
+          updateProfile,
         }),
         [
           s3ProfileModalInitialed,
@@ -112,6 +133,7 @@ export default function ProfileStateProvider({
           profile,
           profileLoading,
           getProfileWithDid,
+          updateProfile,
         ]
       )}
     >
