@@ -21,8 +21,7 @@ export interface UserInfoEditFormProps
   > {}
 
 function UserInfoEditForm({ children, ...props }: UserInfoEditFormProps) {
-  const { profile, profileLoading } = useProfileState();
-  const { updateProfile } = useProfileState();
+  const { profile, profileLoading, updateProfile } = useProfileState();
 
   const [avatar, setAvatar] = useState("");
   const [name, setName] = useState("");
