@@ -3,7 +3,8 @@ import type { CeramicApi } from "@ceramicnetwork/common";
 import { S3Model } from "@us3r-network/data-model";
 import { Page } from "@ceramicnetwork/common";
 
-import { definition as collectionDefinition } from "./collection-runtime-composite";
+import { definition as collectionDefinitionMainnet } from "./collection-runtime-composite-mainnet";
+import { definition as collectionDefinitionTestnet } from "./collection-runtime-composite-testnet";
 export type Creator = {
   id: string;
 };
@@ -22,11 +23,15 @@ export type Collection = {
 export class S3ModelCollectionModel extends S3Model {
   constructor(
     ceramic: CeramicApi | string,
+    network?: "mainnet" | "testnet",
     definition?: RuntimeCompositeDefinition
   ) {
     super(
       ceramic,
-      definition ?? (collectionDefinition as RuntimeCompositeDefinition)
+      definition ??
+        (network === "mainnet"
+          ? (collectionDefinitionMainnet as RuntimeCompositeDefinition)
+          : (collectionDefinitionTestnet as RuntimeCompositeDefinition))
     );
   }
 
