@@ -3,7 +3,7 @@ import * as UserTags from "./UserTagsElements";
 import { Button, Heading, Item, Modal, TextField } from "react-aria-components";
 import { UserTagsAddForm } from "../add-form/UserTagsAddForm";
 import { useUserTagsState } from "./UserTagsContext";
-import PlusIcon from "../../common/icons/PlusIcon";
+import AddSvg from "@material-design-icons/svg/outlined/add.svg";
 
 export function UserTagsDefaultChildren() {
   const { loading, isLoginUser } = useUserTagsState();
@@ -24,7 +24,7 @@ export function UserTagsDefaultChildren() {
               setIsOpenEdit(true);
             }}
           >
-            <PlusIcon />
+            <AddSvg />
           </Button>
         )}
       </Heading>

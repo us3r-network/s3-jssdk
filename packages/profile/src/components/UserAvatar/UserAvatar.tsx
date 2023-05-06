@@ -4,7 +4,7 @@ import { useProfileState } from "../../ProfileStateProvider";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { DEFAULT_DID } from "../../utils/constants";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
-import { UserAvatarChildren } from "./default-ui/UserAvatarChildren";
+import { UserAvatarChildren } from "./UserAvatarChildren";
 
 export interface UserAvatarIncomingProps {
   did?: string;

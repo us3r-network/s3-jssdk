@@ -3,9 +3,10 @@ import * as UserWallets from "./UserWalletsElements";
 import { Button, Heading, Modal, TextField } from "react-aria-components";
 import { UserWalletsAddForm } from "../add-form/UserWalletsAddForm";
 import { useUserWalletsState } from "./UserWalletsContext";
-import PlusIcon from "../../common/icons/PlusIcon";
-import CopyIcon from "../../common/icons/CopyIcon";
-import DeleteIcon from "../../common/icons/DeleteIcon";
+
+import AddSvg from "@material-design-icons/svg/outlined/add.svg";
+import CopySvg from "@material-design-icons/svg/outlined/content_copy.svg";
+import DeleteSvg from "@material-design-icons/svg/outlined/delete.svg";
 
 export function UserWalletsDefaultChildren() {
   const { loading, isLoginUser } = useUserWalletsState();
@@ -26,7 +27,7 @@ export function UserWalletsDefaultChildren() {
               setIsOpenEdit(true);
             }}
           >
-            <PlusIcon />
+            <AddSvg />
           </Button>
         )}
       </Heading>
@@ -36,14 +37,14 @@ export function UserWalletsDefaultChildren() {
             <UserWallets.Address />
             <UserWallets.Network />
             <UserWallets.Delete>
-              <DeleteIcon />
+              <DeleteSvg />
             </UserWallets.Delete>
             <UserWallets.Copy
               onCopied={() => {
                 alert("copied");
               }}
             >
-              <CopyIcon />
+              <CopySvg />
             </UserWallets.Copy>
           </UserWallets.Item>
         )}

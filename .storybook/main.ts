@@ -81,6 +81,20 @@ const config: StorybookConfig = {
       config.resolve.alias[alias.name] = require.resolve(alias.path);
     }
 
+    // Default rule for images /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/
+    config.module = config.module || {};
+    config.module.rules = config.module.rules || [];
+    const fileLoaderRule = config.module.rules.find(
+      (rule) => (rule as any).test && (rule as any).test.test(".svg")
+    );
+    (fileLoaderRule as any).exclude = /\.svg$/;
+
+    config.module.rules.push({
+      test: /\.svg$/,
+      enforce: "pre",
+      loader: require.resolve("@svgr/webpack"),
+    });
+
     return config;
   },
 };
