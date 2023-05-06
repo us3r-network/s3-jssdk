@@ -20,10 +20,12 @@
   "dependencies": {
     "@composedb/devtools": "^0.4.3",
     "@composedb/types": "^0.4.3",
+    "@material-design-icons/svg": "^0.14.7",
     "@us3r-network/data-model": "^0.1.0",
     "did-session": "^2.0.0",
     "react-aria": "^3.24.0",
     "react-aria-components": "^1.0.0-alpha.3",
+    "react-loading": "^2.0.3",
     "zustand": "^4.3.7"
   },
   "peerDependencies": {

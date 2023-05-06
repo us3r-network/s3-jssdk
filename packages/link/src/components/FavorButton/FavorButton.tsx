@@ -9,7 +9,7 @@ import {
 } from "@us3r-network/auth-with-rainbowkit";
 import { useStore } from "../../store";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
-import { FavorButtonChildren } from "./default-ui/FavorButtonChildren";
+import { FavorButtonChildren } from "./FavorButtonChildren";
 
 export interface FavorButtonIncomingProps {
   linkId: string;
@@ -17,7 +17,8 @@ export interface FavorButtonIncomingProps {
 export interface FavorButtonRenderProps {
   isAuthenticated: boolean;
   isFavored: boolean;
-  loading: boolean;
+  isFavoring: boolean;
+  isDisabled: boolean;
   favorsCount: number;
 }
 export interface FavorButtonProps
@@ -49,14 +50,26 @@ export function FavorButton({ linkId, children, ...props }: FavorButtonProps) {
   );
 
   const link = useMemo(() => cacheLinks.get(linkId), [cacheLinks, linkId]);
-  const loading = useMemo(
+
+  const findCurrUserFavor = useMemo(() => {
+    if (!link?.favors || !session) return null;
+    return link.favors?.edges?.find(
+      (edge) => edge?.node?.creator?.id === session?.id
+    );
+  }, [link?.favors, session]);
+
+  const isFavored = !!findCurrUserFavor && !findCurrUserFavor?.node?.revoke;
+
+  const isFavoring = useMemo(
     () => favoringLinkIds.has(linkId),
     [favoringLinkIds, linkId]
   );
 
+  const isDisabled = useMemo(() => !link || isFavoring, [link, isFavoring]);
+
   useEffect(() => {
     (async () => {
-      if (loading) return;
+      if (isFavoring) return;
       if (link) return;
       if (!s3LinkModalInitialed || !s3LinkModel) return;
       const res = await s3LinkModel.queryLink(linkId);
@@ -64,22 +77,15 @@ export function FavorButton({ linkId, children, ...props }: FavorButtonProps) {
       if (!data) return;
       setOneInCacheLinks(data);
     })();
-  }, [loading, link, s3LinkModalInitialed, linkId, setOneInCacheLinks]);
-
-  const findCurrUserFavor = useMemo(() => {
-    if (!link || !session) return null;
-    return link.favors?.edges?.find(
-      (edge) => edge?.node?.creator?.id === session?.id
-    );
-  }, [link, session]);
+  }, [isFavoring, link, s3LinkModalInitialed, linkId, setOneInCacheLinks]);
 
   const onFavor = useCallback(async () => {
     try {
+      if (isDisabled) return;
       if (!session || !s3LinkModalAuthed) {
         signIn();
         return;
       }
-      if (!link) return;
       addOneToFavoringLinkIds(linkId);
       if (findCurrUserFavor) {
         // update favor
@@ -115,9 +121,9 @@ export function FavorButton({ linkId, children, ...props }: FavorButtonProps) {
       removeOneFromFavoringLinkIds(linkId);
     }
   }, [
+    isDisabled,
     session,
     s3LinkModalAuthed,
-    link,
     linkId,
     findCurrUserFavor,
     addOneToFavoringLinkIds,
@@ -126,20 +132,21 @@ export function FavorButton({ linkId, children, ...props }: FavorButtonProps) {
     updateFavorInCacheLinks,
   ]);
 
-  const isFavored = !!findCurrUserFavor && !findCurrUserFavor?.node?.revoke;
-
   const businessProps = {
     "data-us3r-favorbutton": "",
     "data-authenticated": isAuthenticated || undefined,
     "data-favored": isFavored || undefined,
-    "data-loading": loading || undefined,
+    "data-favoring": isFavoring || undefined,
+    "data-disabled": isDisabled || undefined,
+    isDisabled,
     onClick: onFavor,
   };
 
   const businessRenderProps = {
     isAuthenticated,
     isFavored,
-    loading,
+    isFavoring,
+    isDisabled,
     favorsCount: link?.favorsCount || 0,
   };
 
