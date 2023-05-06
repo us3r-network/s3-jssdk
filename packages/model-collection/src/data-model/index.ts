@@ -12,6 +12,7 @@ export type Creator = {
 export type DateTime = string;
 
 export type Collection = {
+  id?: string;
   creator?: Creator;
   modelID: string;
   notes?: string;
@@ -98,6 +99,7 @@ export class S3ModelCollectionModel extends S3Model {
           modelCollectionList(first: ${first}, after: "${after}") {
             edges {
               node {
+                id
                 notes
                 revoke
                 modelID

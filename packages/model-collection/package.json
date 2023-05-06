@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/model-collection",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "the us3r data model - collection",
   "type": "module",
   "main": "dist/cjs/index.js",
