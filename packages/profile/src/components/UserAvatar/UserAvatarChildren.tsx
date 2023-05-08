@@ -1,4 +1,4 @@
-import { Default } from "react-spinners-css";
+import LoadingSpokes from "../common/Loading/LoadingSpokes";
 import type { UserAvatarRenderProps } from "./UserAvatar";
 
 export interface UserAvatarChildrenProps extends UserAvatarRenderProps {}
@@ -8,7 +8,7 @@ export function UserAvatarChildren({
   avatarSrc,
 }: UserAvatarChildrenProps) {
   return loading ? (
-    <Default color="#666" size={32} />
+    <LoadingSpokes color="#666" width={32} />
   ) : (
     <img width={"32px"} height={"32px"} src={avatarSrc} />
   );
