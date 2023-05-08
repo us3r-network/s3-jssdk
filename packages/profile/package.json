@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/profile",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "the us3r data model",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -28,7 +28,7 @@
     "lodash.isfunction": "^3.0.9",
     "react-aria": "^3.24.0",
     "react-aria-components": "^1.0.0-alpha.3",
-    "react-loading": "^2.0.3",
+    "react-spinners-css": "^2.0.1",
     "styled-components": "^5.3.10"
   },
   "peerDependencies": {
