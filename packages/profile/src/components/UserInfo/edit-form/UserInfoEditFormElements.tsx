@@ -1,6 +1,6 @@
 import { Button, ButtonProps, Input, InputProps } from "react-aria-components";
 import { uploadImage } from "../../../utils/uploadFile";
-import { useUserInfoEditFormState } from ".";
+import { useUserInfoEditFormState } from "./UserInfoEditFormContext";
 import { HTMLAttributes } from "react";
 import { TextArea, TextAreaProps } from "../../common/TextArea";
 
