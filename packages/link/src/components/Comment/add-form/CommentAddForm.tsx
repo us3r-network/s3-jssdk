@@ -19,6 +19,7 @@ import {
   useSession,
 } from "@us3r-network/auth-with-rainbowkit";
 import { useStore } from "../../../store";
+import { userLink } from "../../../hooks/link";
 
 export interface CommentAddFormIncomingProps {
   linkId: string;
@@ -32,21 +33,20 @@ export interface CommentAddFormProps
     >,
     CommentAddFormIncomingProps {}
 
-function CommentAddForm({
+function CommentAddFormRoot({
   linkId,
   children,
   onSuccessfullySubmit,
   ...props
 }: CommentAddFormProps) {
+  const { link } = userLink(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
   const isAuthenticated = useIsAuthenticated();
   const session = useSession();
-  const { s3LinkModalInitialed, s3LinkModalAuthed } = useLinkState();
+  const { s3LinkModalAuthed } = useLinkState();
 
-  const cacheLinks = useStore((state) => state.cacheLinks);
-  const favoringLinkIds = useStore((state) => state.favoringLinkIds);
-  const setOneInCacheLinks = useStore((state) => state.setOneInCacheLinks);
+  const commentingLinkIds = useStore((state) => state.commentingLinkIds);
   const addOneToCommentingLinkIds = useStore(
     (state) => state.addOneToCommentingLinkIds
   );
@@ -60,26 +60,12 @@ function CommentAddForm({
     (state) => state.updateCommentInCacheLinks
   );
 
-  const link = useMemo(() => cacheLinks.get(linkId), [cacheLinks, linkId]);
-
   const isCommenting = useMemo(
-    () => favoringLinkIds.has(linkId),
-    [favoringLinkIds, linkId]
+    () => commentingLinkIds.has(linkId),
+    [commentingLinkIds, linkId]
   );
 
   const isDisabled = useMemo(() => !link || isCommenting, [link, isCommenting]);
-
-  useEffect(() => {
-    (async () => {
-      if (isCommenting) return;
-      if (link) return;
-      if (!s3LinkModalInitialed || !s3LinkModel) return;
-      const res = await s3LinkModel.queryLink(linkId);
-      const data = res.data?.node;
-      if (!data) return;
-      setOneInCacheLinks(data);
-    })();
-  }, [isCommenting, link, s3LinkModalInitialed, linkId, setOneInCacheLinks]);
 
   const [text, setText] = useState("");
   const [errMsg, setErrMsg] = useState("");
@@ -101,6 +87,7 @@ function CommentAddForm({
         revoke: false,
       });
       const id = res?.data?.createComment.document.id;
+
       if (id) {
         // update store
         addCommentToCacheLinks(linkId, {
@@ -108,8 +95,8 @@ function CommentAddForm({
           text,
           linkID: linkId,
           revoke: false,
-          createAt: new Date().toTimeString(),
-          modifiedAt: new Date().toTimeString(),
+          createAt: new Date().toISOString(),
+          modifiedAt: new Date().toISOString(),
           creator: {
             id: session.id,
           },
@@ -135,7 +122,7 @@ function CommentAddForm({
   ]);
 
   const businessProps = {
-    "data-us3r-comments-create-form": "",
+    "data-us3r-comment-add-form": "",
     "data-authenticated": isAuthenticated || undefined,
     "data-commenting": isCommenting || undefined,
     "data-disabled": isDisabled || undefined,
@@ -161,7 +148,6 @@ function CommentAddForm({
   );
 }
 
-const _CommentAddForm = Object.assign(CommentAddForm, {
+export const CommentAddForm = Object.assign(CommentAddFormRoot, {
   ...CommentAddFormElements,
 });
-export { _CommentAddForm as CommentAddForm };
