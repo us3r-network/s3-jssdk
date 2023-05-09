@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { AriaButtonProps } from "react-aria";
 import { Button, ButtonRenderProps } from "react-aria-components";
 import { getS3LinkModel, useLinkState } from "../../LinkStateProvider";
@@ -10,6 +10,7 @@ import {
 import { useStore } from "../../store";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
 import { FavorButtonChildren } from "./FavorButtonChildren";
+import { userLink } from "../../hooks/link";
 
 export interface FavorButtonIncomingProps {
   linkId: string;
@@ -29,15 +30,14 @@ export interface FavorButtonProps
     FavorButtonIncomingProps {}
 
 export function FavorButton({ linkId, children, ...props }: FavorButtonProps) {
+  const { link } = userLink(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
   const isAuthenticated = useIsAuthenticated();
   const session = useSession();
-  const { s3LinkModalInitialed, s3LinkModalAuthed } = useLinkState();
+  const { s3LinkModalAuthed } = useLinkState();
 
-  const cacheLinks = useStore((state) => state.cacheLinks);
   const favoringLinkIds = useStore((state) => state.favoringLinkIds);
-  const setOneInCacheLinks = useStore((state) => state.setOneInCacheLinks);
   const addOneToFavoringLinkIds = useStore(
     (state) => state.addOneToFavoringLinkIds
   );
@@ -49,14 +49,12 @@ export function FavorButton({ linkId, children, ...props }: FavorButtonProps) {
     (state) => state.updateFavorInCacheLinks
   );
 
-  const link = useMemo(() => cacheLinks.get(linkId), [cacheLinks, linkId]);
-
   const findCurrUserFavor = useMemo(() => {
     if (!link?.favors || !session) return null;
     return link.favors?.edges?.find(
       (edge) => edge?.node?.creator?.id === session?.id
     );
-  }, [link?.favors, session]);
+  }, [link, session]);
 
   const isFavored = !!findCurrUserFavor && !findCurrUserFavor?.node?.revoke;
 
@@ -66,18 +64,6 @@ export function FavorButton({ linkId, children, ...props }: FavorButtonProps) {
   );
 
   const isDisabled = useMemo(() => !link || isFavoring, [link, isFavoring]);
-
-  useEffect(() => {
-    (async () => {
-      if (isFavoring) return;
-      if (link) return;
-      if (!s3LinkModalInitialed || !s3LinkModel) return;
-      const res = await s3LinkModel.queryLink(linkId);
-      const data = res.data?.node;
-      if (!data) return;
-      setOneInCacheLinks(data);
-    })();
-  }, [isFavoring, link, s3LinkModalInitialed, linkId, setOneInCacheLinks]);
 
   const onFavor = useCallback(async () => {
     try {

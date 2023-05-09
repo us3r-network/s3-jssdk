@@ -10,6 +10,7 @@ import { Button, ButtonRenderProps } from "react-aria-components";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
 import { AriaButtonProps } from "react-aria";
 import { VoteButtonChildren } from "./VoteButtonChildren";
+import { userLink } from "../../hooks/link";
 
 export interface VoteButtonIncomingProps {
   linkId: string;
@@ -29,15 +30,14 @@ export interface VoteButtonProps
     VoteButtonIncomingProps {}
 
 export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
+  const { link } = userLink(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
   const isAuthenticated = useIsAuthenticated();
   const session = useSession();
-  const { s3LinkModalInitialed, s3LinkModalAuthed } = useLinkState();
+  const { s3LinkModalAuthed } = useLinkState();
 
-  const cacheLinks = useStore((state) => state.cacheLinks);
   const votingLinkIds = useStore((state) => state.votingLinkIds);
-  const setOneInCacheLinks = useStore((state) => state.setOneInCacheLinks);
   const addOneToVotingLinkIds = useStore(
     (state) => state.addOneToVotingLinkIds
   );
@@ -49,14 +49,12 @@ export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
     (state) => state.updateVoteInCacheLinks
   );
 
-  const link = useMemo(() => cacheLinks.get(linkId), [cacheLinks, linkId]);
-
   const findCurrUserVote = useMemo(() => {
     if (!link?.votes || !session) return null;
     return link.votes?.edges?.find(
       (edge) => edge?.node?.creator?.id === session?.id
     );
-  }, [link?.votes, session]);
+  }, [link, session]);
 
   const isVoted = !!findCurrUserVote && !findCurrUserVote?.node?.revoke;
 
@@ -66,18 +64,6 @@ export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
   );
 
   const isDisabled = useMemo(() => !link || isVoting, [link, isVoting]);
-
-  useEffect(() => {
-    (async () => {
-      if (isVoting) return;
-      if (link) return;
-      if (!s3LinkModalInitialed || !s3LinkModel) return;
-      const res = await s3LinkModel.queryLink(linkId);
-      const data = res.data?.node;
-      if (!data) return;
-      setOneInCacheLinks(data);
-    })();
-  }, [isVoting, link, s3LinkModalInitialed, linkId, setOneInCacheLinks]);
 
   const onVote = useCallback(async () => {
     try {
