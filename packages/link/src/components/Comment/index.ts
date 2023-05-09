@@ -1,2 +1,2 @@
-// export * from "./add-form";
-// export * from "./comments";
+export * from "./add-form";
+export * from "./comments";
