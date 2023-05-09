@@ -1,5 +1,5 @@
+import LoadingSpokes from "../common/Loading/LoadingSpokes";
 import type { UserAvatarRenderProps } from "./UserAvatar";
-import ReactLoading from "react-loading";
 
 export interface UserAvatarChildrenProps extends UserAvatarRenderProps {}
 
@@ -8,7 +8,7 @@ export function UserAvatarChildren({
   avatarSrc,
 }: UserAvatarChildrenProps) {
   return loading ? (
-    <ReactLoading type="spokes" color="#666" width={"32px"} height={"32px"} />
+    <LoadingSpokes color="#666" width={32} />
   ) : (
     <img width={"32px"} height={"32px"} src={avatarSrc} />
   );
