@@ -12,7 +12,7 @@ export type Comment = {
   revoke: boolean;
   createAt: DateTime;
   modifiedAt: DateTime;
-  link: Link;
+  link?: Link;
   text: string;
   creator: Creator;
 };

@@ -7,7 +7,7 @@ import { definition as linkDefinition } from "./link-runtime-composite";
 import { Vote, VoteInput } from "./vote";
 import { Favor, FavorInput } from "./favor";
 import { Score, ScoreInput } from "./score";
-import { CommentInput } from "./comment";
+import { Comment, CommentInput } from "./comment";
 
 export type Creator = {
   id: string;

@@ -5,37 +5,42 @@ type MakeFieldsRequired<T, K extends keyof T> = Omit<T, K> &
 
 type LinkDataFieldFillingResult = MakeFieldsRequired<
   Link,
-  "favors" | "favorsCount" | "votes" | "votesCount"
+  | "favors"
+  | "favorsCount"
+  | "votes"
+  | "votesCount"
+  | "comments"
+  | "commentsCount"
 >;
-
+export function getLinkListFieldDefaultData() {
+  return {
+    edges: [],
+    pageInfo: {
+      hasNextPage: false,
+      hasPreviousPage: false,
+      startCursor: "",
+      endCursor: "",
+    },
+  };
+}
 export function linkDataFieldFilling(link: Link) {
   if (!link.favors) {
-    link["favors"] = {
-      edges: [],
-      pageInfo: {
-        hasNextPage: false,
-        hasPreviousPage: false,
-        startCursor: "",
-        endCursor: "",
-      },
-    };
+    link["favors"] = getLinkListFieldDefaultData();
   }
   if (!link.favorsCount === undefined) {
     link["favorsCount"] = 0;
   }
   if (!link.votes) {
-    link["votes"] = {
-      edges: [],
-      pageInfo: {
-        hasNextPage: false,
-        hasPreviousPage: false,
-        startCursor: "",
-        endCursor: "",
-      },
-    };
+    link["votes"] = getLinkListFieldDefaultData();
   }
   if (link.votesCount === undefined) {
     link["votesCount"] = 0;
+  }
+  if (!link.comments) {
+    link["comments"] = getLinkListFieldDefaultData();
+  }
+  if (link.commentsCount === undefined) {
+    link["commentsCount"] = 0;
   }
   return link as LinkDataFieldFillingResult;
 }

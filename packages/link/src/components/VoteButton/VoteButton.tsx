@@ -9,7 +9,8 @@ import { useStore } from "../../store";
 import { Button, ButtonRenderProps } from "react-aria-components";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
 import { AriaButtonProps } from "react-aria";
-import { VoteButtonChildren } from "./default-ui/VoteButtonChildren";
+import { VoteButtonChildren } from "./VoteButtonChildren";
+import { userLink } from "../../hooks/link";
 
 export interface VoteButtonIncomingProps {
   linkId: string;
@@ -17,7 +18,8 @@ export interface VoteButtonIncomingProps {
 export interface VoteButtonRenderProps {
   isAuthenticated: boolean;
   isVoted: boolean;
-  loading: boolean;
+  isVoting: boolean;
+  isDisabled: boolean;
   votesCount: number;
 }
 export interface VoteButtonProps
@@ -28,15 +30,14 @@ export interface VoteButtonProps
     VoteButtonIncomingProps {}
 
 export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
+  const { link } = userLink(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
   const isAuthenticated = useIsAuthenticated();
   const session = useSession();
-  const { s3LinkModalInitialed, s3LinkModalAuthed } = useLinkState();
+  const { s3LinkModalAuthed } = useLinkState();
 
-  const cacheLinks = useStore((state) => state.cacheLinks);
   const votingLinkIds = useStore((state) => state.votingLinkIds);
-  const setOneInCacheLinks = useStore((state) => state.setOneInCacheLinks);
   const addOneToVotingLinkIds = useStore(
     (state) => state.addOneToVotingLinkIds
   );
@@ -48,39 +49,29 @@ export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
     (state) => state.updateVoteInCacheLinks
   );
 
-  const link = useMemo(() => cacheLinks.get(linkId), [cacheLinks, linkId]);
-
-  const loading = useMemo(
-    () => votingLinkIds.has(linkId),
-    [votingLinkIds, linkId]
-  );
-
-  useEffect(() => {
-    (async () => {
-      if (loading) return;
-      if (link) return;
-      if (!s3LinkModalInitialed || !s3LinkModel) return;
-      const res = await s3LinkModel.queryLink(linkId);
-      const data = res.data?.node;
-      if (!data) return;
-      setOneInCacheLinks(data);
-    })();
-  }, [loading, link, s3LinkModalInitialed, linkId, setOneInCacheLinks]);
-
   const findCurrUserVote = useMemo(() => {
-    if (!link || !session) return null;
+    if (!link?.votes || !session) return null;
     return link.votes?.edges?.find(
       (edge) => edge?.node?.creator?.id === session?.id
     );
   }, [link, session]);
 
+  const isVoted = !!findCurrUserVote && !findCurrUserVote?.node?.revoke;
+
+  const isVoting = useMemo(
+    () => votingLinkIds.has(linkId),
+    [votingLinkIds, linkId]
+  );
+
+  const isDisabled = useMemo(() => !link || isVoting, [link, isVoting]);
+
   const onVote = useCallback(async () => {
     try {
+      if (isDisabled) return;
       if (!session || !s3LinkModalAuthed) {
         signIn();
         return;
       }
-      if (!link) return;
       addOneToVotingLinkIds(linkId);
       if (findCurrUserVote) {
         // update vote
@@ -125,9 +116,9 @@ export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
       removeOneFromVotingLinkIds(linkId);
     }
   }, [
+    isDisabled,
     session,
     s3LinkModalAuthed,
-    link,
     linkId,
     findCurrUserVote,
     addOneToVotingLinkIds,
@@ -135,20 +126,22 @@ export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
     addVoteToCacheLinks,
     updateVoteInCacheLinks,
   ]);
-  const isVoted = !!findCurrUserVote && !findCurrUserVote?.node?.revoke;
 
   const businessProps = {
     "data-us3r-votebutton": "",
     "data-authenticated": isAuthenticated || undefined,
     "data-voted": isVoted || undefined,
-    "data-loading": loading || undefined,
+    "data-voting": isVoting || undefined,
+    "data-disabled": isDisabled || undefined,
+    isDisabled,
     onClick: onVote,
   };
 
   const businessRenderProps = {
     isAuthenticated,
     isVoted,
-    loading,
+    isVoting,
+    isDisabled,
     votesCount: link?.votesCount || 0,
   };
 
