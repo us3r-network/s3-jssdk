@@ -4,7 +4,7 @@
 
 import { Composite } from "@composedb/devtools";
 
-import { S3LinkModel } from "../src";
+import { S3LinkModel } from "../src/data-model";
 
 import { linkSchema } from "./linkSchema";
 import { genLinkOpsSchema } from "./linkOpsSchema";
@@ -155,7 +155,6 @@ describe("client", () => {
     const updateResp = await s3Link.updateFavor(favorId, {
       revoke: true,
     });
-    console.log(updateResp.errors);
     expect(updateResp.errors).not.toBeDefined();
   });
 
