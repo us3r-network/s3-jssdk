@@ -4,7 +4,7 @@
 
 import { Composite } from "@composedb/devtools";
 
-import { S3ProfileModel } from "../src";
+import { S3ProfileModel } from "../src/data-model";
 
 const profilesSchema = `
 enum ChainType {
