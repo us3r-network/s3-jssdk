@@ -14,7 +14,7 @@ import {
   useScoreReviewsItemState,
   useScoreReviewsState,
 } from "./ScoreReviewsContext";
-import { childrenRender } from "../../../utils/props";
+import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import { Score } from "../../../data-model";
 import {
   UserAvatar,
@@ -25,6 +25,7 @@ import {
 import EditSvg from "@material-design-icons/svg/outlined/edit.svg";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { ScoreForm } from "../form";
+import RatingStarSelect from "../../common/RatingStar/RatingStarSelect";
 
 export function List(props: ListBoxProps<Score>) {
   const { scores } = useScoreReviewsState();
@@ -54,29 +55,54 @@ export function Name(props: UserNameProps) {
   return <UserName did={did} {...props} />;
 }
 
-export function Text(props: HTMLAttributes<HTMLSpanElement>) {
+export function Text({
+  children,
+  ...props
+}: ChildrenRenderProps<
+  HTMLAttributes<HTMLDivElement>,
+  {
+    value: number;
+  }
+>) {
   const { text } = useScoreReviewsItemState();
   return (
-    <span data-text="" {...props}>
-      {text}
-    </span>
-  );
-}
-export function Value(props: HTMLAttributes<HTMLSpanElement>) {
-  const { value } = useScoreReviewsItemState();
-  return (
-    <span data-value="" {...props}>
-      {value}
-    </span>
+    <div data-text="" {...props}>
+      {childrenRender(children, { text }, text)}
+    </div>
   );
 }
 
-export function CreateDate(props: HTMLAttributes<HTMLSpanElement>) {
+export function Value({
+  children,
+  ...props
+}: ChildrenRenderProps<
+  HTMLAttributes<HTMLDivElement>,
+  {
+    value: number;
+  }
+>) {
+  const { value } = useScoreReviewsItemState();
+  return (
+    <div data-value="" {...props}>
+      {childrenRender(children, { value }, <RatingStarSelect value={value} />)}
+    </div>
+  );
+}
+
+export function CreateAt({
+  children,
+  ...props
+}: ChildrenRenderProps<
+  HTMLAttributes<HTMLDivElement>,
+  {
+    value: number;
+  }
+>) {
   const { createAt } = useScoreReviewsItemState();
   return (
-    <span data-create-date="" {...props}>
-      {createAt}
-    </span>
+    <div data-create-at="" {...props}>
+      {childrenRender(children, { createAt }, createAt)}
+    </div>
   );
 }
 
@@ -91,10 +117,7 @@ function ItemDefaultChildren() {
       <div>
         <Avatar />
         <Name />
-        <CreateDate />
-      </div>
-      <div>
-        <Value />
+        <CreateAt />
         {showEditBtn && (
           <>
             <Button
@@ -124,6 +147,7 @@ function ItemDefaultChildren() {
           </>
         )}
       </div>
+      <Value />
       <Text />
     </>
   );

@@ -25,22 +25,13 @@ export function ScoreField({
       {childrenRender(
         children,
         renderProps,
-        <ScoreFieldDefaultChildren {...renderProps} />
+        <RatingStarSelect
+          value={value}
+          onChange={setValue}
+          isDisabled={isDisabled}
+        />
       )}
     </div>
-  );
-}
-function ScoreFieldDefaultChildren({
-  value,
-  setValue,
-  isDisabled,
-}: ScoreFieldRenderProps) {
-  return (
-    <RatingStarSelect
-      value={value}
-      onChange={setValue}
-      isDisabled={isDisabled}
-    />
   );
 }
 
@@ -72,11 +63,19 @@ export function SubmitButton(props: ButtonProps) {
   );
 }
 
-export function ErrorMessage(props: HTMLAttributes<HTMLDivElement>) {
+export function ErrorMessage({
+  children,
+  ...props
+}: ChildrenRenderProps<
+  HTMLAttributes<HTMLDivElement>,
+  {
+    scoresAvg: number;
+  }
+>) {
   const { errMsg } = useScoreFormState();
   return (
     <div data-error-message="" {...props}>
-      {errMsg}
+      {childrenRender(children, { errMsg }, errMsg)}
     </div>
   );
 }
