@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "paths": {
+      "@us3r-network/profile": ["./src/index.ts"]
+    }
+  },
+  "files": ["typings.d.ts"],
+  "include": ["src", "stories"],
+  "exclude": ["node_modules", "dist"]
+}
