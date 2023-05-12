@@ -6,16 +6,16 @@ export function ScoresAvg({
   children,
   ...props
 }: ChildrenRenderProps<
-  HTMLAttributes<HTMLDivElement>,
+  HTMLAttributes<HTMLSpanElement>,
   {
     scoresAvg: number;
   }
 >) {
   const { scoresAvg } = useScoreDashboardState();
   return (
-    <div data-avg="" {...props}>
+    <span data-state-element="ScoresAvg" {...props}>
       {childrenRender(children, { scoresAvg }, scoresAvg)}
-    </div>
+    </span>
   );
 }
 
@@ -23,25 +23,25 @@ export function ScoresCount({
   children,
   ...props
 }: ChildrenRenderProps<
-  HTMLAttributes<HTMLDivElement>,
+  HTMLAttributes<HTMLSpanElement>,
   {
     scoresCount: number;
   }
 >) {
   const { scoresCount } = useScoreDashboardState();
   return (
-    <div data-total-count="" {...props}>
+    <span data-state-element="ScoresCount" {...props}>
       {childrenRender(children, { scoresCount }, scoresCount)}
-    </div>
+    </span>
   );
 }
 
-export function ScoreValuesCount({
+export function ScoreValueCount({
   children,
   value,
   ...props
 }: ChildrenRenderProps<
-  HTMLAttributes<HTMLDivElement>,
+  HTMLAttributes<HTMLSpanElement>,
   {
     count: number;
   }
@@ -51,18 +51,18 @@ export function ScoreValuesCount({
   const { scoreValuesCount } = useScoreDashboardState();
   const count = scoreValuesCount[value];
   return (
-    <div data-values-count="" {...props}>
+    <span data-state-element="ScoreValueCount" {...props}>
       {childrenRender(children, { count }, count)}
-    </div>
+    </span>
   );
 }
 
-export function ScoreValuesPercentage({
+export function ScoreValuePercentage({
   children,
   value,
   ...props
 }: ChildrenRenderProps<
-  HTMLAttributes<HTMLDivElement>,
+  HTMLAttributes<HTMLSpanElement>,
   {
     percentage: number;
   }
@@ -72,8 +72,8 @@ export function ScoreValuesPercentage({
   const { scoreValuesPercentage } = useScoreDashboardState();
   const percentage = scoreValuesPercentage[value];
   return (
-    <div data-values-percentage="" {...props}>
+    <span data-state-element="ScoreValuePercentage" {...props}>
       {childrenRender(children, { percentage }, percentage)}
-    </div>
+    </span>
   );
 }

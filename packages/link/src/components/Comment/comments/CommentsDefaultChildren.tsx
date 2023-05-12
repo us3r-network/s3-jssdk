@@ -3,8 +3,8 @@ import { CommentAddForm } from "../add-form/CommentAddForm";
 import { useCommentsState } from "./CommentsContext";
 
 export function CommentsDefaultChildren() {
-  const { loading, linkId } = useCommentsState();
-  return loading ? (
+  const { isLoading, linkId } = useCommentsState();
+  return isLoading ? (
     <>loading ...</>
   ) : (
     <>

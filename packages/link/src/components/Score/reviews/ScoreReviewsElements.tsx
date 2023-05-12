@@ -29,13 +29,13 @@ import RatingStarSelect from "../../common/RatingStar/RatingStarSelect";
 
 export function List(props: ListBoxProps<Score>) {
   const { scores } = useScoreReviewsState();
-  return <ListBox data-list="" items={scores} {...props} />;
+  return <ListBox data-state-element="List" items={scores} {...props} />;
 }
 
 export function Item({ children, value, ...props }: ItemProps<Score>) {
   if (!value) return null;
   return (
-    <AriaItem data-item="" key={value.id} {...props}>
+    <AriaItem data-state-element="Item" key={value.id} {...props}>
       <ScoreReviewsItemContext.Provider value={value as Score}>
         {childrenRender(children, value, <ItemDefaultChildren />)}
       </ScoreReviewsItemContext.Provider>
@@ -46,29 +46,29 @@ export function Item({ children, value, ...props }: ItemProps<Score>) {
 export function Avatar(props: UserAvatarProps) {
   const { creator } = useScoreReviewsItemState();
   const did = creator.id;
-  return <UserAvatar did={did} {...props} />;
+  return <UserAvatar data-state-element="Avatar" did={did} {...props} />;
 }
 
 export function Name(props: UserNameProps) {
   const { creator } = useScoreReviewsItemState();
   const did = creator.id;
-  return <UserName did={did} {...props} />;
+  return <UserName data-state-element="Name" did={did} {...props} />;
 }
 
 export function Text({
   children,
   ...props
 }: ChildrenRenderProps<
-  HTMLAttributes<HTMLDivElement>,
+  HTMLAttributes<HTMLSpanElement>,
   {
     value: number;
   }
 >) {
   const { text } = useScoreReviewsItemState();
   return (
-    <div data-text="" {...props}>
+    <span data-state-element="Text" {...props}>
       {childrenRender(children, { text }, text)}
-    </div>
+    </span>
   );
 }
 
@@ -76,16 +76,16 @@ export function Value({
   children,
   ...props
 }: ChildrenRenderProps<
-  HTMLAttributes<HTMLDivElement>,
+  HTMLAttributes<HTMLSpanElement>,
   {
     value: number;
   }
 >) {
   const { value } = useScoreReviewsItemState();
   return (
-    <div data-value="" {...props}>
+    <span data-state-element="Value" {...props}>
       {childrenRender(children, { value }, <RatingStarSelect value={value} />)}
-    </div>
+    </span>
   );
 }
 
@@ -93,16 +93,16 @@ export function CreateAt({
   children,
   ...props
 }: ChildrenRenderProps<
-  HTMLAttributes<HTMLDivElement>,
+  HTMLAttributes<HTMLSpanElement>,
   {
     value: number;
   }
 >) {
   const { createAt } = useScoreReviewsItemState();
   return (
-    <div data-create-at="" {...props}>
+    <span data-state-element="createAt" {...props}>
       {childrenRender(children, { createAt }, createAt)}
-    </div>
+    </span>
   );
 }
 

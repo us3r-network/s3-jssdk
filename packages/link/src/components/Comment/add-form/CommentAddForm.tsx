@@ -122,7 +122,7 @@ function CommentAddFormRoot({
   ]);
 
   const businessProps = {
-    "data-us3r-comment-add-form": "",
+    "data-us3r-component": "CommentAddForm",
     "data-authenticated": isAuthenticated || undefined,
     "data-commenting": isCommenting || undefined,
     "data-disabled": isDisabled || undefined,

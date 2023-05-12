@@ -4,7 +4,7 @@ export function ScoreFormDefaultChildren() {
   return (
     <>
       <section>
-        <ScoreForm.ScoreField />
+        <ScoreForm.ScoreSelect />
       </section>
       <section>
         <ScoreForm.CommentTextarea />

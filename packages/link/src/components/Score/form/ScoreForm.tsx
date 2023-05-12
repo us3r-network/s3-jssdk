@@ -160,7 +160,8 @@ function ScoreFormRoot({
   ]);
 
   const businessProps = {
-    "data-us3r-score-add-form": "",
+    "data-us3r-component": "ScoreForm",
+    "data-form-type": scoreId ? "edit" : "add",
     "data-authenticated": isAuthenticated || undefined,
     "data-scoring": isScoring || undefined,
     "data-disabled": isDisabled || undefined,

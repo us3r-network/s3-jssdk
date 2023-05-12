@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 
 export interface ScoreDashboardContextValue {
-  loading: boolean;
+  isLoading: boolean;
   scoresAvg: number;
   scoresCount: number;
   scoreValuesCount: number[];
