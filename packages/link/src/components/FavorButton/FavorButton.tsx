@@ -10,7 +10,7 @@ import {
 import { useStore } from "../../store";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
 import { FavorButtonChildren } from "./FavorButtonChildren";
-import { userLink } from "../../hooks/link";
+import { useLink } from "../../hooks/useLink";
 
 export interface FavorButtonIncomingProps {
   linkId: string;
@@ -30,7 +30,7 @@ export interface FavorButtonProps
     FavorButtonIncomingProps {}
 
 export function FavorButton({ linkId, children, ...props }: FavorButtonProps) {
-  const { link } = userLink(linkId);
+  const { link } = useLink(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
   const isAuthenticated = useIsAuthenticated();

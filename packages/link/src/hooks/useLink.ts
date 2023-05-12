@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
+import { Link } from "../data-model";
 
-export const userLink = (linkId: string) => {
+export const useLink = (linkId: string) => {
   const s3LinkModel = getS3LinkModel();
   const { s3LinkModalInitialed } = useLinkState();
 
@@ -17,7 +18,10 @@ export const userLink = (linkId: string) => {
   );
 
   const link = useMemo(
-    () => (cacheLinks.has(linkId) ? { ...cacheLinks.get(linkId) } : undefined),
+    () =>
+      cacheLinks.has(linkId)
+        ? { ...(cacheLinks.get(linkId) as Link) }
+        : undefined,
     [cacheLinks, linkId]
   );
 

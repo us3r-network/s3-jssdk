@@ -10,7 +10,7 @@ import { Button, ButtonRenderProps } from "react-aria-components";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
 import { AriaButtonProps } from "react-aria";
 import { VoteButtonChildren } from "./VoteButtonChildren";
-import { userLink } from "../../hooks/link";
+import { useLink } from "../../hooks/useLink";
 
 export interface VoteButtonIncomingProps {
   linkId: string;
@@ -30,7 +30,7 @@ export interface VoteButtonProps
     VoteButtonIncomingProps {}
 
 export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
-  const { link } = userLink(linkId);
+  const { link } = useLink(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
   const isAuthenticated = useIsAuthenticated();

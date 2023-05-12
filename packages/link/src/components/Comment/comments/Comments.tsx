@@ -3,7 +3,7 @@ import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import * as CommentsElements from "./CommentsElements";
 import { CommentsContext, CommentsContextValue } from "./CommentsContext";
 import { CommentsDefaultChildren } from "./CommentsDefaultChildren";
-import { userLink } from "../../../hooks/link";
+import { useLink } from "../../../hooks/useLink";
 
 export interface CommentsIncomingProps {
   linkId: string;
@@ -17,7 +17,7 @@ export interface CommentsProps
     CommentsIncomingProps {}
 
 function CommentsRoot({ linkId, children, ...props }: CommentsProps) {
-  const { isFetching, link } = userLink(linkId);
+  const { isFetching, link } = useLink(linkId);
 
   const comments = useMemo(
     () => (isFetching ? [] : link?.comments?.edges?.map((e) => e.node) || []),
