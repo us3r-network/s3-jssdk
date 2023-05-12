@@ -25,8 +25,8 @@ export function ScoreDashboardDefaultChildren() {
         {[...Array(SCORE_VALUE_MAX)].map((_, index) => {
           const value = index + 1;
           return (
-            <p key={value}>
-              <ScoreDashboard.ScoreValuesPercentage value={value}>
+            <div key={value}>
+              <ScoreDashboard.ScoreValuePercentage value={value}>
                 {({ percentage }) => {
                   return (
                     <>
@@ -50,8 +50,8 @@ export function ScoreDashboardDefaultChildren() {
                     </>
                   );
                 }}
-              </ScoreDashboard.ScoreValuesPercentage>
-            </p>
+              </ScoreDashboard.ScoreValuePercentage>
+            </div>
           );
         })}
       </div>

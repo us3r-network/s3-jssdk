@@ -44,12 +44,12 @@ function CommentsRoot({
   const commentsCount = useMemo(() => link?.commentsCount || 0, [link]);
 
   const businessProps = {
-    "data-us3r-comments": "",
+    "data-us3r-component": "Comments",
     "data-loading": isFetching || undefined,
   };
   const contextValue = {
     linkId,
-    loading: isFetching,
+    isLoading: isFetching,
     comments,
     commentsCount,
   };

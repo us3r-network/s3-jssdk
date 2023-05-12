@@ -119,7 +119,7 @@ export function FavorButton({ linkId, children, ...props }: FavorButtonProps) {
   ]);
 
   const businessProps = {
-    "data-us3r-favorbutton": "",
+    "data-us3r-component": "FavorButton",
     "data-authenticated": isAuthenticated || undefined,
     "data-favored": isFavored || undefined,
     "data-favoring": isFavoring || undefined,

@@ -3,7 +3,7 @@ import { Score } from "../../../data-model";
 
 export interface ScoreReviewsContextValue {
   linkId: string;
-  loading: boolean;
+  isLoading: boolean;
   scores: Score[];
 }
 

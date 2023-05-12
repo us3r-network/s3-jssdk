@@ -43,12 +43,12 @@ function ScoreReviewsRoot({
   );
 
   const businessProps = {
-    "data-us3r-scores": "",
+    "data-us3r-component": "ScoreReviews",
     "data-loading": isFetching || undefined,
   };
   const contextValue = {
     linkId,
-    loading: isFetching,
+    isLoading: isFetching,
     scores,
   };
   return (

@@ -63,11 +63,11 @@ function ScoreDashboardRoot({
   }, [scoreValuesCount, scoresCount]);
 
   const businessProps = {
-    "data-us3r-score-dashboard": "",
+    "data-us3r-component": "ScoreDashboard",
     "data-loading": isFetching || undefined,
   };
   const contextValue = {
-    loading: isFetching,
+    isLoading: isFetching,
     scoresCount,
     scoresAvg,
     scoreValuesCount,

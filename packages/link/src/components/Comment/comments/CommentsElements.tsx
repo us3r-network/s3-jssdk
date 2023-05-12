@@ -22,7 +22,7 @@ import {
 export function Count(props: HTMLAttributes<HTMLSpanElement>) {
   const { commentsCount } = useCommentsState();
   return (
-    <span data-count="" {...props}>
+    <span data-state-element="Count" {...props}>
       {commentsCount}
     </span>
   );
@@ -30,13 +30,13 @@ export function Count(props: HTMLAttributes<HTMLSpanElement>) {
 
 export function List(props: ListBoxProps<Comment>) {
   const { comments } = useCommentsState();
-  return <ListBox data-list="" items={comments} {...props} />;
+  return <ListBox data-state-element="List" items={comments} {...props} />;
 }
 
 export function Item({ children, value, ...props }: ItemProps<Comment>) {
   if (!value) return null;
   return (
-    <AriaItem data-item="" key={value.id} {...props}>
+    <AriaItem data-state-element="Item" key={value.id} {...props}>
       <CommentsItemContext.Provider value={value as Comment}>
         {childrenRender(children, value, <ItemDefaultChildren />)}
       </CommentsItemContext.Provider>
@@ -47,28 +47,28 @@ export function Item({ children, value, ...props }: ItemProps<Comment>) {
 export function Avatar(props: UserAvatarProps) {
   const { creator } = useCommentsItemState();
   const did = creator.id;
-  return <UserAvatar did={did} {...props} />;
+  return <UserAvatar data-state-element="Avatar" did={did} {...props} />;
 }
 
 export function Name(props: UserNameProps) {
   const { creator } = useCommentsItemState();
   const did = creator.id;
-  return <UserName did={did} {...props} />;
+  return <UserName data-state-element="Name" did={did} {...props} />;
 }
 
 export function Text(props: HTMLAttributes<HTMLSpanElement>) {
   const { text } = useCommentsItemState();
   return (
-    <span data-text="" {...props}>
+    <span data-state-element="Text" {...props}>
       {text}
     </span>
   );
 }
 
-export function CreateDate(props: HTMLAttributes<HTMLSpanElement>) {
+export function CreateAt(props: HTMLAttributes<HTMLSpanElement>) {
   const { createAt } = useCommentsItemState();
   return (
-    <span data-create-date="" {...props}>
+    <span data-state-element="CreateAt" {...props}>
       {createAt}
     </span>
   );
@@ -80,7 +80,7 @@ function ItemDefaultChildren() {
       <div>
         <Avatar />
         <Name />
-        <CreateDate />
+        <CreateAt />
       </div>
       <Text />
     </>

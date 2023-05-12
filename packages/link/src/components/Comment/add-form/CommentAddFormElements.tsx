@@ -6,7 +6,7 @@ export function TextInput(props: InputProps) {
   const { text, setText, isDisabled } = useCommentAddFormState();
   return (
     <Input
-      data-text-input=""
+      data-state-element="TextInput"
       disabled={isDisabled}
       placeholder="text"
       value={text}
@@ -22,7 +22,7 @@ export function SubmitButton(props: ButtonProps) {
   const { isDisabled, submitComment } = useCommentAddFormState();
   return (
     <Button
-      data-submit-button=""
+      data-state-element="SubmitButton"
       onPress={submitComment}
       isDisabled={isDisabled}
       {...props}
@@ -33,7 +33,7 @@ export function SubmitButton(props: ButtonProps) {
 export function ErrorMessage(props: HTMLAttributes<HTMLSpanElement>) {
   const { errMsg } = useCommentAddFormState();
   return (
-    <span data-error-message="" {...props}>
+    <span data-state-element="ErrorMessage" {...props}>
       {errMsg}
     </span>
   );

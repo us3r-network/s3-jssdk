@@ -8,7 +8,7 @@ export interface ScoresAvgIncomingProps {
   linkId: string;
 }
 export interface ScoresAvgRenderProps {
-  loading: boolean;
+  isLoading: boolean;
   scoresAvg: number;
 }
 
@@ -27,11 +27,11 @@ export function ScoresAvg({ linkId, children, ...props }: ScoresAvgProps) {
   );
 
   const businessProps = {
-    "data-us3r-scores-avg": "",
+    "data-us3r-component": "ScoresAvg",
     "data-loading": isFetching || undefined,
   };
   const renderProps = {
-    loading: isFetching,
+    isLoading: isFetching,
     scoresAvg,
   };
 
@@ -47,10 +47,10 @@ export function ScoresAvg({ linkId, children, ...props }: ScoresAvgProps) {
 }
 
 function ScoresAvgDefaultChildren({
-  loading,
+  isLoading,
   scoresAvg,
 }: ScoresAvgRenderProps) {
-  return !loading ? (
+  return !isLoading ? (
     <>
       <StarIcon />
       <span>{scoresAvg}</span>

@@ -128,7 +128,7 @@ export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
   ]);
 
   const businessProps = {
-    "data-us3r-votebutton": "",
+    "data-us3r-component": "VoteButton",
     "data-authenticated": isAuthenticated || undefined,
     "data-voted": isVoted || undefined,
     "data-voting": isVoting || undefined,

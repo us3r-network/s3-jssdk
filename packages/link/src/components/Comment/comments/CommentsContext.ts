@@ -3,7 +3,7 @@ import { Comment } from "../../../data-model";
 
 export interface CommentsContextValue {
   linkId: string;
-  loading: boolean;
+  isLoading: boolean;
   comments: Comment[];
   commentsCount: number;
 }

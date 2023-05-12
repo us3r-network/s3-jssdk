@@ -12,12 +12,12 @@ import { useState } from "react";
 import { useLinkState } from "../../../LinkStateProvider";
 
 export function ScoreReviewsDefaultChildren() {
-  const { loading, linkId } = useScoreReviewsState();
+  const { isLoading, linkId } = useScoreReviewsState();
   const [isOpenAdd, setIsOpenAdd] = useState(false);
   const { signIn } = useAuthentication();
   const session = useSession();
   const { s3LinkModalAuthed } = useLinkState();
-  return loading ? (
+  return isLoading ? (
     <div data-loading="">loading ...</div>
   ) : (
     <div data-score-box="">
