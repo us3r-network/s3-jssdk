@@ -19,7 +19,7 @@ import {
   useSession,
 } from "@us3r-network/auth-with-rainbowkit";
 import { useStore } from "../../../store";
-import { userLink } from "../../../hooks/link";
+import { useLink } from "../../../hooks/useLink";
 
 export interface CommentAddFormIncomingProps {
   linkId: string;
@@ -39,7 +39,7 @@ function CommentAddFormRoot({
   onSuccessfullySubmit,
   ...props
 }: CommentAddFormProps) {
-  const { link } = userLink(linkId);
+  const { link } = useLink(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
   const isAuthenticated = useIsAuthenticated();

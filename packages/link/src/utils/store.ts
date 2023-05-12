@@ -3,7 +3,7 @@ import { Link } from "../data-model";
 type MakeFieldsRequired<T, K extends keyof T> = Omit<T, K> &
   Required<Pick<T, K>>;
 
-type LinkDataFieldFillingResult = MakeFieldsRequired<
+export type LinkDataFieldFillingResult = MakeFieldsRequired<
   Link,
   | "favors"
   | "favorsCount"
@@ -11,6 +11,8 @@ type LinkDataFieldFillingResult = MakeFieldsRequired<
   | "votesCount"
   | "comments"
   | "commentsCount"
+  | "scores"
+  | "scoresCount"
 >;
 export function getLinkListFieldDefaultData() {
   return {
@@ -41,6 +43,12 @@ export function linkDataFieldFilling(link: Link) {
   }
   if (link.commentsCount === undefined) {
     link["commentsCount"] = 0;
+  }
+  if (!link.scores) {
+    link["scores"] = getLinkListFieldDefaultData();
+  }
+  if (link.scoresCount === undefined) {
+    link["scoresCount"] = 0;
   }
   return link as LinkDataFieldFillingResult;
 }
