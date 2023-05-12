@@ -1,12 +1,12 @@
-import { UserAvatar } from "../../UserAvatar/UserAvatar";
-import { UserName } from "../../UserName/UserName";
-import type { LoginButtonRenderProps } from "../LoginButton";
+import { UserAvatar } from "../UserAvatar/UserAvatar";
+import { UserName } from "../UserName/UserName";
+import type { LoginButtonRenderProps } from "./LoginButton";
 
 export interface LoginButtonChildrenProps extends LoginButtonRenderProps {}
 
 export function LoginButtonChildren({
   isAuthenticated,
-  loading,
+  isLoading,
 }: LoginButtonChildrenProps) {
   return isAuthenticated ? (
     <>
@@ -14,6 +14,6 @@ export function LoginButtonChildren({
       <UserName />
     </>
   ) : (
-    <span>{loading ? "logging" : "Login"}</span>
+    <span>{isLoading ? "logging" : "Login"}</span>
   );
 }

@@ -1,25 +1,24 @@
 import { useState } from "react";
 import * as UserTags from "./UserTagsElements";
 import { Button, Heading, Item, Modal, TextField } from "react-aria-components";
-import { UserTagsAddForm } from "../add-form/UserTagsAddForm";
+import { UserTagAddForm } from "../add-form/UserTagAddForm";
 import { useUserTagsState } from "./UserTagsContext";
 import AddSvg from "@material-design-icons/svg/outlined/add.svg";
 
 export function UserTagsDefaultChildren() {
-  const { loading, isLoginUser } = useUserTagsState();
+  const { isLoading, isLoginUser } = useUserTagsState();
   const [isOpenEdit, setIsOpenEdit] = useState(false);
-  return loading ? (
+  return isLoading ? (
     <>loading ...</>
   ) : (
     <>
-      <Heading data-tags-heading="">
-        <span data-tags-count>
+      <Heading>
+        <span>
           Tags(
           <UserTags.Count />)
         </span>
         {isLoginUser && (
           <Button
-            data-tags-create-button
             onPress={() => {
               setIsOpenEdit(true);
             }}
@@ -32,21 +31,21 @@ export function UserTagsDefaultChildren() {
         {(item) => <Item key={item.tag}>{item.tag}</Item>}
       </UserTags.List>
       {isLoginUser && (
-        <Modal data-modal="" isOpen={isOpenEdit} onOpenChange={setIsOpenEdit}>
-          <Heading data-heading="">Add New Tag</Heading>
-          <UserTagsAddForm
+        <Modal isOpen={isOpenEdit} onOpenChange={setIsOpenEdit}>
+          <Heading>Add New Tag</Heading>
+          <UserTagAddForm
             onSuccessfullySubmit={() => {
               setIsOpenEdit(false);
             }}
           >
             <TextField autoFocus>
-              <UserTagsAddForm.TagInput />
+              <UserTagAddForm.TagInput />
             </TextField>
 
-            <UserTagsAddForm.SubmitButton>Submit</UserTagsAddForm.SubmitButton>
+            <UserTagAddForm.SubmitButton>Submit</UserTagAddForm.SubmitButton>
 
-            <UserTagsAddForm.ErrorMessage />
-          </UserTagsAddForm>
+            <UserTagAddForm.ErrorMessage />
+          </UserTagAddForm>
         </Modal>
       )}
     </>

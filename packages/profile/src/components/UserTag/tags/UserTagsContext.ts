@@ -3,7 +3,7 @@ import { createContext, useContext } from "react";
 export interface UserTagsContextValue {
   did: string;
   isLoginUser: boolean;
-  loading: boolean;
+  isLoading: boolean;
   tags: string[];
 }
 

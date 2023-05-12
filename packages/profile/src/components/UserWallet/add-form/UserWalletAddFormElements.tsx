@@ -1,13 +1,13 @@
 import { Button, ButtonProps, Input, InputProps } from "react-aria-components";
 import { HTMLAttributes } from "react";
-import { useUserWalletsAddFormState } from "./UserWalletsAddFormContext";
+import { useUserWalletAddFormState } from "./UserWalletAddFormContext";
 
 export function AddressInput(props: InputProps) {
-  const { address, setAddress, disabled } = useUserWalletsAddFormState();
+  const { address, setAddress, isDisabled } = useUserWalletAddFormState();
   return (
     <Input
-      data-address-input=""
-      disabled={disabled}
+      data-state-element="AddressInput"
+      disabled={isDisabled}
       placeholder="address"
       value={address}
       onChange={(e) => {
@@ -19,21 +19,21 @@ export function AddressInput(props: InputProps) {
 }
 
 export function SubmitButton(props: ButtonProps) {
-  const { disabled, submitCreate } = useUserWalletsAddFormState();
+  const { isDisabled, submitAdd } = useUserWalletAddFormState();
   return (
     <Button
-      data-submit-button=""
-      onPress={submitCreate}
-      isDisabled={disabled}
+      data-state-element="SubmitButton"
+      onPress={submitAdd}
+      isDisabled={isDisabled}
       {...props}
     />
   );
 }
 
 export function ErrorMessage(props: HTMLAttributes<HTMLSpanElement>) {
-  const { errMsg } = useUserWalletsAddFormState();
+  const { errMsg } = useUserWalletAddFormState();
   return (
-    <span data-error-message="" {...props}>
+    <span data-state-element="ErrorMessage" {...props}>
       {errMsg}
     </span>
   );

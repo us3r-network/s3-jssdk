@@ -6,7 +6,7 @@ import { useUserInfoState } from "./UserInfoContext";
 export function Avatar(props: UserAvatarProps) {
   const { isLoginUser, did } = useUserInfoState();
   const avatarProps = {
-    "data-avatar": "",
+    "data-state-element": "Avatar",
     ...props,
   };
   if (!isLoginUser) {
@@ -18,7 +18,7 @@ export function Avatar(props: UserAvatarProps) {
 export function Name(props: UserNameProps) {
   const { isLoginUser, did } = useUserInfoState();
   const nameProps = {
-    "data-name": "",
+    "data-state-element": "Name",
     ...props,
   };
   if (!isLoginUser) {

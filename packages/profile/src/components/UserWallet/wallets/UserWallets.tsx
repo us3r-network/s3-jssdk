@@ -23,7 +23,7 @@ export interface UserWalletsProps
     >,
     UserWalletsIncomingProps {}
 
-function UserWallets({
+function UserWalletsRoot({
   children,
   onSuccessfullyDelete,
   onFailToDelete,
@@ -35,29 +35,29 @@ function UserWallets({
   const isLoginUser = !props.hasOwnProperty("did");
   const did = (isLoginUser ? session?.id : props.did) || "";
 
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [wallets, setWallets] = useState<Wallet[]>([]);
 
   useEffect(() => {
     if (isLoginUser) {
       if (!profileLoading) {
-        setLoading(false);
+        setIsLoading(false);
         setWallets(profile?.wallets || []);
       } else {
-        setLoading(true);
+        setIsLoading(true);
       }
     }
   }, [isLoginUser, did, profileLoading, profile?.wallets]);
 
   useEffect(() => {
     if (!isLoginUser) {
-      setLoading(true);
+      setIsLoading(true);
       getProfileWithDid(did)
         .then((data) => {
           setWallets(data?.wallets || []);
         })
         .catch(console.error)
-        .finally(() => setLoading(false));
+        .finally(() => setIsLoading(false));
     }
   }, [isLoginUser, did, getProfileWithDid]);
 
@@ -96,13 +96,13 @@ function UserWallets({
   );
 
   const businessProps = {
-    "data-us3r-userwallets": "",
-    "data-loading": loading || undefined,
+    "data-us3r-component": "UserWallets",
+    "data-loading": isLoading || undefined,
   };
   const contextValue = {
     did,
     isLoginUser,
-    loading,
+    isLoading,
     wallets,
     deletingWalletAddress,
     deleteWallet,
@@ -116,7 +116,6 @@ function UserWallets({
   );
 }
 
-const _UserWallets = Object.assign(UserWallets, {
+export const UserWallets = Object.assign(UserWalletsRoot, {
   ...UserWalletsElements,
 });
-export { _UserWallets as UserWallets };

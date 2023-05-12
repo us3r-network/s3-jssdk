@@ -4,7 +4,7 @@ import { Wallet } from "../../../data-model";
 export interface UserWalletsContextValue {
   did: string;
   isLoginUser: boolean;
-  loading: boolean;
+  isLoading: boolean;
   wallets: Wallet[];
   deletingWalletAddress: Set<string>;
   deleteWallet: (wallet: Wallet) => Promise<void>;

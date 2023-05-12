@@ -7,49 +7,49 @@ import {
 } from "react";
 import { useProfileState } from "../../../ProfileStateProvider";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
-import * as UserTagsAddFormElements from "./UserTagsAddFormElements";
+import * as UserTagAddFormElements from "./UserTagAddFormElements";
 import {
-  UserTagsAddFormContext,
-  UserTagsAddFormContextValue,
-} from "./UserTagsAddFormContext";
-import { UserTagsAddFormDefaultChildren } from "./UserTagsAddFormDefaultChildren";
+  UserTagAddFormContext,
+  UserTagAddFormContextValue,
+} from "./UserTagAddFormContext";
+import { UserTagAddFormDefaultChildren } from "./UserTagAddFormDefaultChildren";
 
-export interface UserTagsAddFormIncomingProps {
+export interface UserTagAddFormIncomingProps {
   onSuccessfullySubmit?: () => void;
 }
 
-export interface UserTagsAddFormProps
+export interface UserTagAddFormProps
   extends ChildrenRenderProps<
       HTMLAttributes<HTMLFormElement>,
-      UserTagsAddFormContextValue
+      UserTagAddFormContextValue
     >,
-    UserTagsAddFormIncomingProps {}
+    UserTagAddFormIncomingProps {}
 
-function UserTagsAddForm({
+function UserTagAddFormRoot({
   children,
   onError,
   onSuccessfullySubmit,
   ...props
-}: UserTagsAddFormProps) {
+}: UserTagAddFormProps) {
   const { profile, profileLoading, updateProfile } = useProfileState();
 
   const [tag, setTag] = useState("");
 
-  const [creating, setCreating] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
-  const disabled = useMemo(
-    () => profileLoading || !profile || creating,
-    [profileLoading, profile, creating]
+  const isDisabled = useMemo(
+    () => profileLoading || !profile || isAdding,
+    [profileLoading, profile, isAdding]
   );
 
   useEffect(() => {
     setErrMsg("");
   }, [tag]);
 
-  const submitCreate = useCallback(async () => {
+  const submitAdd = useCallback(async () => {
     try {
-      setCreating(true);
+      setIsAdding(true);
       await updateProfile({
         tags: [...(profile?.tags || []), tag],
       });
@@ -58,37 +58,36 @@ function UserTagsAddForm({
       const errMsg = (error as ReadonlyArray<any>)[0].toJSON().message;
       setErrMsg(errMsg);
     } finally {
-      setCreating(false);
+      setIsAdding(false);
     }
   }, [tag, profile, updateProfile, onSuccessfullySubmit]);
 
   const businessProps = {
-    "data-us3r-usertags-add-form": "",
-    "data-creating": creating || undefined,
-    "data-disabled": disabled || undefined,
+    "data-us3r-component": "UserTagAddForm",
+    "data-adding": isAdding || undefined,
+    "data-disabled": isDisabled || undefined,
   };
   const contextValue = {
     tag,
     setTag,
-    creating,
+    isAdding,
     errMsg,
-    disabled,
-    submitCreate,
+    isDisabled,
+    submitAdd,
   };
   return (
     <form {...props} {...businessProps}>
-      <UserTagsAddFormContext.Provider value={contextValue}>
+      <UserTagAddFormContext.Provider value={contextValue}>
         {childrenRender(
           children,
           contextValue,
-          <UserTagsAddFormDefaultChildren />
+          <UserTagAddFormDefaultChildren />
         )}
-      </UserTagsAddFormContext.Provider>
+      </UserTagAddFormContext.Provider>
     </form>
   );
 }
 
-const _UserTagsAddForm = Object.assign(UserTagsAddForm, {
-  ...UserTagsAddFormElements,
+export const UserTagAddForm = Object.assign(UserTagAddFormRoot, {
+  ...UserTagAddFormElements,
 });
-export { _UserTagsAddForm as UserTagsAddForm };

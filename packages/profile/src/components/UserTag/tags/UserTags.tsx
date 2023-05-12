@@ -17,46 +17,46 @@ export interface UserTagsProps
     >,
     UserTagsIncomingProps {}
 
-function UserTags({ children, ...props }: UserTagsProps) {
+function UserTagsRoot({ children, ...props }: UserTagsProps) {
   const session = useSession();
   const { profile, profileLoading, getProfileWithDid } = useProfileState();
   const isLoginUser = !props.hasOwnProperty("did");
   const did = (isLoginUser ? session?.id : props.did) || "";
 
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [tags, setTags] = useState<string[]>([]);
 
   useEffect(() => {
     if (isLoginUser) {
       if (!profileLoading) {
-        setLoading(false);
+        setIsLoading(false);
         setTags(profile?.tags || []);
       } else {
-        setLoading(true);
+        setIsLoading(true);
       }
     }
   }, [isLoginUser, did, profileLoading, profile?.tags]);
 
   useEffect(() => {
     if (!isLoginUser) {
-      setLoading(true);
+      setIsLoading(true);
       getProfileWithDid(did)
         .then((data) => {
           setTags(data?.tags || []);
         })
         .catch(console.error)
-        .finally(() => setLoading(false));
+        .finally(() => setIsLoading(false));
     }
   }, [isLoginUser, did, getProfileWithDid]);
 
   const businessProps = {
-    "data-us3r-usertags": "",
-    "data-loading": loading || undefined,
+    "data-us3r-component": "UserTags",
+    "data-loading": isLoading || undefined,
   };
   const contextValue = {
     did,
     isLoginUser,
-    loading,
+    isLoading,
     tags,
   };
   return (
@@ -68,7 +68,6 @@ function UserTags({ children, ...props }: UserTagsProps) {
   );
 }
 
-const _UserTags = Object.assign(UserTags, {
+export const UserTags = Object.assign(UserTagsRoot, {
   ...UserTagsElements,
 });
-export { _UserTags as UserTags };

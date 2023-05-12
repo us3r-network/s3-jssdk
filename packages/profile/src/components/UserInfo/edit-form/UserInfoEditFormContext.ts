@@ -7,9 +7,9 @@ export interface UserInfoEditFormContextValue {
   setName: (name: string) => void;
   bio: string;
   setBio: (bio: string) => void;
-  updating: boolean;
+  isUpdating: boolean;
   errMsg: string;
-  disabled: boolean;
+  isDisabled: boolean;
   submitEdit: () => void;
 }
 

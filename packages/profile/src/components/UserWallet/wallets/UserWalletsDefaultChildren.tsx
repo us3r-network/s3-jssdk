@@ -1,7 +1,7 @@
 import { useState } from "react";
 import * as UserWallets from "./UserWalletsElements";
 import { Button, Heading, Modal, TextField } from "react-aria-components";
-import { UserWalletsAddForm } from "../add-form/UserWalletsAddForm";
+import { UserWalletAddForm } from "../add-form/UserWalletAddForm";
 import { useUserWalletsState } from "./UserWalletsContext";
 
 import AddSvg from "@material-design-icons/svg/outlined/add.svg";
@@ -9,20 +9,19 @@ import CopySvg from "@material-design-icons/svg/outlined/content_copy.svg";
 import DeleteSvg from "@material-design-icons/svg/outlined/delete.svg";
 
 export function UserWalletsDefaultChildren() {
-  const { loading, isLoginUser } = useUserWalletsState();
+  const { isLoading, isLoginUser } = useUserWalletsState();
   const [isOpenEdit, setIsOpenEdit] = useState(false);
-  return loading ? (
+  return isLoading ? (
     <>loading ...</>
   ) : (
     <>
-      <Heading data-wallets-heading="">
-        <span data-wallets-count>
+      <Heading>
+        <span>
           Wallets(
           <UserWallets.Count />)
         </span>
         {isLoginUser && (
           <Button
-            data-wallets-create-button
             onPress={() => {
               setIsOpenEdit(true);
             }}
@@ -50,23 +49,23 @@ export function UserWalletsDefaultChildren() {
         )}
       </UserWallets.List>
       {isLoginUser && (
-        <Modal data-modal="" isOpen={isOpenEdit} onOpenChange={setIsOpenEdit}>
-          <Heading data-heading="">Add New Wallet</Heading>
-          <UserWalletsAddForm
+        <Modal isOpen={isOpenEdit} onOpenChange={setIsOpenEdit}>
+          <Heading>Add New Wallet</Heading>
+          <UserWalletAddForm
             onSuccessfullySubmit={() => {
               setIsOpenEdit(false);
             }}
           >
             <TextField autoFocus>
-              <UserWalletsAddForm.AddressInput />
+              <UserWalletAddForm.AddressInput />
             </TextField>
 
-            <UserWalletsAddForm.SubmitButton>
+            <UserWalletAddForm.SubmitButton>
               Submit
-            </UserWalletsAddForm.SubmitButton>
+            </UserWalletAddForm.SubmitButton>
 
-            <UserWalletsAddForm.ErrorMessage />
-          </UserWalletsAddForm>
+            <UserWalletAddForm.ErrorMessage />
+          </UserWalletAddForm>
         </Modal>
       )}
     </>

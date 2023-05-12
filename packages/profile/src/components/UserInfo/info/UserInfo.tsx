@@ -17,46 +17,46 @@ export interface UserInfoProps
     >,
     UserInfoIncomingProps {}
 
-function UserInfo({ children, ...props }: UserInfoProps) {
+function UserInfoRoot({ children, ...props }: UserInfoProps) {
   const session = useSession();
   const { profile, profileLoading, getProfileWithDid } = useProfileState();
   const isLoginUser = !props.hasOwnProperty("did");
   const did = (isLoginUser ? session?.id : props.did) || "";
 
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [info, setUserInfo] = useState<Profile | null>(null);
 
   useEffect(() => {
     if (isLoginUser) {
       if (!profileLoading) {
-        setLoading(false);
+        setIsLoading(false);
         setUserInfo(profile);
       } else {
-        setLoading(true);
+        setIsLoading(true);
       }
     }
   }, [isLoginUser, did, profileLoading, profile]);
 
   useEffect(() => {
     if (!isLoginUser) {
-      setLoading(true);
+      setIsLoading(true);
       getProfileWithDid(did)
         .then((data) => {
           setUserInfo(data);
         })
         .catch(console.error)
-        .finally(() => setLoading(false));
+        .finally(() => setIsLoading(false));
     }
   }, [isLoginUser, did, getProfileWithDid]);
 
   const businessProps = {
-    "data-us3r-userinfo": "",
-    "data-loading": loading || undefined,
+    "data-us3r-component": "UserInfo",
+    "data-loading": isLoading || undefined,
   };
   const contextValue = {
     did,
     isLoginUser,
-    loading,
+    isLoading,
     info,
   };
 
@@ -68,7 +68,6 @@ function UserInfo({ children, ...props }: UserInfoProps) {
     </div>
   );
 }
-const _UserInfo = Object.assign(UserInfo, {
+export const UserInfo = Object.assign(UserInfoRoot, {
   ...UserInfoElements,
 });
-export { _UserInfo as UserInfo };

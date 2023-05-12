@@ -20,19 +20,19 @@ export interface UserInfoEditFormProps
     UserInfoEditFormContextValue
   > {}
 
-function UserInfoEditForm({ children, ...props }: UserInfoEditFormProps) {
+function UserInfoEditFormRoot({ children, ...props }: UserInfoEditFormProps) {
   const { profile, profileLoading, updateProfile } = useProfileState();
 
   const [avatar, setAvatar] = useState("");
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
 
-  const [updating, setUpdating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
-  const disabled = useMemo(
-    () => profileLoading || !profile || updating,
-    [profileLoading, profile, updating]
+  const isDisabled = useMemo(
+    () => profileLoading || !profile || isUpdating,
+    [profileLoading, profile, isUpdating]
   );
 
   useEffect(() => {
@@ -47,7 +47,7 @@ function UserInfoEditForm({ children, ...props }: UserInfoEditFormProps) {
 
   const submitEdit = useCallback(async () => {
     try {
-      setUpdating(true);
+      setIsUpdating(true);
       await updateProfile({
         avatar: avatar,
         name: name,
@@ -57,14 +57,14 @@ function UserInfoEditForm({ children, ...props }: UserInfoEditFormProps) {
       const errMsg = (error as ReadonlyArray<any>)[0].toJSON().message;
       setErrMsg(errMsg);
     } finally {
-      setUpdating(false);
+      setIsUpdating(false);
     }
   }, [avatar, bio, name, updateProfile]);
 
   const businessProps = {
-    "data-us3r-userinfo-edit-form": "",
-    "data-updating": updating || undefined,
-    "data-disabled": disabled || undefined,
+    "data-us3r-component": "UserInfoEditForm",
+    "data-updating": isUpdating || undefined,
+    "data-disabled": isDisabled || undefined,
   };
   const contextValue = {
     avatar,
@@ -73,9 +73,9 @@ function UserInfoEditForm({ children, ...props }: UserInfoEditFormProps) {
     setName,
     bio,
     setBio,
-    updating,
+    isUpdating,
     errMsg,
-    disabled,
+    isDisabled,
     submitEdit,
   };
   return (
@@ -91,7 +91,6 @@ function UserInfoEditForm({ children, ...props }: UserInfoEditFormProps) {
   );
 }
 
-const _UserInfoEditForm = Object.assign(UserInfoEditForm, {
+export const UserInfoEditForm = Object.assign(UserInfoEditFormRoot, {
   ...UserInfoEditFormElements,
 });
-export { _UserInfoEditForm as UserInfoEditForm };
