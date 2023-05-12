@@ -7,6 +7,7 @@ import { useLink } from "../../../hooks/useLink";
 
 export interface CommentsIncomingProps {
   linkId: string;
+  order?: "asc" | "desc";
 }
 
 export interface CommentsProps
@@ -16,12 +17,28 @@ export interface CommentsProps
     >,
     CommentsIncomingProps {}
 
-function CommentsRoot({ linkId, children, ...props }: CommentsProps) {
+function CommentsRoot({
+  linkId,
+  order = "desc",
+  children,
+  ...props
+}: CommentsProps) {
   const { isFetching, link } = useLink(linkId);
 
   const comments = useMemo(
-    () => (isFetching ? [] : link?.comments?.edges?.map((e) => e.node) || []),
-    [link, isFetching]
+    () =>
+      (isFetching ? [] : link?.comments?.edges?.map((e) => e.node) || []).sort(
+        (a, b) => {
+          const aTime = new Date(a.createAt).getTime();
+          const bTime = new Date(b.createAt).getTime();
+          if (order === "asc") {
+            return aTime - bTime;
+          } else {
+            return bTime - aTime;
+          }
+        }
+      ),
+    [link, isFetching, order]
   );
 
   const commentsCount = useMemo(() => link?.commentsCount || 0, [link]);
