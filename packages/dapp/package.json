@@ -1,0 +1,42 @@
+{
+  "name": "@us3r-network/dapp",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --forceExit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ceramicnetwork/streamid": "^2.14.0",
+    "@composedb/devtools": "^0.4.3",
+    "@composedb/types": "^0.4.3",
+    "@us3r-network/data-model": "^0.1.0"
+  },
+  "jest": {
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "transform": {
+      "^.+\\.(t|j)s$": [
+        "@swc/jest",
+        {
+          "root": "../.."
+        }
+      ]
+    }
+  }
+}
