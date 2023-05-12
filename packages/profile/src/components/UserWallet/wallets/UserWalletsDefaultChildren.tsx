@@ -1,6 +1,12 @@
 import { useState } from "react";
 import * as UserWallets from "./UserWalletsElements";
-import { Button, Heading, Modal, TextField } from "react-aria-components";
+import {
+  Button,
+  Dialog,
+  Heading,
+  Modal,
+  TextField,
+} from "react-aria-components";
 import { UserWalletAddForm } from "../add-form/UserWalletAddForm";
 import { useUserWalletsState } from "./UserWalletsContext";
 
@@ -50,22 +56,24 @@ export function UserWalletsDefaultChildren() {
       </UserWallets.List>
       {isLoginUser && (
         <Modal isOpen={isOpenEdit} onOpenChange={setIsOpenEdit}>
-          <Heading>Add New Wallet</Heading>
-          <UserWalletAddForm
-            onSuccessfullySubmit={() => {
-              setIsOpenEdit(false);
-            }}
-          >
-            <TextField autoFocus>
-              <UserWalletAddForm.AddressInput />
-            </TextField>
+          <Dialog>
+            <Heading>Add New Wallet</Heading>
+            <UserWalletAddForm
+              onSuccessfullySubmit={() => {
+                setIsOpenEdit(false);
+              }}
+            >
+              <TextField autoFocus>
+                <UserWalletAddForm.AddressInput />
+              </TextField>
 
-            <UserWalletAddForm.SubmitButton>
-              Submit
-            </UserWalletAddForm.SubmitButton>
+              <UserWalletAddForm.SubmitButton>
+                Submit
+              </UserWalletAddForm.SubmitButton>
 
-            <UserWalletAddForm.ErrorMessage />
-          </UserWalletAddForm>
+              <UserWalletAddForm.ErrorMessage />
+            </UserWalletAddForm>
+          </Dialog>
         </Modal>
       )}
     </>

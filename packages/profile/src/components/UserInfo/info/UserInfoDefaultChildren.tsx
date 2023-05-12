@@ -2,6 +2,7 @@ import { useState } from "react";
 import * as UserInfo from "./UserInfoElements";
 import {
   Button,
+  Dialog,
   Heading,
   Label,
   Modal,
@@ -34,48 +35,50 @@ export function UserInfoDefaultChildren() {
       </section>
       {isLoginUser && (
         <Modal isOpen={isOpenEdit} onOpenChange={setIsOpenEdit}>
-          <Heading>Edit Info</Heading>
-          <UserInfoEditForm>
-            {({ isDisabled }) => {
-              return (
-                <>
-                  <UserInfoEditForm.AvatarPreview />
+          <Dialog>
+            <Heading>Edit Info</Heading>
+            <UserInfoEditForm>
+              {({ isDisabled }) => {
+                return (
+                  <>
+                    <UserInfoEditForm.AvatarPreview />
 
-                  <TextField autoFocus>
-                    <Label>Select Image</Label>
-                    <UserInfoEditForm.AvatarUploadInput />
-                  </TextField>
+                    <TextField autoFocus>
+                      <Label>Select Image</Label>
+                      <UserInfoEditForm.AvatarUploadInput />
+                    </TextField>
 
-                  <TextField>
-                    <Label>Name</Label>
-                    <UserInfoEditForm.NameInput />
-                  </TextField>
+                    <TextField>
+                      <Label>Name</Label>
+                      <UserInfoEditForm.NameInput />
+                    </TextField>
 
-                  <TextField>
-                    <Label htmlFor="bio-textarea">Bio</Label>
-                    <UserInfoEditForm.BioTextArea id="bio-textarea" />
-                  </TextField>
+                    <TextField>
+                      <Label htmlFor="bio-textarea">Bio</Label>
+                      <UserInfoEditForm.BioTextArea id="bio-textarea" />
+                    </TextField>
 
-                  <section data-btns="">
-                    <Button
-                      data-cancel-button=""
-                      isDisabled={isDisabled}
-                      onPress={() => {
-                        setIsOpenEdit(false);
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                    <UserInfoEditForm.SubmitButton>
-                      Submit
-                    </UserInfoEditForm.SubmitButton>
-                  </section>
+                    <section data-btns="">
+                      <Button
+                        data-cancel-button=""
+                        isDisabled={isDisabled}
+                        onPress={() => {
+                          setIsOpenEdit(false);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                      <UserInfoEditForm.SubmitButton>
+                        Submit
+                      </UserInfoEditForm.SubmitButton>
+                    </section>
 
-                  <UserInfoEditForm.ErrorMessage />
-                </>
-              );
-            }}
-          </UserInfoEditForm>
+                    <UserInfoEditForm.ErrorMessage />
+                  </>
+                );
+              }}
+            </UserInfoEditForm>
+          </Dialog>
         </Modal>
       )}
     </>
