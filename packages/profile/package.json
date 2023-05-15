@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/profile",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "the us3r data model",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
