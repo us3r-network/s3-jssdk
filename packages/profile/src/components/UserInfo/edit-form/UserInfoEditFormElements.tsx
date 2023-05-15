@@ -1,5 +1,4 @@
 import { Button, ButtonProps, Input, InputProps } from "react-aria-components";
-import { uploadImage } from "../../../utils/uploadFile";
 import { useUserInfoEditFormState } from "./UserInfoEditFormContext";
 import { HTMLAttributes } from "react";
 import { TextArea, TextAreaProps } from "../../common/TextArea";
@@ -18,7 +17,12 @@ export function AvatarPreview(props: HTMLAttributes<HTMLImageElement>) {
 }
 
 export function AvatarUploadInput(props: InputProps) {
-  const { setAvatar, isDisabled } = useUserInfoEditFormState();
+  const { setAvatar, isDisabled, avatarUploadOpts } =
+    useUserInfoEditFormState();
+  if (!avatarUploadOpts) {
+    throw new Error("avatarUploadOpts is required");
+  }
+  const { upload, validate, getUrl } = avatarUploadOpts;
   return (
     <Input
       data-state-element="AvatarUploadInput"
@@ -29,9 +33,14 @@ export function AvatarUploadInput(props: InputProps) {
         const target = e.target as HTMLInputElement;
         const file = target.files && target.files[0];
         if (!file) return;
-        const resp = await uploadImage(file);
-        const body = await resp.json();
-        setAvatar(body.url);
+        try {
+          const resp = await upload(file);
+          if (!validate(resp)) return;
+          const url = await getUrl(resp);
+          setAvatar(url);
+        } catch (error) {
+          console.error(error);
+        }
       }}
       {...props}
     />

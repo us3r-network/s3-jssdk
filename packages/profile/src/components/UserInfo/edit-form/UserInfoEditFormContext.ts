@@ -1,6 +1,7 @@
 import { createContext, useContext } from "react";
+import type { AvatarUploadOpts } from "./UserInfoEditForm";
 
-export interface UserInfoEditFormContextValue {
+export interface UserInfoEditFormContextValue<T> {
   avatar: string;
   setAvatar: (avatar: string) => void;
   name: string;
@@ -11,10 +12,11 @@ export interface UserInfoEditFormContextValue {
   errMsg: string;
   isDisabled: boolean;
   submitEdit: () => void;
+  avatarUploadOpts: AvatarUploadOpts<T>;
 }
 
 export const UserInfoEditFormContext =
-  createContext<UserInfoEditFormContextValue | null>(null);
+  createContext<UserInfoEditFormContextValue<any> | null>(null);
 
 export function useUserInfoEditFormState() {
   const context = useContext(UserInfoEditFormContext);
