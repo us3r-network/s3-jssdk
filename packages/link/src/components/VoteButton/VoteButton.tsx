@@ -14,6 +14,7 @@ import { useLink } from "../../hooks/useLink";
 
 export interface VoteButtonIncomingProps {
   linkId: string;
+  onSuccessfullyVote?: () => void;
 }
 export interface VoteButtonRenderProps {
   isAuthenticated: boolean;
@@ -29,7 +30,12 @@ export interface VoteButtonProps
     >,
     VoteButtonIncomingProps {}
 
-export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
+export function VoteButton({
+  linkId,
+  onSuccessfullyVote,
+  children,
+  ...props
+}: VoteButtonProps) {
   const { link } = useLink(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
@@ -110,6 +116,7 @@ export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
           });
         }
       }
+      if (onSuccessfullyVote) onSuccessfullyVote();
     } catch (error) {
       console.error(error);
     } finally {
@@ -125,6 +132,7 @@ export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
     removeOneFromVotingLinkIds,
     addVoteToCacheLinks,
     updateVoteInCacheLinks,
+    onSuccessfullyVote,
   ]);
 
   const businessProps = {

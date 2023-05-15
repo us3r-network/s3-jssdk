@@ -157,6 +157,7 @@ function ScoreFormRoot({
     removeOneFromScoringLinkIds,
     addScoreToCacheLinks,
     updateScoreInCacheLinks,
+    onSuccessfullySubmit,
   ]);
 
   const businessProps = {

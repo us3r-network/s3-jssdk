@@ -42,7 +42,12 @@ export function UserInfoDefaultChildren() {
           <Modal isOpen={isOpenEdit} onOpenChange={setIsOpenEdit}>
             <Dialog>
               <Heading>Edit Info</Heading>
-              <UserInfoEditForm avatarUploadOpts={avatarUploadOpts}>
+              <UserInfoEditForm
+                avatarUploadOpts={avatarUploadOpts}
+                onSuccessfullySubmit={() => {
+                  setIsOpenEdit(false);
+                }}
+              >
                 {({ isDisabled }) => {
                   return (
                     <>

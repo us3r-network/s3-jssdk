@@ -14,6 +14,7 @@ import { useLink } from "../../hooks/useLink";
 
 export interface FavorButtonIncomingProps {
   linkId: string;
+  onSuccessfullyFavor?: () => void;
 }
 export interface FavorButtonRenderProps {
   isAuthenticated: boolean;
@@ -29,7 +30,12 @@ export interface FavorButtonProps
     >,
     FavorButtonIncomingProps {}
 
-export function FavorButton({ linkId, children, ...props }: FavorButtonProps) {
+export function FavorButton({
+  linkId,
+  onSuccessfullyFavor,
+  children,
+  ...props
+}: FavorButtonProps) {
   const { link } = useLink(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
@@ -101,6 +107,7 @@ export function FavorButton({ linkId, children, ...props }: FavorButtonProps) {
           });
         }
       }
+      if (onSuccessfullyFavor) onSuccessfullyFavor();
     } catch (error) {
       console.error(error);
     } finally {
@@ -116,6 +123,7 @@ export function FavorButton({ linkId, children, ...props }: FavorButtonProps) {
     removeOneFromFavoringLinkIds,
     addFavorToCacheLinks,
     updateFavorInCacheLinks,
+    onSuccessfullyFavor,
   ]);
 
   const businessProps = {

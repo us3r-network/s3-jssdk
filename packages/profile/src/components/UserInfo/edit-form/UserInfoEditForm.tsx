@@ -21,6 +21,7 @@ export interface AvatarUploadOpts<T> {
 }
 export interface UserInfoEditFormIncomingProps<T> {
   avatarUploadOpts: AvatarUploadOpts<T>;
+  onSuccessfullySubmit?: () => void;
 }
 
 export interface UserInfoEditFormProps<T>
@@ -33,6 +34,7 @@ export interface UserInfoEditFormProps<T>
 function UserInfoEditFormRoot<T>({
   avatarUploadOpts,
   children,
+  onSuccessfullySubmit,
   ...props
 }: UserInfoEditFormProps<T>) {
   const { profile, profileLoading, updateProfile } = useProfileState();
@@ -67,13 +69,14 @@ function UserInfoEditFormRoot<T>({
         name: name,
         bio: bio,
       });
+      if (onSuccessfullySubmit) onSuccessfullySubmit();
     } catch (error) {
       const errMsg = (error as ReadonlyArray<any>)[0].toJSON().message;
       setErrMsg(errMsg);
     } finally {
       setIsUpdating(false);
     }
-  }, [avatar, bio, name, updateProfile]);
+  }, [avatar, bio, name, updateProfile, onSuccessfullySubmit]);
 
   const businessProps = {
     "data-us3r-component": "UserInfoEditForm",
