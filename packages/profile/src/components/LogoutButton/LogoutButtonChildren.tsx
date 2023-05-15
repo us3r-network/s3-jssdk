@@ -1,4 +1,4 @@
-import type { LogoutButtonRenderProps } from "../LogoutButton";
+import type { LogoutButtonRenderProps } from "./LogoutButton";
 
 export interface LogoutButtonChildrenProps extends LogoutButtonRenderProps {}
 

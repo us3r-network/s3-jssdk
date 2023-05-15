@@ -7,50 +7,50 @@ import {
 } from "react";
 import { useProfileState } from "../../../ProfileStateProvider";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
-import * as UserWalletsAddFormElements from "./UserWalletsAddFormElements";
+import * as UserWalletAddFormElements from "./UserWalletAddFormElements";
 import {
-  UserWalletsAddFormContext,
-  UserWalletsAddFormContextValue,
-} from "./UserWalletsAddFormContext";
-import { UserWalletsAddFormDefaultChildren } from "./UserWalletsAddFormDefaultChildren";
+  UserWalletAddFormContext,
+  UserWalletAddFormContextValue,
+} from "./UserWalletAddFormContext";
+import { UserWalletAddFormDefaultChildren } from "./UserWalletAddFormDefaultChildren";
 import { WalletChainType } from "../../../data-model";
 
-export interface UserWalletsAddFormIncomingProps {
+export interface UserWalletAddFormIncomingProps {
   onSuccessfullySubmit?: () => void;
 }
 
-export interface UserWalletsAddFormProps
+export interface UserWalletAddFormProps
   extends ChildrenRenderProps<
       HTMLAttributes<HTMLFormElement>,
-      UserWalletsAddFormContextValue
+      UserWalletAddFormContextValue
     >,
-    UserWalletsAddFormIncomingProps {}
+    UserWalletAddFormIncomingProps {}
 
-function UserWalletsAddForm({
+function UserWalletAddFormRoot({
   children,
   onError,
   onSuccessfullySubmit,
   ...props
-}: UserWalletsAddFormProps) {
+}: UserWalletAddFormProps) {
   const { profile, profileLoading, updateProfile } = useProfileState();
 
   const [address, setAddress] = useState("");
 
-  const [creating, setCreating] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
-  const disabled = useMemo(
-    () => profileLoading || !profile || creating,
-    [profileLoading, profile, creating]
+  const isDisabled = useMemo(
+    () => profileLoading || !profile || isAdding,
+    [profileLoading, profile, isAdding]
   );
 
   useEffect(() => {
     setErrMsg("");
   }, [address]);
 
-  const submitCreate = useCallback(async () => {
+  const submitAdd = useCallback(async () => {
     try {
-      setCreating(true);
+      setIsAdding(true);
       await updateProfile({
         wallets: [
           ...(profile?.wallets || []),
@@ -66,37 +66,36 @@ function UserWalletsAddForm({
       const errMsg = (error as ReadonlyArray<any>)[0].toJSON().message;
       setErrMsg(errMsg);
     } finally {
-      setCreating(false);
+      setIsAdding(false);
     }
   }, [address, profile, updateProfile, onSuccessfullySubmit]);
 
   const businessProps = {
-    "data-us3r-userwallets-create-form": "",
-    "data-creating": creating || undefined,
-    "data-disabled": disabled || undefined,
+    "data-us3r-component": "UserWalletAddForm",
+    "data-adding": isAdding || undefined,
+    "data-disabled": isDisabled || undefined,
   };
   const contextValue = {
     address,
     setAddress,
-    creating,
+    isAdding,
     errMsg,
-    disabled,
-    submitCreate,
+    isDisabled,
+    submitAdd,
   };
   return (
     <form {...props} {...businessProps}>
-      <UserWalletsAddFormContext.Provider value={contextValue}>
+      <UserWalletAddFormContext.Provider value={contextValue}>
         {childrenRender(
           children,
           contextValue,
-          <UserWalletsAddFormDefaultChildren />
+          <UserWalletAddFormDefaultChildren />
         )}
-      </UserWalletsAddFormContext.Provider>
+      </UserWalletAddFormContext.Provider>
     </form>
   );
 }
 
-const _UserWalletsAddForm = Object.assign(UserWalletsAddForm, {
-  ...UserWalletsAddFormElements,
+export const UserWalletAddForm = Object.assign(UserWalletAddFormRoot, {
+  ...UserWalletAddFormElements,
 });
-export { _UserWalletsAddForm as UserWalletsAddForm };

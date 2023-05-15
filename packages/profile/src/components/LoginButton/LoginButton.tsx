@@ -6,12 +6,12 @@ import { useCallback, useMemo } from "react";
 import { AriaButtonProps } from "react-aria";
 import { Button, ButtonRenderProps } from "react-aria-components";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
-import { LoginButtonChildren } from "./default-ui/LoginButtonChildren";
+import { LoginButtonChildren } from "./LoginButtonChildren";
 
 export interface LoginButtonRenderProps {
   isAuthenticated: boolean;
-  loading: boolean;
-  disabled: boolean;
+  isLoading: boolean;
+  isDisabled: boolean;
 }
 export interface LoginButtonProps
   extends ChildrenRenderProps<
@@ -22,25 +22,25 @@ export interface LoginButtonProps
 export function LoginButton({ children, ...props }: LoginButtonProps) {
   const { ready, status, signIn } = useAuthentication();
   const isAuthenticated = useIsAuthenticated();
-  const loading = ready && status === "loading";
-  const disabled = !ready || loading || isAuthenticated;
+  const isLoading = ready && status === "loading";
+  const isDisabled = !ready || isLoading || isAuthenticated;
   const onClick = useCallback(() => {
-    if (!disabled && !isAuthenticated) {
+    if (!isDisabled && !isAuthenticated) {
       signIn();
     }
-  }, [disabled, isAuthenticated, signIn]);
+  }, [isDisabled, isAuthenticated, signIn]);
   const businessProps = {
-    "data-us3r-loginbutton": "",
+    "data-us3r-component": "LoginButton",
     "data-authenticated": isAuthenticated || undefined,
-    "data-loading": loading || undefined,
-    "data-disabled": disabled || undefined,
+    "data-loading": isLoading || undefined,
+    "data-disabled": isDisabled || undefined,
     onClick,
   };
 
   const businessRenderProps = {
     isAuthenticated,
-    loading,
-    disabled,
+    isLoading,
+    isDisabled,
   };
 
   const defaultChildren = useMemo(

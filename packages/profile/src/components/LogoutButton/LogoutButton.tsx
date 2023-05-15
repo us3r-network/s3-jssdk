@@ -6,11 +6,11 @@ import {
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
 import { AriaButtonProps } from "react-aria";
 import { Button, ButtonRenderProps } from "react-aria-components";
-import { LogoutButtonChildren } from "./default-ui/LogoutButtonChildren";
+import { LogoutButtonChildren } from "./LogoutButtonChildren";
 
 export interface LogoutButtonRenderProps {
   isAuthenticated: boolean;
-  disabled: boolean;
+  isDisabled: boolean;
 }
 
 export interface LogoutButtonProps
@@ -22,21 +22,22 @@ export interface LogoutButtonProps
 export function LogoutButton({ children, ...props }: LogoutButtonProps) {
   const { ready, signOut } = useAuthentication();
   const isAuthenticated = useIsAuthenticated();
-  const disabled = !ready || !isAuthenticated;
+  const isDisabled = !ready || !isAuthenticated;
   const onClick = useCallback(() => {
-    if (!disabled && isAuthenticated) {
+    if (!isDisabled && isAuthenticated) {
       signOut();
     }
-  }, [disabled, isAuthenticated, signOut]);
+  }, [isDisabled, isAuthenticated, signOut]);
   const businessProps = {
-    "data-us3r-logoutbutton": "",
+    "data-us3r-component": "LogoutButton",
     "data-authenticated": isAuthenticated || undefined,
-    "data-disabled": disabled || undefined,
+    "data-disabled": isDisabled || undefined,
+    isDisabled,
     onClick,
   };
   const businessRenderProps = {
     isAuthenticated,
-    disabled,
+    isDisabled,
   };
 
   const defaultChildren = useMemo(

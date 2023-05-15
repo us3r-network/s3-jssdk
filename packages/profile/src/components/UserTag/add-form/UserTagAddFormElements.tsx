@@ -1,13 +1,13 @@
 import { Button, ButtonProps, Input, InputProps } from "react-aria-components";
 import { HTMLAttributes } from "react";
-import { useUserTagsAddFormState } from "./UserTagsAddFormContext";
+import { useUserTagAddFormState } from "./UserTagAddFormContext";
 
 export function TagInput(props: InputProps) {
-  const { tag, setTag, disabled } = useUserTagsAddFormState();
+  const { tag, setTag, isDisabled } = useUserTagAddFormState();
   return (
     <Input
-      data-tag-input=""
-      disabled={disabled}
+      data-state-element="TagInput"
+      disabled={isDisabled}
       placeholder="tag"
       value={tag}
       onChange={(e) => {
@@ -19,21 +19,21 @@ export function TagInput(props: InputProps) {
 }
 
 export function SubmitButton(props: ButtonProps) {
-  const { disabled, submitCreate } = useUserTagsAddFormState();
+  const { isDisabled, submitAdd } = useUserTagAddFormState();
   return (
     <Button
-      data-submit-button=""
-      onPress={submitCreate}
-      isDisabled={disabled}
+      data-state-element="SubmitButton"
+      onPress={submitAdd}
+      isDisabled={isDisabled}
       {...props}
     />
   );
 }
 
 export function ErrorMessage(props: HTMLAttributes<HTMLSpanElement>) {
-  const { errMsg } = useUserTagsAddFormState();
+  const { errMsg } = useUserTagAddFormState();
   return (
-    <span data-error-message="" {...props}>
+    <span data-state-element="ErrorMessage" {...props}>
       {errMsg}
     </span>
   );

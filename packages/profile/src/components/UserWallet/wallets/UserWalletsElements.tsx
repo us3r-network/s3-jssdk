@@ -17,7 +17,7 @@ import { shortPubKey } from "../../../utils/short";
 export function Count(props: HTMLAttributes<HTMLSpanElement>) {
   const { wallets } = useUserWalletsState();
   return (
-    <span data-count="" {...props}>
+    <span data-state-element="Count" {...props}>
       {wallets.length}
     </span>
   );
@@ -25,13 +25,13 @@ export function Count(props: HTMLAttributes<HTMLSpanElement>) {
 
 export function List(props: ListBoxProps<Wallet>) {
   const { wallets } = useUserWalletsState();
-  return <ListBox data-list="" items={wallets} {...props} />;
+  return <ListBox data-state-element="List" items={wallets} {...props} />;
 }
 
 export function Item({ children, value, ...props }: ItemProps<Wallet>) {
   if (!value) return null;
   return (
-    <AriaItem data-item="" key={value.address} {...props}>
+    <AriaItem data-state-element="Item" key={value.address} {...props}>
       <UserWalletsItemContext.Provider value={value as Wallet}>
         {childrenRender(children, value)}
       </UserWalletsItemContext.Provider>
@@ -42,7 +42,7 @@ export function Item({ children, value, ...props }: ItemProps<Wallet>) {
 export function Address(props: HTMLAttributes<HTMLSpanElement>) {
   const { address } = useUserWalletsItemState();
   return (
-    <span data-address="" {...props}>
+    <span data-state-element="Address" {...props}>
       {shortPubKey(address)}
     </span>
   );
@@ -51,7 +51,7 @@ export function Address(props: HTMLAttributes<HTMLSpanElement>) {
 export function Network(props: HTMLAttributes<HTMLSpanElement>) {
   const { primary } = useUserWalletsItemState();
   return (
-    <span data-address="" {...props}>
+    <span data-state-element="Network" {...props}>
       {primary ? "Main" : ""}
     </span>
   );
@@ -63,7 +63,7 @@ export function Delete(props: HTMLAttributes<HTMLSpanElement>) {
   if (!wallet || wallet.primary) return null;
   return (
     <span
-      data-delete=""
+      data-state-element="Delete"
       onClick={() => {
         deleteWallet(wallet);
       }}
@@ -83,7 +83,7 @@ export function Copy({
   const { address } = useUserWalletsItemState();
   return (
     <span
-      data-copy=""
+      data-state-element="Copy"
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(address);

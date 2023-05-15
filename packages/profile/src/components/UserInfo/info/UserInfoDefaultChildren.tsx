@@ -2,6 +2,7 @@ import { useState } from "react";
 import * as UserInfo from "./UserInfoElements";
 import {
   Button,
+  Dialog,
   Heading,
   Label,
   Modal,
@@ -11,14 +12,13 @@ import { UserInfoEditForm } from "../edit-form/UserInfoEditForm";
 import { useUserInfoState } from "./UserInfoContext";
 
 export function UserInfoDefaultChildren() {
-  const { loading, isLoginUser } = useUserInfoState();
+  const { isLoading, isLoginUser } = useUserInfoState();
   const [isOpenEdit, setIsOpenEdit] = useState(false);
-  return loading ? (
+  return isLoading ? (
     <>loading ...</>
   ) : (
     <>
       <section
-        data-avatar-box=""
         onClick={() => {
           if (isLoginUser) {
             setIsOpenEdit(true);
@@ -27,58 +27,58 @@ export function UserInfoDefaultChildren() {
       >
         <UserInfo.Avatar />
       </section>
-      <section data-name-box="">
+      <section>
         <UserInfo.Name />
       </section>
-      <section data-bio-box="">
+      <section>
         <UserInfo.Bio />
       </section>
       {isLoginUser && (
-        <Modal data-modal="" isOpen={isOpenEdit} onOpenChange={setIsOpenEdit}>
-          <Heading data-heading="">Edit Info</Heading>
-          <UserInfoEditForm>
-            {({ disabled }) => {
-              return (
-                <>
-                  <UserInfoEditForm.AvatarPreview />
+        <Modal isOpen={isOpenEdit} onOpenChange={setIsOpenEdit}>
+          <Dialog>
+            <Heading>Edit Info</Heading>
+            <UserInfoEditForm>
+              {({ isDisabled }) => {
+                return (
+                  <>
+                    <UserInfoEditForm.AvatarPreview />
 
-                  <TextField autoFocus data-field="">
-                    <Label data-label="">Select Image</Label>
-                    <UserInfoEditForm.AvatarUploadInput />
-                  </TextField>
+                    <TextField autoFocus>
+                      <Label>Select Image</Label>
+                      <UserInfoEditForm.AvatarUploadInput />
+                    </TextField>
 
-                  <TextField data-field="">
-                    <Label data-label="">Name</Label>
-                    <UserInfoEditForm.NameInput />
-                  </TextField>
+                    <TextField>
+                      <Label>Name</Label>
+                      <UserInfoEditForm.NameInput />
+                    </TextField>
 
-                  <TextField data-field="">
-                    <Label htmlFor="bio-textarea" data-label="">
-                      Bio
-                    </Label>
-                    <UserInfoEditForm.BioTextArea id="bio-textarea" />
-                  </TextField>
+                    <TextField>
+                      <Label htmlFor="bio-textarea">Bio</Label>
+                      <UserInfoEditForm.BioTextArea id="bio-textarea" />
+                    </TextField>
 
-                  <section data-btns="">
-                    <Button
-                      data-cancel-button=""
-                      isDisabled={disabled}
-                      onPress={() => {
-                        setIsOpenEdit(false);
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                    <UserInfoEditForm.SubmitButton>
-                      Submit
-                    </UserInfoEditForm.SubmitButton>
-                  </section>
+                    <section data-btns="">
+                      <Button
+                        data-cancel-button=""
+                        isDisabled={isDisabled}
+                        onPress={() => {
+                          setIsOpenEdit(false);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                      <UserInfoEditForm.SubmitButton>
+                        Submit
+                      </UserInfoEditForm.SubmitButton>
+                    </section>
 
-                  <UserInfoEditForm.ErrorMessage />
-                </>
-              );
-            }}
-          </UserInfoEditForm>
+                    <UserInfoEditForm.ErrorMessage />
+                  </>
+                );
+              }}
+            </UserInfoEditForm>
+          </Dialog>
         </Modal>
       )}
     </>

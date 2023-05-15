@@ -10,7 +10,7 @@ export interface UserAvatarIncomingProps {
   did?: string;
 }
 export interface UserAvatarRenderProps {
-  loading: boolean;
+  isLoading: boolean;
   avatarSrc: string;
 }
 export interface UserAvatarProps
@@ -32,23 +32,23 @@ export function UserAvatar({ children, ...props }: UserAvatarProps) {
     () => getUserAvatarSrc(did || DEFAULT_DID),
     [did]
   );
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [avatarSrc, setAvatarSrc] = useState(defaultAvatarUrl);
 
   useEffect(() => {
     if (isLoginUser) {
       if (!profileLoading) {
-        setLoading(false);
+        setIsLoading(false);
         setAvatarSrc(profile?.avatar || defaultAvatarUrl);
       } else {
-        setLoading(true);
+        setIsLoading(true);
       }
     }
   }, [isLoginUser, profileLoading, profile, defaultAvatarUrl]);
 
   useEffect(() => {
     if (!isLoginUser) {
-      setLoading(true);
+      setIsLoading(true);
       getProfileWithDid(did)
         .then((data) => {
           if (data) {
@@ -56,16 +56,16 @@ export function UserAvatar({ children, ...props }: UserAvatarProps) {
           }
         })
         .catch(console.error)
-        .finally(() => setLoading(false));
+        .finally(() => setIsLoading(false));
     }
   }, [isLoginUser, did, defaultAvatarUrl, getProfileWithDid]);
 
   const businessProps = {
-    "data-us3r-useravatar": "",
-    "data-loading": loading || undefined,
+    "data-us3r-component": "UserAvatar",
+    "data-loading": isLoading || undefined,
   };
   const businessRenderProps = {
-    loading,
+    isLoading,
     avatarSrc,
   };
 

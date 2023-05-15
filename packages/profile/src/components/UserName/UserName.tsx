@@ -3,13 +3,13 @@ import { useProfileState } from "../../ProfileStateProvider";
 import { shortDid } from "../../utils/short";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
-import { UserNameChildren } from "./default-ui/UserNameChildren";
+import { UserNameChildren } from "./UserNameChildren";
 export interface UserNameIncomingProps {
   did?: string;
   name?: string;
 }
 export interface UserNameRenderProps {
-  loading: boolean;
+  isLoading: boolean;
   username: string;
 }
 export interface UserNameProps
@@ -25,13 +25,13 @@ export function UserName({ name, children, ...props }: UserNameProps) {
   const isLoginUser = !props.hasOwnProperty("did");
   const did = (isLoginUser ? session?.id : props.did) || "";
 
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [username, setUsername] = useState("");
 
   useEffect(() => {
     if (name) {
       setUsername(name);
-      setLoading(false);
+      setIsLoading(false);
     }
   }, [name]);
 
@@ -39,10 +39,10 @@ export function UserName({ name, children, ...props }: UserNameProps) {
     if (name) return;
     if (isLoginUser) {
       if (!profileLoading) {
-        setLoading(false);
+        setIsLoading(false);
         setUsername(profile?.name || shortDid(did));
       } else {
-        setLoading(true);
+        setIsLoading(true);
       }
     }
   }, [name, isLoginUser, did, profileLoading, profile]);
@@ -50,21 +50,21 @@ export function UserName({ name, children, ...props }: UserNameProps) {
   useEffect(() => {
     if (name) return;
     if (!isLoginUser) {
-      setLoading(true);
+      setIsLoading(true);
       getProfileWithDid(did)
         .then((data) => {
           setUsername(data?.name || shortDid(did));
         })
         .catch(console.error)
-        .finally(() => setLoading(false));
+        .finally(() => setIsLoading(false));
     }
   }, [name, isLoginUser, did, getProfileWithDid]);
   const businessProps = {
-    "data-us3r-username": "",
-    "data-loading": loading || undefined,
+    "data-us3r-component": "UserName",
+    "data-loading": isLoading || undefined,
   };
   const businessRenderProps = {
-    loading,
+    isLoading,
     username,
   };
 

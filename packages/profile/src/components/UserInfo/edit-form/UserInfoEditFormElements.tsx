@@ -8,9 +8,8 @@ export function AvatarPreview(props: HTMLAttributes<HTMLImageElement>) {
   const { avatar } = useUserInfoEditFormState();
   return (
     <img
-      data-avatar-preview=""
+      data-state-element="AvatarPreview"
       src={avatar}
-      alt=""
       width={32}
       height={32}
       {...props}
@@ -19,11 +18,11 @@ export function AvatarPreview(props: HTMLAttributes<HTMLImageElement>) {
 }
 
 export function AvatarUploadInput(props: InputProps) {
-  const { setAvatar, disabled } = useUserInfoEditFormState();
+  const { setAvatar, isDisabled } = useUserInfoEditFormState();
   return (
     <Input
-      data-avatar-upload=""
-      disabled={disabled}
+      data-state-element="AvatarUploadInput"
+      disabled={isDisabled}
       placeholder="avatar"
       type="file"
       onChange={async (e) => {
@@ -40,11 +39,11 @@ export function AvatarUploadInput(props: InputProps) {
 }
 
 export function NameInput(props: InputProps) {
-  const { name, setName, disabled } = useUserInfoEditFormState();
+  const { name, setName, isDisabled } = useUserInfoEditFormState();
   return (
     <Input
-      data-name-input=""
-      disabled={disabled}
+      data-state-element="NameInput"
+      disabled={isDisabled}
       placeholder="name"
       value={name}
       onChange={(e) => {
@@ -56,11 +55,11 @@ export function NameInput(props: InputProps) {
 }
 
 export function BioTextArea(props: TextAreaProps) {
-  const { bio, setBio, disabled } = useUserInfoEditFormState();
+  const { bio, setBio, isDisabled } = useUserInfoEditFormState();
   return (
     <TextArea
-      data-bio-textarea=""
-      disabled={disabled}
+      data-state-element="BioTextArea"
+      disabled={isDisabled}
       placeholder="bio"
       value={bio}
       onChange={(e) => {
@@ -72,12 +71,12 @@ export function BioTextArea(props: TextAreaProps) {
 }
 
 export function SubmitButton(props: ButtonProps) {
-  const { disabled, submitEdit } = useUserInfoEditFormState();
+  const { isDisabled, submitEdit } = useUserInfoEditFormState();
   return (
     <Button
-      data-submit-button=""
+      data-state-element="SubmitButton"
       onPress={submitEdit}
-      isDisabled={disabled}
+      isDisabled={isDisabled}
       {...props}
     />
   );
@@ -86,7 +85,7 @@ export function SubmitButton(props: ButtonProps) {
 export function ErrorMessage(props: HTMLAttributes<HTMLSpanElement>) {
   const { errMsg } = useUserInfoEditFormState();
   return (
-    <span data-error-message="" {...props}>
+    <span data-state-element="AvatarPreview" {...props}>
       {errMsg}
     </span>
   );

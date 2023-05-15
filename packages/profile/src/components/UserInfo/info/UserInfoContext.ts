@@ -4,7 +4,7 @@ import { Profile } from "../../../data-model";
 export interface UserInfoContextValue {
   did: string;
   isLoginUser: boolean;
-  loading: boolean;
+  isLoading: boolean;
   info: Profile | null;
 }
 export const UserInfoContext = createContext<UserInfoContextValue | null>(null);
