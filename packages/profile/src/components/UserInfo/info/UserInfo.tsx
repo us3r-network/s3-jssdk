@@ -6,18 +6,24 @@ import { Profile } from "../../../data-model";
 import * as UserInfoElements from "./UserInfoElements";
 import { UserInfoContext, UserInfoContextValue } from "./UserInfoContext";
 import { UserInfoDefaultChildren } from "./UserInfoDefaultChildren";
-export interface UserInfoIncomingProps {
+import type { AvatarUploadOpts } from "../edit-form";
+export interface UserInfoIncomingProps<T> {
   did?: string;
+  avatarUploadOpts?: AvatarUploadOpts<T>;
 }
 
-export interface UserInfoProps
+export interface UserInfoProps<T>
   extends ChildrenRenderProps<
       HTMLAttributes<HTMLDivElement>,
-      UserInfoContextValue
+      UserInfoContextValue<T>
     >,
-    UserInfoIncomingProps {}
+    UserInfoIncomingProps<T> {}
 
-function UserInfoRoot({ children, ...props }: UserInfoProps) {
+function UserInfoRoot<T>({
+  avatarUploadOpts,
+  children,
+  ...props
+}: UserInfoProps<T>) {
   const session = useSession();
   const { profile, profileLoading, getProfileWithDid } = useProfileState();
   const isLoginUser = !props.hasOwnProperty("did");
@@ -58,6 +64,7 @@ function UserInfoRoot({ children, ...props }: UserInfoProps) {
     isLoginUser,
     isLoading,
     info,
+    avatarUploadOpts,
   };
 
   return (

@@ -14,13 +14,27 @@ import {
 } from "./UserInfoEditFormContext";
 import { UserInfoEditFormDefaultChildren } from "./UserInfoEditFormDefaultChildren";
 
-export interface UserInfoEditFormProps
-  extends ChildrenRenderProps<
-    HTMLAttributes<HTMLFormElement>,
-    UserInfoEditFormContextValue
-  > {}
+export interface AvatarUploadOpts<T> {
+  upload: (file: File) => Promise<T>;
+  validate: (data: T) => boolean;
+  getUrl: (data: T) => Promise<string>;
+}
+export interface UserInfoEditFormIncomingProps<T> {
+  avatarUploadOpts: AvatarUploadOpts<T>;
+}
 
-function UserInfoEditFormRoot({ children, ...props }: UserInfoEditFormProps) {
+export interface UserInfoEditFormProps<T>
+  extends ChildrenRenderProps<
+      HTMLAttributes<HTMLFormElement>,
+      UserInfoEditFormContextValue<T>
+    >,
+    UserInfoEditFormIncomingProps<T> {}
+
+function UserInfoEditFormRoot<T>({
+  avatarUploadOpts,
+  children,
+  ...props
+}: UserInfoEditFormProps<T>) {
   const { profile, profileLoading, updateProfile } = useProfileState();
 
   const [avatar, setAvatar] = useState("");
@@ -77,6 +91,7 @@ function UserInfoEditFormRoot({ children, ...props }: UserInfoEditFormProps) {
     errMsg,
     isDisabled,
     submitEdit,
+    avatarUploadOpts,
   };
   return (
     <form {...props} {...businessProps}>
