@@ -14,6 +14,7 @@ import { useLink } from "../../hooks/useLink";
 
 export interface FavorButtonIncomingProps {
   linkId: string;
+  onSuccessfullyFavor?: () => void;
 }
 export interface FavorButtonRenderProps {
   isAuthenticated: boolean;
@@ -29,7 +30,12 @@ export interface FavorButtonProps
     >,
     FavorButtonIncomingProps {}
 
-export function FavorButton({ linkId, children, ...props }: FavorButtonProps) {
+export function FavorButton({
+  linkId,
+  onSuccessfullyFavor,
+  children,
+  ...props
+}: FavorButtonProps) {
   const { link } = useLink(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
@@ -78,6 +84,7 @@ export function FavorButton({ linkId, children, ...props }: FavorButtonProps) {
         const id = findCurrUserFavor.node.id;
         const revoke = !findCurrUserFavor.node.revoke;
         await s3LinkModel?.updateFavor(id, { revoke });
+        if (onSuccessfullyFavor) onSuccessfullyFavor();
         // update store
         updateFavorInCacheLinks(linkId, id, { revoke });
       } else {
@@ -86,6 +93,7 @@ export function FavorButton({ linkId, children, ...props }: FavorButtonProps) {
           linkID: linkId,
           revoke: false,
         });
+        if (onSuccessfullyFavor) onSuccessfullyFavor();
         const id = res?.data?.createFavor.document.id;
         if (id) {
           // update store
@@ -116,6 +124,7 @@ export function FavorButton({ linkId, children, ...props }: FavorButtonProps) {
     removeOneFromFavoringLinkIds,
     addFavorToCacheLinks,
     updateFavorInCacheLinks,
+    onSuccessfullyFavor,
   ]);
 
   const businessProps = {

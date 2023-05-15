@@ -119,6 +119,7 @@ function CommentAddFormRoot({
     removeOneFromCommentingLinkIds,
     addCommentToCacheLinks,
     updateCommentInCacheLinks,
+    onSuccessfullySubmit,
   ]);
 
   const businessProps = {

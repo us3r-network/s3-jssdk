@@ -14,6 +14,7 @@ import { useLink } from "../../hooks/useLink";
 
 export interface VoteButtonIncomingProps {
   linkId: string;
+  onSuccessfullyVote?: () => void;
 }
 export interface VoteButtonRenderProps {
   isAuthenticated: boolean;
@@ -29,7 +30,12 @@ export interface VoteButtonProps
     >,
     VoteButtonIncomingProps {}
 
-export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
+export function VoteButton({
+  linkId,
+  onSuccessfullyVote,
+  children,
+  ...props
+}: VoteButtonProps) {
   const { link } = useLink(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
@@ -79,6 +85,7 @@ export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
         const revoke = !findCurrUserVote.node.revoke;
         const type = revoke ? "DOWN_VOTE" : "UP_VOTE";
         await s3LinkModel?.updateVote(id, { revoke, type });
+        if (onSuccessfullyVote) onSuccessfullyVote();
         // update store
         updateVoteInCacheLinks(linkId, id, {
           revoke,
@@ -94,6 +101,7 @@ export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
           revoke,
           type,
         });
+        if (onSuccessfullyVote) onSuccessfullyVote();
         const id = res?.data?.createVote.document.id;
         if (id) {
           // update store
@@ -125,6 +133,7 @@ export function VoteButton({ linkId, children, ...props }: VoteButtonProps) {
     removeOneFromVotingLinkIds,
     addVoteToCacheLinks,
     updateVoteInCacheLinks,
+    onSuccessfullyVote,
   ]);
 
   const businessProps = {
