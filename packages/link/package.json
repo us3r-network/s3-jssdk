@@ -12,7 +12,8 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --forceExit"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --forceExit",
+    "pub": "npm publish --access public --tag latest"
   },
   "keywords": [],
   "author": "",
