@@ -13,6 +13,7 @@ export type SocialLink = {
 };
 
 export type Dapp = {
+  id?: string;
   name: string;
   icon?: string;
   url?: string;
@@ -115,6 +116,32 @@ export class S3DappModel extends S3Model {
       },
     });
 
+    return res;
+  }
+
+  public async queryDappWithId(id: string) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      node: Dapp;
+    }>(`
+      query {
+        node(id: "${id}") {
+          id
+          ...on Dapp {
+            name
+            icon
+            url
+            tags
+            models
+            socialLink {
+              platform
+              url
+            }
+            description
+          }
+        }
+      }
+    `);
     return res;
   }
 }

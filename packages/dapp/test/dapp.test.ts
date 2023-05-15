@@ -64,4 +64,9 @@ describe("client", () => {
     expect(dappList).not.toBeNull();
     expect(dappList?.edges.length).toBe(1);
   });
+
+  test("query dapp by id", async () => {
+    const resp = await s3Dapp.queryDappWithId(dappId);
+    expect(resp.errors).not.toBeDefined();
+  });
 });
