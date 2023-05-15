@@ -84,7 +84,6 @@ export function FavorButton({
         const id = findCurrUserFavor.node.id;
         const revoke = !findCurrUserFavor.node.revoke;
         await s3LinkModel?.updateFavor(id, { revoke });
-        if (onSuccessfullyFavor) onSuccessfullyFavor();
         // update store
         updateFavorInCacheLinks(linkId, id, { revoke });
       } else {
@@ -93,7 +92,6 @@ export function FavorButton({
           linkID: linkId,
           revoke: false,
         });
-        if (onSuccessfullyFavor) onSuccessfullyFavor();
         const id = res?.data?.createFavor.document.id;
         if (id) {
           // update store
@@ -109,6 +107,7 @@ export function FavorButton({
           });
         }
       }
+      if (onSuccessfullyFavor) onSuccessfullyFavor();
     } catch (error) {
       console.error(error);
     } finally {

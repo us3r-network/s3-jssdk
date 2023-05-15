@@ -85,7 +85,6 @@ export function VoteButton({
         const revoke = !findCurrUserVote.node.revoke;
         const type = revoke ? "DOWN_VOTE" : "UP_VOTE";
         await s3LinkModel?.updateVote(id, { revoke, type });
-        if (onSuccessfullyVote) onSuccessfullyVote();
         // update store
         updateVoteInCacheLinks(linkId, id, {
           revoke,
@@ -101,7 +100,6 @@ export function VoteButton({
           revoke,
           type,
         });
-        if (onSuccessfullyVote) onSuccessfullyVote();
         const id = res?.data?.createVote.document.id;
         if (id) {
           // update store
@@ -118,6 +116,7 @@ export function VoteButton({
           });
         }
       }
+      if (onSuccessfullyVote) onSuccessfullyVote();
     } catch (error) {
       console.error(error);
     } finally {
