@@ -3,7 +3,7 @@ import { ScoreForm } from "../form/ScoreForm";
 import { useScoreReviewsState } from "./ScoreReviewsContext";
 import { ScoreDashboard } from "../dashboard";
 import { Button, Dialog, Heading, Modal } from "react-aria-components";
-import EditSvg from "@material-design-icons/svg/outlined/edit.svg";
+import {ReactComponent as EditSvg} from "@material-design-icons/svg/outlined/edit.svg";
 import {
   useAuthentication,
   useSession,

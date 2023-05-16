@@ -1,6 +1,6 @@
 import type { FavorButtonRenderProps } from "./FavorButton";
-import FavoriteBorderSvg from "@material-design-icons/svg/round/favorite_border.svg";
-import FavoriteSvg from "@material-design-icons/svg/round/favorite.svg";
+import { ReactComponent as FavoriteBorderSvg } from "@material-design-icons/svg/round/favorite_border.svg";
+import { ReactComponent as FavoriteSvg } from "@material-design-icons/svg/round/favorite.svg";
 import LoadingSpokes from "../common/Loading/LoadingSpokes";
 
 export interface FavorButtonChildrenProps extends FavorButtonRenderProps {}

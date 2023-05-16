@@ -10,7 +10,7 @@ import {
 } from "react-aria-components";
 import { UserTagAddForm } from "../add-form/UserTagAddForm";
 import { useUserTagsState } from "./UserTagsContext";
-import AddSvg from "@material-design-icons/svg/outlined/add.svg";
+import { ReactComponent as AddSvg } from "@material-design-icons/svg/outlined/add.svg";
 
 export function UserTagsDefaultChildren() {
   const { isLoading, isLoginUser } = useUserTagsState();
