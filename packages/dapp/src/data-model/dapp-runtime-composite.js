@@ -2,7 +2,7 @@
 export const definition = {
   "models": {
     "Dapp": {
-      "id": "kjzl6hvfrbw6cbat9fr4wefuv1qwvtnexiwwht7dlhqjuyrxrl7x02ydu05uovb",
+      "id": "kjzl6hvfrbw6cakdqkmlv1vk5rd0vcwfwio0fuglf24vrjkoitx7pxegxf8jovc",
       "accountRelation": { "type": "list" },
     },
   },
