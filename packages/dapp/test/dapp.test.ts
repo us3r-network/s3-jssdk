@@ -39,7 +39,7 @@ describe("client", () => {
       ],
       socialLink: [
         {
-          platform: "test platform socialLink",
+          platform: "twitter",
           url: testURL,
         },
       ],

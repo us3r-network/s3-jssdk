@@ -1,7 +1,7 @@
 export const dappSchema = `
 type SocialLink
 {
-  platform: String! @string(minLength: 20, maxLength: 60)
+  platform: String! @string(minLength: 1, maxLength: 60)
   url: URI!
 }
 
