@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/profile",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "description": "the us3r data model",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -41,6 +41,7 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-terser": "^0.1.0",
     "@rollup/plugin-typescript": "^11.1.0",
+    "@svgr/rollup": "^8.0.1",
     "@swc/core": "^1.3.49",
     "@swc/jest": "^0.2.24",
     "@types/jest": "^29.5.0",

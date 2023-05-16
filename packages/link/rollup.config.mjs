@@ -5,6 +5,7 @@ import image from "@rollup/plugin-image";
 import dts from "rollup-plugin-dts";
 import postcss from "rollup-plugin-postcss";
 import terser from "@rollup/plugin-terser";
+import svgr from "@svgr/rollup";
 
 import { createRequire } from "node:module";
 
@@ -37,6 +38,7 @@ export default [
       resolve(),
       commonjs(),
       image(),
+      svgr(),
       typescript({
         tsconfig: "./tsconfig.json",
         exclude: [

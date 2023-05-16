@@ -22,7 +22,7 @@ import {
   UserName,
   UserNameProps,
 } from "@us3r-network/profile";
-import EditSvg from "@material-design-icons/svg/outlined/edit.svg";
+import {ReactComponent as EditSvg} from "@material-design-icons/svg/outlined/edit.svg";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { ScoreForm } from "../form";
 import RatingStarSelect from "../../common/RatingStar/RatingStarSelect";

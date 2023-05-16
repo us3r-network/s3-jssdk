@@ -90,9 +90,8 @@ const config: StorybookConfig = {
     (fileLoaderRule as any).exclude = /\.svg$/;
 
     config.module.rules.push({
-      test: /\.svg$/,
-      enforce: "pre",
-      loader: require.resolve("@svgr/webpack"),
+      test: /\.svg$/i,
+      use: ["@svgr/webpack", "url-loader"],
     });
 
     return config;

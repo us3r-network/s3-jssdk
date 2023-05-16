@@ -10,9 +10,9 @@ import {
 import { UserWalletAddForm } from "../add-form/UserWalletAddForm";
 import { useUserWalletsState } from "./UserWalletsContext";
 
-import AddSvg from "@material-design-icons/svg/outlined/add.svg";
-import CopySvg from "@material-design-icons/svg/outlined/content_copy.svg";
-import DeleteSvg from "@material-design-icons/svg/outlined/delete.svg";
+import { ReactComponent as AddSvg } from "@material-design-icons/svg/outlined/add.svg";
+import { ReactComponent as CopySvg } from "@material-design-icons/svg/outlined/content_copy.svg";
+import { ReactComponent as DeleteSvg } from "@material-design-icons/svg/outlined/delete.svg";
 
 export function UserWalletsDefaultChildren() {
   const { isLoading, isLoginUser } = useUserWalletsState();
