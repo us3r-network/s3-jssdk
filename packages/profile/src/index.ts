@@ -1,4 +1,4 @@
-export { S3ProfileModel } from "./data-model";
+export * from "./data-model";
 
 export * from "./components";
 
