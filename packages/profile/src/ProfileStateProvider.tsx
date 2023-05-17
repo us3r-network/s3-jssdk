@@ -47,10 +47,8 @@ export default function ProfileStateProvider({
   const [s3ProfileModalAuthed, setS3ProfileModalAuthed] = useState(false);
   // TODO: Whether ceramicHost allows switching
   useEffect(() => {
-    if (!s3ProfileModel) {
-      s3ProfileModel = new S3ProfileModel(ceramicHost);
-      setS3ProfileModalInitialed(true);
-    }
+    s3ProfileModel = new S3ProfileModel(ceramicHost);
+    setS3ProfileModalInitialed(true);
   }, [ceramicHost]);
 
   // When the authorization is complete, query and store the profile

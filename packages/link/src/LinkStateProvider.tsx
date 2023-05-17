@@ -37,10 +37,8 @@ export default function LinkStateProvider({
   const [s3LinkModalAuthed, setS3LinkModalAuthed] = useState(false);
   // TODO: Whether ceramicHost allows switching
   useEffect(() => {
-    if (!s3LinkModel) {
-      s3LinkModel = new S3LinkModel(ceramicHost);
-      setS3LinkModalInitialed(true);
-    }
+    s3LinkModel = new S3LinkModel(ceramicHost);
+    setS3LinkModalInitialed(true);
   }, [ceramicHost]);
 
   const session = useSession();
