@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { Link } from "../data-model";
 
 export const useLink = (linkId: string) => {
   const s3LinkModel = getS3LinkModel();
@@ -9,6 +8,7 @@ export const useLink = (linkId: string) => {
 
   const cacheLinks = useStore((state) => state.cacheLinks);
   const fetchingLinkIds = useStore((state) => state.fetchingLinkIds);
+  const blockFetchLinkIds = useStore((state) => state.blockFetchLinkIds);
   const setOneInCacheLinks = useStore((state) => state.setOneInCacheLinks);
   const addOneToFetchingLinkIds = useStore(
     (state) => state.addOneToFetchingLinkIds
@@ -16,26 +16,21 @@ export const useLink = (linkId: string) => {
   const removeOneFromFetchingLinkIds = useStore(
     (state) => state.removeOneFromFetchingLinkIds
   );
-
-  const link = useMemo(
-    () =>
-      cacheLinks.has(linkId)
-        ? { ...(cacheLinks.get(linkId) as Link) }
-        : undefined,
-    [cacheLinks, linkId]
+  const addOneToBlockFetchLinkIds = useStore(
+    (state) => state.addOneToBlockFetchLinkIds
   );
+  const link = cacheLinks.get(linkId);
 
-  const isFetching = useMemo(
-    () => fetchingLinkIds.has(linkId),
-    [fetchingLinkIds, linkId]
-  );
+  const isFetching = fetchingLinkIds.has(linkId);
+  const isBlockFetch = blockFetchLinkIds.has(linkId);
   const [errMsg, setErrMsg] = useState("");
 
   useEffect(() => {
     (async () => {
+      if (isBlockFetch) return;
       if (isFetching) return;
-      if (link) return;
       if (!s3LinkModalInitialed || !s3LinkModel) return;
+
       try {
         setErrMsg("");
         addOneToFetchingLinkIds(linkId);
@@ -48,17 +43,19 @@ export const useLink = (linkId: string) => {
         const errMsg = (error as ReadonlyArray<any>)[0].toJSON().message;
         setErrMsg(errMsg);
       } finally {
+        addOneToBlockFetchLinkIds(linkId);
         removeOneFromFetchingLinkIds(linkId);
       }
     })();
   }, [
     isFetching,
-    link,
+    isBlockFetch,
     s3LinkModalInitialed,
     linkId,
     setOneInCacheLinks,
     addOneToFetchingLinkIds,
     removeOneFromFetchingLinkIds,
   ]);
+
   return { isFetching, link, errMsg };
 };

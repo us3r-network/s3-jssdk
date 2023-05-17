@@ -4,9 +4,12 @@ import { Link } from "../data-model";
 export interface LinkSlice {
   cacheLinks: Map<string, Link>;
   fetchingLinkIds: Set<string>;
+  blockFetchLinkIds: Set<string>;
   setOneInCacheLinks: (link: Link) => void;
   addOneToFetchingLinkIds: (linkId: string) => void;
   removeOneFromFetchingLinkIds: (linkId: string) => void;
+  addOneToBlockFetchLinkIds: (linkId: string) => void;
+  removeOneFromBlockFetchLinkIds: (linkId: string) => void;
 }
 
 export const createLinkSlice: StateCreator<LinkSlice, [], [], LinkSlice> = (
@@ -14,6 +17,7 @@ export const createLinkSlice: StateCreator<LinkSlice, [], [], LinkSlice> = (
 ) => ({
   cacheLinks: new Map(),
   fetchingLinkIds: new Set(),
+  blockFetchLinkIds: new Set(),
   setOneInCacheLinks: (link) => {
     set((state) => ({
       cacheLinks: new Map(state.cacheLinks).set(link?.id || link.url, link),
@@ -31,6 +35,20 @@ export const createLinkSlice: StateCreator<LinkSlice, [], [], LinkSlice> = (
       const updatedSet = new Set(state.fetchingLinkIds);
       updatedSet.delete(linkId);
       return { fetchingLinkIds: updatedSet };
+    });
+  },
+  addOneToBlockFetchLinkIds: (linkId) => {
+    set((state) => {
+      const updatedSet = new Set(state.blockFetchLinkIds);
+      updatedSet.add(linkId);
+      return { blockFetchLinkIds: updatedSet };
+    });
+  },
+  removeOneFromBlockFetchLinkIds: (linkId) => {
+    set((state) => {
+      const updatedSet = new Set(state.blockFetchLinkIds);
+      updatedSet.delete(linkId);
+      return { blockFetchLinkIds: updatedSet };
     });
   },
 });

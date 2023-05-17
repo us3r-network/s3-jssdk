@@ -22,20 +22,33 @@ import {
   UserName,
   UserNameProps,
 } from "@us3r-network/profile";
-import {ReactComponent as EditSvg} from "@material-design-icons/svg/outlined/edit.svg";
+import { ReactComponent as EditSvg } from "@material-design-icons/svg/outlined/edit.svg";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { ScoreForm } from "../form";
 import RatingStarSelect from "../../common/RatingStar/RatingStarSelect";
 
 export function List(props: ListBoxProps<Score>) {
   const { scores } = useScoreReviewsState();
-  return <ListBox data-state-element="List" items={scores} {...props} />;
+  return (
+    <ListBox
+      aria-label="Score reviews"
+      selectionMode="single"
+      data-state-element="List"
+      items={scores}
+      {...props}
+    />
+  );
 }
 
 export function Item({ children, value, ...props }: ItemProps<Score>) {
   if (!value) return null;
   return (
-    <AriaItem data-state-element="Item" key={value.id} {...props}>
+    <AriaItem
+      data-state-element="Item"
+      key={value.id}
+      textValue={value.id}
+      {...props}
+    >
       <ScoreReviewsItemContext.Provider value={value as Score}>
         {childrenRender(children, value, <ItemDefaultChildren />)}
       </ScoreReviewsItemContext.Provider>
