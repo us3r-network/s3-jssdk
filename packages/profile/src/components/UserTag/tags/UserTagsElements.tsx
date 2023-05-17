@@ -14,5 +14,13 @@ export function Count(props: HTMLAttributes<HTMLSpanElement>) {
 export function List(props: ListBoxProps<{ tag: string }>) {
   const { tags } = useUserTagsState();
   const items = tags.map((tag) => ({ tag }));
-  return <ListBox data-state-element="List" items={items} {...props} />;
+  return (
+    <ListBox
+      aria-label="User tags"
+      selectionMode="single"
+      data-state-element="List"
+      items={items}
+      {...props}
+    />
+  );
 }

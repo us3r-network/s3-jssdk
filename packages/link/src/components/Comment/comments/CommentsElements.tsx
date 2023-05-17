@@ -30,13 +30,26 @@ export function Count(props: HTMLAttributes<HTMLSpanElement>) {
 
 export function List(props: ListBoxProps<Comment>) {
   const { comments } = useCommentsState();
-  return <ListBox data-state-element="List" items={comments} {...props} />;
+  return (
+    <ListBox
+      aria-label="Comment list"
+      selectionMode="single"
+      data-state-element="List"
+      items={comments}
+      {...props}
+    />
+  );
 }
 
 export function Item({ children, value, ...props }: ItemProps<Comment>) {
   if (!value) return null;
   return (
-    <AriaItem data-state-element="Item" key={value.id} {...props}>
+    <AriaItem
+      data-state-element="Item"
+      key={value.id}
+      textValue={value.id}
+      {...props}
+    >
       <CommentsItemContext.Provider value={value as Comment}>
         {childrenRender(children, value, <ItemDefaultChildren />)}
       </CommentsItemContext.Provider>

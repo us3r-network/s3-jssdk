@@ -25,13 +25,26 @@ export function Count(props: HTMLAttributes<HTMLSpanElement>) {
 
 export function List(props: ListBoxProps<Wallet>) {
   const { wallets } = useUserWalletsState();
-  return <ListBox data-state-element="List" items={wallets} {...props} />;
+  return (
+    <ListBox
+      aria-label="User wallets"
+      selectionMode="single"
+      data-state-element="List"
+      items={wallets}
+      {...props}
+    />
+  );
 }
 
 export function Item({ children, value, ...props }: ItemProps<Wallet>) {
   if (!value) return null;
   return (
-    <AriaItem data-state-element="Item" key={value.address} {...props}>
+    <AriaItem
+      data-state-element="Item"
+      key={value.address}
+      textValue={value.address}
+      {...props}
+    >
       <UserWalletsItemContext.Provider value={value as Wallet}>
         {childrenRender(children, value)}
       </UserWalletsItemContext.Provider>
