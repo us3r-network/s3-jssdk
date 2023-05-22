@@ -28,18 +28,16 @@ function ScoreReviewsRoot({
   ...props
 }: ScoreReviewsProps) {
   const { isFetching, link } = useLink(linkId);
-  const scores = useMemo(
-    () =>
-      (!isFetching && link ? getScoresFromLink(link) : []).sort((a, b) => {
-        const aTime = a?.createAt ? new Date(a.createAt).getTime() : 0;
-        const bTime = b?.createAt ? new Date(b.createAt).getTime() : 0;
-        if (order === "asc") {
-          return aTime - bTime;
-        } else {
-          return bTime - aTime;
-        }
-      }),
-    [isFetching, link, order]
+  const scores = (!isFetching && link ? getScoresFromLink(link) : []).sort(
+    (a, b) => {
+      const aTime = a?.createAt ? new Date(a.createAt).getTime() : 0;
+      const bTime = b?.createAt ? new Date(b.createAt).getTime() : 0;
+      if (order === "asc") {
+        return aTime - bTime;
+      } else {
+        return bTime - aTime;
+      }
+    }
   );
 
   const businessProps = {

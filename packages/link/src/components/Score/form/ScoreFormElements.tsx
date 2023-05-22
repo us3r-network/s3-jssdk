@@ -5,17 +5,17 @@ import { TextArea, TextAreaProps } from "../../common/TextArea";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import RatingStarSelect from "../../common/RatingStar/RatingStarSelect";
 
-type ScoreSelectRenderProps = {
+type ScoreSelectFieldRenderProps = {
   value: number;
   setValue: (value: number) => void;
   isDisabled: boolean;
 };
-export function ScoreSelect({
+export function ScoreSelectField({
   children,
   ...props
 }: ChildrenRenderProps<
   HTMLAttributes<HTMLDivElement>,
-  ScoreSelectRenderProps
+  ScoreSelectFieldRenderProps
 >) {
   const { value, setValue, isDisabled } = useScoreFormState();
   const renderProps = {
@@ -24,7 +24,7 @@ export function ScoreSelect({
     isDisabled,
   };
   return (
-    <div data-state-element="ScoreSelect" {...props}>
+    <div data-state-element="ScoreSelectField" {...props}>
       {childrenRender(
         children,
         renderProps,
@@ -58,7 +58,7 @@ export function SubmitButton(props: ButtonProps) {
   const { isDisabled, submitScore } = useScoreFormState();
   return (
     <Button
-      data-submit-button=""
+      data-state-element="SubmitButton"
       onPress={submitScore}
       isDisabled={isDisabled}
       {...props}
@@ -66,11 +66,19 @@ export function SubmitButton(props: ButtonProps) {
   );
 }
 
-export function ErrorMessage(props: HTMLAttributes<HTMLSpanElement>) {
+export function ErrorMessage({
+  children,
+  ...props
+}: ChildrenRenderProps<
+  HTMLAttributes<HTMLSpanElement>,
+  {
+    errMsg: string;
+  }
+>) {
   const { errMsg } = useScoreFormState();
   return (
     <span data-state-element="ErrorMessage" {...props}>
-      {errMsg}
+      {childrenRender(children, { errMsg }, errMsg)}
     </span>
   );
 }

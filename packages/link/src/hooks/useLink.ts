@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
 
@@ -35,12 +35,15 @@ export const useLink = (linkId: string) => {
         setErrMsg("");
         addOneToFetchingLinkIds(linkId);
         const res = await s3LinkModel.queryLink(linkId);
+        if (res?.errors && res?.errors.length > 0) {
+          throw new Error(res?.errors[0]?.message);
+        }
         const data = res.data?.node;
         if (data) {
           setOneInCacheLinks(data);
         }
       } catch (error) {
-        const errMsg = (error as ReadonlyArray<any>)[0].toJSON().message;
+        const errMsg = (error as any)?.message;
         setErrMsg(errMsg);
       } finally {
         addOneToBlockFetchLinkIds(linkId);

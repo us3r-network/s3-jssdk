@@ -86,6 +86,9 @@ function CommentAddFormRoot({
         linkID: linkId,
         revoke: false,
       });
+      if (res?.errors && res?.errors.length > 0) {
+        throw new Error(res?.errors[0]?.message);
+      }
       const id = res?.data?.createComment.document.id;
 
       if (id) {
@@ -104,7 +107,7 @@ function CommentAddFormRoot({
       }
       if (onSuccessfullySubmit) onSuccessfullySubmit();
     } catch (error) {
-      const errMsg = (error as ReadonlyArray<any>)[0].toJSON().message;
+      const errMsg = (error as any)?.message;
       setErrMsg(errMsg);
     } finally {
       removeOneFromCommentingLinkIds(linkId);

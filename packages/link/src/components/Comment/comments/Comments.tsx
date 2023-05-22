@@ -25,23 +25,19 @@ function CommentsRoot({
 }: CommentsProps) {
   const { isFetching, link } = useLink(linkId);
 
-  const comments = useMemo(
-    () =>
-      (isFetching ? [] : link?.comments?.edges?.map((e) => e.node) || []).sort(
-        (a, b) => {
-          const aTime = new Date(a.createAt).getTime();
-          const bTime = new Date(b.createAt).getTime();
-          if (order === "asc") {
-            return aTime - bTime;
-          } else {
-            return bTime - aTime;
-          }
-        }
-      ),
-    [link, isFetching, order]
-  );
+  const comments = (
+    isFetching ? [] : link?.comments?.edges?.map((e) => e.node) || []
+  ).sort((a, b) => {
+    const aTime = new Date(a.createAt).getTime();
+    const bTime = new Date(b.createAt).getTime();
+    if (order === "asc") {
+      return aTime - bTime;
+    } else {
+      return bTime - aTime;
+    }
+  });
 
-  const commentsCount = useMemo(() => link?.commentsCount || 0, [link]);
+  const commentsCount = link?.commentsCount || 0;
 
   const businessProps = {
     "data-us3r-component": "Comments",

@@ -104,8 +104,11 @@ function ScoreFormRoot({
           linkID: linkId,
           revoke: false,
         });
+        if (res?.errors && res?.errors.length > 0) {
+          console.log({ res });
+          throw new Error(res?.errors[0]?.message);
+        }
         const id = res?.data?.createScore.document.id;
-
         if (id) {
           // update store
           addScoreToCacheLinks(linkId, {
@@ -127,7 +130,11 @@ function ScoreFormRoot({
           value,
           text,
         });
+        if (res?.errors && res?.errors.length > 0) {
+          throw new Error(res?.errors[0]?.message);
+        }
         const id = res?.data?.updateScore.document.id;
+        console.log({ res });
         if (id) {
           // update store
           updateScoreInCacheLinks(linkId, scoreId, {
@@ -140,7 +147,7 @@ function ScoreFormRoot({
 
       if (onSuccessfullySubmit) onSuccessfullySubmit();
     } catch (error) {
-      const errMsg = (error as ReadonlyArray<any>)[0].toJSON().message;
+      const errMsg = (error as any)?.message;
       setErrMsg(errMsg);
     } finally {
       removeOneFromScoringLinkIds(linkId);

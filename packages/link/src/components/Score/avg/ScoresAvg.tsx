@@ -52,8 +52,8 @@ function ScoresAvgDefaultChildren({
 }: ScoresAvgRenderProps) {
   return !isLoading ? (
     <>
-      <StarIcon />
-      <span>{scoresAvg}</span>
+      <StarIcon data-layout-element="StarIcon" />
+      <span data-layout-element="AvgValue">{scoresAvg}</span>
     </>
   ) : null;
 }

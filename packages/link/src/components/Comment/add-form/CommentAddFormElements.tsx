@@ -1,6 +1,7 @@
 import { Button, ButtonProps, Input, InputProps } from "react-aria-components";
 import { HTMLAttributes } from "react";
 import { useCommentAddFormState } from "./CommentAddFormContext";
+import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 
 export function TextInput(props: InputProps) {
   const { text, setText, isDisabled } = useCommentAddFormState();
@@ -30,11 +31,19 @@ export function SubmitButton(props: ButtonProps) {
   );
 }
 
-export function ErrorMessage(props: HTMLAttributes<HTMLSpanElement>) {
+export function ErrorMessage({
+  children,
+  ...props
+}: ChildrenRenderProps<
+  HTMLAttributes<HTMLSpanElement>,
+  {
+    errMsg: string;
+  }
+>) {
   const { errMsg } = useCommentAddFormState();
   return (
     <span data-state-element="ErrorMessage" {...props}>
-      {errMsg}
+      {childrenRender(children, { errMsg }, errMsg)}
     </span>
   );
 }

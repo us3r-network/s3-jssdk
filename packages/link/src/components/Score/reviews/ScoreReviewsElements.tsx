@@ -127,27 +127,26 @@ function ItemDefaultChildren() {
   const showEditBtn = session && did && session?.id === did;
   return (
     <>
-      <div>
-        <Avatar />
-        <Name />
-        <CreateAt />
+      <div data-layout-element="ScoreValueWrap">
+        <Value />
         {showEditBtn && (
           <>
             <Button
+              data-layout-element="EditButton"
               onPress={() => {
                 setIsOpenEdit(true);
               }}
             >
-              <EditSvg />
+              <EditSvg data-layout-element="Icon" />
               Edit
             </Button>
             <Modal
-              data-modal=""
+              data-layout-element="ScoreEditModel"
               isOpen={isOpenEdit}
               onOpenChange={setIsOpenEdit}
             >
-              <Dialog>
-                <Heading data-heading="">Rating & Review</Heading>
+              <Dialog data-layout-element="Dialog">
+                <Heading data-layout-element="Heading">Rating & Review</Heading>
                 <ScoreForm
                   linkId={linkID}
                   scoreId={id}
@@ -160,8 +159,14 @@ function ItemDefaultChildren() {
           </>
         )}
       </div>
-      <Value />
       <Text />
+      <div data-layout-element="UserInfo">
+        <Avatar />
+        <div data-layout-element="NameAndDate">
+          <Name />
+          <CreateAt />
+        </div>
+      </div>
     </>
   );
 }

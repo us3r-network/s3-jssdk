@@ -10,7 +10,7 @@ import {
   useCommentsItemState,
   useCommentsState,
 } from "./CommentsContext";
-import { childrenRender } from "../../../utils/props";
+import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import { Comment } from "../../../data-model";
 import {
   UserAvatar,
@@ -19,11 +19,19 @@ import {
   UserNameProps,
 } from "@us3r-network/profile";
 
-export function Count(props: HTMLAttributes<HTMLSpanElement>) {
+export function Count({
+  children,
+  ...props
+}: ChildrenRenderProps<
+  HTMLAttributes<HTMLSpanElement>,
+  {
+    commentsCount: number;
+  }
+>) {
   const { commentsCount } = useCommentsState();
   return (
     <span data-state-element="Count" {...props}>
-      {commentsCount}
+      {childrenRender(children, { commentsCount }, commentsCount)}
     </span>
   );
 }
@@ -69,20 +77,36 @@ export function Name(props: UserNameProps) {
   return <UserName data-state-element="Name" did={did} {...props} />;
 }
 
-export function Text(props: HTMLAttributes<HTMLSpanElement>) {
+export function Text({
+  children,
+  ...props
+}: ChildrenRenderProps<
+  HTMLAttributes<HTMLSpanElement>,
+  {
+    text: string;
+  }
+>) {
   const { text } = useCommentsItemState();
   return (
     <span data-state-element="Text" {...props}>
-      {text}
+      {childrenRender(children, { text }, text)}
     </span>
   );
 }
 
-export function CreateAt(props: HTMLAttributes<HTMLSpanElement>) {
+export function CreateAt({
+  children,
+  ...props
+}: ChildrenRenderProps<
+  HTMLAttributes<HTMLSpanElement>,
+  {
+    createAt: string;
+  }
+>) {
   const { createAt } = useCommentsItemState();
   return (
     <span data-state-element="CreateAt" {...props}>
-      {createAt}
+      {childrenRender(children, { createAt }, createAt)}
     </span>
   );
 }
@@ -90,10 +114,12 @@ export function CreateAt(props: HTMLAttributes<HTMLSpanElement>) {
 function ItemDefaultChildren() {
   return (
     <>
-      <div>
+      <div data-layout-element="UserInfo">
         <Avatar />
-        <Name />
-        <CreateAt />
+        <div data-layout-element="NameAndDate">
+          <Name />
+          <CreateAt />
+        </div>
       </div>
       <Text />
     </>
