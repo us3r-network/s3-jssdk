@@ -10,7 +10,10 @@ import {
 
 export const useFavorAction = (
   linkId: string,
-  onSuccessfullyFavor?: () => void
+  opts?: {
+    onSuccessfullyFavor?: () => void;
+    onFailedFavor?: (errMsg: string) => void;
+  }
 ) => {
   const { link } = useLink(linkId);
   const s3LinkModel = getS3LinkModel();
@@ -31,12 +34,12 @@ export const useFavorAction = (
     (state) => state.updateFavorInCacheLinks
   );
 
-  const findCurrUserFavor = useMemo(() => {
-    if (!link?.favors || !session) return null;
-    return link.favors?.edges?.find(
-      (edge) => edge?.node?.creator?.id === session?.id
-    );
-  }, [link, session]);
+  const findCurrUserFavor =
+    !link?.favors || !session
+      ? null
+      : link.favors?.edges?.find(
+          (edge) => edge?.node?.creator?.id === session?.id
+        );
 
   const isFavored = !!findCurrUserFavor && !findCurrUserFavor?.node?.revoke;
 
@@ -89,9 +92,10 @@ export const useFavorAction = (
           });
         }
       }
-      if (onSuccessfullyFavor) onSuccessfullyFavor();
+      if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor();
     } catch (error) {
-      console.error(error);
+      const errMsg = (error as any)?.message;
+      if (opts?.onFailedFavor) opts.onFailedFavor(errMsg);
     } finally {
       removeOneFromFavoringLinkIds(linkId);
     }
@@ -100,13 +104,15 @@ export const useFavorAction = (
     isAuthenticated,
     session,
     s3LinkModalAuthed,
+    signIn,
     linkId,
     findCurrUserFavor,
     addOneToFavoringLinkIds,
     removeOneFromFavoringLinkIds,
     addFavorToCacheLinks,
     updateFavorInCacheLinks,
-    onSuccessfullyFavor,
+    opts?.onSuccessfullyFavor,
+    opts?.onFailedFavor,
   ]);
 
   return { isFavored, isFavoring, isDisabled, onFavor };

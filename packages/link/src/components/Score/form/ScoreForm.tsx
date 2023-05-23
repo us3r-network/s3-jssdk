@@ -9,20 +9,16 @@ import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import * as ScoreFormElements from "./ScoreFormElements";
 import { ScoreFormContext, ScoreFormContextValue } from "./ScoreFormContext";
 import { ScoreFormDefaultChildren } from "./ScoreFormDefaultChildren";
-import { getS3LinkModel, useLinkState } from "../../../LinkStateProvider";
-import {
-  useAuthentication,
-  useIsAuthenticated,
-  useSession,
-} from "@us3r-network/auth-with-rainbowkit";
-import { useStore } from "../../../store";
+import { useIsAuthenticated } from "@us3r-network/auth-with-rainbowkit";
 import { useLink } from "../../../hooks/useLink";
 import { getScoresFromLink } from "../../../utils/score";
+import { useScoreAction } from "../../../hooks/useScoreAction";
 
 export interface ScoreFormIncomingProps {
   linkId: string;
   scoreId?: string;
-  onSuccessfullySubmit?: () => void;
+  onSuccessfullyScore?: () => void;
+  onFailedScore?: (errMsg: string) => void;
 }
 
 export interface ScoreFormProps
@@ -36,9 +32,11 @@ function ScoreFormRoot({
   linkId,
   scoreId,
   children,
-  onSuccessfullySubmit,
+  onSuccessfullyScore,
+  onFailedScore,
   ...props
 }: ScoreFormProps) {
+  const isAuthenticated = useIsAuthenticated();
   const { isFetching, link } = useLink(linkId);
   const scores = useMemo(
     () => (!isFetching && link ? getScoresFromLink(link) : []),
@@ -48,30 +46,6 @@ function ScoreFormRoot({
     () => (scoreId ? scores.find((s) => s.id === scoreId) : null),
     [scores, scoreId]
   );
-  const s3LinkModel = getS3LinkModel();
-  const { signIn } = useAuthentication();
-  const isAuthenticated = useIsAuthenticated();
-  const session = useSession();
-  const { s3LinkModalAuthed } = useLinkState();
-
-  const scoringLinkIds = useStore((state) => state.scoringLinkIds);
-  const addOneToScoringLinkIds = useStore(
-    (state) => state.addOneToScoringLinkIds
-  );
-  const removeOneFromScoringLinkIds = useStore(
-    (state) => state.removeOneFromScoringLinkIds
-  );
-  const addScoreToCacheLinks = useStore((state) => state.addScoreToCacheLinks);
-  const updateScoreInCacheLinks = useStore(
-    (state) => state.updateScoreInCacheLinks
-  );
-
-  const isScoring = useMemo(
-    () => scoringLinkIds.has(linkId),
-    [scoringLinkIds, linkId]
-  );
-
-  const isDisabled = useMemo(() => !link || isScoring, [link, isScoring]);
 
   const [value, setValue] = useState(0);
   const [text, setText] = useState("");
@@ -88,84 +62,24 @@ function ScoreFormRoot({
     setErrMsg("");
   }, [text]);
 
-  const submitScore = useCallback(async () => {
-    try {
-      if (isDisabled) return;
-      if (!session || !s3LinkModalAuthed) {
-        signIn();
-        return;
-      }
-      addOneToScoringLinkIds(linkId);
-      if (!scoreId) {
-        // add
-        const res = await s3LinkModel?.createScore({
-          value,
-          text,
-          linkID: linkId,
-          revoke: false,
-        });
-        if (res?.errors && res?.errors.length > 0) {
-          console.log({ res });
-          throw new Error(res?.errors[0]?.message);
-        }
-        const id = res?.data?.createScore.document.id;
-        if (id) {
-          // update store
-          addScoreToCacheLinks(linkId, {
-            id,
-            value,
-            text,
-            linkID: linkId,
-            revoke: false,
-            createAt: new Date().toISOString(),
-            modifiedAt: new Date().toISOString(),
-            creator: {
-              id: session.id,
-            },
-          });
-        }
-      } else {
-        // edit
-        const res = await s3LinkModel?.updateScore(scoreId, {
-          value,
-          text,
-        });
-        if (res?.errors && res?.errors.length > 0) {
-          throw new Error(res?.errors[0]?.message);
-        }
-        const id = res?.data?.updateScore.document.id;
-        console.log({ res });
-        if (id) {
-          // update store
-          updateScoreInCacheLinks(linkId, scoreId, {
-            value,
-            text,
-            modifiedAt: new Date().toISOString(),
-          });
-        }
-      }
-
-      if (onSuccessfullySubmit) onSuccessfullySubmit();
-    } catch (error) {
-      const errMsg = (error as any)?.message;
-      setErrMsg(errMsg);
-    } finally {
-      removeOneFromScoringLinkIds(linkId);
-    }
-  }, [
-    value,
-    text,
-    isDisabled,
-    session,
-    s3LinkModalAuthed,
+  const { isScoring, isDisabled, onScoreAdd, onScoreEdit } = useScoreAction(
     linkId,
-    scoreId,
-    addOneToScoringLinkIds,
-    removeOneFromScoringLinkIds,
-    addScoreToCacheLinks,
-    updateScoreInCacheLinks,
-    onSuccessfullySubmit,
-  ]);
+    {
+      onSuccessfullyScore,
+      onFailedScore: (errMsg) => {
+        setErrMsg(errMsg);
+        onFailedScore?.(errMsg);
+      },
+    }
+  );
+
+  const submitScore = useCallback(async () => {
+    if (scoreId) {
+      await onScoreEdit({ scoreId, value, text });
+    } else {
+      await onScoreAdd({ value, text });
+    }
+  }, [scoreId, value, text, onScoreAdd, onScoreEdit]);
 
   const businessProps = {
     "data-us3r-component": "ScoreForm",
@@ -184,6 +98,7 @@ function ScoreFormRoot({
     errMsg,
     submitScore,
   };
+
   return (
     <form {...props} {...businessProps}>
       <ScoreFormContext.Provider value={contextValue}>

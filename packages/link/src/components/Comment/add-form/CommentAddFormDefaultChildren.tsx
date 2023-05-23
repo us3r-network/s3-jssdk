@@ -5,7 +5,7 @@ export function CommentAddFormDefaultChildren() {
     <>
       <div data-layout-element="FormBox">
         <CommentAddForm.TextInput />
-        <CommentAddForm.SubmitButton>Submit</CommentAddForm.SubmitButton>
+        <CommentAddForm.SubmitButton />
       </div>
       <CommentAddForm.ErrorMessage />
     </>

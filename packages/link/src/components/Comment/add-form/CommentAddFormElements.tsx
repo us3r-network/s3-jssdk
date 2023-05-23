@@ -1,7 +1,14 @@
-import { Button, ButtonProps, Input, InputProps } from "react-aria-components";
+import {
+  Button,
+  ButtonRenderProps,
+  Input,
+  InputProps,
+} from "react-aria-components";
 import { HTMLAttributes } from "react";
 import { useCommentAddFormState } from "./CommentAddFormContext";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
+import { AriaButtonProps } from "react-aria";
+import LoadingSpokes from "../../common/Loading/LoadingSpokes";
 
 export function TextInput(props: InputProps) {
   const { text, setText, isDisabled } = useCommentAddFormState();
@@ -19,15 +26,31 @@ export function TextInput(props: InputProps) {
   );
 }
 
-export function SubmitButton(props: ButtonProps) {
-  const { isDisabled, submitComment } = useCommentAddFormState();
+export function SubmitButton({
+  children,
+  ...props
+}: ChildrenRenderProps<
+  AriaButtonProps,
+  ButtonRenderProps & {
+    isCommenting: boolean;
+  }
+>) {
+  const { isDisabled, isCommenting, submitComment } = useCommentAddFormState();
   return (
     <Button
       data-state-element="SubmitButton"
       onPress={submitComment}
       isDisabled={isDisabled}
       {...props}
-    />
+    >
+      {(buttonProps) =>
+        childrenRender(
+          children,
+          { ...buttonProps, isCommenting },
+          isCommenting ? <LoadingSpokes /> : "Submit"
+        )
+      }
+    </Button>
   );
 }
 

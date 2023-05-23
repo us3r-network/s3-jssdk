@@ -7,7 +7,7 @@ export function ScoreFormDefaultChildren() {
       <UserAvatar />
       <ScoreForm.ScoreSelectField />
       <ScoreForm.CommentTextarea />
-      <ScoreForm.SubmitButton>Submit</ScoreForm.SubmitButton>
+      <ScoreForm.SubmitButton />
       <ScoreForm.ErrorMessage />
     </>
   );

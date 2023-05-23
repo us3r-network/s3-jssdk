@@ -10,7 +10,10 @@ import {
 
 export const useVoteAction = (
   linkId: string,
-  onSuccessfullyVote?: () => void
+  opts?: {
+    onSuccessfullyVote?: () => void;
+    onFailedVote?: (errMsg: string) => void;
+  }
 ) => {
   const { link } = useLink(linkId);
   const s3LinkModel = getS3LinkModel();
@@ -31,12 +34,12 @@ export const useVoteAction = (
     (state) => state.updateVoteInCacheLinks
   );
 
-  const findCurrUserVote = useMemo(() => {
-    if (!link?.votes || !session) return null;
-    return link.votes?.edges?.find(
-      (edge) => edge?.node?.creator?.id === session?.id
-    );
-  }, [link, session]);
+  const findCurrUserVote =
+    !link?.votes || !session
+      ? null
+      : link.votes?.edges?.find(
+          (edge) => edge?.node?.creator?.id === session?.id
+        );
 
   const isVoted = !!findCurrUserVote && !findCurrUserVote?.node?.revoke;
 
@@ -98,9 +101,10 @@ export const useVoteAction = (
           });
         }
       }
-      if (onSuccessfullyVote) onSuccessfullyVote();
+      if (opts?.onSuccessfullyVote) opts.onSuccessfullyVote();
     } catch (error) {
-      console.error(error);
+      const errMsg = (error as any)?.message;
+      if (opts?.onFailedVote) opts.onFailedVote(errMsg);
     } finally {
       removeOneFromVotingLinkIds(linkId);
     }
@@ -115,7 +119,8 @@ export const useVoteAction = (
     removeOneFromVotingLinkIds,
     addVoteToCacheLinks,
     updateVoteInCacheLinks,
-    onSuccessfullyVote,
+    opts?.onSuccessfullyVote,
+    opts?.onFailedVote,
   ]);
 
   return { isVoted, isVoting, isDisabled, onVote };

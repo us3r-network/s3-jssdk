@@ -1,5 +1,5 @@
 import { SCORE_VALUE_MAX } from "../../../constants";
-import { StarBorderIcon, StarIcon } from "./StarIcon";
+import { InactivatedStarIcon, ActivatedStarIcon } from "./StarIcon";
 interface RatingStarSelectProps {
   value: number;
   onChange?: (value: number) => void;
@@ -23,11 +23,7 @@ export default function RatingStarSelect({
               if (onChange) onChange(v);
             }}
           >
-            {value >= v ? (
-              <StarIcon data-layout-element="SelectedIcon" />
-            ) : (
-              <StarBorderIcon data-layout-element="SelectIcon" />
-            )}
+            {value >= v ? <ActivatedStarIcon /> : <InactivatedStarIcon />}
           </span>
         );
       })}

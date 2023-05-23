@@ -42,6 +42,7 @@ export function ScoreDashboardDefaultChildren() {
                       {scoreValue} star
                     </span>
                     <ProgressBar
+                      aria-label={`${percentage}% for {scoreValue} star`}
                       value={percentage}
                       data-layout-element="ProgressBar"
                     >

@@ -2,7 +2,7 @@ import * as ScoreReviews from "./ScoreReviewsElements";
 import { ScoreForm } from "../form/ScoreForm";
 import { useScoreReviewsState } from "./ScoreReviewsContext";
 import { ScoreDashboard } from "../dashboard";
-import { Button, Dialog, Heading, Modal } from "react-aria-components";
+import { Button } from "react-aria-components";
 import { ReactComponent as EditSvg } from "@material-design-icons/svg/outlined/edit.svg";
 import {
   useAuthentication,
@@ -11,7 +11,8 @@ import {
 import { useState } from "react";
 import { useLinkState } from "../../../LinkStateProvider";
 import RatingStarSelect from "../../common/RatingStar/RatingStarSelect";
-import { useLink } from "../../../hooks/useLink";
+import { useScoreAction } from "../../../hooks/useScoreAction";
+import { Modal } from "../../common/Modal/Modal";
 
 export function ScoreReviewsDefaultChildren() {
   const { isLoading, linkId } = useScoreReviewsState();
@@ -19,16 +20,7 @@ export function ScoreReviewsDefaultChildren() {
   const { signIn } = useAuthentication();
   const session = useSession();
   const { s3LinkModalAuthed } = useLinkState();
-
-  const { link } = useLink(linkId);
-  const findCurrUserScore =
-    !link?.scores || !session
-      ? null
-      : link.scores?.edges?.find(
-          (edge) => edge?.node?.creator?.id === session?.id
-        );
-
-  const isCommented = !!findCurrUserScore && !findCurrUserScore?.node?.revoke;
+  const { isScored, isDisabled } = useScoreAction(linkId);
   return isLoading ? (
     <span data-layout-element="Loading">loading ...</span>
   ) : (
@@ -36,9 +28,8 @@ export function ScoreReviewsDefaultChildren() {
       <ScoreDashboard linkId={linkId} />
       <Button
         data-layout-element="RatingAndReviewWrapButton"
-        isDisabled={isCommented}
+        isDisabled={isDisabled || isScored}
         onPress={() => {
-          if (isCommented) return;
           if (!session || !s3LinkModalAuthed) {
             signIn();
             return;
@@ -61,16 +52,14 @@ export function ScoreReviewsDefaultChildren() {
         data-layout-element="RatingAndReviewModel"
         isOpen={isOpenAdd}
         onOpenChange={setIsOpenAdd}
+        title="Rating & Review"
       >
-        <Dialog data-layout-element="Dialog">
-          <Heading data-layout-element="Heading">Rating & Review</Heading>
-          <ScoreForm
-            linkId={linkId}
-            onSuccessfullySubmit={() => {
-              setIsOpenAdd(false);
-            }}
-          />
-        </Dialog>
+        <ScoreForm
+          linkId={linkId}
+          onSuccessfullyScore={() => {
+            setIsOpenAdd(false);
+          }}
+        />
       </Modal>
     </div>
   );

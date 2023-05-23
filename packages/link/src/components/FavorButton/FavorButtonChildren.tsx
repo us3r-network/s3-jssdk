@@ -12,13 +12,7 @@ export function FavorButtonChildren({
 }: FavorButtonChildrenProps) {
   return (
     <>
-      {(isFavoring && (
-        <LoadingSpokes
-          width={20}
-          height={20}
-          data-layout-element="LoadingSvg"
-        />
-      )) || (
+      {(isFavoring && <LoadingSpokes />) || (
         <>
           {isFavored ? (
             <FavoredIcon data-layout-element="FavoredIcon" />

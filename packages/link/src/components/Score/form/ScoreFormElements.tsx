@@ -1,9 +1,11 @@
-import { Button, ButtonProps } from "react-aria-components";
+import { Button, ButtonProps, ButtonRenderProps } from "react-aria-components";
 import { HTMLAttributes } from "react";
 import { useScoreFormState } from "./ScoreFormContext";
 import { TextArea, TextAreaProps } from "../../common/TextArea";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import RatingStarSelect from "../../common/RatingStar/RatingStarSelect";
+import { AriaButtonProps } from "react-aria";
+import LoadingSpokes from "../../common/Loading/LoadingSpokes";
 
 type ScoreSelectFieldRenderProps = {
   value: number;
@@ -54,15 +56,31 @@ export function CommentTextarea(props: TextAreaProps) {
   );
 }
 
-export function SubmitButton(props: ButtonProps) {
-  const { isDisabled, submitScore } = useScoreFormState();
+export function SubmitButton({
+  children,
+  ...props
+}: ChildrenRenderProps<
+  AriaButtonProps,
+  ButtonRenderProps & {
+    isScoring: boolean;
+  }
+>) {
+  const { isDisabled, isScoring, submitScore } = useScoreFormState();
   return (
     <Button
       data-state-element="SubmitButton"
       onPress={submitScore}
       isDisabled={isDisabled}
       {...props}
-    />
+    >
+      {(buttonProps) =>
+        childrenRender(
+          children,
+          { ...buttonProps, isScoring },
+          isScoring ? <LoadingSpokes /> : "Submit"
+        )
+      }
+    </Button>
   );
 }
 

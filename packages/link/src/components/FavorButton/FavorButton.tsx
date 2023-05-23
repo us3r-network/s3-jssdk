@@ -10,6 +10,7 @@ import { useFavorAction } from "../../hooks/useFavorAction";
 export interface FavorButtonIncomingProps {
   linkId: string;
   onSuccessfullyFavor?: () => void;
+  onFailedFavor?: (errMsg: string) => void;
 }
 export interface FavorButtonRenderProps {
   isAuthenticated: boolean;
@@ -28,6 +29,7 @@ export interface FavorButtonProps
 export function FavorButton({
   linkId,
   onSuccessfullyFavor,
+  onFailedFavor,
   children,
   ...props
 }: FavorButtonProps) {
@@ -35,7 +37,10 @@ export function FavorButton({
   const { link } = useLink(linkId);
   const { isFavored, isFavoring, isDisabled, onFavor } = useFavorAction(
     linkId,
-    onSuccessfullyFavor
+    {
+      onSuccessfullyFavor,
+      onFailedFavor,
+    }
   );
 
   const businessProps = {

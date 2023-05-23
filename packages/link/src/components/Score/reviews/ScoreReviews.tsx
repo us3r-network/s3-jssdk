@@ -8,6 +8,7 @@ import {
 import { useLink } from "../../../hooks/useLink";
 import { ScoreReviewsDefaultChildren } from "./ScoreReviewsDefaultChildren";
 import { getScoresFromLink } from "../../../utils/score";
+import { useScores } from "../../../hooks/useScores";
 
 export interface ScoreReviewsIncomingProps {
   linkId: string;
@@ -27,18 +28,7 @@ function ScoreReviewsRoot({
   children,
   ...props
 }: ScoreReviewsProps) {
-  const { isFetching, link } = useLink(linkId);
-  const scores = (!isFetching && link ? getScoresFromLink(link) : []).sort(
-    (a, b) => {
-      const aTime = a?.createAt ? new Date(a.createAt).getTime() : 0;
-      const bTime = b?.createAt ? new Date(b.createAt).getTime() : 0;
-      if (order === "asc") {
-        return aTime - bTime;
-      } else {
-        return bTime - aTime;
-      }
-    }
-  );
+  const { isFetching, scores } = useScores(linkId, { order });
 
   const businessProps = {
     "data-us3r-component": "ScoreReviews",

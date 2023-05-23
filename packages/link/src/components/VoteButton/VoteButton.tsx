@@ -10,6 +10,7 @@ import { useVoteAction } from "../../hooks/useVoteAction";
 export interface VoteButtonIncomingProps {
   linkId: string;
   onSuccessfullyVote?: () => void;
+  onFailedVote?: (errMsg: string) => void;
 }
 export interface VoteButtonRenderProps {
   isAuthenticated: boolean;
@@ -28,15 +29,16 @@ export interface VoteButtonProps
 export function VoteButton({
   linkId,
   onSuccessfullyVote,
+  onFailedVote,
   children,
   ...props
 }: VoteButtonProps) {
   const isAuthenticated = useIsAuthenticated();
   const { link } = useLink(linkId);
-  const { isVoted, isVoting, isDisabled, onVote } = useVoteAction(
-    linkId,
-    onSuccessfullyVote
-  );
+  const { isVoted, isVoting, isDisabled, onVote } = useVoteAction(linkId, {
+    onSuccessfullyVote,
+    onFailedVote,
+  });
 
   const businessProps = {
     "data-us3r-component": "VoteButton",
