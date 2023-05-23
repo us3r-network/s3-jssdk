@@ -13,9 +13,9 @@ export type ModalProps = AriaOverlayProps &
   };
 export function Modal({ children, title, ...props }: ModalProps) {
   return (
-    <AriaModal data-layout-element="Modal" {...props}>
-      <Dialog data-layout-element="Dialog">
-        {title && <Heading data-layout-element="Title">{title}</Heading>}
+    <AriaModal data-common-element="Modal" {...props}>
+      <Dialog data-common-element="Dialog">
+        {title && <Heading data-common-element="Title">{title}</Heading>}
         {children}
       </Dialog>
     </AriaModal>

@@ -49,7 +49,7 @@ export function ScoreReviewsDefaultChildren() {
       </ScoreReviews.List>
 
       <Modal
-        data-layout-element="RatingAndReviewModel"
+        data-layout-element="ScoreAddModel"
         isOpen={isOpenAdd}
         onOpenChange={setIsOpenAdd}
         title="Rating & Review"
