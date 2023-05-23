@@ -11,12 +11,12 @@ export default function RatingStarSelect({
   isDisabled,
 }: RatingStarSelectProps) {
   return (
-    <span data-layout-element="RatingStarSelect">
+    <span data-common-element="RatingStarSelect">
       {[...Array(SCORE_VALUE_MAX)].map((_, index) => {
         const v = index + 1;
         return (
           <span
-            data-layout-element="Option"
+            data-common-element="Option"
             key={v}
             onClick={() => {
               if (isDisabled) return;

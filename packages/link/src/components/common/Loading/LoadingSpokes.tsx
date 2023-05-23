@@ -7,7 +7,7 @@ export default function LoadingSpokes(props: SVGAttributes<SVGSVGElement>) {
       viewBox="0 0 32 32"
       width={20}
       height={20}
-      data-layout-element="LoadingSpokes"
+      data-common-element="LoadingSpokes"
       {...props}
     >
       <path opacity=".1" d="M14 0 H18 V8 H14 z" transform="rotate(0 16 16)">
