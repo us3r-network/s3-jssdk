@@ -20,7 +20,12 @@ export function useScoreReviewsState() {
   return context;
 }
 
-export const ScoreReviewsItemContext = createContext<Score>(null!);
+export interface ScoreReviewsItemContextValue {
+  data: Score;
+  isLoginUserScore: boolean;
+}
+export const ScoreReviewsItemContext =
+  createContext<ScoreReviewsItemContextValue>(null!);
 
 export function useScoreReviewsItemState() {
   const context = useContext(ScoreReviewsItemContext);

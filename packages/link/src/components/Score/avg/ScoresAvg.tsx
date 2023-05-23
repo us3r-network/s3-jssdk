@@ -2,7 +2,7 @@ import { HTMLAttributes, useMemo } from "react";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import { useLink } from "../../../hooks/useLink";
 import { getScoresAvgFromLink } from "../../../utils/score";
-import { StarIcon } from "../../common/RatingStar/StarIcon";
+import { ActivatedStarIcon } from "../../common/RatingStar/StarIcon";
 
 export interface ScoresAvgIncomingProps {
   linkId: string;
@@ -52,8 +52,8 @@ function ScoresAvgDefaultChildren({
 }: ScoresAvgRenderProps) {
   return !isLoading ? (
     <>
-      <StarIcon />
-      <span>{scoresAvg}</span>
+      <ActivatedStarIcon />
+      <span data-layout-element="AvgValue">{scoresAvg}</span>
     </>
   ) : null;
 }

@@ -2,7 +2,14 @@ import { SVGAttributes } from "react";
 
 export default function LoadingSpokes(props: SVGAttributes<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 32 32"
+      width={20}
+      height={20}
+      data-layout-element="LoadingSpokes"
+      {...props}
+    >
       <path opacity=".1" d="M14 0 H18 V8 H14 z" transform="rotate(0 16 16)">
         <animate
           attributeName="opacity"

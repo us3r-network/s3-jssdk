@@ -1,20 +1,16 @@
-import { useCallback, useEffect, useMemo } from "react";
-import { getS3LinkModel, useLinkState } from "../../LinkStateProvider";
-import {
-  useAuthentication,
-  useIsAuthenticated,
-  useSession,
-} from "@us3r-network/auth-with-rainbowkit";
-import { useStore } from "../../store";
+import { useMemo } from "react";
+import { useIsAuthenticated } from "@us3r-network/auth-with-rainbowkit";
 import { Button, ButtonRenderProps } from "react-aria-components";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
 import { AriaButtonProps } from "react-aria";
 import { VoteButtonChildren } from "./VoteButtonChildren";
 import { useLink } from "../../hooks/useLink";
+import { useVoteAction } from "../../hooks/useVoteAction";
 
 export interface VoteButtonIncomingProps {
   linkId: string;
   onSuccessfullyVote?: () => void;
+  onFailedVote?: (errMsg: string) => void;
 }
 export interface VoteButtonRenderProps {
   isAuthenticated: boolean;
@@ -33,107 +29,16 @@ export interface VoteButtonProps
 export function VoteButton({
   linkId,
   onSuccessfullyVote,
+  onFailedVote,
   children,
   ...props
 }: VoteButtonProps) {
-  const { link } = useLink(linkId);
-  const s3LinkModel = getS3LinkModel();
-  const { signIn } = useAuthentication();
   const isAuthenticated = useIsAuthenticated();
-  const session = useSession();
-  const { s3LinkModalAuthed } = useLinkState();
-
-  const votingLinkIds = useStore((state) => state.votingLinkIds);
-  const addOneToVotingLinkIds = useStore(
-    (state) => state.addOneToVotingLinkIds
-  );
-  const removeOneFromVotingLinkIds = useStore(
-    (state) => state.removeOneFromVotingLinkIds
-  );
-  const addVoteToCacheLinks = useStore((state) => state.addVoteToCacheLinks);
-  const updateVoteInCacheLinks = useStore(
-    (state) => state.updateVoteInCacheLinks
-  );
-
-  const findCurrUserVote = useMemo(() => {
-    if (!link?.votes || !session) return null;
-    return link.votes?.edges?.find(
-      (edge) => edge?.node?.creator?.id === session?.id
-    );
-  }, [link, session]);
-
-  const isVoted = !!findCurrUserVote && !findCurrUserVote?.node?.revoke;
-
-  const isVoting = useMemo(
-    () => votingLinkIds.has(linkId),
-    [votingLinkIds, linkId]
-  );
-
-  const isDisabled = useMemo(() => !link || isVoting, [link, isVoting]);
-
-  const onVote = useCallback(async () => {
-    try {
-      if (isDisabled) return;
-      if (!session || !s3LinkModalAuthed) {
-        signIn();
-        return;
-      }
-      addOneToVotingLinkIds(linkId);
-      if (findCurrUserVote) {
-        // update vote
-        const id = findCurrUserVote.node.id;
-        const revoke = !findCurrUserVote.node.revoke;
-        const type = revoke ? "DOWN_VOTE" : "UP_VOTE";
-        await s3LinkModel?.updateVote(id, { revoke, type });
-        // update store
-        updateVoteInCacheLinks(linkId, id, {
-          revoke,
-          type,
-          modifiedAt: new Date().toDateString(),
-        });
-      } else {
-        // create vote
-        const revoke = false;
-        const type = "UP_VOTE";
-        const res = await s3LinkModel?.createVote({
-          linkID: linkId,
-          revoke,
-          type,
-        });
-        const id = res?.data?.createVote.document.id;
-        if (id) {
-          // update store
-          addVoteToCacheLinks(linkId, {
-            id,
-            linkID: linkId,
-            revoke,
-            type,
-            createAt: new Date().toDateString(),
-            modifiedAt: new Date().toDateString(),
-            creator: {
-              id: session.id,
-            },
-          });
-        }
-      }
-      if (onSuccessfullyVote) onSuccessfullyVote();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      removeOneFromVotingLinkIds(linkId);
-    }
-  }, [
-    isDisabled,
-    session,
-    s3LinkModalAuthed,
-    linkId,
-    findCurrUserVote,
-    addOneToVotingLinkIds,
-    removeOneFromVotingLinkIds,
-    addVoteToCacheLinks,
-    updateVoteInCacheLinks,
+  const { link } = useLink(linkId);
+  const { isVoted, isVoting, isDisabled, onVote } = useVoteAction(linkId, {
     onSuccessfullyVote,
-  ]);
+    onFailedVote,
+  });
 
   const businessProps = {
     "data-us3r-component": "VoteButton",

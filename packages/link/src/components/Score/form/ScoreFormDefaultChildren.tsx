@@ -1,18 +1,13 @@
+import { UserAvatar } from "@us3r-network/profile";
 import * as ScoreForm from "./ScoreFormElements";
 
 export function ScoreFormDefaultChildren() {
   return (
     <>
-      <section>
-        <ScoreForm.ScoreSelect />
-      </section>
-      <section>
-        <ScoreForm.CommentTextarea />
-      </section>
-      <section>
-        <ScoreForm.SubmitButton>Submit</ScoreForm.SubmitButton>
-      </section>
-
+      <UserAvatar />
+      <ScoreForm.ScoreSelectField />
+      <ScoreForm.CommentTextarea />
+      <ScoreForm.SubmitButton />
       <ScoreForm.ErrorMessage />
     </>
   );

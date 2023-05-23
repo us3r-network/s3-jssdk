@@ -1,16 +1,15 @@
 import {
   Item as AriaItem,
   Button,
-  Dialog,
-  Heading,
   ItemProps,
+  ItemRenderProps,
   ListBox,
   ListBoxProps,
-  Modal,
 } from "react-aria-components";
 import { HTMLAttributes, useState } from "react";
 import {
   ScoreReviewsItemContext,
+  ScoreReviewsItemContextValue,
   useScoreReviewsItemState,
   useScoreReviewsState,
 } from "./ScoreReviewsContext";
@@ -23,9 +22,13 @@ import {
   UserNameProps,
 } from "@us3r-network/profile";
 import { ReactComponent as EditSvg } from "@material-design-icons/svg/outlined/edit.svg";
-import { useSession } from "@us3r-network/auth-with-rainbowkit";
+import {
+  useIsAuthenticated,
+  useSession,
+} from "@us3r-network/auth-with-rainbowkit";
 import { ScoreForm } from "../form";
 import RatingStarSelect from "../../common/RatingStar/RatingStarSelect";
+import { Modal } from "../../common/Modal/Modal";
 
 export function List(props: ListBoxProps<Score>) {
   const { scores } = useScoreReviewsState();
@@ -40,8 +43,26 @@ export function List(props: ListBoxProps<Score>) {
   );
 }
 
-export function Item({ children, value, ...props }: ItemProps<Score>) {
-  if (!value) return null;
+export function Item({
+  children,
+  value,
+  ...props
+}: ChildrenRenderProps<
+  ItemProps<Score>,
+  ItemRenderProps & ScoreReviewsItemContextValue
+>) {
+  if (!value) {
+    throw new Error("ScoreReviews.Item must have a value");
+  }
+  const isAuthenticated = useIsAuthenticated();
+  const session = useSession();
+  const did = value.creator.id;
+  const isLoginUserScore =
+    isAuthenticated && !!session?.id && !!did && session.id === did;
+  const contextValue = {
+    data: value,
+    isLoginUserScore,
+  };
   return (
     <AriaItem
       data-state-element="Item"
@@ -49,7 +70,7 @@ export function Item({ children, value, ...props }: ItemProps<Score>) {
       textValue={value.id}
       {...props}
     >
-      <ScoreReviewsItemContext.Provider value={value as Score}>
+      <ScoreReviewsItemContext.Provider value={contextValue}>
         {childrenRender(children, value, <ItemDefaultChildren />)}
       </ScoreReviewsItemContext.Provider>
     </AriaItem>
@@ -57,13 +78,17 @@ export function Item({ children, value, ...props }: ItemProps<Score>) {
 }
 
 export function Avatar(props: UserAvatarProps) {
-  const { creator } = useScoreReviewsItemState();
+  const {
+    data: { creator },
+  } = useScoreReviewsItemState();
   const did = creator.id;
   return <UserAvatar data-state-element="Avatar" did={did} {...props} />;
 }
 
 export function Name(props: UserNameProps) {
-  const { creator } = useScoreReviewsItemState();
+  const {
+    data: { creator },
+  } = useScoreReviewsItemState();
   const did = creator.id;
   return <UserName data-state-element="Name" did={did} {...props} />;
 }
@@ -77,7 +102,9 @@ export function Text({
     value: number;
   }
 >) {
-  const { text } = useScoreReviewsItemState();
+  const {
+    data: { text },
+  } = useScoreReviewsItemState();
   return (
     <span data-state-element="Text" {...props}>
       {childrenRender(children, { text }, text)}
@@ -94,7 +121,9 @@ export function Value({
     value: number;
   }
 >) {
-  const { value } = useScoreReviewsItemState();
+  const {
+    data: { value },
+  } = useScoreReviewsItemState();
   return (
     <span data-state-element="Value" {...props}>
       {childrenRender(children, { value }, <RatingStarSelect value={value} />)}
@@ -111,7 +140,9 @@ export function CreateAt({
     value: number;
   }
 >) {
-  const { createAt } = useScoreReviewsItemState();
+  const {
+    data: { createAt },
+  } = useScoreReviewsItemState();
   return (
     <span data-state-element="createAt" {...props}>
       {childrenRender(children, { createAt }, createAt)}
@@ -120,48 +151,51 @@ export function CreateAt({
 }
 
 function ItemDefaultChildren() {
-  const { id, creator, linkID } = useScoreReviewsItemState();
-  const session = useSession();
-  const did = creator.id;
+  const { linkId } = useScoreReviewsState();
+  const { data, isLoginUserScore } = useScoreReviewsItemState();
+  const { id } = data;
   const [isOpenEdit, setIsOpenEdit] = useState(false);
-  const showEditBtn = session && did && session?.id === did;
+
   return (
     <>
-      <div>
-        <Avatar />
-        <Name />
-        <CreateAt />
-        {showEditBtn && (
+      <div data-layout-element="ScoreValueWrap">
+        <Value />
+        {isLoginUserScore && (
           <>
             <Button
+              data-layout-element="EditButton"
               onPress={() => {
                 setIsOpenEdit(true);
               }}
             >
-              <EditSvg />
+              <EditSvg data-layout-element="Icon" />
               Edit
             </Button>
             <Modal
-              data-modal=""
+              data-layout-element="ScoreEditModel"
+              title="Rating & Review"
               isOpen={isOpenEdit}
               onOpenChange={setIsOpenEdit}
             >
-              <Dialog>
-                <Heading data-heading="">Rating & Review</Heading>
-                <ScoreForm
-                  linkId={linkID}
-                  scoreId={id}
-                  onSuccessfullySubmit={() => {
-                    setIsOpenEdit(false);
-                  }}
-                />
-              </Dialog>
+              <ScoreForm
+                linkId={linkId}
+                scoreId={id}
+                onSuccessfullyScore={() => {
+                  setIsOpenEdit(false);
+                }}
+              />
             </Modal>
           </>
         )}
       </div>
-      <Value />
       <Text />
+      <div data-layout-element="UserInfo">
+        <Avatar />
+        <div data-layout-element="NameAndDate">
+          <Name />
+          <CreateAt />
+        </div>
+      </div>
     </>
   );
 }
