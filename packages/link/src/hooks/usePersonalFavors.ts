@@ -68,7 +68,6 @@ export const usePersonalFavors = (opts?: {
     opts?.onSuccessfullyFetch,
     opts?.onFailedFetch,
   ]);
-  console.log({ usePersonalFavors: personalFavors });
 
   return {
     isFetching: isFetchingPersonalFavors,
