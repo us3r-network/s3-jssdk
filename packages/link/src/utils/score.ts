@@ -2,7 +2,10 @@ import { SCORE_VALUE_MAX, SCORE_VALUE_MIN } from "../constants";
 import { Link, Score } from "../data-model";
 
 export const getScoresFromLink = (link: Link): Score[] => {
-  return link?.scores?.edges?.map((e) => e.node) || [];
+  return (
+    link?.scores?.edges?.filter((edge) => !!edge?.node)?.map((e) => e.node) ||
+    []
+  );
 };
 
 export const getScoresCountFromLink = (link: Link): number => {

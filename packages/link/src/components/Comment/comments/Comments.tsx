@@ -1,4 +1,4 @@
-import { HTMLAttributes, useMemo } from "react";
+import { HTMLAttributes } from "react";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import * as CommentsElements from "./CommentsElements";
 import { CommentsContext, CommentsContextValue } from "./CommentsContext";
@@ -38,7 +38,7 @@ function CommentsRoot({
     commentsCount,
   };
   return (
-    <div {...props} {...businessProps}>
+    <div {...businessProps} {...props}>
       <CommentsContext.Provider value={contextValue}>
         {childrenRender(children, contextValue, <CommentsDefaultChildren />)}
       </CommentsContext.Provider>

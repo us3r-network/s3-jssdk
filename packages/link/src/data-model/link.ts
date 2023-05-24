@@ -456,6 +456,10 @@ export class S3LinkModel extends S3Model {
                   creator {
                     id
                   }
+                  url
+                  data
+                  type
+                  
                 }
               }
             }
@@ -656,6 +660,8 @@ export class S3LinkModel extends S3Model {
                   creator {
                     id
                   }
+                  data
+                  title
                 }
               }
             }

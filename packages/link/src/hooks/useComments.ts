@@ -10,7 +10,11 @@ export const useComments = (
   const { order = "asc" } = opts || {};
 
   const comments = (
-    isFetching ? [] : link?.comments?.edges?.map((e) => e.node) || []
+    isFetching
+      ? []
+      : link?.comments?.edges
+          ?.filter((edge) => !!edge?.node)
+          ?.map((e) => e.node) || []
   ).sort((a, b) => {
     const aTime = new Date(a.createAt).getTime();
     const bTime = new Date(b.createAt).getTime();

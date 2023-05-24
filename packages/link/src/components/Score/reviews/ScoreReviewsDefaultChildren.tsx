@@ -50,6 +50,7 @@ export function ScoreReviewsDefaultChildren() {
 
       <Modal
         data-layout-element="ScoreAddModel"
+        isDismissable
         isOpen={isOpenAdd}
         onOpenChange={setIsOpenAdd}
         title="Rating & Review"

@@ -45,12 +45,12 @@ export const useCommentAction = (
 
   const onComment = useCallback(
     async (text: string) => {
+      if (isDisabled) return;
+      if (!isAuthenticated || !session || !s3LinkModalAuthed) {
+        signIn();
+        return;
+      }
       try {
-        if (isDisabled) return;
-        if (!isAuthenticated || !session || !s3LinkModalAuthed) {
-          signIn();
-          return;
-        }
         addOneToCommentingLinkIds(linkId);
         const res = await s3LinkModel?.createComment({
           text,

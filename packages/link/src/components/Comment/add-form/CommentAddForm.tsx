@@ -62,7 +62,7 @@ function CommentAddFormRoot({
     submitComment,
   };
   return (
-    <form {...props} {...businessProps}>
+    <form {...businessProps} {...props}>
       <CommentAddFormContext.Provider value={contextValue}>
         {childrenRender(
           children,
