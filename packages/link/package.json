@@ -1,11 +1,14 @@
 {
   "name": "@us3r-network/link",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "the us3r data model",
   "type": "module",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": "dist/cjs/index.js"
+  },
   "files": [
     "dist",
     "package.json"
