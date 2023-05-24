@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/link",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "the us3r data model",
   "type": "module",
   "main": "dist/cjs/index.js",
