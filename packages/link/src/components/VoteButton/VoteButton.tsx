@@ -9,7 +9,7 @@ import { useVoteAction } from "../../hooks/useVoteAction";
 
 export interface VoteButtonIncomingProps {
   linkId: string;
-  onSuccessfullyVote?: () => void;
+  onSuccessfullyVote?: (isVoted: boolean) => void;
   onFailedVote?: (errMsg: string) => void;
 }
 export interface VoteButtonRenderProps {
@@ -63,7 +63,7 @@ export function VoteButton({
     [businessRenderProps]
   );
   return (
-    <Button {...props} {...businessProps}>
+    <Button {...businessProps} {...props}>
       {(buttonProps) =>
         childrenRender(
           children,

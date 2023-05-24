@@ -11,7 +11,7 @@ import {
 export const useVoteAction = (
   linkId: string,
   opts?: {
-    onSuccessfullyVote?: () => void;
+    onSuccessfullyVote?: (isVoted: boolean) => void;
     onFailedVote?: (errMsg: string) => void;
   }
 ) => {
@@ -51,12 +51,12 @@ export const useVoteAction = (
   const isDisabled = useMemo(() => !link || isVoting, [link, isVoting]);
 
   const onVote = useCallback(async () => {
+    if (isDisabled) return;
+    if (!isAuthenticated || !session || !s3LinkModalAuthed) {
+      signIn();
+      return;
+    }
     try {
-      if (isDisabled) return;
-      if (!isAuthenticated || !session || !s3LinkModalAuthed) {
-        signIn();
-        return;
-      }
       addOneToVotingLinkIds(linkId);
       if (findCurrUserVote) {
         // update vote
@@ -73,6 +73,7 @@ export const useVoteAction = (
           type,
           modifiedAt: new Date().toDateString(),
         });
+        if (opts?.onSuccessfullyVote) opts.onSuccessfullyVote(!revoke);
       } else {
         // create vote
         const revoke = false;
@@ -100,8 +101,8 @@ export const useVoteAction = (
             },
           });
         }
+        if (opts?.onSuccessfullyVote) opts.onSuccessfullyVote(!revoke);
       }
-      if (opts?.onSuccessfullyVote) opts.onSuccessfullyVote();
     } catch (error) {
       const errMsg = (error as any)?.message;
       if (opts?.onFailedVote) opts.onFailedVote(errMsg);

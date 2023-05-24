@@ -11,7 +11,7 @@ import {
 export const useFavorAction = (
   linkId: string,
   opts?: {
-    onSuccessfullyFavor?: () => void;
+    onSuccessfullyFavor?: (isFavored: boolean) => void;
     onFailedFavor?: (errMsg: string) => void;
   }
 ) => {
@@ -34,6 +34,13 @@ export const useFavorAction = (
     (state) => state.updateFavorInCacheLinks
   );
 
+  const addOneToPersonalFavors = useStore(
+    (state) => state.addOneToPersonalFavors
+  );
+  const removeOneFromPersonalFavors = useStore(
+    (state) => state.removeOneFromPersonalFavors
+  );
+
   const findCurrUserFavor =
     !link?.favors || !session
       ? null
@@ -51,23 +58,30 @@ export const useFavorAction = (
   const isDisabled = useMemo(() => !link || isFavoring, [link, isFavoring]);
 
   const onFavor = useCallback(async () => {
+    if (isDisabled) return;
+    if (!isAuthenticated || !session || !s3LinkModalAuthed) {
+      signIn();
+      return;
+    }
     try {
-      if (isDisabled) return;
-      if (!isAuthenticated || !session || !s3LinkModalAuthed) {
-        signIn();
-        return;
-      }
       addOneToFavoringLinkIds(linkId);
       if (findCurrUserFavor) {
         // update favor
         const id = findCurrUserFavor.node.id;
         const revoke = !findCurrUserFavor.node.revoke;
         const res = await s3LinkModel?.updateFavor(id, { revoke });
+
         if (res?.errors && res?.errors.length > 0) {
           throw new Error(res?.errors[0]?.message);
         }
         // update store
         updateFavorInCacheLinks(linkId, id, { revoke });
+        if (revoke) {
+          removeOneFromPersonalFavors(id);
+        } else {
+          addOneToPersonalFavors({ ...findCurrUserFavor.node, link: link });
+        }
+        if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(!revoke);
       } else {
         // create favor
         const res = await s3LinkModel?.createFavor({
@@ -79,8 +93,7 @@ export const useFavorAction = (
         }
         const id = res?.data?.createFavor.document.id;
         if (id) {
-          // update store
-          addFavorToCacheLinks(linkId, {
+          const favorData = {
             id,
             linkID: linkId,
             revoke: false,
@@ -89,10 +102,13 @@ export const useFavorAction = (
             creator: {
               id: session.id,
             },
-          });
+          };
+          // update store
+          addFavorToCacheLinks(linkId, favorData);
+          addOneToPersonalFavors({ ...favorData, link: link });
         }
+        if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(true);
       }
-      if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor();
     } catch (error) {
       const errMsg = (error as any)?.message;
       if (opts?.onFailedFavor) opts.onFailedFavor(errMsg);
@@ -106,6 +122,7 @@ export const useFavorAction = (
     s3LinkModalAuthed,
     signIn,
     linkId,
+    link,
     findCurrUserFavor,
     addOneToFavoringLinkIds,
     removeOneFromFavoringLinkIds,
@@ -113,6 +130,8 @@ export const useFavorAction = (
     updateFavorInCacheLinks,
     opts?.onSuccessfullyFavor,
     opts?.onFailedFavor,
+    addOneToPersonalFavors,
+    removeOneFromPersonalFavors,
   ]);
 
   return { isFavored, isFavoring, isDisabled, onFavor };

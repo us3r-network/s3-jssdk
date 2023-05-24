@@ -34,6 +34,13 @@ export const useScoreAction = (
     (state) => state.updateScoreInCacheLinks
   );
 
+  const addOneToPersonalScores = useStore(
+    (state) => state.addOneToPersonalScores
+  );
+  const updateOneInPersonalScores = useStore(
+    (state) => state.updateOneInPersonalScores
+  );
+
   const isScoring = useMemo(
     () => scoringLinkIds.has(linkId),
     [scoringLinkIds, linkId]
@@ -52,12 +59,12 @@ export const useScoreAction = (
 
   const onScoreAdd = useCallback(
     async ({ value, text }: { value: number; text: string }) => {
+      if (isDisabled) return;
+      if (!isAuthenticated || !session || !s3LinkModalAuthed) {
+        signIn();
+        return;
+      }
       try {
-        if (isDisabled) return;
-        if (!isAuthenticated || !session || !s3LinkModalAuthed) {
-          signIn();
-          return;
-        }
         addOneToScoringLinkIds(linkId);
         const res = await s3LinkModel?.createScore({
           value,
@@ -70,8 +77,7 @@ export const useScoreAction = (
         }
         const id = res?.data?.createScore.document.id;
         if (id) {
-          // update store
-          addScoreToCacheLinks(linkId, {
+          const scoreData = {
             id,
             value,
             text,
@@ -82,7 +88,10 @@ export const useScoreAction = (
             creator: {
               id: session.id,
             },
-          });
+          };
+          // update store
+          addScoreToCacheLinks(linkId, scoreData);
+          addOneToPersonalScores({ ...scoreData, link: link });
         }
 
         if (opts?.onSuccessfullyScore) opts.onSuccessfullyScore();
@@ -100,11 +109,13 @@ export const useScoreAction = (
       s3LinkModalAuthed,
       signIn,
       linkId,
+      link,
       addOneToScoringLinkIds,
       removeOneFromScoringLinkIds,
       addScoreToCacheLinks,
       opts?.onSuccessfullyScore,
       opts?.onFailedScore,
+      addOneToPersonalScores,
     ]
   );
 
@@ -118,12 +129,12 @@ export const useScoreAction = (
       value: number;
       text: string;
     }) => {
+      if (isDisabled) return;
+      if (!isAuthenticated || !session || !s3LinkModalAuthed) {
+        signIn();
+        return;
+      }
       try {
-        if (isDisabled) return;
-        if (!isAuthenticated || !session || !s3LinkModalAuthed) {
-          signIn();
-          return;
-        }
         addOneToScoringLinkIds(linkId);
         const res = await s3LinkModel?.updateScore(scoreId, {
           value,
@@ -134,12 +145,14 @@ export const useScoreAction = (
         }
         const id = res?.data?.updateScore.document.id;
         if (id) {
-          // update store
-          updateScoreInCacheLinks(linkId, scoreId, {
+          const scoreData = {
             value,
             text,
             modifiedAt: new Date().toISOString(),
-          });
+          };
+          // update store
+          updateScoreInCacheLinks(linkId, scoreId, scoreData);
+          updateOneInPersonalScores(scoreId, scoreData);
         }
 
         if (opts?.onSuccessfullyScore) opts.onSuccessfullyScore();
@@ -162,6 +175,7 @@ export const useScoreAction = (
       updateScoreInCacheLinks,
       opts?.onSuccessfullyScore,
       opts?.onFailedScore,
+      updateOneInPersonalScores,
     ]
   );
 

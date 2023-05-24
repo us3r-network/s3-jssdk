@@ -1,13 +1,11 @@
-import { HTMLAttributes, useMemo } from "react";
+import { HTMLAttributes } from "react";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import * as ScoreReviewsElements from "./ScoreReviewsElements";
 import {
   ScoreReviewsContext,
   ScoreReviewsContextValue,
 } from "./ScoreReviewsContext";
-import { useLink } from "../../../hooks/useLink";
 import { ScoreReviewsDefaultChildren } from "./ScoreReviewsDefaultChildren";
-import { getScoresFromLink } from "../../../utils/score";
 import { useScores } from "../../../hooks/useScores";
 
 export interface ScoreReviewsIncomingProps {
@@ -40,7 +38,7 @@ function ScoreReviewsRoot({
     scores,
   };
   return (
-    <div {...props} {...businessProps}>
+    <div {...businessProps} {...props}>
       <ScoreReviewsContext.Provider value={contextValue}>
         {childrenRender(
           children,

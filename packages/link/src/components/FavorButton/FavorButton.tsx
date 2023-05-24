@@ -9,7 +9,7 @@ import { useFavorAction } from "../../hooks/useFavorAction";
 
 export interface FavorButtonIncomingProps {
   linkId: string;
-  onSuccessfullyFavor?: () => void;
+  onSuccessfullyFavor?: (isFavored: boolean) => void;
   onFailedFavor?: (errMsg: string) => void;
 }
 export interface FavorButtonRenderProps {
@@ -67,7 +67,7 @@ export function FavorButton({
   );
 
   return (
-    <Button {...props} {...businessProps}>
+    <Button {...businessProps} {...props}>
       {(buttonProps) =>
         childrenRender(
           children,

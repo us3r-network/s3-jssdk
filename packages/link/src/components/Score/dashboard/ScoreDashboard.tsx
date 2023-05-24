@@ -75,7 +75,7 @@ function ScoreDashboardRoot({
   };
 
   return (
-    <div {...props} {...businessProps}>
+    <div {...businessProps} {...props}>
       <ScoreDashboardContext.Provider value={contextValue}>
         {childrenRender(
           children,

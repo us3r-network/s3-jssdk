@@ -41,7 +41,6 @@ export function List(props: ListBoxProps<Comment>) {
   return (
     <ListBox
       aria-label="Comment list"
-      selectionMode="single"
       data-state-element="List"
       items={comments}
       {...props}

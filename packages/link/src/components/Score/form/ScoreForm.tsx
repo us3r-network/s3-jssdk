@@ -100,7 +100,7 @@ function ScoreFormRoot({
   };
 
   return (
-    <form {...props} {...businessProps}>
+    <form {...businessProps} {...props}>
       <ScoreFormContext.Provider value={contextValue}>
         {childrenRender(children, contextValue, <ScoreFormDefaultChildren />)}
       </ScoreFormContext.Provider>

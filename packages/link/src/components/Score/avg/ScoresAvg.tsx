@@ -36,7 +36,7 @@ export function ScoresAvg({ linkId, children, ...props }: ScoresAvgProps) {
   };
 
   return (
-    <span {...props} {...businessProps}>
+    <span {...businessProps} {...props}>
       {childrenRender(
         children,
         renderProps,

@@ -35,7 +35,6 @@ export function List(props: ListBoxProps<Score>) {
   return (
     <ListBox
       aria-label="Score reviews"
-      selectionMode="single"
       data-state-element="List"
       items={scores}
       {...props}
@@ -173,6 +172,7 @@ function ItemDefaultChildren() {
             </Button>
             <Modal
               data-layout-element="ScoreEditModel"
+              isDismissable
               title="Rating & Review"
               isOpen={isOpenEdit}
               onOpenChange={setIsOpenEdit}
