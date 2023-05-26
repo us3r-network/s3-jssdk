@@ -48,14 +48,20 @@ export const useScoreAction = (
 
   const isDisabled = useMemo(() => !link || isScoring, [link, isScoring]);
 
-  const findCurrUserScore =
-    !link?.scores || !session
-      ? null
-      : link.scores?.edges?.find(
-          (edge) => edge?.node?.creator?.id === session?.id
-        );
+  const findCurrUserScore = useMemo(
+    () =>
+      !link?.scores || !session
+        ? null
+        : link.scores?.edges?.find(
+            (edge) => edge?.node?.creator?.id === session?.id
+          )?.node,
+    [link?.scores, session]
+  );
 
-  const isScored = !!findCurrUserScore && !findCurrUserScore?.node?.revoke;
+  const isScored = useMemo(
+    () => !!findCurrUserScore && !findCurrUserScore?.revoke,
+    [findCurrUserScore]
+  );
 
   const onScoreAdd = useCallback(
     async ({ value, text }: { value: number; text: string }) => {

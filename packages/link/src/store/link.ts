@@ -20,7 +20,9 @@ export const createLinkSlice: StateCreator<LinkSlice, [], [], LinkSlice> = (
   blockFetchLinkIds: new Set(),
   setOneInCacheLinks: (link) => {
     set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(link?.id || link.url, link),
+      cacheLinks: new Map(state.cacheLinks).set(link?.id || link.url, {
+        ...link,
+      }),
     }));
   },
   addOneToFetchingLinkIds: (linkId) => {

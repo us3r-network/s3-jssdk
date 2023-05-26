@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useStore } from "../store";
 import {
   useIsAuthenticated,
@@ -68,8 +68,14 @@ export const usePersonalScores = (opts?: {
     opts?.onSuccessfullyFetch,
     opts?.onFailedFetch,
   ]);
+
+  const personalScoresAry = useMemo(
+    () => Array.from(personalScores.values()),
+    [personalScores]
+  );
+
   return {
     isFetching: isFetchingPersonalScores,
-    personalScores: Array.from(personalScores.values()),
+    personalScores: personalScoresAry,
   };
 };

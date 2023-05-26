@@ -10,9 +10,8 @@ import * as ScoreFormElements from "./ScoreFormElements";
 import { ScoreFormContext, ScoreFormContextValue } from "./ScoreFormContext";
 import { ScoreFormDefaultChildren } from "./ScoreFormDefaultChildren";
 import { useIsAuthenticated } from "@us3r-network/auth-with-rainbowkit";
-import { useLink } from "../../../hooks/useLink";
-import { getScoresFromLink } from "../../../utils/score";
 import { useScoreAction } from "../../../hooks/useScoreAction";
+import { useScores } from "../../../hooks/useScores";
 
 export interface ScoreFormIncomingProps {
   linkId: string;
@@ -37,11 +36,7 @@ function ScoreFormRoot({
   ...props
 }: ScoreFormProps) {
   const isAuthenticated = useIsAuthenticated();
-  const { isFetching, link } = useLink(linkId);
-  const scores = useMemo(
-    () => (!isFetching && link ? getScoresFromLink(link) : []),
-    [isFetching, link]
-  );
+  const { scores } = useScores(linkId);
   const score = useMemo(
     () => (scoreId ? scores.find((s) => s.id === scoreId) : null),
     [scores, scoreId]

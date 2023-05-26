@@ -40,14 +40,15 @@ export const createScoreSlice: StateCreator<
   addScoreToCacheLinks: (linkId, score) => {
     const link = get().cacheLinks.get(linkId);
     if (!link) return;
-    const newLink = linkDataFieldFilling(link);
+    const newLink = { ...linkDataFieldFilling(link) };
     newLink.scores.edges.push({
       cursor: score.id,
       node: { ...score },
     });
+    newLink.scores = { ...newLink.scores };
     newLink.scoresCount++;
     set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, newLink),
+      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
     }));
   },
   updateScoreInCacheLinks: (linkId, scoreId, score) => {
@@ -62,6 +63,7 @@ export const createScoreSlice: StateCreator<
       ...newLink.scores.edges[scoreIndex].node,
       ...score,
     };
+    newLink.scores = { ...newLink.scores };
     if (score.hasOwnProperty("revoke")) {
       if (score.revoke) {
         newLink.scoresCount--;
@@ -70,7 +72,7 @@ export const createScoreSlice: StateCreator<
       }
     }
     set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, newLink),
+      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
     }));
   },
   removeScoreFromCacheLinks: (linkId, scoreId) => {
@@ -82,9 +84,10 @@ export const createScoreSlice: StateCreator<
     );
     if (scoreIndex === -1) return;
     newLink.scores.edges.splice(scoreIndex, 1);
+    newLink.scores = { ...newLink.scores };
     newLink.scoresCount--;
     set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, newLink),
+      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
     }));
   },
 });

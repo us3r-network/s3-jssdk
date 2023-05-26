@@ -46,10 +46,11 @@ export const createVoteSlice: StateCreator<
       cursor: vote.id,
       node: { ...vote },
     });
+    newLink.votes = { ...newLink.votes };
     newLink.votesCount++;
 
     set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, newLink),
+      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
     }));
   },
   updateVoteInCacheLinks: (linkId, voteId, vote) => {
@@ -64,6 +65,7 @@ export const createVoteSlice: StateCreator<
       ...newLink.votes.edges[voteIndex].node,
       ...vote,
     };
+    newLink.votes = { ...newLink.votes };
     if (vote.hasOwnProperty("revoke")) {
       if (vote.revoke) {
         newLink.votesCount--;
@@ -72,7 +74,7 @@ export const createVoteSlice: StateCreator<
       }
     }
     set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, newLink),
+      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
     }));
   },
   removeVoteFromCacheLinks: (linkId, voteId) => {
@@ -84,9 +86,10 @@ export const createVoteSlice: StateCreator<
     );
     if (voteIndex === -1) return;
     newLink.votes.edges.splice(voteIndex, 1);
+    newLink.votes = { ...newLink.votes };
     newLink.votesCount--;
     set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, newLink),
+      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
     }));
   },
 });
