@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useStore } from "../store";
 import {
   useIsAuthenticated,
@@ -69,8 +69,13 @@ export const usePersonalFavors = (opts?: {
     opts?.onFailedFetch,
   ]);
 
+  const personalFavorsAry = useMemo(
+    () => Array.from(personalFavors.values()),
+    [personalFavors]
+  );
+
   return {
     isFetching: isFetchingPersonalFavors,
-    personalFavors: Array.from(personalFavors.values()),
+    personalFavors: personalFavorsAry,
   };
 };

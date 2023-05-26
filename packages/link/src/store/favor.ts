@@ -45,9 +45,10 @@ export const createFavorSlice: StateCreator<
       cursor: favor.id,
       node: { ...favor },
     });
+    newLink.favors = { ...newLink.favors };
     newLink.favorsCount++;
     set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, newLink),
+      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
     }));
   },
   updateFavorInCacheLinks: (linkId, favorId, favor) => {
@@ -62,6 +63,7 @@ export const createFavorSlice: StateCreator<
       ...newLink.favors.edges[favorIndex].node,
       ...favor,
     };
+    newLink.favors = { ...newLink.favors };
     if (favor.hasOwnProperty("revoke")) {
       if (favor.revoke) {
         newLink.favorsCount--;
@@ -70,7 +72,7 @@ export const createFavorSlice: StateCreator<
       }
     }
     set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, newLink),
+      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
     }));
   },
   removeFavorFromCacheLinks: (linkId, favorId) => {
@@ -82,9 +84,10 @@ export const createFavorSlice: StateCreator<
     );
     if (favorIndex === -1) return;
     newLink.favors.edges.splice(favorIndex, 1);
+    newLink.favors = { ...newLink.favors };
     newLink.favorsCount--;
     set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, newLink),
+      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
     }));
   },
 });

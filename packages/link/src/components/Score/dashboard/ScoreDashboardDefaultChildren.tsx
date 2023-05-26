@@ -29,7 +29,7 @@ export function ScoreDashboardDefaultChildren() {
       <span data-layout-element="DividingLine"></span>
       <div data-layout-element="ScoreValuePercentages">
         {[...Array(SCORE_VALUE_MAX)].map((_, index) => {
-          const scoreValue = index + 1;
+          const scoreValue = SCORE_VALUE_MAX - index;
           return (
             <ScoreDashboard.ScoreValuePercentage
               value={scoreValue}

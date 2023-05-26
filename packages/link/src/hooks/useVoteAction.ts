@@ -34,14 +34,20 @@ export const useVoteAction = (
     (state) => state.updateVoteInCacheLinks
   );
 
-  const findCurrUserVote =
-    !link?.votes || !session
-      ? null
-      : link.votes?.edges?.find(
-          (edge) => edge?.node?.creator?.id === session?.id
-        );
+  const findCurrUserVote = useMemo(
+    () =>
+      !link?.votes || !session
+        ? null
+        : link.votes?.edges?.find(
+            (edge) => edge?.node?.creator?.id === session?.id
+          )?.node,
+    [link?.votes, session]
+  );
 
-  const isVoted = !!findCurrUserVote && !findCurrUserVote?.node?.revoke;
+  const isVoted = useMemo(
+    () => !!findCurrUserVote && !findCurrUserVote?.revoke,
+    [findCurrUserVote]
+  );
 
   const isVoting = useMemo(
     () => votingLinkIds.has(linkId),
@@ -60,8 +66,8 @@ export const useVoteAction = (
       addOneToVotingLinkIds(linkId);
       if (findCurrUserVote) {
         // update vote
-        const id = findCurrUserVote.node.id;
-        const revoke = !findCurrUserVote.node.revoke;
+        const id = findCurrUserVote.id;
+        const revoke = !findCurrUserVote.revoke;
         const type = revoke ? "DOWN_VOTE" : "UP_VOTE";
         const res = await s3LinkModel?.updateVote(id, { revoke, type });
         if (res?.errors && res?.errors.length > 0) {

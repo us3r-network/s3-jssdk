@@ -41,14 +41,20 @@ export const useFavorAction = (
     (state) => state.removeOneFromPersonalFavors
   );
 
-  const findCurrUserFavor =
-    !link?.favors || !session
-      ? null
-      : link.favors?.edges?.find(
-          (edge) => edge?.node?.creator?.id === session?.id
-        );
+  const findCurrUserFavor = useMemo(
+    () =>
+      !link?.favors || !session
+        ? null
+        : link.favors?.edges?.find(
+            (edge) => edge?.node?.creator?.id === session?.id
+          )?.node,
+    [link?.favors, session]
+  );
 
-  const isFavored = !!findCurrUserFavor && !findCurrUserFavor?.node?.revoke;
+  const isFavored = useMemo(
+    () => !!findCurrUserFavor && !findCurrUserFavor?.revoke,
+    [findCurrUserFavor]
+  );
 
   const isFavoring = useMemo(
     () => favoringLinkIds.has(linkId),
@@ -67,8 +73,8 @@ export const useFavorAction = (
       addOneToFavoringLinkIds(linkId);
       if (findCurrUserFavor) {
         // update favor
-        const id = findCurrUserFavor.node.id;
-        const revoke = !findCurrUserFavor.node.revoke;
+        const id = findCurrUserFavor.id;
+        const revoke = !findCurrUserFavor.revoke;
         const res = await s3LinkModel?.updateFavor(id, { revoke });
 
         if (res?.errors && res?.errors.length > 0) {
@@ -79,7 +85,7 @@ export const useFavorAction = (
         if (revoke) {
           removeOneFromPersonalFavors(id);
         } else {
-          addOneToPersonalFavors({ ...findCurrUserFavor.node, link: link });
+          addOneToPersonalFavors({ ...findCurrUserFavor, link: link });
         }
         if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(!revoke);
       } else {

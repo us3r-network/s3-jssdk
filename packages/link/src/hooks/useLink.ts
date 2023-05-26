@@ -19,10 +19,16 @@ export const useLink = (linkId: string) => {
   const addOneToBlockFetchLinkIds = useStore(
     (state) => state.addOneToBlockFetchLinkIds
   );
-  const link = cacheLinks.get(linkId);
+  const link = useMemo(() => cacheLinks.get(linkId), [cacheLinks, linkId]);
 
-  const isFetching = fetchingLinkIds.has(linkId);
-  const isBlockFetch = blockFetchLinkIds.has(linkId);
+  const isFetching = useMemo(
+    () => fetchingLinkIds.has(linkId),
+    [fetchingLinkIds, linkId]
+  );
+  const isBlockFetch = useMemo(
+    () => blockFetchLinkIds.has(linkId),
+    [blockFetchLinkIds, linkId]
+  );
   const [errMsg, setErrMsg] = useState("");
 
   useEffect(() => {

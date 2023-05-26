@@ -45,9 +45,10 @@ export const createCommentSlice: StateCreator<
       cursor: comment.id,
       node: { ...comment },
     });
+    newLink.comments = { ...newLink.comments };
     newLink.commentsCount++;
     set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, newLink),
+      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
     }));
   },
   updateCommentInCacheLinks: (linkId, commentId, comment) => {
@@ -62,6 +63,7 @@ export const createCommentSlice: StateCreator<
       ...newLink.comments.edges[commentIndex].node,
       ...comment,
     };
+    newLink.comments = { ...newLink.comments };
     if (comment.hasOwnProperty("revoke")) {
       if (comment.revoke) {
         newLink.commentsCount--;
@@ -70,7 +72,7 @@ export const createCommentSlice: StateCreator<
       }
     }
     set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, newLink),
+      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
     }));
   },
   removeCommentFromCacheLinks: (linkId, commentId) => {
@@ -82,9 +84,10 @@ export const createCommentSlice: StateCreator<
     );
     if (commentIndex === -1) return;
     newLink.comments.edges.splice(commentIndex, 1);
+    newLink.comments = { ...newLink.comments };
     newLink.commentsCount--;
     set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, newLink),
+      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
     }));
   },
 });

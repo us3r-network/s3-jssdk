@@ -6,13 +6,9 @@ import {
   ScoreDashboardContextValue,
 } from "./ScoreDashboardContext";
 import { ScoreDashboardDefaultChildren } from "./ScoreDashboardDefaultChildren";
-import { useLink } from "../../../hooks/useLink";
 import { SCORE_VALUE_MAX, SCORE_VALUE_MIN } from "../../../constants";
-import {
-  getScoresAvgFromScores,
-  getScoresCountFromLink,
-  getScoresFromLink,
-} from "../../../utils/score";
+import { getScoresAvgFromScores } from "../../../utils/score";
+import { useScores } from "../../../hooks/useScores";
 export interface ScoreDashboardIncomingProps {
   linkId: string;
 }
@@ -29,21 +25,13 @@ function ScoreDashboardRoot({
   children,
   ...props
 }: ScoreDashboardProps) {
-  const { isFetching, link } = useLink(linkId);
-  const scores = useMemo(
-    () => (!isFetching && link ? getScoresFromLink(link) : []),
-    [isFetching, link]
-  );
-  const scoresCount = useMemo(
-    () => (link ? getScoresCountFromLink(link) : 0),
-    [link]
-  );
+  const { isFetching, scores, scoresCount } = useScores(linkId);
   const scoresAvg = useMemo(
     () => getScoresAvgFromScores(scores, scoresCount),
     [scores, scoresCount]
   );
 
-  const values = scores.map((score) => score.value);
+  const values = useMemo(() => scores.map((score) => score.value), [scores]);
 
   const scoreValuesCount = useMemo(() => {
     const counts = Array.from({ length: SCORE_VALUE_MAX + 1 }, () => 0);
