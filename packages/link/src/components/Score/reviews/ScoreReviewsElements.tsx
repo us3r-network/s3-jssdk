@@ -29,6 +29,7 @@ import {
 import { ScoreForm } from "../form";
 import RatingStarSelect from "../../common/RatingStar/RatingStarSelect";
 import { Modal } from "../../common/Modal/Modal";
+import { formatDateFromNow } from "../../../utils/time";
 
 export function List(props: ListBoxProps<Score>) {
   const { scores } = useScoreReviewsState();
@@ -144,7 +145,11 @@ export function CreateAt({
   } = useScoreReviewsItemState();
   return (
     <span data-state-element="createAt" {...props}>
-      {childrenRender(children, { createAt }, createAt)}
+      {childrenRender(
+        children,
+        { createAt },
+        createAt && formatDateFromNow(createAt)
+      )}
     </span>
   );
 }

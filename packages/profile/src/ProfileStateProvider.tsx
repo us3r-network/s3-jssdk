@@ -32,6 +32,14 @@ const defaultContextValue: ProfileStateContextValue = {
 };
 const ProfileStateContext = createContext(defaultContextValue);
 
+const defaultNewProfile: Profile = {
+  name: "",
+  avatar: "",
+  bio: "",
+  tags: [],
+  wallets: [],
+};
+
 export interface ProfileStateProviderProps extends PropsWithChildren {
   // ceramic host
   ceramicHost: string;
@@ -65,7 +73,11 @@ export default function ProfileStateProvider({
       s3ProfileModel
         .queryPersonalProfile()
         .then((res) => {
-          setProfile(res.data?.viewer?.profile || null);
+          if (res?.errors && res.errors.length > 0) {
+            setProfile(defaultNewProfile);
+          } else {
+            setProfile(res.data?.viewer?.profile || null);
+          }
         })
         .finally(() => {
           setProfileLoading(false);
@@ -102,13 +114,18 @@ export default function ProfileStateProvider({
         throw Error("updateProfile: not authed");
       }
       const newProfile = { ...profile, ...data };
-      await s3ProfileModel.mutationPersonalProfile({
+
+      const res = await s3ProfileModel.mutationPersonalProfile({
         name: newProfile.name || "",
         avatar: newProfile.avatar || "",
         bio: newProfile.bio || "",
         tags: [...(newProfile.tags || [])],
         wallets: [...(newProfile.wallets || [])],
       });
+
+      if (res?.errors && res.errors.length > 0) {
+        throw Error(res.errors[0].message);
+      }
       setProfile(newProfile);
     },
     [session, s3ProfileModalAuthed, profile]

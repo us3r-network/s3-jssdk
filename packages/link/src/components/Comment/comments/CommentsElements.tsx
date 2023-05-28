@@ -18,6 +18,7 @@ import {
   UserName,
   UserNameProps,
 } from "@us3r-network/profile";
+import { formatDateFromNow } from "../../../utils/time";
 
 export function Count({
   children,
@@ -105,7 +106,7 @@ export function CreateAt({
   const { createAt } = useCommentsItemState();
   return (
     <span data-state-element="CreateAt" {...props}>
-      {childrenRender(children, { createAt }, createAt)}
+      {childrenRender(children, { createAt }, formatDateFromNow(createAt))}
     </span>
   );
 }

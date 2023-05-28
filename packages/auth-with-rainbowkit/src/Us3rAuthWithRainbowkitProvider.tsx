@@ -18,7 +18,7 @@ import {
 } from "react";
 import {
   configureChains,
-  createClient,
+  createConfig,
   useAccount,
   useDisconnect,
   WagmiConfig,
@@ -33,7 +33,7 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import { Us3rAuth } from "@us3r-network/auth";
 
-const { chains, provider, webSocketProvider } = configureChains(
+const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     mainnet,
     polygon,
@@ -62,11 +62,11 @@ const connectors = connectorsForWallets([
   },
 ]);
 
-const wagmiClient = createClient({
+const wagmiConfig = createConfig({
   autoConnect: false,
   connectors,
-  provider,
-  webSocketProvider,
+  publicClient,
+  webSocketPublicClient,
 });
 
 let us3rAuthInstance: Us3rAuth | null = null;
@@ -201,7 +201,7 @@ export default function Us3rAuthWithRainbowkitProvider({
     return mode === "dark" ? darkVars : lightVars;
   }, [mode, darkVars, lightVars]);
   return (
-    <WagmiConfig client={wagmiClient}>
+    <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider
         chains={chains}
         appInfo={{ appName }}
