@@ -71,7 +71,7 @@ function UserInfoEditFormRoot<T>({
       });
       if (onSuccessfullySubmit) onSuccessfullySubmit();
     } catch (error) {
-      const errMsg = (error as ReadonlyArray<any>)[0].toJSON().message;
+      const errMsg = (error as any).message;
       setErrMsg(errMsg);
     } finally {
       setIsUpdating(false);
