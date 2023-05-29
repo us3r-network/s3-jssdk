@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/link",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "the us3r data model",
   "type": "module",
   "main": "dist/cjs/index.js",
@@ -23,7 +23,7 @@
     "@composedb/types": "^0.4.3",
     "@material-design-icons/svg": "^0.14.7",
     "@us3r-network/data-model": "^0.1.0",
-    "dayjs": "^1.11.7",
+    "dayjs": "^2.0.0-alpha.4",
     "did-session": "^2.0.0",
     "react-aria": "^3.24.0",
     "react-aria-components": "^1.0.0-alpha.3",
