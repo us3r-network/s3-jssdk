@@ -97,7 +97,7 @@ function UserInfoEditFormRoot<T>({
     avatarUploadOpts,
   };
   return (
-    <form {...props} {...businessProps}>
+    <form {...businessProps} {...props}>
       <UserInfoEditFormContext.Provider value={contextValue}>
         {childrenRender(
           children,

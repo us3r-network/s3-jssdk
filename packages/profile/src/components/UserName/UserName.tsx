@@ -73,7 +73,7 @@ export function UserName({ name, children, ...props }: UserNameProps) {
     [businessRenderProps]
   );
   return (
-    <span {...props} {...businessProps}>
+    <span {...businessProps} {...props}>
       {childrenRender(children, businessRenderProps, defaultChildren)}
     </span>
   );

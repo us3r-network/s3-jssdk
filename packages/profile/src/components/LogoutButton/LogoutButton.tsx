@@ -46,7 +46,7 @@ export function LogoutButton({ children, ...props }: LogoutButtonProps) {
   );
 
   return (
-    <Button {...props} {...businessProps}>
+    <Button {...businessProps} {...props}>
       {(buttonProps) =>
         childrenRender(
           children,

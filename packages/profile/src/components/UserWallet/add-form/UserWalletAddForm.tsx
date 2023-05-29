@@ -84,7 +84,7 @@ function UserWalletAddFormRoot({
     submitAdd,
   };
   return (
-    <form {...props} {...businessProps}>
+    <form {...businessProps} {...props}>
       <UserWalletAddFormContext.Provider value={contextValue}>
         {childrenRender(
           children,

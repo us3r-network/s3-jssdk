@@ -30,7 +30,7 @@ export function Name(props: UserNameProps) {
 export function Bio(props: HTMLAttributes<HTMLSpanElement>) {
   const { info } = useUserInfoState();
   return (
-    <span data-bio="" {...props}>
+    <span data-state-element="Bio" {...props}>
       {info?.bio}
     </span>
   );
