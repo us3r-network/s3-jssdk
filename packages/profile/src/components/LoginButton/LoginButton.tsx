@@ -49,7 +49,7 @@ export function LoginButton({ children, ...props }: LoginButtonProps) {
   );
 
   return (
-    <Button {...props} {...businessProps}>
+    <Button {...businessProps} {...props}>
       {(buttonProps) =>
         childrenRender(
           children,

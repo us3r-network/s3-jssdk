@@ -76,7 +76,7 @@ function UserTagAddFormRoot({
     submitAdd,
   };
   return (
-    <form {...props} {...businessProps}>
+    <form {...businessProps} {...props}>
       <UserTagAddFormContext.Provider value={contextValue}>
         {childrenRender(
           children,

@@ -35,7 +35,7 @@ export function UserTagsDefaultChildren() {
         )}
       </Heading>
       <UserTags.List>
-        {(item) => <Item key={item.tag}>{item.tag}</Item>}
+        {(item) => <UserTags.Item value={item} key={item.tag} />}
       </UserTags.List>
       {isLoginUser && (
         <Modal isOpen={isOpenEdit} onOpenChange={setIsOpenEdit}>

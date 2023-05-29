@@ -1,4 +1,9 @@
-import { ListBox, ListBoxProps } from "react-aria-components";
+import {
+  Item as AriaItem,
+  ItemProps,
+  ListBox,
+  ListBoxProps,
+} from "react-aria-components";
 import { HTMLAttributes } from "react";
 import { useUserTagsState } from "./UserTagsContext";
 
@@ -22,5 +27,22 @@ export function List(props: ListBoxProps<{ tag: string }>) {
       items={items}
       {...props}
     />
+  );
+}
+
+export function Item({
+  children,
+  value,
+  ...props
+}: ItemProps<{ tag: string }>) {
+  return (
+    <AriaItem
+      data-state-element="Item"
+      key={value?.tag}
+      textValue={value?.tag}
+      {...props}
+    >
+      {value?.tag}
+    </AriaItem>
   );
 }

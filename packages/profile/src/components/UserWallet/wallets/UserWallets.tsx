@@ -18,7 +18,7 @@ export interface UserWalletsIncomingProps {
 
 export interface UserWalletsProps
   extends ChildrenRenderProps<
-      HTMLAttributes<HTMLFormElement>,
+      HTMLAttributes<HTMLDivElement>,
       UserWalletsContextValue
     >,
     UserWalletsIncomingProps {}
@@ -108,11 +108,11 @@ function UserWalletsRoot({
     deleteWallet,
   };
   return (
-    <form {...props} {...businessProps}>
+    <div {...businessProps} {...props}>
       <UserWalletsContext.Provider value={contextValue}>
         {childrenRender(children, contextValue, <UserWalletsDefaultChildren />)}
       </UserWalletsContext.Provider>
-    </form>
+    </div>
   );
 }
 

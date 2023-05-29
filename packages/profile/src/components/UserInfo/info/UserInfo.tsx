@@ -68,7 +68,7 @@ function UserInfoRoot<T>({
   };
 
   return (
-    <div {...props} {...businessProps}>
+    <div {...businessProps} {...props}>
       <UserInfoContext.Provider value={contextValue}>
         {childrenRender(children, contextValue, <UserInfoDefaultChildren />)}
       </UserInfoContext.Provider>

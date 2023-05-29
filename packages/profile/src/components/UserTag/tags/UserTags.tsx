@@ -12,7 +12,7 @@ export interface UserTagsIncomingProps {
 
 export interface UserTagsProps
   extends ChildrenRenderProps<
-      HTMLAttributes<HTMLFormElement>,
+      HTMLAttributes<HTMLDivElement>,
       UserTagsContextValue
     >,
     UserTagsIncomingProps {}
@@ -60,11 +60,11 @@ function UserTagsRoot({ children, ...props }: UserTagsProps) {
     tags,
   };
   return (
-    <form {...props} {...businessProps}>
+    <div {...businessProps} {...props}>
       <UserTagsContext.Provider value={contextValue}>
         {childrenRender(children, contextValue, <UserTagsDefaultChildren />)}
       </UserTagsContext.Provider>
-    </form>
+    </div>
   );
 }
 

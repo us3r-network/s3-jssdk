@@ -75,7 +75,7 @@ export function UserAvatar({ children, ...props }: UserAvatarProps) {
   );
 
   return (
-    <span {...props} {...businessProps}>
+    <span {...businessProps} {...props}>
       {childrenRender(children, businessRenderProps, defaultChildren)}
     </span>
   );
