@@ -1,14 +1,10 @@
-/**
- * @jest-environment s3network
- */
-
 import { Composite } from "@composedb/devtools";
 
 import { S3LinkModel } from "../src";
 
-import { linkSchema } from "./linkSchema";
-import { genLinkOpsSchema } from "./linkOpsSchema";
-import { genRelationSchema } from "./linkRelationSchema";
+import { linkSchema } from "./schema/linkSchema";
+import { genLinkOpsSchema } from "./schema/linkOpsSchema";
+import { genRelationSchema } from "./schema/linkRelationSchema";
 
 describe("client", () => {
   let linkComposite: Composite;
@@ -155,7 +151,6 @@ describe("client", () => {
     const updateResp = await s3Link.updateFavor(favorId, {
       revoke: true,
     });
-    console.log(updateResp.errors);
     expect(updateResp.errors).not.toBeDefined();
   });
 

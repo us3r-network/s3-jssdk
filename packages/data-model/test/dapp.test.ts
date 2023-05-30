@@ -1,12 +1,7 @@
-/**
- * @jest-environment s3network
- */
-
 import { Composite } from "@composedb/devtools";
 
-import { S3DappModel } from "../src/data-model";
-
-import { dappSchema } from "./dappSchema";
+import { S3DappModel } from "../src";
+import { dappSchema } from "./schema/dappSchema";
 
 describe("client", () => {
   let dappComposite: Composite;
@@ -24,7 +19,7 @@ describe("client", () => {
 
     const linkCompositeRT = dappComposite.toRuntime();
 
-    s3Dapp = new S3DappModel(ceramic, linkCompositeRT);
+    s3Dapp = new S3DappModel(ceramic, "testnet", linkCompositeRT);
   });
 
   // create dapp

@@ -1,16 +1,18 @@
 import { RuntimeCompositeDefinition } from "@composedb/types";
 import type { CeramicApi } from "@ceramicnetwork/common";
-import { S3Model } from "@us3r-network/data-model";
+
 import { Page } from "@ceramicnetwork/common";
 
-import { definition as collectionDefinition } from "./collection-runtime-composite";
-export type Creator = {
-  id: string;
-};
+import { S3Model } from "../base";
+import type { Creator } from "../base";
+
+import { definition as collectionDefinitionMainnet } from "./collection-runtime-composite-mainnet";
+import { definition as collectionDefinitionTestnet } from "./collection-runtime-composite-testnet";
 
 export type DateTime = string;
 
 export type Collection = {
+  id?: string;
   creator?: Creator;
   modelID: string;
   notes?: string;
@@ -22,11 +24,15 @@ export type Collection = {
 export class S3ModelCollectionModel extends S3Model {
   constructor(
     ceramic: CeramicApi | string,
+    network?: "mainnet" | "testnet",
     definition?: RuntimeCompositeDefinition
   ) {
     super(
       ceramic,
-      definition ?? (collectionDefinition as RuntimeCompositeDefinition)
+      definition ??
+        (network === "mainnet"
+          ? (collectionDefinitionMainnet as RuntimeCompositeDefinition)
+          : (collectionDefinitionTestnet as RuntimeCompositeDefinition))
     );
   }
 

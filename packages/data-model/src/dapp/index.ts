@@ -1,11 +1,11 @@
 import { RuntimeCompositeDefinition } from "@composedb/types";
 import type { CeramicApi } from "@ceramicnetwork/common";
-// import type { StreamID } from "@ceramicnetwork/streamid";
 import { Page } from "@ceramicnetwork/common";
 
-import { S3Model } from "@us3r-network/data-model";
+import { S3Model } from "../base";
 
-import { definition as dappDefinition } from "./dapp-runtime-composite";
+import { definition as dappDefinitionMainnet } from "./dapp-runtime-composite-mainnet";
+import { definition as dappDefinitionTestnet } from "./dapp-runtime-composite-testnet";
 
 export type SocialLink = {
   platform: string;
@@ -26,11 +26,15 @@ export type Dapp = {
 export class S3DappModel extends S3Model {
   constructor(
     ceramic: CeramicApi | string,
+    network?: "mainnet" | "testnet",
     definition?: RuntimeCompositeDefinition
   ) {
     super(
       ceramic,
-      definition ?? (dappDefinition as RuntimeCompositeDefinition)
+      definition ??
+        (network === "mainnet"
+          ? (dappDefinitionMainnet as RuntimeCompositeDefinition)
+          : (dappDefinitionTestnet as RuntimeCompositeDefinition))
     );
   }
 
