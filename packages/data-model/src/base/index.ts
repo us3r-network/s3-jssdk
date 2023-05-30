@@ -32,6 +32,6 @@ export class S3Model {
   }
 }
 
-export const modelName = "base";
-
-export class S3ExModel {}
+export type Creator = {
+  id: string;
+};

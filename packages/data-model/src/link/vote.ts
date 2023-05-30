@@ -1,4 +1,5 @@
-import { DateTime, Link, Creator } from ".";
+import { DateTime, Link } from ".";
+import { Creator } from "../base";
 
 export type VoteType = "UP_VOTE" | "DOWN_VOTE";
 

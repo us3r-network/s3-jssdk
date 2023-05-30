@@ -1,22 +1,7 @@
-/**
- * @jest-environment s3network
- */
-
 import { Composite } from "@composedb/devtools";
 
 import { S3ModelCollectionModel } from "../src";
-
-const collectionSchema = `
-  type ModelCollection @createModel(accountRelation: LIST, description: "model collection of someone in us3r.network") {
-    creator: DID! @documentAccount
-    version: CommitID! @documentVersion
-    modelID: StreamID!
-    notes: String @string(maxLength: 1000)
-    revoke: Boolean
-    createAt: DateTime
-    modifiedAt: DateTime
-  }
-`;
+import { collectionSchema } from "./schema/collectionSchema";
 
 describe("client", () => {
   let composite: Composite;
@@ -28,6 +13,7 @@ describe("client", () => {
     });
     s3ModelCollection = new S3ModelCollectionModel(
       ceramic,
+      "testnet",
       composite.toRuntime()
     );
   });

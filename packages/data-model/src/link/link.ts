@@ -8,10 +8,7 @@ import { Favor, FavorInput } from "./favor";
 import { Score, ScoreInput } from "./score";
 import { Comment, CommentInput } from "./comment";
 import { S3Model } from "../base";
-
-export type Creator = {
-  id: string;
-};
+import type { Creator } from "../base";
 
 export type DateTime = string;
 

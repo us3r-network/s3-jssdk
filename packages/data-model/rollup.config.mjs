@@ -20,6 +20,7 @@ export default [
       },
     ],
     plugins: [commonjs(), typescript({ tsconfig: "./tsconfig.json" })],
+    external: ["@composedb/client", "dids"],
   },
   {
     input: "src/index.ts",
