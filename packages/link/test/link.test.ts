@@ -4,7 +4,7 @@
 
 import { Composite } from "@composedb/devtools";
 
-import { S3LinkModel } from "../src/data-model";
+import { S3LinkModel } from "../src";
 
 import { linkSchema } from "./linkSchema";
 import { genLinkOpsSchema } from "./linkOpsSchema";
