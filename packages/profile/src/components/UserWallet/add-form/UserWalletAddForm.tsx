@@ -13,7 +13,7 @@ import {
   UserWalletAddFormContextValue,
 } from "./UserWalletAddFormContext";
 import { UserWalletAddFormDefaultChildren } from "./UserWalletAddFormDefaultChildren";
-import { WalletChainType } from "../../../data-model";
+import { WalletChainType } from "@us3r-network/data-model";
 
 export interface UserWalletAddFormIncomingProps {
   onSuccessfullySubmit?: () => void;

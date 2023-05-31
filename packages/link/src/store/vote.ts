@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
 import { LinkSlice } from "./link";
-import { Vote } from "../data-model";
+import { Vote } from "@us3r-network/data-model";
 import { linkDataFieldFilling } from "../utils/store";
 
 export interface VoteSlice {

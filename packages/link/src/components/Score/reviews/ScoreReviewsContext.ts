@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { Score } from "../../../data-model";
+import { Score } from "@us3r-network/data-model";
 
 export interface ScoreReviewsContextValue {
   linkId: string;

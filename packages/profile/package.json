@@ -1,7 +1,7 @@
 {
   "name": "@us3r-network/profile",
-  "version": "0.4.11",
-  "description": "the us3r data model",
+  "version": "0.5.0",
+  "description": "the us3r profile components",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
@@ -19,12 +19,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@composedb/devtools": "^0.4.3",
-    "@composedb/types": "^0.4.3",
     "@material-design-icons/svg": "^0.14.7",
     "@multiavatar/multiavatar": "^1.0.7",
-    "@us3r-network/data-model": "^0.1.0",
-    "did-session": "^2.0.0",
+    "@us3r-network/data-model": "^0.2.0",
     "lodash.isfunction": "^3.0.9",
     "react-aria": "^3.24.0",
     "react-aria-components": "^1.0.0-alpha.3",

@@ -14,7 +14,7 @@ import {
   useScoreReviewsState,
 } from "./ScoreReviewsContext";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
-import { Score } from "../../../data-model";
+import { Score } from "@us3r-network/data-model";
 import {
   UserAvatar,
   UserAvatarProps,

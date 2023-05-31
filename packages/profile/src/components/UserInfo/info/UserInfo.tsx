@@ -2,7 +2,7 @@ import { HTMLAttributes, useEffect, useState } from "react";
 import { useProfileState } from "../../../ProfileStateProvider";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
-import { Profile } from "../../../data-model";
+import { Profile } from "@us3r-network/data-model";
 import * as UserInfoElements from "./UserInfoElements";
 import { UserInfoContext, UserInfoContextValue } from "./UserInfoContext";
 import { UserInfoDefaultChildren } from "./UserInfoDefaultChildren";

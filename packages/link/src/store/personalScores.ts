@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
 import { LinkSlice } from "./link";
-import { Score } from "../data-model";
+import { Score } from "@us3r-network/data-model";
 
 export interface PersonalScoresSlice {
   personalScores: Map<string, Score>;

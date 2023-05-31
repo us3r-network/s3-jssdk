@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
 import { LinkSlice } from "./link";
-import { Favor } from "../data-model";
+import { Favor } from "@us3r-network/data-model";
 
 export interface PersonalFavorsSlice {
   personalFavors: Map<string, Favor>;

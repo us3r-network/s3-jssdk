@@ -1,7 +1,7 @@
 import { StateCreator } from "zustand";
 import { LinkSlice } from "./link";
 import { linkDataFieldFilling } from "../utils/store";
-import { Favor } from "../data-model";
+import { Favor } from "@us3r-network/data-model";
 
 export interface FavorSlice {
   favoringLinkIds: Set<string>;

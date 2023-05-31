@@ -11,7 +11,7 @@ import {
   useCommentsState,
 } from "./CommentsContext";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
-import { Comment } from "../../../data-model";
+import { Comment } from "@us3r-network/data-model";
 import {
   UserAvatar,
   UserAvatarProps,

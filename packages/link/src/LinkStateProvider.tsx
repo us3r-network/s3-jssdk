@@ -7,7 +7,7 @@ import {
   PropsWithChildren,
 } from "react";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
-import { S3LinkModel } from "./data-model";
+import { S3LinkModel } from "@us3r-network/data-model";
 
 let s3LinkModel: S3LinkModel | null = null;
 export const getS3LinkModel = () => s3LinkModel;
