@@ -1,41 +1,5 @@
 import type { StorybookConfig } from "@storybook/react-webpack5";
-
-// Which package directories need to generate storybook
-const packageDirs = ["profile", "link"];
-
-const stories = packageDirs
-  .map((dir) => {
-    const story = {
-      // The group name of the current story
-      titlePrefix: `s3 ${dir}`,
-      // The root directory of the package where the current story is located
-      directory: `../packages/${dir}`,
-      // Files that need to generate stories
-      files: `src/**/*.{stories.@(js|jsx|ts|tsx),mdx}`,
-    };
-    /**
-     * Generate the story navigation bar in the specified order
-     * order : Introduction, Components, Examples, ...
-     */
-    return [
-      // Introduction
-      {
-        ...story,
-        files: `stories/**/Introduction.mdx`,
-      },
-      // Components
-      {
-        ...story,
-        files: `src/**/*.{stories.@(js|jsx|ts|tsx),mdx}`,
-      },
-      // Examples
-      {
-        ...story,
-        files: `stories/**/*.{stories.@(js|jsx|ts|tsx),mdx}`,
-      },
-    ];
-  })
-  .reduce((acc, val) => acc.concat(val), []);
+import stories from "./stories";
 
 const webpackAlias = [
   {
