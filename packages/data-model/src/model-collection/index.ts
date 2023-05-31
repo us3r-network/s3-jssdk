@@ -99,6 +99,7 @@ export class S3ModelCollectionModel extends S3Model {
           modelCollectionList(first: ${first}, after: "${after}") {
             edges {
               node {
+                id
                 notes
                 revoke
                 modelID
