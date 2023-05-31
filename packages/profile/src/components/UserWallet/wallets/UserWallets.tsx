@@ -7,7 +7,7 @@ import {
   UserWalletsContextValue,
 } from "./UserWalletsContext";
 import { UserWalletsDefaultChildren } from "./UserWalletsDefaultChildren";
-import { Wallet } from "../../../data-model";
+import { Wallet } from "@us3r-network/data-model";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 
 export interface UserWalletsIncomingProps {

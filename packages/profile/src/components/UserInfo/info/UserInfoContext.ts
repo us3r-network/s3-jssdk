@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { Profile } from "../../../data-model";
+import { Profile } from "@us3r-network/data-model";
 import type { AvatarUploadOpts } from "../edit-form";
 
 export interface UserInfoContextValue<T> {

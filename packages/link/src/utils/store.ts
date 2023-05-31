@@ -1,4 +1,4 @@
-import { Link } from "../data-model";
+import { Link } from "@us3r-network/data-model";
 
 type MakeFieldsRequired<T, K extends keyof T> = Omit<T, K> &
   Required<Pick<T, K>>;

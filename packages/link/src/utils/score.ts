@@ -1,5 +1,5 @@
 import { SCORE_VALUE_MAX, SCORE_VALUE_MIN } from "../constants";
-import { Link, Score } from "../data-model";
+import { Link, Score } from "@us3r-network/data-model";
 
 export const getScoresFromLink = (link: Link): Score[] => {
   return (

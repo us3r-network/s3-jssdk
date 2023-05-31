@@ -1,5 +1,5 @@
 import { StateCreator } from "zustand";
-import { Link } from "../data-model";
+import { Link } from "@us3r-network/data-model";
 
 export interface LinkSlice {
   cacheLinks: Map<string, Link>;

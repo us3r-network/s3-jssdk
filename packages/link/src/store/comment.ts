@@ -1,7 +1,7 @@
 import { StateCreator } from "zustand";
 import { LinkSlice } from "./link";
 import { linkDataFieldFilling } from "../utils/store";
-import { Comment } from "../data-model";
+import { Comment } from "@us3r-network/data-model";
 
 export interface CommentSlice {
   commentingLinkIds: Set<string>;

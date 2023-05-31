@@ -10,7 +10,7 @@ import {
   useUserWalletsItemState,
   useUserWalletsState,
 } from "./UserWalletsContext";
-import { Wallet } from "../../../data-model";
+import { Wallet } from "@us3r-network/data-model";
 import { childrenRender } from "../../../utils/props";
 import { shortPubKey } from "../../../utils/short";
 

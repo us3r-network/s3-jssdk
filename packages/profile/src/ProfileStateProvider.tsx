@@ -9,7 +9,7 @@ import {
   PropsWithChildren,
 } from "react";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
-import { S3ProfileModel, Profile } from "./data-model";
+import { S3ProfileModel, Profile } from "@us3r-network/data-model";
 
 let s3ProfileModel: S3ProfileModel | null = null;
 export const getS3ProfileModel = () => s3ProfileModel;

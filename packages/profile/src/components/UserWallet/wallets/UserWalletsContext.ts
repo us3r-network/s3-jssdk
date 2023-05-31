@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { Wallet } from "../../../data-model";
+import { Wallet } from "@us3r-network/data-model";
 
 export interface UserWalletsContextValue {
   did: string;

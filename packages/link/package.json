@@ -1,7 +1,7 @@
 {
   "name": "@us3r-network/link",
-  "version": "0.1.15",
-  "description": "the us3r data model",
+  "version": "0.2.0",
+  "description": "the us3r link components",
   "type": "module",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -19,12 +19,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@composedb/devtools": "^0.4.3",
-    "@composedb/types": "^0.4.3",
     "@material-design-icons/svg": "^0.14.7",
-    "@us3r-network/data-model": "^0.1.0",
+    "@us3r-network/data-model": "^0.2.0",
     "dayjs": "^2.0.0-alpha.4",
-    "did-session": "^2.0.0",
     "react-aria": "^3.24.0",
     "react-aria-components": "^1.0.0-alpha.3",
     "zustand": "^4.3.7"
