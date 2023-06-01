@@ -45,7 +45,7 @@ export const usePersonalScores = (opts?: {
         }
         const scores =
           res.data?.viewer?.scoreList?.edges
-            ?.filter((edge) => !!edge?.node)
+            ?.filter((edge) => !!edge?.node && !edge.node?.revoke)
             ?.map((edge) => edge?.node) || [];
         setAllInPersonalScores(scores);
       } catch (error) {

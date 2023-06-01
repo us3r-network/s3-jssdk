@@ -26,8 +26,8 @@ export const useScores = (
   );
 
   const scoresCount = useMemo(
-    () => link?.scoresCount || 0,
-    [link?.scoresCount]
+    () => link?.scoresCount || scores.length,
+    [link?.scoresCount, scores]
   );
 
   return { isFetching, scores, scoresCount };

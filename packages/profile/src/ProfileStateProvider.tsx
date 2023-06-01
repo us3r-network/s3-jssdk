@@ -10,6 +10,7 @@ import {
 } from "react";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { S3ProfileModel, Profile } from "@us3r-network/data-model";
+import { shortDid } from "./utils/short";
 
 let s3ProfileModel: S3ProfileModel | null = null;
 export const getS3ProfileModel = () => s3ProfileModel;
@@ -116,9 +117,9 @@ export default function ProfileStateProvider({
       const newProfile = { ...profile, ...data };
 
       const res = await s3ProfileModel.mutationPersonalProfile({
-        name: newProfile.name || "",
+        name: newProfile.name || shortDid(session.id),
         avatar: newProfile.avatar || "",
-        bio: newProfile.bio || "",
+        bio: newProfile.bio || "bio",
         tags: [...(newProfile.tags || [])],
         wallets: [...(newProfile.wallets || [])],
       });

@@ -45,7 +45,7 @@ export const usePersonalFavors = (opts?: {
         }
         const favors =
           res.data?.viewer?.favorList?.edges
-            ?.filter((edge) => !!edge?.node)
+            ?.filter((edge) => !!edge?.node && !edge.node?.revoke)
             .map((edge) => edge?.node) || [];
         setAllInPersonalFavors(favors);
       } catch (error) {
