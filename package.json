@@ -49,6 +49,7 @@
     "url-loader": "^4.1.1"
   },
   "dependencies": {
-    "@svgr/webpack": "^7.0.0"
+    "@svgr/webpack": "^7.0.0",
+    "json-stringify-pretty-compact": "^4.0.0"
   }
 }
