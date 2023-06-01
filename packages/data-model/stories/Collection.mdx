@@ -1,1 +1,22 @@
+import { Meta, Source } from "@storybook/blocks";
+import stringify from "json-stringify-pretty-compact";
+import MainnetDefinition from "!!raw-loader!../src/model-collection/collection-runtime-composite-mainnet.js";
+import TestnetDefinition from "!!raw-loader!../src/model-collection/collection-runtime-composite-testnet.js";
+
+<Meta title="Collection" />
+
 # Collection Model
+
+## Mainnet
+
+<Source
+  code={stringify(JSON.parse(MainnetDefinition.split("=").pop()))}
+  language="javascript"
+/>
+
+## Testnet
+
+<Source
+  code={stringify(JSON.parse(TestnetDefinition.split("=").pop()))}
+  language="javascript"
+/>
