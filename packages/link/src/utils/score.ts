@@ -3,8 +3,9 @@ import { Link, Score } from "@us3r-network/data-model";
 
 export const getScoresFromLink = (link: Link): Score[] => {
   return (
-    link?.scores?.edges?.filter((edge) => !!edge?.node)?.map((e) => e.node) ||
-    []
+    link?.scores?.edges
+      ?.filter((edge) => !!edge?.node && !edge.node?.revoke)
+      ?.map((e) => e.node) || []
   );
 };
 

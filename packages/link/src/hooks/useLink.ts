@@ -33,6 +33,7 @@ export const useLink = (linkId: string) => {
 
   useEffect(() => {
     (async () => {
+      if (!linkId) return;
       if (isBlockFetch) return;
       if (isFetching) return;
       if (!s3LinkModalInitialed || !s3LinkModel) return;

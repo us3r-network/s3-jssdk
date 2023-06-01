@@ -15,7 +15,7 @@ export const useComments = (
       (isFetching
         ? []
         : link?.comments?.edges
-            ?.filter((edge) => !!edge?.node)
+            ?.filter((edge) => !!edge?.node && !edge.node?.revoke)
             ?.map((e) => e.node) || []
       ).sort((a, b) => {
         const aTime = new Date(a.createAt).getTime();
@@ -30,8 +30,8 @@ export const useComments = (
   );
 
   const commentsCount = useMemo(
-    () => link?.commentsCount || 0,
-    [link?.commentsCount]
+    () => link?.commentsCount || comments.length,
+    [link?.commentsCount, comments]
   );
 
   return { isFetching, comments, commentsCount };
