@@ -1,13 +1,85 @@
-import { Button, ButtonProps, Input, InputProps } from "react-aria-components";
+import {
+  Button,
+  ButtonProps,
+  Input,
+  InputProps,
+  Label,
+  TextField,
+  TextFieldProps,
+} from "react-aria-components";
 import { useUserInfoEditFormState } from "./UserInfoEditFormContext";
-import { HTMLAttributes } from "react";
+import { HTMLAttributes, useMemo } from "react";
 import { TextArea, TextAreaProps } from "../../common/TextArea";
+import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
+import LoadingSpokes from "../../common/Loading/LoadingSpokes";
 
-export function AvatarPreview(props: HTMLAttributes<HTMLImageElement>) {
+type AvatarFieldRenderProps = {
+  isLoading: boolean;
+  isUploadingAvatar: boolean;
+  avatar: string;
+};
+
+export function AvatarField({
+  children,
+  ...props
+}: ChildrenRenderProps<TextFieldProps, AvatarFieldRenderProps>) {
+  const { isLoading, isUpdating, isUploadingAvatar, avatar } =
+    useUserInfoEditFormState();
+  const isDisabled = useMemo(
+    () => isLoading || isUpdating || isUploadingAvatar,
+    [isLoading, isUpdating, isUploadingAvatar]
+  );
+  const fieldProps = {
+    name: "avatar",
+    type: "url",
+    isDisabled: isDisabled,
+  };
+  const renderProps = {
+    isLoading,
+    isUploadingAvatar,
+    avatar,
+  };
+  const defaultChildren = useMemo(
+    () => <AvatarFieldDefaultChildren {...renderProps} />,
+    [renderProps]
+  );
+  return (
+    <TextField
+      data-state-element="AvatarField"
+      aria-label="avatar"
+      {...fieldProps}
+      {...props}
+    >
+      {childrenRender(
+        children,
+        { ...fieldProps, ...renderProps },
+        defaultChildren
+      )}
+    </TextField>
+  );
+}
+
+function AvatarFieldDefaultChildren({
+  isLoading,
+  isUploadingAvatar,
+}: AvatarFieldRenderProps) {
+  return isLoading || isUploadingAvatar ? (
+    <LoadingSpokes color="#666" width={32} />
+  ) : (
+    <>
+      <Label>
+        <AvatarPreviewImg />
+      </Label>
+      <AvatarUploadInput />
+    </>
+  );
+}
+
+export function AvatarPreviewImg(props: HTMLAttributes<HTMLImageElement>) {
   const { avatar } = useUserInfoEditFormState();
   return (
     <img
-      data-state-element="AvatarPreview"
+      data-state-element="AvatarPreviewImg"
       src={avatar}
       width={32}
       height={32}
@@ -17,7 +89,7 @@ export function AvatarPreview(props: HTMLAttributes<HTMLImageElement>) {
 }
 
 export function AvatarUploadInput(props: InputProps) {
-  const { setAvatar, isDisabled, avatarUploadOpts } =
+  const { setAvatar, isDisabled, avatarUploadOpts, setIsUploadingAvatar } =
     useUserInfoEditFormState();
   if (!avatarUploadOpts) {
     throw new Error("avatarUploadOpts is required");
@@ -34,12 +106,15 @@ export function AvatarUploadInput(props: InputProps) {
         const file = target.files && target.files[0];
         if (!file) return;
         try {
+          setIsUploadingAvatar(true);
           const resp = await upload(file);
           if (!validate(resp)) return;
           const url = await getUrl(resp);
           setAvatar(url);
         } catch (error) {
           console.error(error);
+        } finally {
+          setIsUploadingAvatar(false);
         }
       }}
       {...props}

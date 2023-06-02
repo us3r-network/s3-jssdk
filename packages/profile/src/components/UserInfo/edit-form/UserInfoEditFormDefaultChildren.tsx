@@ -4,12 +4,7 @@ import * as UserInfoEditForm from "./UserInfoEditFormElements";
 export function UserInfoEditFormDefaultChildren() {
   return (
     <>
-      <UserInfoEditForm.AvatarPreview />
-
-      <TextField autoFocus>
-        <Label>Select Image</Label>
-        <UserInfoEditForm.AvatarUploadInput />
-      </TextField>
+      <UserInfoEditForm.AvatarField />
 
       <TextField>
         <Label>Name</Label>

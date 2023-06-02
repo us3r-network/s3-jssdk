@@ -4,10 +4,13 @@ import type { AvatarUploadOpts } from "./UserInfoEditForm";
 export interface UserInfoEditFormContextValue<T> {
   avatar: string;
   setAvatar: (avatar: string) => void;
+  isUploadingAvatar: boolean;
+  setIsUploadingAvatar: (isUploadingAvatar: boolean) => void;
   name: string;
   setName: (name: string) => void;
   bio: string;
   setBio: (bio: string) => void;
+  isLoading: boolean;
   isUpdating: boolean;
   errMsg: string;
   isDisabled: boolean;

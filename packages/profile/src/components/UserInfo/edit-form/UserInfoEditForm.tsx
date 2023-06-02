@@ -13,6 +13,8 @@ import {
   UserInfoEditFormContextValue,
 } from "./UserInfoEditFormContext";
 import { UserInfoEditFormDefaultChildren } from "./UserInfoEditFormDefaultChildren";
+import { getDefaultUserAvatarWithDid } from "../../../utils/avatar";
+import { useSession } from "@us3r-network/auth-with-rainbowkit";
 
 export interface AvatarUploadOpts<T> {
   upload: (file: File) => Promise<T>;
@@ -37,9 +39,11 @@ function UserInfoEditFormRoot<T>({
   onSuccessfullySubmit,
   ...props
 }: UserInfoEditFormProps<T>) {
+  const session = useSession();
   const { profile, profileLoading, updateProfile } = useProfileState();
 
   const [avatar, setAvatar] = useState("");
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
 
@@ -52,10 +56,15 @@ function UserInfoEditFormRoot<T>({
   );
 
   useEffect(() => {
-    setAvatar(profile?.avatar || "");
     setName(profile?.name || "");
     setBio(profile?.bio || "");
-  }, [profile?.avatar, profile?.name, profile?.bio]);
+  }, [profile?.name, profile?.bio]);
+
+  useEffect(() => {
+    if (!isUpdating) {
+      setAvatar(profile?.avatar || getDefaultUserAvatarWithDid(session?.id));
+    }
+  }, [session, profile?.avatar, isUpdating]);
 
   useEffect(() => {
     setErrMsg("");
@@ -80,16 +89,21 @@ function UserInfoEditFormRoot<T>({
 
   const businessProps = {
     "data-us3r-component": "UserInfoEditForm",
+    "data-loading": profileLoading || undefined,
     "data-updating": isUpdating || undefined,
     "data-disabled": isDisabled || undefined,
+    "data-avatar-uploading": isUploadingAvatar || undefined,
   };
   const contextValue = {
     avatar,
     setAvatar,
+    isUploadingAvatar,
+    setIsUploadingAvatar,
     name,
     setName,
     bio,
     setBio,
+    isLoading: profileLoading,
     isUpdating,
     errMsg,
     isDisabled,
