@@ -51,17 +51,7 @@ export function UserInfoDefaultChildren() {
                 {({ isDisabled }) => {
                   return (
                     <>
-                      <UserInfoEditForm.AvatarPreview />
-
-                      <TextField autoFocus>
-                        <Label>Select Image</Label>
-                        <UserInfoEditForm.AvatarUploadInput />
-                      </TextField>
-
-                      <TextField>
-                        <Label>Name</Label>
-                        <UserInfoEditForm.NameInput />
-                      </TextField>
+                      <UserInfoEditForm.AvatarField />
 
                       <TextField>
                         <Label htmlFor="bio-textarea">Bio</Label>
