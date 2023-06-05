@@ -1,9 +1,11 @@
 import "@rainbow-me/rainbowkit/styles.css";
 import {
   connectorsForWallets,
+  createAuthenticationAdapter,
   darkTheme,
   getDefaultWallets,
   lightTheme,
+  RainbowKitAuthenticationProvider,
   RainbowKitProvider,
   useConnectModal,
 } from "@rainbow-me/rainbowkit";
@@ -103,7 +105,12 @@ const Us3rAuthWithRainbowkitContext = createContext(
   defaultAuthenticationContext
 );
 
-function Us3rAuthWrap({ children }: PropsWithChildren) {
+function Us3rAuthWrap({
+  children,
+  setRainbowAuthenticationStatus,
+}: PropsWithChildren & {
+  setRainbowAuthenticationStatus: (status: AuthenticationStatus) => void;
+}) {
   const { openConnectModal } = useConnectModal();
   const { disconnect } = useDisconnect();
   const [session, setSession] = useState<Session>();
@@ -116,14 +123,14 @@ function Us3rAuthWrap({ children }: PropsWithChildren) {
       }
       await us3rAuthInstance.init();
       setSession(us3rAuthInstance.session);
-      setStatus(
-        us3rAuthInstance.session?.isAuthorized()
-          ? "authenticated"
-          : "unauthenticated"
-      );
+      const authStatus = us3rAuthInstance.session?.isAuthorized()
+        ? "authenticated"
+        : "unauthenticated";
+      setStatus(authStatus);
+      setRainbowAuthenticationStatus(authStatus);
       setReady(true);
     })();
-  }, []);
+  }, [setRainbowAuthenticationStatus]);
 
   useAccount({
     async onConnect({ connector, isReconnected }) {
@@ -131,14 +138,17 @@ function Us3rAuthWrap({ children }: PropsWithChildren) {
         return;
       }
       setStatus("loading");
+      setRainbowAuthenticationStatus("unauthenticated");
       try {
         const provider = await connector?.getProvider();
         await us3rAuthInstance.auth("ethereum", {
           provider,
         });
         setStatus("authenticated");
+        setRainbowAuthenticationStatus("authenticated");
       } catch (error) {
         setStatus("unauthenticated");
+        setRainbowAuthenticationStatus("unauthenticated");
         disconnect();
       } finally {
         setSession(us3rAuthInstance.session);
@@ -156,8 +166,9 @@ function Us3rAuthWrap({ children }: PropsWithChildren) {
     }
     setSession(undefined);
     setStatus("unauthenticated");
+    setRainbowAuthenticationStatus("unauthenticated");
     disconnect();
-  }, [disconnect]);
+  }, [disconnect, setRainbowAuthenticationStatus]);
 
   return (
     <Us3rAuthWithRainbowkitContext.Provider
@@ -177,6 +188,31 @@ function Us3rAuthWrap({ children }: PropsWithChildren) {
   );
 }
 
+/**
+ * We want to display RainbowKit's UI as much as possible during the Us3rAuth authorization process.
+ * Therefore, we need to use RainbowKitAuthenticationProvider.
+ * Actually, we don't need the logic of authenticationAdapter because Us3rAuth has its own authorization process.
+ * However, authenticationAdapter is a required item, but fortunately,
+ * we found that we can skip the logic of authenticationAdapter when getNonce returns an empty string.
+ * And the authorization modal prompt will only pop up when RainbowKit's AuthenticationStatus is unauthenticated.
+ * Therefore, in authenticationAdapter, we need to return an empty string for getNonce and any value for other options.
+ * And during the Us3rAuth authorization process, set AuthenticationStatus to unauthenticated.
+ */
+const authenticationAdapter = createAuthenticationAdapter({
+  getNonce: async () => {
+    return "";
+  },
+  createMessage: () => {
+    return "";
+  },
+  getMessageBody: () => {
+    return "";
+  },
+  verify: async () => {
+    return true;
+  },
+  signOut: async () => {},
+});
 const defaultDarkTheme = darkTheme();
 const defaultLightTheme = lightTheme();
 type ThemeMode = "light" | "dark";
@@ -200,15 +236,27 @@ export default function Us3rAuthWithRainbowkitProvider({
   const rainbowkitTheme = useMemo(() => {
     return mode === "dark" ? darkVars : lightVars;
   }, [mode, darkVars, lightVars]);
+
+  const [rainbowAuthenticationStatus, setRainbowAuthenticationStatus] =
+    useState<AuthenticationStatus>("unauthenticated");
   return (
     <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider
-        chains={chains}
-        appInfo={{ appName }}
-        theme={rainbowkitTheme}
+      <RainbowKitAuthenticationProvider
+        adapter={authenticationAdapter}
+        status={rainbowAuthenticationStatus}
       >
-        <Us3rAuthWrap>{children}</Us3rAuthWrap>
-      </RainbowKitProvider>
+        <RainbowKitProvider
+          chains={chains}
+          appInfo={{ appName }}
+          theme={rainbowkitTheme}
+        >
+          <Us3rAuthWrap
+            setRainbowAuthenticationStatus={setRainbowAuthenticationStatus}
+          >
+            {children}
+          </Us3rAuthWrap>
+        </RainbowKitProvider>
+      </RainbowKitAuthenticationProvider>
     </WagmiConfig>
   );
 }
