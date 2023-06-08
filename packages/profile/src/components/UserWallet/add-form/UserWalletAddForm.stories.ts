@@ -1,13 +1,23 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { UserWalletAddForm as UserWalletAddFormComponent } from "./UserWalletAddForm";
+import UserWalletAddFormUiComponent from "../../../ui/UserWallet/add-form/UserWalletAddForm";
+import UserWalletAddFormUiCode from "!!raw-loader!../../../ui/UserWallet/add-form/UserWalletAddForm";
+
 const meta = {
   title: "Components/UserWalletAddForm",
-  component: UserWalletAddFormComponent,
-  tags: ["autodocs"],
-} satisfies Meta<typeof UserWalletAddFormComponent>;
+  component: UserWalletAddFormUiComponent,
+} satisfies Meta<typeof UserWalletAddFormUiComponent>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
-export const UserWalletAddForm: Story = {};
+export const UserWalletAddForm: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: UserWalletAddFormUiCode,
+        language: "tsx",
+      },
+    },
+  },
+};

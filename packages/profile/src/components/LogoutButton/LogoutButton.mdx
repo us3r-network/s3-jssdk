@@ -1,28 +1,17 @@
-import { Canvas, Meta, Story, ArgTypes } from "@storybook/blocks";
+import { Canvas, Meta, Controls } from "@storybook/blocks";
 
 import * as LogoutButtonStories from "./LogoutButton.stories";
-import * as LogoutButtonExampleStories from "../../../stories/LogoutButton/LogoutButtonExample.stories";
 
 <Meta of={LogoutButtonStories} />
 
 # LogoutButton
 
-The logout button allows users to perform logout actions through mouse, touch, and keyboard interactions.
+LogoutButton 组件内部调用 [@us3r-network/auth-with-rainbowkit](?path=/docs/auth-auth-with-rainbowkit--docs) 中断 Ceramic 会话的程序。
 
-<Canvas of={LogoutButtonStories.LogoutButton} />
+```jsx
+import { LogoutButton } from "@us3r-network/profile";
+```
 
-<ArgTypes />
+<Canvas />
 
-# Example
-
-## Import Css
-
-...
-
-## Css Moudle
-
-...
-
-## Styled
-
-<Canvas of={LogoutButtonExampleStories.LogoutButtonExample} />
+## Render Props

@@ -1,23 +1,23 @@
-import { LoginButton, LoginButtonProps } from "@us3r-network/profile";
-import { UserAvatarExample } from "../UserAvatar/UserAvatarExample";
-import { UserNameExample } from "../UserName/UserNameExample";
+import {
+  LoginButton as LoginButtonRoot,
+  LoginButtonProps,
+} from "@us3r-network/profile";
+import { UserAvatar, UserName } from "@us3r-network/profile/ui";
 import "./LoginButton.css";
 
-export interface LoginButtonExampleProps extends LoginButtonProps {}
-
-export function LoginButtonExample({ ...otherProps }: LoginButtonExampleProps) {
+export default function ({ className = "", ...props }: LoginButtonProps) {
   return (
-    <LoginButton className="us3r-LoginButton" {...otherProps}>
-      {({ isAuthenticated, loading }) =>
+    <LoginButtonRoot className={`my-LoginButton ${className}`} {...props}>
+      {({ isAuthenticated, isLoading }) =>
         isAuthenticated ? (
           <>
-            <UserAvatarExample />
-            <UserNameExample />
+            <UserAvatar className="userAvatar" />
+            <UserName />
           </>
         ) : (
-          <span>{loading ? "logging..." : "Login"}</span>
+          <span>{isLoading ? "logging..." : "Login"}</span>
         )
       }
-    </LoginButton>
+    </LoginButtonRoot>
   );
 }

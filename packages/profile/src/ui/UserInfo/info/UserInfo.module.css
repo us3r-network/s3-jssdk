@@ -1,0 +1,63 @@
+.UserInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    padding: 20px;
+    width: 360px;
+    box-sizing: border-box;
+    background: #1b1e23;
+    border-radius: 20px;
+}
+
+.LoadingSpokes {
+    width: 60px;
+    height: 60px;
+    fill: #ccc;
+}
+
+.Avatar {
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    position: relative;
+
+    overflow: hidden;
+    cursor: pointer;
+
+    &:hover {
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 120px;
+            height: 120px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+        }
+    }
+}
+
+.AvatarImg {
+    composes: AvatarImg from '../../UserAvatar/UserAvatar.module.css';
+}
+
+.Name {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+    color: #fff;
+}
+
+.Bio {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #718096;
+}

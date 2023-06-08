@@ -73,17 +73,20 @@ const componentStories = componentPkgs
       // Introduction
       {
         ...story,
-        files: `stories/**/Introduction.mdx`,
+        directory: `${story.directory}/stories`,
+        files: `**/Introduction.mdx`,
       },
       // Components
       {
         ...story,
-        files: `src/**/*.{stories.@(js|jsx|ts|tsx),mdx}`,
+        directory: `${story.directory}/src`,
+        files: `**/*.{stories.@(js|jsx|ts|tsx),mdx}`,
       },
       // Examples
       {
         ...story,
-        files: `stories/**/*.{stories.@(js|jsx|ts|tsx),mdx}`,
+        directory: `${story.directory}/stories`,
+        files: `**/*.{stories.@(js|jsx|ts|tsx),mdx}`,
       },
     ];
   })

@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "./dist",
     "paths": {
-      "@us3r-network/profile": ["./src/index.ts"]
+      "@us3r-network/profile": ["./src/index.ts"],
+      "@us3r-network/profile/ui": ["./src/ui/index.ts"]
     }
   },
   "files": ["typings.d.ts"],

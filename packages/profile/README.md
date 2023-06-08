@@ -1,94 +1,37 @@
 # @us3r-network/profile
 
-The model defines the profile for the web3 user.
+We created a [data model](https://github.com/us3r-network/s3-jssdk/tree/main/packages/data-model) about user profile based on ceramic, and provided crud SDK for the model, and commonly used react components related to profile
 
-## Profile Model
-
-profile.gql
-
-```gql
-enum ChainType {
-  EVM
-  SOLANA
-}
-
-type Wallet
-{
-  chain: ChainType!
-  address: String! @string(minLength: 20, maxLength: 60)
-  primary: Boolean!
-}
-
-type Profile
-  @createModel(
-    accountRelation: SINGLE,
-    description: "profile for us3r-network"
-  ) {
-  version: CommitID! @documentVersion
-  name: String! @string(minLength: 3, maxLength: 100)
-  bio: String @string(minLength: 3, maxLength: 200)
-  avatar: String @string(maxLength: 1000)
-  tags: [String!] @string(maxLength: 60) @list(maxLength:20)
-  wallets: [Wallet!] @list(maxLength:20)
-}
-```
-
+[![License](https://img.shields.io/badge/License-MIT.svg)](https://opensource.org/licenses/MIT)
+[![npm version](https://badge.fury.io/js/%40us3r-network%2Fprofile.svg)](https://badge.fury.io/js/%40us3r-network%2Fprofile)
+[![npm downloads](https://img.shields.io/npm/dm/%40us3r-network%2Fprofile.svg)](https://www.npmjs.com/package/@us3r-network/profile)
 
 ## Install
 
+```bash
+npm install @us3r-network/auth-with-rainbowkit @us3r-network/profile
 ```
-npm install @us3r-network/profile
-```
+
+Where [@us3r-network/auth-with-rainbowkit](https://github.com/us3r-network/s3-jssdk/tree/main/packages/auth-with-rainbowkit) is the peerDependencies of @us3r-network/profile
 
 ## Usage
 
-### Init Profile instance
+You need to wrap your application with `Us3rAuthWithRainbowkitProvider` and `ProfileStateProvider` first.
 
-```ts
-...
+```tsx
+import { PropsWithChildren } from "react";
+import { Us3rAuthWithRainbowkitProvider } from "@us3r-network/auth-with-rainbowkit";
+import { ProfileStateProvider } from "@us3r-network/profile";
 
-import S3ProfileModel from '@us3r-network/profile'
-
-const CERAMIC_HOST = process.env.CERAMIC_HOST
-
-const s3Profile = new S3ProfileModel(CERAMIC_HOST)
-...
-
+export default function App({ children }: PropsWithChildren) {
+  return (
+    <Us3rAuthWithRainbowkitProvider>
+      <ProfileStateProvider ceramicHost={process.env.REACT_APP_CERAMIC_HOST}>
+        {children}
+      </ProfileStateProvider>
+    </Us3rAuthWithRainbowkitProvider>
+  );
+}
 ```
 
-### Auth Profile instance with did-session
-
-```ts
-const didSession = '...'
-s3Profile.authComposeClient(didSession)
-
-```
-
-### S3Profile Read & Write
-
-after authorization, the profile can write with method
-
-```ts
-
-...
-await s3Profile.mutationPersonalProfile(/** {...profile} */)
-...
-
-```
-
-and read the profile with
-
-```ts
-...
-await s3Profile.queryPersonalProfile()
-...
-```
-
-or get others profile with a did
-
-```ts
-...
-await s3Profile.queryProfileWithDid(/** did */)
-...
-```
-
+Then you can start using our components. For more information, please refer to our component documentation [storybook](https://www.components.s3.xyz/?path=/docs/components-profile-introduction--docs).

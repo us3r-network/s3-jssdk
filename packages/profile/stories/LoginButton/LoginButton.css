@@ -1,36 +1,43 @@
-.us3r-LoginButton {
+.my-LoginButton {
+    height: 48px;
+    padding: 12px 24px;
     box-sizing: border-box;
-
-    /* Auto layout */
-
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 12px;
-    isolation: isolate;
-
-    height: 40px;
-
-    /* 🌘 $neutral/100 */
-
-    background: #1a1e23;
-    /* 🌘 $neutral/400 */
-
-    border: 1px solid #39424c;
-    border-radius: 12px;
-
-    cursor: pointer;
 
     font-weight: 500;
     font-size: 16px;
     line-height: 24px;
-    /* identical to box height, or 150% */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
 
-    text-align: center;
+    &:disabled {
+        cursor: not-allowed;
+        pointer-events: auto;
+        opacity: 0.5;
+    }
 
-    /* #718096 */
-
+    border: 1px solid #39424c;
+    border-radius: 12px;
+    background-color: #1a1e23;
     color: #718096;
+
+    &:disabled {
+        cursor: not-allowed;
+        pointer-events: auto;
+        opacity: 0.5;
+        background-color: #14171a;
+    }
+
+    &:not(:disabled):hover {
+        border: 1px solid #aaa;
+        background-color: #14171a;
+    }
+}
+
+.my-LoginButton .userAvatar {
+    width: 28px;
+    height: 28px;
 }
