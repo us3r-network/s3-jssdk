@@ -1,28 +1,19 @@
-import { Canvas, Meta, Story, ArgTypes } from "@storybook/blocks";
+import { Canvas, Meta, Controls } from "@storybook/blocks";
 
 import * as LoginButtonStories from "./LoginButton.stories";
-import * as LoginButtonExampleStories from "../../../stories/LoginButton/LoginButtonExample.stories";
 
 <Meta of={LoginButtonStories} />
 
 # LoginButton
 
-The login button allows users to perform login authorization actions through mouse, touch, and keyboard interactions.
+当需要获取当前登录的用户信息时，或者需要进行 Ceramic node 的写操作时我们需要先与 Ceramic 建立一个会话。
 
-<Canvas of={LoginButtonStories.LoginButton} />
+LoginButton 组件内部调用 [@us3r-network/auth-with-rainbowkit](?path=/docs/auth-auth-with-rainbowkit--docs) 的授权流程。
 
-<ArgTypes of={LoginButtonStories} />
+```jsx
+import { LoginButton } from "@us3r-network/profile";
+```
 
-# Example
+<Canvas />
 
-## Import Css
-
-<Canvas of={LoginButtonExampleStories.LoginButtonImportCss} />
-
-## Css Moudle
-
-<Canvas of={LoginButtonExampleStories.LoginButtonCssModule} />
-
-## Styled
-
-<Canvas of={LoginButtonExampleStories.LoginButtonStyled} />
+## Render Props

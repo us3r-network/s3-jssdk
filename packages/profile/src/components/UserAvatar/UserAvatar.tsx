@@ -6,6 +6,9 @@ import { UserAvatarChildren } from "./UserAvatarChildren";
 import { getDefaultUserAvatarWithDid } from "../../utils/avatar";
 
 export interface UserAvatarIncomingProps {
+  /**
+   * if not provided, will use the current user's did
+   */
   did?: string;
 }
 export interface UserAvatarRenderProps {

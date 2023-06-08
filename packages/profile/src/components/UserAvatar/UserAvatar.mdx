@@ -1,26 +1,21 @@
-import { Canvas, Meta, Story, ArgTypes } from "@storybook/blocks";
+import { Canvas, Meta, Controls } from "@storybook/blocks";
 
 import * as UserAvatarStories from "./UserAvatar.stories";
-import * as UserAvatarExampleStories from "../../../stories/UserAvatar/UserAvatarExample.stories";
 
 <Meta of={UserAvatarStories} />
 
 # UserAvatar
 
+UserAvatar 用来显示用户头像, 它可以是当前登录用户的头像, 也可以是其他用户的头像.
+
+```jsx
+import { UserAvatar } from "@us3r-network/profile";
+```
+
 <Canvas />
 
-<ArgTypes />
+## Props
 
-# Example
+<Controls />
 
-## Import Css
-
-...
-
-## Css Moudle
-
-...
-
-## Styled
-
-<Canvas of={UserAvatarExampleStories.UserAvatarExample} />
+## Render Props

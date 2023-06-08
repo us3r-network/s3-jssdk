@@ -1,0 +1,3 @@
+.LogoutButton {
+    composes: button from '../common/button/Button.module.css';
+}

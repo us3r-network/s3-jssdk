@@ -1,0 +1,23 @@
+.UserWalletAddForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    width: 380px;
+}
+
+.AddressInput {
+    composes: input from '../../common/input/Input.module.css';
+}
+
+.SubmitButton {
+    composes: button from '../../common/button/Button.module.css';
+}
+
+.ErrorMessage {
+    composes: errortext from '../../common/text/ErrorText.module.css';
+
+    &:empty {
+        display: none;
+    }
+}

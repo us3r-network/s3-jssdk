@@ -1,0 +1,23 @@
+.UserTagAddForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    width: 380px;
+}
+
+.TagInput {
+    composes: input from '../../common/input/Input.module.css';
+}
+
+.SubmitButton {
+    composes: button from '../../common/button/Button.module.css';
+}
+
+.ErrorMessage {
+    composes: errortext from '../../common/text/ErrorText.module.css';
+
+    &:empty {
+        display: none;
+    }
+}

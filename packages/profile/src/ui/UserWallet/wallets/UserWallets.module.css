@@ -1,0 +1,113 @@
+.UserWallets {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  padding: 20px;
+  width: 360px;
+  box-sizing: border-box;
+  background: #1b1e23;
+  border-radius: 20px;
+}
+
+.Heading {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.CountBox {
+  font-style: italic;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  display: flex;
+  color: #ffffff;
+}
+
+.AddIcon {
+  fill: #ffffff;
+  cursor: pointer;
+}
+
+.LoadingSpokes {
+  width: 24px;
+  height: 24px;
+  fill: #ccc;
+}
+
+.List {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.Item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &[data-focused] {
+    outline: none;
+  }
+}
+
+.ItemText,
+.ItemAction {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.Address {
+  color: #718096;
+}
+
+.Network {
+  padding: 2px 4px;
+  background: #718096;
+  border-radius: 4px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  color: #14171a;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.Delete {
+  cursor: pointer;
+}
+
+.DeleteIcon,
+.CopyIcon {
+  width: 24px;
+  height: 24px;
+  fill: #718096;
+}
+
+.Copy {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+}
+
+.Copied {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translateY(-100%);
+  padding: 2px 4px;
+  background: #718096;
+  border-radius: 4px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  color: #14171a;
+}

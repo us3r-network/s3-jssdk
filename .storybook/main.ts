@@ -15,6 +15,10 @@ const webpackAlias = [
     path: "../packages/data-model/src/index.ts",
   },
   {
+    name: "@us3r-network/profile/ui",
+    path: "../packages/profile/src/ui/index.ts",
+  },
+  {
     name: "@us3r-network/profile",
     path: "../packages/profile/src/index.ts",
   },
