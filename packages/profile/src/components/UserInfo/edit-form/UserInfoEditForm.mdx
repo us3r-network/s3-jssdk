@@ -1,6 +1,7 @@
-import { Canvas, Meta, Controls } from "@storybook/blocks";
+import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
 
 import * as UserInfoEditFormStories from "./UserInfoEditForm.stories";
+import StyleCode from "!!raw-loader!../../../ui/UserInfo/edit-form/UserInfoEditForm.module.css";
 
 <Meta of={UserInfoEditFormStories} />
 
@@ -13,6 +14,13 @@ import { UserInfoEditForm } from "@us3r-network/profile";
 ```
 
 <Canvas />
+
+<p>
+  <details>
+    <summary>View custom styles</summary>
+    <Source code={StyleCode} />
+  </details>
+</p>
 
 ## Props
 
