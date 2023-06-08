@@ -1,6 +1,7 @@
-import { Canvas, Meta, Controls } from "@storybook/blocks";
+import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
 
 import * as UserTagAddFormStories from "./UserTagAddForm.stories";
+import StyleCode from "!!raw-loader!../../../ui/UserTag/add-form/UserTagAddForm.module.css";
 
 <Meta of={UserTagAddFormStories} />
 
@@ -13,6 +14,13 @@ import { UserTagAddForm } from "@us3r-network/profile";
 ```
 
 <Canvas />
+
+<p>
+  <details>
+    <summary>View custom styles</summary>
+    <Source code={StyleCode} />
+  </details>
+</p>
 
 ## Props
 

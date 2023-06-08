@@ -1,6 +1,7 @@
-import { Canvas, Meta, Controls } from "@storybook/blocks";
+import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
 
 import * as LoginButtonStories from "./LoginButton.stories";
+import StyleCode from "!!raw-loader!../../ui/LoginButton/LoginButton.module.css";
 
 <Meta of={LoginButtonStories} />
 
@@ -15,5 +16,12 @@ import { LoginButton } from "@us3r-network/profile";
 ```
 
 <Canvas />
+
+<p>
+  <details>
+    <summary>View custom styles</summary>
+    <Source code={StyleCode} />
+  </details>
+</p>
 
 ## Render Props

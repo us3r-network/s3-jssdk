@@ -1,6 +1,7 @@
-import { Canvas, Meta, Controls } from "@storybook/blocks";
+import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
 
 import * as UserWalletsStories from "./UserWallets.stories";
+import StyleCode from "!!raw-loader!../../../ui/UserWallet/wallets/UserWallets.module.css";
 
 <Meta of={UserWalletsStories} />
 
@@ -13,6 +14,13 @@ import { UserWallets } from "@us3r-network/profile";
 ```
 
 <Canvas />
+
+<p>
+  <details>
+    <summary>View custom styles</summary>
+    <Source code={StyleCode} />
+  </details>
+</p>
 
 ## Props
 
