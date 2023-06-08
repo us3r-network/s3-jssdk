@@ -71,7 +71,7 @@ Where [@us3r-network/auth-with-rainbowkit](?path=/docs/auth-auth-with-rainbowkit
 
 [LoginButton](?path=/docs/components-profile-components-loginbutton--docs) 组件绑定了 button 元素，它没有其它的子组件了，只有它自身元素。
 
-> 虽然 LoginButton 没有其它子组件，但是我们可以利用 children 渲染函数来渲染不同的内容。
+> 虽然 LoginButton 没有其它子组件，但是可以利用 children 渲染函数来渲染不同的内容。
 > 比如在登录状态下 children 渲染用户的头像和名称，未登录状态下渲染 Login 文字，正在请求登录状态下渲染 Loading 文字。
 > 并且[UserAvatar](?path=/docs/components-profile-components-useravatar--docs)和[UserName](?path=/docs/components-profile-components-username--docs)都是单独的组件.
 > 这里的 UserAvatar 和 UserName 已经在其它地方进行单独封装并且自定义了样式。
@@ -91,7 +91,7 @@ UserInfo 有一些子组件，是一些通常要展示出来的用户信息，`U
 
 > 组件不仅可以组合它们携带的子组件，还可以同时将其它组件集成进来.
 > 比如 [UserInfoEditForm](?path=/docs/components-profile-components-userinfoeditform--docs) , 这是一个可以编辑用户信息的组件.
-> 在这里我们让用户头像 `UserInfo.Avatar` 点击后可以打开编辑表单 `UserInfoEditForm` 来编辑用户信息.
+> 在这里让用户头像 `UserInfo.Avatar` 点击后可以打开编辑表单 `UserInfoEditForm` 来编辑用户信息.
 
 <Canvas of={UserInfoStories.UserInfo} />
 
@@ -102,7 +102,7 @@ UserInfo 有一些子组件，是一些通常要展示出来的用户信息，`U
 
 ## Styling
 
-因为我们是无样式组件库，所以你可以用各种方式来实现布局和样式
+因为是无样式组件库，所以你可以用各种方式来实现布局和样式
 
 ### import css
 
