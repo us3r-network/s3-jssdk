@@ -1,0 +1,19 @@
+.VoteButton {
+    composes: button from '../common/button/Button.module.css';
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+.Icon {
+    width: 24px;
+    height: 24px;
+    fill: #fff;
+}
+
+.Count {
+    font-size: 18px;
+    color: #fff;
+}

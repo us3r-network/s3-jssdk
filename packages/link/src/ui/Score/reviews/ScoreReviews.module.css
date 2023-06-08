@@ -1,0 +1,125 @@
+.ScoreReviews {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.LoadingSpokes {
+  width: 60px;
+  height: 60px;
+  fill: #ccc;
+}
+
+.CompositeWrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.RatingAndReviewWrapButton {
+  composes: button from '../../common/button/Button.module.css';
+  width: 100%;
+  justify-content: space-between;
+}
+
+.Label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.Icon {
+  width: 20px;
+  height: 20px;
+  fill: #718096;
+}
+
+.List {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(282px, 1fr));
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.Item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  box-sizing: border-box;
+  gap: 20px;
+  background: #14171a;
+  border-radius: 10px;
+  color: #718096;
+
+  @media (max-width: 600px) {
+    background: #1B1E23;
+    border: 1px solid #39424C;
+    border-radius: 10px;
+  }
+}
+
+.ScoreValueWrap {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Text {
+  display: inline-block;
+  height: 50px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+.UserInfo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+
+  @media (max-width: 600px) {
+    width: 100%;
+    border-top: 1px solid #39424C;
+    padding-top: 10px;
+  }
+}
+
+.UserAvatar {
+  width: 48px;
+  height: 48px;
+
+  >* {
+    width: 100%;
+    height: 100%;
+  }
+
+  >svg {
+    fill: #ccc;
+  }
+
+  >img {
+    border-radius: 50%;
+  }
+}
+
+.NameAndDate {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.UserName {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  color: #ffffff;
+}

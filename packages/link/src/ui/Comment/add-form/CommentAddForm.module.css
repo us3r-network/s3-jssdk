@@ -1,0 +1,37 @@
+.CommentAddForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.FormBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    gap: 20px;
+
+    background: #14171a;
+    border: 1px solid #39424c;
+    border-radius: 10px;
+}
+
+.TextInput {
+    composes: input from '../../common/input/Input.module.css';
+}
+
+.SubmitButton {
+    composes: button from '../../common/button/Button.module.css';
+    height: 40px;
+}
+
+.ErrorMessage {
+    composes: errortext from '../../common/text/ErrorText.module.css';
+
+    &:empty {
+        display: none;
+    }
+}

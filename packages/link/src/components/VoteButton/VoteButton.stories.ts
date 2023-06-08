@@ -1,18 +1,26 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { VoteButton as VoteButtonComponent } from "./VoteButton";
+import VoteButtonUiComponent from "../../ui/VoteButton/VoteButton";
+import VoteButtonUiCode from "!!raw-loader!../../ui/VoteButton/VoteButton";
 import { EXAMPLE_LINKID_1 } from "../../../stories/constants";
+
 const meta = {
   title: "Components/VoteButton",
-  component: VoteButtonComponent,
-  tags: ["autodocs"],
-} satisfies Meta<typeof VoteButtonComponent>;
+  component: VoteButtonUiComponent,
+} satisfies Meta<typeof VoteButtonUiComponent>;
 export default meta;
 
-type Story = StoryObj<typeof VoteButtonComponent>;
+type Story = StoryObj<typeof VoteButtonUiComponent>;
 
-// More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const VoteButton: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: VoteButtonUiCode,
+        language: "tsx",
+      },
+    },
+  },
   args: {
     linkId: EXAMPLE_LINKID_1,
   },

@@ -1,17 +1,26 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { FavorButton as FavorButtonComponent } from ".";
+import FavorButtonUiComponent from "../../ui/FavorButton/FavorButton";
+import FavorButtonUiCode from "!!raw-loader!../../ui/FavorButton/FavorButton";
 import { EXAMPLE_LINKID_1 } from "../../../stories/constants";
+
 const meta = {
   title: "Components/FavorButton",
-  component: FavorButtonComponent,
-} satisfies Meta<typeof FavorButtonComponent>;
+  component: FavorButtonUiComponent,
+} satisfies Meta<typeof FavorButtonUiComponent>;
 export default meta;
 
-type Story = StoryObj<typeof FavorButtonComponent>;
+type Story = StoryObj<typeof FavorButtonUiComponent>;
 
-// More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const FavorButton: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: FavorButtonUiCode,
+        language: "tsx",
+      },
+    },
+  },
   args: {
     linkId: EXAMPLE_LINKID_1,
   },
