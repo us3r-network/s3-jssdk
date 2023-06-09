@@ -7,7 +7,9 @@ import StyleCode from "!!raw-loader!../../../ui/Score/form/ScoreForm.module.css"
 
 # ScoreForm
 
-A ScoreForm is ...
+ScoreForm 是一个用于评分的表单组件。它为用户提供了一种简单的方式来对特定内容进行评分。
+
+该组件适用于各种需要用户参与评分的场景，例如产品评价、文章评分等。
 
 ```jsx
 import { ScoreForm } from "@us3r-network/link";
@@ -28,4 +30,8 @@ import { ScoreForm } from "@us3r-network/link";
 
 ## Render Props
 
+ScoreForm 的 children 可以是一个函数，它接收一个对象作为参数，该对象包含以下属性：
+
 ## Subcomponents
+
+ScoreForm 是一个 Context.Provider 组件，它有一些子组件可以用于渲染表单的各个部分。

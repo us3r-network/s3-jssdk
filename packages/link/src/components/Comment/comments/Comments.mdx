@@ -7,7 +7,7 @@ import StyleCode from "!!raw-loader!../../../ui/Comment/comments/Comments.module
 
 # Comments
 
-A Comments is ...
+Comments 是一个用于展示评论列表的组件。允许你展示多个评论。
 
 ```jsx
 import { Comments } from "@us3r-network/link";
@@ -28,4 +28,8 @@ import { Comments } from "@us3r-network/link";
 
 ## Render Props
 
+Comments 的 children 可以是一个函数，它接收一个对象作为参数，该对象包含以下属性：
+
 ## Subcomponents
+
+Comments 是一个 Context.Provider 组件，它有一些子组件可以用来渲染评论列表。

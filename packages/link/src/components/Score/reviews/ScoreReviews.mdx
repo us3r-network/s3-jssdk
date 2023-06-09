@@ -7,7 +7,8 @@ import StyleCode from "!!raw-loader!../../../ui/Score/reviews/ScoreReviews.modul
 
 # ScoreReviews
 
-A ScoreReviews is ...
+ScoreReviews 是一个用于展示评价和评论的组件。它提供了一个界面，用于展示用户对特定内容的评分和评论。
+以便其他用户了解他们对内容的看法。该组件适用于各种需要展示用户评价和评论的场景，例如产品页面、文章页面等。
 
 ```jsx
 import { ScoreReviews } from "@us3r-network/link";
@@ -28,4 +29,8 @@ import { ScoreReviews } from "@us3r-network/link";
 
 ## Render Props
 
+ScoreReviews 的 children 可以是一个函数，它接收一个对象作为参数，该对象包含以下属性：
+
 ## Subcomponents
+
+ScoreReviews 是一个 Context.Provider 组件，它有一些子组件可以用于渲染评分和评论的各个部分。
