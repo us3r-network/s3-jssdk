@@ -26,17 +26,18 @@
 }
 
 .CommentTextarea {
-    composes: textarea from '../../common/input/TextArea.module.css';
+    composes: TextArea from '../../common/input/TextArea.module.css';
     resize: vertical;
 }
 
 .SubmitButton {
-    composes: button from '../../common/button/Button.module.css';
+    composes: Button from '../../common/button/Button.module.css';
     width: 100%;
 }
 
 .ErrorMessage {
-    composes: errortext from '../../common/text/ErrorText.module.css';
+    composes: ErrorText from '../../common/text/ErrorText.module.css';
+    margin: 4px 0px;
 
     &:empty {
         display: none;

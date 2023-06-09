@@ -1,5 +1,5 @@
 .VoteButton {
-    composes: button from '../common/button/Button.module.css';
+    composes: Button from '../common/button/Button.module.css';
     display: flex;
     align-items: center;
     gap: 10px;

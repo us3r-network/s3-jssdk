@@ -17,7 +17,6 @@ import RatingStarSelect from "../../common/rating-star/RatingStarSelect";
 import ScoreDashboard from "../dashboard/ScoreDashboard";
 import ScoreForm from "../form/ScoreForm";
 import { ReactComponent as EditSvg } from "@material-design-icons/svg/outlined/edit.svg";
-
 import styles from "./ScoreReviews.module.css";
 
 export default function ({ className = "", ...props }: ScoreReviewsProps) {

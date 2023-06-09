@@ -6,9 +6,7 @@
 }
 
 .LoadingSpokes {
-  width: 60px;
-  height: 60px;
-  fill: #ccc;
+  composes: ListLoadingSpokes from '../../common/loading/LoadingSpokes.module.css';
 }
 
 .CompositeWrap {
@@ -19,7 +17,7 @@
 }
 
 .RatingAndReviewWrapButton {
-  composes: button from '../../common/button/Button.module.css';
+  composes: Button from '../../common/button/Button.module.css';
   width: 100%;
   justify-content: space-between;
 }

@@ -1,0 +1,21 @@
+.LoadingSpokes {
+    fill: #ccc;
+}
+
+.ButtonLoadingSpokes {
+    composes: LoadingSpokes;
+    width: 24px;
+    height: 24px;
+}
+
+.ListLoadingSpokes {
+    composes: LoadingSpokes;
+    width: 60px;
+    height: 60px;
+}
+
+.FillLoadingSpokes {
+    composes: LoadingSpokes;
+    width: 100%;
+    height: 100%;
+}

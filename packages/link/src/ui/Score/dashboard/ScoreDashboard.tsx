@@ -28,7 +28,9 @@ export default function ({ className = "", ...props }: ScoreDashboardProps) {
           {({ scoresCount }) => `${scoresCount} global ratings`}
         </ScoreDashboard.ScoresCount>
       </div>
+
       <span className={styles.DividingLine}></span>
+
       <div className={styles.ScoreValuePercentages}>
         {[...Array(SCORE_VALUE_MAX)].map((_, index) => {
           const scoreValue = SCORE_VALUE_MAX - index;

@@ -20,16 +20,22 @@
 }
 
 .TextInput {
-    composes: input from '../../common/input/Input.module.css';
+    composes: Input from '../../common/input/Input.module.css';
 }
 
 .SubmitButton {
-    composes: button from '../../common/button/Button.module.css';
+    composes: Button from '../../common/button/Button.module.css';
+    width: 100px;
     height: 40px;
 }
 
+.LoadingSpokes {
+    composes: ButtonLoadingSpokes from '../../common/loading/LoadingSpokes.module.css';
+}
+
 .ErrorMessage {
-    composes: errortext from '../../common/text/ErrorText.module.css';
+    composes: ErrorText from '../../common/text/ErrorText.module.css';
+    margin: 4px 0px;
 
     &:empty {
         display: none;
