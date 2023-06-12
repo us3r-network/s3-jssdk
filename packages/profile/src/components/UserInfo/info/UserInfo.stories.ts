@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { UserInfo } from "./UserInfo";
 import UserInfoUiComponent from "../../../ui/UserInfo/info/UserInfo";
 import UserInfoUiCode from "!!raw-loader!../../../ui/UserInfo/info/UserInfo";
 import {
@@ -9,14 +10,16 @@ import { DEFAULT_DID } from "../../../utils/constants";
 
 const meta = {
   title: "Components/UserInfo",
-  component: UserInfoUiComponent<DefaultUploadImageResult>,
-} satisfies Meta<typeof UserInfoUiComponent<DefaultUploadImageResult>>;
+  component: UserInfo<DefaultUploadImageResult>,
+  render: UserInfoUiComponent<DefaultUploadImageResult>,
+} satisfies Meta<typeof UserInfo<DefaultUploadImageResult>>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
-export const UserInfo: Story = {
+export const UserInfoStory: Story = {
+  name: "UserInfo",
   parameters: {
     docs: {
       source: {

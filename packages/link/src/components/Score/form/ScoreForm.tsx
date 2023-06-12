@@ -14,9 +14,23 @@ import { useScoreAction } from "../../../hooks/useScoreAction";
 import { useScores } from "../../../hooks/useScores";
 
 export interface ScoreFormIncomingProps {
+  /**
+   * link stream id.
+   */
   linkId: string;
+  /**
+   * score stream id.
+   * if provided, the form will be in edit mode
+   * if not provided, the form will be in add mode
+   */
   scoreId?: string;
+  /**
+   * callback when score is successfully added
+   */
   onSuccessfullyScore?: () => void;
+  /**
+   * callback when score is failed to add
+   */
   onFailedScore?: (errMsg: string) => void;
 }
 

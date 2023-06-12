@@ -5,6 +5,10 @@ import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
 import { UserNameChildren } from "./UserNameChildren";
 export interface UserNameIncomingProps {
+  /**
+   * user did.
+   * if not provided, will use current login user's did.
+   */
   did?: string;
   name?: string;
 }

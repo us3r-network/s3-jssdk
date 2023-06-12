@@ -5,10 +5,13 @@ import { ActivatedStarIcon } from "../../common/RatingStar/StarIcon";
 import { useScores } from "../../../hooks/useScores";
 
 export interface ScoresAvgIncomingProps {
+  /** The link id to get the scores from */
   linkId: string;
 }
 export interface ScoresAvgRenderProps {
+  /**  Is the component loading */
   isLoading: boolean;
+  /**  The average score */
   scoresAvg: number;
 }
 

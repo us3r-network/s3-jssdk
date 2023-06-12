@@ -11,8 +11,20 @@ import { Wallet } from "@us3r-network/data-model";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 
 export interface UserWalletsIncomingProps {
+  /**
+   * user did.
+   */
   did?: string;
+  /**
+   * callback when delete wallet successfully.
+   * @param wallet deleted wallet.
+   */
   onSuccessfullyDelete?: (wallet: Wallet) => void;
+  /**
+   * callback when fail to delete wallet.
+   * @param wallet deleted wallet.
+   * @param errMsg error message.
+   */
   onFailToDelete?: (wallet: Wallet, errMsg: string) => void;
 }
 

@@ -8,8 +8,19 @@ import { useLink } from "../../hooks/useLink";
 import { useVoteAction } from "../../hooks/useVoteAction";
 
 export interface VoteButtonIncomingProps {
+  /**
+   * link stream id.
+   */
   linkId: string;
+  /**
+   * callback when vote is successfully added or removed.
+   * @param isVoted is voted or not.
+   */
   onSuccessfullyVote?: (isVoted: boolean) => void;
+  /**
+   * callback when vote is failed to add or remove.
+   * @param errMsg error message.
+   */
   onFailedVote?: (errMsg: string) => void;
 }
 export interface VoteButtonRenderProps {
