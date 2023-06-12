@@ -8,6 +8,7 @@ import { EXAMPLE_LINKID_1 } from "../../../stories/constants";
 const meta = {
   title: "Components/VoteButton",
   component: VoteButton,
+  render: VoteButtonUiComponent,
 } satisfies Meta<typeof VoteButton>;
 export default meta;
 
@@ -15,7 +16,6 @@ type Story = StoryObj<typeof meta>;
 
 export const VoteButtonStory: Story = {
   name: "VoteButton",
-  render: VoteButtonUiComponent,
   parameters: {
     docs: {
       source: {

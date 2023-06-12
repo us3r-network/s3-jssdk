@@ -8,6 +8,7 @@ import { EXAMPLE_LINKID_1 } from "../../../stories/constants";
 const meta = {
   title: "Components/FavorButton",
   component: FavorButton,
+  render: FavorButtonUiComponent,
 } satisfies Meta<typeof FavorButton>;
 export default meta;
 
@@ -15,7 +16,6 @@ type Story = StoryObj<typeof meta>;
 
 export const FavorButtonStory: Story = {
   name: "FavorButton",
-  render: FavorButtonUiComponent,
   parameters: {
     docs: {
       source: {

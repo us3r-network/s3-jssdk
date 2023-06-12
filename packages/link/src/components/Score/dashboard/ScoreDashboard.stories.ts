@@ -7,6 +7,7 @@ import { EXAMPLE_LINKID_1 } from "../../../../stories/constants";
 const meta = {
   title: "Components/ScoreDashboard",
   component: ScoreDashboard,
+  render: ScoreDashboardUiComponent,
 } satisfies Meta<typeof ScoreDashboard>;
 export default meta;
 
@@ -15,7 +16,6 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const ScoreDashboardStory: Story = {
   name: "ScoreDashboard",
-  render: ScoreDashboardUiComponent,
   parameters: {
     docs: {
       source: {
