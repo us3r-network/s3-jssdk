@@ -1,0 +1,35 @@
+import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
+
+import * as ScoreDashboardStories from "./ScoreDashboard.stories";
+import StyleCode from "!!raw-loader!../../../ui/Score/dashboard/ScoreDashboard.module.css";
+
+<Meta of={ScoreDashboardStories} />
+
+# ScoreDashboard
+
+ScoreDashboard 是一个评分的仪表板组件。它为用户提供了一个可视化的界面，用于展示和汇总评分数据。
+
+```jsx
+import { ScoreDashboard } from "@us3r-network/link";
+```
+
+<Canvas />
+
+<p>
+  <details>
+    <summary>View custom styles</summary>
+    <Source code={StyleCode} />
+  </details>
+</p>
+
+## Props
+
+<Controls />
+
+## Render Props
+
+ScoreDashboard 的 children 可以是一个函数，它接收一个对象作为参数，该对象包含以下属性：
+
+## Subcomponents
+
+ScoreDashboard 是一个 Context.Provider 组件，它有一些子组件可以用来渲染不同的部分。

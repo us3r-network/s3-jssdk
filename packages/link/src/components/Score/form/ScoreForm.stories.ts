@@ -1,28 +1,27 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ScoreForm as ScoreFormComponent } from "./ScoreForm";
-import {
-  EXAMPLE_LINKID_1,
-  EXAMPLE_SCOREID,
-} from "../../../../stories/constants";
+import ScoreFormUiComponent from "../../../ui/Score/form/ScoreForm";
+import ScoreFormUiCode from "!!raw-loader!../../../ui/Score/form/ScoreForm";
+import { EXAMPLE_LINKID_1 } from "../../../../stories/constants";
+
 const meta = {
   title: "Components/ScoreForm",
-  component: ScoreFormComponent,
-  tags: ["autodocs"],
-} satisfies Meta<typeof ScoreFormComponent>;
+  component: ScoreFormUiComponent,
+} satisfies Meta<typeof ScoreFormUiComponent>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
-export const ScoreAddForm: Story = {
-  args: {
-    linkId: EXAMPLE_LINKID_1,
+export const ScoreForm: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: ScoreFormUiCode,
+        language: "tsx",
+      },
+    },
   },
-};
-
-export const ScoreEditForm: Story = {
   args: {
     linkId: EXAMPLE_LINKID_1,
-    scoreId: EXAMPLE_SCOREID,
   },
 };

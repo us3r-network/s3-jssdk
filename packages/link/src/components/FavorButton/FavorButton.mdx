@@ -1,28 +1,31 @@
-import { Canvas, Meta, Story, ArgTypes } from "@storybook/blocks";
+import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
 
 import * as FavorButtonStories from "./FavorButton.stories";
-import * as FavorButtonExampleStories from "../../../stories/FavorButton/FavorButtonExample.stories";
+import StyleCode from "!!raw-loader!../../ui/FavorButton/FavorButton.module.css";
 
 <Meta of={FavorButtonStories} />
 
 # FavorButton
 
-The login button allows users to perform login authorization actions through mouse, touch, and keyboard interactions.
+FavorButton 是一个用于添加关注的交互组件。它为用户提供了一种简单而直观的方式来标记他们感兴趣的链接，并随时获取更新。
 
-<Canvas of={FavorButtonStories.FavorButton} />
+```jsx
+import { FavorButton } from "@us3r-network/link";
+```
 
-<ArgTypes />
+<Canvas />
 
-# Example
+<p>
+  <details>
+    <summary>View custom styles</summary>
+    <Source code={StyleCode} />
+  </details>
+</p>
 
-## Import Css
+## Props
 
-<Canvas of={FavorButtonExampleStories.FavorButtonImportCss} />
+<Controls />
 
-## Css Moudle
+## Render Props
 
-<Canvas of={FavorButtonExampleStories.FavorButtonCssModule} />
-
-## Styled
-
-<Canvas of={FavorButtonExampleStories.FavorButtonStyled} />
+FavorButton 的 children 可以是一个函数，它接收一个对象作为参数，该对象包含以下属性：
