@@ -6,7 +6,14 @@ import { CommentsDefaultChildren } from "./CommentsDefaultChildren";
 import { useComments } from "../../../hooks/useComments";
 
 export interface CommentsIncomingProps {
+  /**
+   * link stream id.
+   */
   linkId: string;
+  /**
+   * order of the comments
+   * @default "desc"
+   */
   order?: "asc" | "desc";
 }
 

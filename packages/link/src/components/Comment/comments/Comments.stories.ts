@@ -1,18 +1,21 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { Comments } from "./Comments";
 import CommentsUiComponent from "../../../ui/Comment/comments/Comments";
 import CommentsUiCode from "!!raw-loader!../../../ui/Comment/comments/Comments";
 import { EXAMPLE_LINKID_1 } from "../../../../stories/constants";
 
 const meta = {
   title: "Components/Comments",
-  component: CommentsUiComponent,
-} satisfies Meta<typeof CommentsUiComponent>;
+  component: Comments,
+} satisfies Meta<typeof Comments>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
-export const Comments: Story = {
+export const CommentsStory: Story = {
+  name: "Comments",
+  render: CommentsUiComponent,
   parameters: {
     docs: {
       source: {

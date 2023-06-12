@@ -10,6 +10,9 @@ import { SCORE_VALUE_MAX, SCORE_VALUE_MIN } from "../../../constants";
 import { getScoresAvgFromScores } from "../../../utils/score";
 import { useScores } from "../../../hooks/useScores";
 export interface ScoreDashboardIncomingProps {
+  /**
+   * link stream id.
+   */
   linkId: string;
 }
 

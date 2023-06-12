@@ -16,6 +16,9 @@ import { UserWalletAddFormDefaultChildren } from "./UserWalletAddFormDefaultChil
 import { WalletChainType } from "@us3r-network/data-model";
 
 export interface UserWalletAddFormIncomingProps {
+  /**
+   * callback when profile is successfully updated.
+   */
   onSuccessfullySubmit?: () => void;
 }
 

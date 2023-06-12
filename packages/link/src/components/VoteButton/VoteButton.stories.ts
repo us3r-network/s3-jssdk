@@ -1,18 +1,21 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
+import { VoteButton } from "./VoteButton";
 import VoteButtonUiComponent from "../../ui/VoteButton/VoteButton";
 import VoteButtonUiCode from "!!raw-loader!../../ui/VoteButton/VoteButton";
 import { EXAMPLE_LINKID_1 } from "../../../stories/constants";
 
 const meta = {
   title: "Components/VoteButton",
-  component: VoteButtonUiComponent,
-} satisfies Meta<typeof VoteButtonUiComponent>;
+  component: VoteButton,
+} satisfies Meta<typeof VoteButton>;
 export default meta;
 
-type Story = StoryObj<typeof VoteButtonUiComponent>;
+type Story = StoryObj<typeof meta>;
 
-export const VoteButton: Story = {
+export const VoteButtonStory: Story = {
+  name: "VoteButton",
+  render: VoteButtonUiComponent,
   parameters: {
     docs: {
       source: {

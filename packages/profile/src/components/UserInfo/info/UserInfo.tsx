@@ -8,7 +8,14 @@ import { UserInfoContext, UserInfoContextValue } from "./UserInfoContext";
 import { UserInfoDefaultChildren } from "./UserInfoDefaultChildren";
 import type { AvatarUploadOpts } from "../edit-form";
 export interface UserInfoIncomingProps<T> {
+  /**
+   * user did.
+   * if not provided, will use current user's did.
+   */
   did?: string;
+  /**
+   * avatar upload options
+   */
   avatarUploadOpts?: AvatarUploadOpts<T>;
 }
 

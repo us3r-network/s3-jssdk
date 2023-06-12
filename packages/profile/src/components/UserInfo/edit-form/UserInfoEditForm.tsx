@@ -17,12 +17,30 @@ import { getDefaultUserAvatarWithDid } from "../../../utils/avatar";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 
 export interface AvatarUploadOpts<T> {
+  /**
+   * upload avatar function.
+   * @param file avatar file.
+   */
   upload: (file: File) => Promise<T>;
+  /**
+   * validate avatar file.
+   * @param data response from upload function.
+   */
   validate: (data: T) => boolean;
+  /**
+   * get avatar url.
+   * @param data response from upload function.
+   */
   getUrl: (data: T) => Promise<string>;
 }
 export interface UserInfoEditFormIncomingProps<T> {
+  /**
+   * avatar upload options
+   */
   avatarUploadOpts: AvatarUploadOpts<T>;
+  /**
+   * callback when profile is successfully updated.
+   */
   onSuccessfullySubmit?: () => void;
 }
 

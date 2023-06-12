@@ -10,8 +10,18 @@ import { useIsAuthenticated } from "@us3r-network/auth-with-rainbowkit";
 import { useCommentAction } from "../../../hooks/useCommentAction";
 
 export interface CommentAddFormIncomingProps {
+  /**
+   * link stream id.
+   */
   linkId: string;
+  /**
+   * callback when comment is successfully added.
+   */
   onSuccessfullyComment?: () => void;
+  /**
+   * callback when comment is failed to add.
+   * @param errMsg error message.
+   */
   onFailedComment?: (errMsg: string) => void;
 }
 

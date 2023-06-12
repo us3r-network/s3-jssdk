@@ -7,6 +7,10 @@ import { UserTagsDefaultChildren } from "./UserTagsDefaultChildren";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 
 export interface UserTagsIncomingProps {
+  /**
+   * user did.
+   * if not provided, will use current login user's did.
+   */
   did?: string;
 }
 

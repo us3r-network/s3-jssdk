@@ -9,7 +9,13 @@ import { ScoreReviewsDefaultChildren } from "./ScoreReviewsDefaultChildren";
 import { useScores } from "../../../hooks/useScores";
 
 export interface ScoreReviewsIncomingProps {
+  /**
+   * link stream id.
+   */
   linkId: string;
+  /**
+   * order of the reviews
+   */
   order?: "asc" | "desc";
 }
 

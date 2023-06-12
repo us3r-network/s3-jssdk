@@ -8,8 +8,19 @@ import { useLink } from "../../hooks/useLink";
 import { useFavorAction } from "../../hooks/useFavorAction";
 
 export interface FavorButtonIncomingProps {
+  /**
+   * link stream id.
+   */
   linkId: string;
+  /**
+   * callback when favor is successfully added or removed.
+   * @param isFavored is favored or not.
+   */
   onSuccessfullyFavor?: (isFavored: boolean) => void;
+  /**
+   * callback when favor is failed to add or remove.
+   * @param errMsg error message.
+   */
   onFailedFavor?: (errMsg: string) => void;
 }
 export interface FavorButtonRenderProps {

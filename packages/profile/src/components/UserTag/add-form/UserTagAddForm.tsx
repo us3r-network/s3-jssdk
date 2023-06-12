@@ -15,6 +15,9 @@ import {
 import { UserTagAddFormDefaultChildren } from "./UserTagAddFormDefaultChildren";
 
 export interface UserTagAddFormIncomingProps {
+  /**
+   * callback when profile is successfully updated.
+   */
   onSuccessfullySubmit?: () => void;
 }
 
