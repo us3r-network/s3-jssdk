@@ -1,6 +1,6 @@
 import { HTMLAttributes } from "react";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
-import * as ScoreReviewsElements from "./ScoreReviewsElements";
+import ScoreReviewsElements from "./ScoreReviewsElements";
 import {
   ScoreReviewsContext,
   ScoreReviewsContextValue,

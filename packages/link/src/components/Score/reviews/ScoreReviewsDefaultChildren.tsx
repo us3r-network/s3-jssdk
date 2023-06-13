@@ -1,4 +1,4 @@
-import * as ScoreReviews from "./ScoreReviewsElements";
+import ScoreReviews from "./ScoreReviewsElements";
 import { ScoreForm } from "../form/ScoreForm";
 import { useScoreReviewsState } from "./ScoreReviewsContext";
 import { ScoreDashboard } from "../dashboard";

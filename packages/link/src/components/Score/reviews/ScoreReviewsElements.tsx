@@ -31,7 +31,7 @@ import RatingStarSelect from "../../common/RatingStar/RatingStarSelect";
 import { Modal } from "../../common/Modal/Modal";
 import { formatDateFromNow } from "../../../utils/time";
 
-export function List(props: ListBoxProps<Score>) {
+function List(props: ListBoxProps<Score>) {
   const { scores } = useScoreReviewsState();
   return (
     <ListBox
@@ -43,7 +43,7 @@ export function List(props: ListBoxProps<Score>) {
   );
 }
 
-export function Item({
+function Item({
   children,
   value,
   ...props
@@ -77,7 +77,7 @@ export function Item({
   );
 }
 
-export function Avatar(props: UserAvatarProps) {
+function Avatar(props: UserAvatarProps) {
   const {
     data: { creator },
   } = useScoreReviewsItemState();
@@ -85,7 +85,7 @@ export function Avatar(props: UserAvatarProps) {
   return <UserAvatar data-state-element="Avatar" did={did} {...props} />;
 }
 
-export function Name(props: UserNameProps) {
+function Name(props: UserNameProps) {
   const {
     data: { creator },
   } = useScoreReviewsItemState();
@@ -93,7 +93,7 @@ export function Name(props: UserNameProps) {
   return <UserName data-state-element="Name" did={did} {...props} />;
 }
 
-export function Text({
+function Text({
   children,
   ...props
 }: ChildrenRenderProps<
@@ -112,7 +112,7 @@ export function Text({
   );
 }
 
-export function Value({
+function Value({
   children,
   ...props
 }: ChildrenRenderProps<
@@ -131,7 +131,7 @@ export function Value({
   );
 }
 
-export function CreateAt({
+function CreateAt({
   children,
   ...props
 }: ChildrenRenderProps<
@@ -204,3 +204,13 @@ function ItemDefaultChildren() {
     </>
   );
 }
+
+export default {
+  List,
+  Item,
+  Avatar,
+  Name,
+  Text,
+  Value,
+  CreateAt,
+};

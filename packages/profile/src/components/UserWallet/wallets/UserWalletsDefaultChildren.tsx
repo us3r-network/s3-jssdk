@@ -1,5 +1,5 @@
 import { useState } from "react";
-import * as UserWallets from "./UserWalletsElements";
+import UserWallets from "./UserWalletsElements";
 import {
   Button,
   Dialog,

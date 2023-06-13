@@ -1,6 +1,7 @@
-import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
 
 import * as CommentsStories from "./Comments.stories";
+import { RenderProps, Subcomponents } from "./stories/Table";
 import StyleCode from "!!raw-loader!../../../ui/Comment/comments/Comments.module.css";
 
 <Meta of={CommentsStories} />
@@ -30,6 +31,10 @@ import { Comments } from "@us3r-network/link";
 
 Comments 的 children 可以是一个函数，它接收一个对象作为参数，该对象包含以下属性：
 
+<ArgTypes of={RenderProps} />
+
 ## Subcomponents
 
 Comments 是一个 Context.Provider 组件，它有一些子组件可以用来渲染评论列表。
+
+<ArgTypes of={Subcomponents} />

@@ -1,6 +1,7 @@
-import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
 
 import * as ScoreReviewsStories from "./ScoreReviews.stories";
+import { RenderProps, Subcomponents } from "./stories/Table";
 import StyleCode from "!!raw-loader!../../../ui/Score/reviews/ScoreReviews.module.css";
 
 <Meta of={ScoreReviewsStories} />
@@ -31,6 +32,10 @@ import { ScoreReviews } from "@us3r-network/link";
 
 ScoreReviews 的 children 可以是一个函数，它接收一个对象作为参数，该对象包含以下属性：
 
+<ArgTypes of={RenderProps} />
+
 ## Subcomponents
 
 ScoreReviews 是一个 Context.Provider 组件，它有一些子组件可以用于渲染评分和评论的各个部分。
+
+<ArgTypes of={Subcomponents} />

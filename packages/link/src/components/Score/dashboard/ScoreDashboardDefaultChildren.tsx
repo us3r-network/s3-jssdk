@@ -1,4 +1,4 @@
-import * as ScoreDashboard from "./ScoreDashboardElements";
+import ScoreDashboard from "./ScoreDashboardElements";
 import { SCORE_VALUE_MAX } from "../../../constants";
 import RatingStarSelect from "../../common/RatingStar/RatingStarSelect";
 import { ProgressBar } from "react-aria-components";

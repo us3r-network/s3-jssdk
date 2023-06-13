@@ -1,6 +1,7 @@
-import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
 
 import * as LogoutButtonStories from "./LogoutButton.stories";
+import { RenderProps } from "./stories/Table";
 import StyleCode from "!!raw-loader!../../ui/LogoutButton/LogoutButton.module.css";
 
 <Meta of={LogoutButtonStories} />
@@ -15,6 +16,10 @@ import { LogoutButton } from "@us3r-network/profile";
 
 <Canvas />
 
+## Props
+
+<Controls />
+
 <p>
   <details>
     <summary>View custom styles</summary>
@@ -23,3 +28,7 @@ import { LogoutButton } from "@us3r-network/profile";
 </p>
 
 ## Render Props
+
+LogoutButton 的 children 可以是一个函数，它接收一个对象作为参数，该对象包含以下属性：
+
+<ArgTypes of={RenderProps} />

@@ -1,6 +1,7 @@
-import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
 
 import * as UserAvatarStories from "./UserAvatar.stories";
+import { RenderProps } from "./stories/Table";
 import StyleCode from "!!raw-loader!../../ui/UserAvatar/UserAvatar.module.css";
 
 <Meta of={UserAvatarStories} />
@@ -27,3 +28,7 @@ import { UserAvatar } from "@us3r-network/profile";
 <Controls />
 
 ## Render Props
+
+UserAvatar 的 children 可以是一个函数，它接收一个对象作为参数，该对象包含以下属性：
+
+<ArgTypes of={RenderProps} />

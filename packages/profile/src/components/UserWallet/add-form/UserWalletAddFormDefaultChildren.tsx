@@ -1,5 +1,5 @@
 import { TextField } from "react-aria-components";
-import * as UserWalletAddForm from "./UserWalletAddFormElements";
+import UserWalletAddForm from "./UserWalletAddFormElements";
 
 export function UserWalletAddFormDefaultChildren() {
   return (

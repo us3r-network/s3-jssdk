@@ -1,7 +1,7 @@
 import { HTMLAttributes, useEffect, useState } from "react";
 import { useProfileState } from "../../../ProfileStateProvider";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
-import * as UserTagsElements from "./UserTagsElements";
+import UserTagsElements from "./UserTagsElements";
 import { UserTagsContext, UserTagsContextValue } from "./UserTagsContext";
 import { UserTagsDefaultChildren } from "./UserTagsDefaultChildren";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";

@@ -1,6 +1,7 @@
-import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
 
 import * as VoteButtonStories from "./VoteButton.stories";
+import { RenderProps } from "./stories/Table";
 import StyleCode from "!!raw-loader!../../ui/VoteButton/VoteButton.module.css";
 
 <Meta of={VoteButtonStories} />
@@ -29,3 +30,5 @@ import { VoteButton } from "@us3r-network/link";
 ## Render Props
 
 VoteButton 的 children 可以是一个函数，它接收一个对象作为参数，该对象包含以下属性：
+
+<ArgTypes of={RenderProps} />

@@ -1,6 +1,7 @@
-import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
 
 import * as UserTagsStories from "./UserTags.stories";
+import { RenderProps, Subcomponents } from "./stories/Table";
 import StyleCode from "!!raw-loader!../../../ui/UserTag/tags/UserTags.module.css";
 
 <Meta of={UserTagsStories} />
@@ -28,4 +29,12 @@ import { UserTags } from "@us3r-network/profile";
 
 ## Render Props
 
+UserTags 的 children 可以是一个函数，它接收一个对象作为参数，该对象包含以下属性：
+
+<ArgTypes of={RenderProps} />
+
 ## Subcomponents
+
+UserTags 是一个 Context.Provider 组件，它有一些子组件可以用来渲染表单的不同部分。
+
+<ArgTypes of={Subcomponents} />

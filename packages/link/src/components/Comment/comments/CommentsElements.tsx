@@ -20,7 +20,7 @@ import {
 } from "@us3r-network/profile";
 import { formatDateFromNow } from "../../../utils/time";
 
-export function Count({
+function Count({
   children,
   ...props
 }: ChildrenRenderProps<
@@ -37,7 +37,7 @@ export function Count({
   );
 }
 
-export function List(props: ListBoxProps<Comment>) {
+function List(props: ListBoxProps<Comment>) {
   const { comments } = useCommentsState();
   return (
     <ListBox
@@ -49,7 +49,7 @@ export function List(props: ListBoxProps<Comment>) {
   );
 }
 
-export function Item({ children, value, ...props }: ItemProps<Comment>) {
+function Item({ children, value, ...props }: ItemProps<Comment>) {
   if (!value) return null;
   return (
     <AriaItem
@@ -65,19 +65,19 @@ export function Item({ children, value, ...props }: ItemProps<Comment>) {
   );
 }
 
-export function Avatar(props: UserAvatarProps) {
+function Avatar(props: UserAvatarProps) {
   const { creator } = useCommentsItemState();
   const did = creator.id;
   return <UserAvatar data-state-element="Avatar" did={did} {...props} />;
 }
 
-export function Name(props: UserNameProps) {
+function Name(props: UserNameProps) {
   const { creator } = useCommentsItemState();
   const did = creator.id;
   return <UserName data-state-element="Name" did={did} {...props} />;
 }
 
-export function Text({
+function Text({
   children,
   ...props
 }: ChildrenRenderProps<
@@ -94,7 +94,7 @@ export function Text({
   );
 }
 
-export function CreateAt({
+function CreateAt({
   children,
   ...props
 }: ChildrenRenderProps<
@@ -125,3 +125,13 @@ function ItemDefaultChildren() {
     </>
   );
 }
+
+export default {
+  Count,
+  List,
+  Item,
+  Avatar,
+  Name,
+  Text,
+  CreateAt,
+};

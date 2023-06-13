@@ -2,7 +2,7 @@ import { HTMLAttributes } from "react";
 import { useScoreDashboardState } from "./ScoreDashboardContext";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 
-export function ScoresAvg({
+function ScoresAvg({
   children,
   ...props
 }: ChildrenRenderProps<
@@ -19,7 +19,7 @@ export function ScoresAvg({
   );
 }
 
-export function ScoresCount({
+function ScoresCount({
   children,
   ...props
 }: ChildrenRenderProps<
@@ -36,7 +36,7 @@ export function ScoresCount({
   );
 }
 
-export function ScoreValueCount({
+function ScoreValueCount({
   children,
   value,
   ...props
@@ -57,7 +57,7 @@ export function ScoreValueCount({
   );
 }
 
-export function ScoreValuePercentage({
+function ScoreValuePercentage({
   children,
   value,
   ...props
@@ -77,3 +77,10 @@ export function ScoreValuePercentage({
     </span>
   );
 }
+
+export default {
+  ScoresAvg,
+  ScoresCount,
+  ScoreValueCount,
+  ScoreValuePercentage,
+};

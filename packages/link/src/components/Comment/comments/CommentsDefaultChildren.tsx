@@ -1,4 +1,4 @@
-import * as Comments from "./CommentsElements";
+import Comments from "./CommentsElements";
 import { CommentAddForm } from "../add-form/CommentAddForm";
 import { useCommentsState } from "./CommentsContext";
 import { FavorButton } from "../../FavorButton";

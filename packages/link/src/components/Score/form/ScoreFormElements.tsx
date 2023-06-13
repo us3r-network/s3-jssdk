@@ -1,4 +1,4 @@
-import { Button, ButtonProps, ButtonRenderProps } from "react-aria-components";
+import { Button, ButtonRenderProps } from "react-aria-components";
 import { HTMLAttributes } from "react";
 import { useScoreFormState } from "./ScoreFormContext";
 import { TextArea, TextAreaProps } from "../../common/TextArea";
@@ -12,7 +12,7 @@ type ScoreSelectFieldRenderProps = {
   setValue: (value: number) => void;
   isDisabled: boolean;
 };
-export function ScoreSelectField({
+function ScoreSelectField({
   children,
   ...props
 }: ChildrenRenderProps<
@@ -40,7 +40,7 @@ export function ScoreSelectField({
   );
 }
 
-export function CommentTextarea(props: TextAreaProps) {
+function CommentTextarea(props: TextAreaProps) {
   const { text, setText, isDisabled } = useScoreFormState();
   return (
     <TextArea
@@ -56,7 +56,7 @@ export function CommentTextarea(props: TextAreaProps) {
   );
 }
 
-export function SubmitButton({
+function SubmitButton({
   children,
   ...props
 }: ChildrenRenderProps<
@@ -84,7 +84,7 @@ export function SubmitButton({
   );
 }
 
-export function ErrorMessage({
+function ErrorMessage({
   children,
   ...props
 }: ChildrenRenderProps<
@@ -100,3 +100,10 @@ export function ErrorMessage({
     </span>
   );
 }
+
+export default {
+  ScoreSelectField,
+  CommentTextarea,
+  SubmitButton,
+  ErrorMessage,
+};

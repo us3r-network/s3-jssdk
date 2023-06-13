@@ -1,6 +1,6 @@
 import { HTMLAttributes } from "react";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
-import * as CommentsElements from "./CommentsElements";
+import CommentsElements from "./CommentsElements";
 import { CommentsContext, CommentsContextValue } from "./CommentsContext";
 import { CommentsDefaultChildren } from "./CommentsDefaultChildren";
 import { useComments } from "../../../hooks/useComments";

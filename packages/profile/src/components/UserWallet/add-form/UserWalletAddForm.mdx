@@ -1,13 +1,14 @@
-import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
 
 import * as UserWalletAddFormStories from "./UserWalletAddForm.stories";
+import { RenderProps, Subcomponents } from "./stories/Table";
 import StyleCode from "!!raw-loader!../../../ui/UserWallet/add-form/UserWalletAddForm.module.css";
 
 <Meta of={UserWalletAddFormStories} />
 
 # UserWalletAddForm
 
-UserWalletAddForm 是一个 Context 组件，它有一些子组件，用于添加用户钱包信息，只有在用户登录的情况下才会可用。
+UserWalletAddForm 用于添加用户钱包信息，只有在用户登录的情况下才会可用。
 
 ```jsx
 import { UserWalletAddForm } from "@us3r-network/profile";
@@ -28,4 +29,12 @@ import { UserWalletAddForm } from "@us3r-network/profile";
 
 ## Render Props
 
+UserWalletAddForm 的 children 可以是一个函数，它接收一个对象作为参数，该对象包含以下属性：
+
+<ArgTypes of={RenderProps} />
+
 ## Subcomponents
+
+UserWalletAddForm 是一个 Context.Provider 组件，它有一些子组件可以用来渲染表单的不同部分。
+
+<ArgTypes of={Subcomponents} />

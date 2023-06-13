@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
-import * as ScoreFormElements from "./ScoreFormElements";
+import ScoreFormElements from "./ScoreFormElements";
 import { ScoreFormContext, ScoreFormContextValue } from "./ScoreFormContext";
 import { ScoreFormDefaultChildren } from "./ScoreFormDefaultChildren";
 import { useIsAuthenticated } from "@us3r-network/auth-with-rainbowkit";

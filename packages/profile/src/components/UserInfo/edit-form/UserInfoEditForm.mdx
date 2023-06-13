@@ -1,13 +1,14 @@
-import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
 
 import * as UserInfoEditFormStories from "./UserInfoEditForm.stories";
+import { RenderProps, Subcomponents } from "./stories/Table";
 import StyleCode from "!!raw-loader!../../../ui/UserInfo/edit-form/UserInfoEditForm.module.css";
 
 <Meta of={UserInfoEditFormStories} />
 
 # UserInfoEditForm
 
-UserInfoEditForm 是一个 Context 组件，它有一些子组件，用于编辑用户的基本信息，只有在用户登录的情况下才会可用。
+UserInfoEditForm 用于编辑用户的基本信息，只有在用户登录的情况下才会是可用状态。
 
 ```jsx
 import { UserInfoEditForm } from "@us3r-network/profile";
@@ -28,4 +29,12 @@ import { UserInfoEditForm } from "@us3r-network/profile";
 
 ## Render Props
 
+UserInfoEditForm 的 children 可以是一个函数，它接收一个对象作为参数，该对象包含以下属性：
+
+<ArgTypes of={RenderProps} />
+
 ## Subcomponents
+
+UserInfoEditForm 是一个 Context.Provider 组件，它有一些子组件可以用来渲染表单的不同部分。
+
+<ArgTypes of={Subcomponents} />

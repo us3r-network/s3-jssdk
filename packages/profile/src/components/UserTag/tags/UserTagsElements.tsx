@@ -7,7 +7,7 @@ import {
 import { HTMLAttributes } from "react";
 import { useUserTagsState } from "./UserTagsContext";
 
-export function Count(props: HTMLAttributes<HTMLSpanElement>) {
+function Count(props: HTMLAttributes<HTMLSpanElement>) {
   const { tags } = useUserTagsState();
   return (
     <span data-state-element="Count" {...props}>
@@ -16,7 +16,7 @@ export function Count(props: HTMLAttributes<HTMLSpanElement>) {
   );
 }
 
-export function List(props: ListBoxProps<{ tag: string }>) {
+function List(props: ListBoxProps<{ tag: string }>) {
   const { tags } = useUserTagsState();
   const items = tags.map((tag) => ({ tag }));
   return (
@@ -30,11 +30,7 @@ export function List(props: ListBoxProps<{ tag: string }>) {
   );
 }
 
-export function Item({
-  children,
-  value,
-  ...props
-}: ItemProps<{ tag: string }>) {
+function Item({ children, value, ...props }: ItemProps<{ tag: string }>) {
   return (
     <AriaItem
       data-state-element="Item"
@@ -46,3 +42,9 @@ export function Item({
     </AriaItem>
   );
 }
+
+export default {
+  Count,
+  List,
+  Item,
+};
