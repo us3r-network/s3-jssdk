@@ -1,13 +1,10 @@
-import {
-  UserAvatar as UserAvatarRoot,
-  UserAvatarProps,
-} from "@us3r-network/profile";
+import { UserAvatar, UserAvatarProps } from "@us3r-network/profile";
 import LoadingSpokes from "../common/loading/LoadingSpokes";
 import styles from "./UserAvatar.module.css";
 
-const UserAvatar = ({ className = "", ...props }: UserAvatarProps) => {
+export default function ({ className = "", ...props }: UserAvatarProps) {
   return (
-    <UserAvatarRoot className={`${styles.UserAvatar} ${className}`} {...props}>
+    <UserAvatar className={`${styles.UserAvatar} ${className}`} {...props}>
       {({ isLoading, avatarSrc }) =>
         isLoading ? (
           <LoadingSpokes className={styles.LoadingSpokes} />
@@ -15,8 +12,6 @@ const UserAvatar = ({ className = "", ...props }: UserAvatarProps) => {
           <img className={styles.AvatarImg} src={avatarSrc} />
         )
       }
-    </UserAvatarRoot>
+    </UserAvatar>
   );
-};
-
-export default UserAvatar;
+}

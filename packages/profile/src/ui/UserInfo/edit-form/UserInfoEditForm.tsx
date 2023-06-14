@@ -1,50 +1,45 @@
-import {
-  UserInfoEditForm as UserInfoEditFormRoot,
-  UserInfoEditFormProps,
-} from "@us3r-network/profile";
+import { UserInfoEditForm, UserInfoEditFormProps } from "@us3r-network/profile";
 import { Label } from "react-aria-components";
 import LoadingSpokes from "../../common/loading/LoadingSpokes";
 import styles from "./UserInfoEditForm.module.css";
 
-const UserInfoEditForm = <T,>({
+export default function <T>({
   className = "",
   ...props
-}: UserInfoEditFormProps<T>) => {
+}: UserInfoEditFormProps<T>) {
   return (
-    <UserInfoEditFormRoot
+    <UserInfoEditForm
       className={`${styles.UserInfoEditForm} ${className}`}
       {...props}
     >
-      <UserInfoEditFormRoot.AvatarField className={styles.AvatarField}>
+      <UserInfoEditForm.AvatarField className={styles.AvatarField}>
         {({ isLoading, isUploadingAvatar }) => {
           return isLoading || isUploadingAvatar ? (
             <LoadingSpokes className={styles.AvatarLoadingSpokes} />
           ) : (
             <>
               <Label>
-                <UserInfoEditFormRoot.AvatarPreviewImg
+                <UserInfoEditForm.AvatarPreviewImg
                   className={styles.AvatarPreviewImg}
                 />
               </Label>
-              <UserInfoEditFormRoot.AvatarUploadInput
+              <UserInfoEditForm.AvatarUploadInput
                 className={styles.AvatarUploadInput}
               />
             </>
           );
         }}
-      </UserInfoEditFormRoot.AvatarField>
+      </UserInfoEditForm.AvatarField>
 
-      <UserInfoEditFormRoot.NameInput className={styles.NameInput} />
+      <UserInfoEditForm.NameInput className={styles.NameInput} />
 
-      <UserInfoEditFormRoot.BioTextArea className={styles.BioTextArea} />
+      <UserInfoEditForm.BioTextArea className={styles.BioTextArea} />
 
-      <UserInfoEditFormRoot.SubmitButton className={styles.SubmitButton}>
+      <UserInfoEditForm.SubmitButton className={styles.SubmitButton}>
         Submit
-      </UserInfoEditFormRoot.SubmitButton>
+      </UserInfoEditForm.SubmitButton>
 
-      <UserInfoEditFormRoot.ErrorMessage className={styles.ErrorMessage} />
-    </UserInfoEditFormRoot>
+      <UserInfoEditForm.ErrorMessage className={styles.ErrorMessage} />
+    </UserInfoEditForm>
   );
-};
-
-export default UserInfoEditForm;
+}

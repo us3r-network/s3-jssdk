@@ -177,6 +177,8 @@ function ErrorMessage(props: HTMLAttributes<HTMLSpanElement>) {
 
 export default {
   AvatarField,
+  AvatarPreviewImg,
+  AvatarUploadInput,
   NameInput,
   BioTextArea,
   SubmitButton,
