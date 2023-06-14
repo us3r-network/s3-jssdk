@@ -1,5 +1,5 @@
 import { Label, TextField } from "react-aria-components";
-import * as UserInfoEditForm from "./UserInfoEditFormElements";
+import UserInfoEditForm from "./UserInfoEditFormElements";
 
 export function UserInfoEditFormDefaultChildren() {
   return (

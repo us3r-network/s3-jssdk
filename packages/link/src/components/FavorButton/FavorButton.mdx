@@ -1,6 +1,7 @@
-import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
 
 import * as FavorButtonStories from "./FavorButton.stories";
+import { RenderProps } from "./stories/Table";
 import StyleCode from "!!raw-loader!../../ui/FavorButton/FavorButton.module.css";
 
 <Meta of={FavorButtonStories} />
@@ -28,4 +29,6 @@ import { FavorButton } from "@us3r-network/link";
 
 ## Render Props
 
-FavorButton 的 children 可以是一个函数，它接收一个对象作为参数，该对象包含以下属性：
+FavorButton's children can be a function that receives an object as a parameter, which contains the following properties:
+
+<ArgTypes of={RenderProps} />

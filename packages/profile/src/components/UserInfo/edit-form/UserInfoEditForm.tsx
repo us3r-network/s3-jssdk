@@ -7,7 +7,7 @@ import {
 } from "react";
 import { useProfileState } from "../../../ProfileStateProvider";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
-import * as UserInfoEditFormElements from "./UserInfoEditFormElements";
+import UserInfoEditFormElements from "./UserInfoEditFormElements";
 import {
   UserInfoEditFormContext,
   UserInfoEditFormContextValue,

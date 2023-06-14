@@ -1,21 +1,26 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo } from "react";
 import {
   useAuthentication,
   useIsAuthenticated,
 } from "@us3r-network/auth-with-rainbowkit";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
-import { AriaButtonProps } from "react-aria";
-import { Button, ButtonRenderProps } from "react-aria-components";
+import { Button, ButtonProps, ButtonRenderProps } from "react-aria-components";
 import { LogoutButtonChildren } from "./LogoutButtonChildren";
 
 export interface LogoutButtonRenderProps {
+  /**
+   * Whether the user is authenticated.
+   */
   isAuthenticated: boolean;
+  /**
+   * Whether the button is disabled.
+   */
   isDisabled: boolean;
 }
 
 export interface LogoutButtonProps
   extends ChildrenRenderProps<
-    AriaButtonProps,
+    ButtonProps,
     ButtonRenderProps & LogoutButtonRenderProps
   > {}
 

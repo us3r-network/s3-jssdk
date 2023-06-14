@@ -1,4 +1,4 @@
-import { UserTags as UserTagsRoot, UserTagsProps } from "@us3r-network/profile";
+import { UserTags, UserTagsProps } from "@us3r-network/profile";
 import { useState } from "react";
 import UserTagAddForm from "../add-form/UserTagAddForm";
 import ModalBase from "../../common/modal/ModalBase";
@@ -7,16 +7,16 @@ import { ReactComponent as AddIcon } from "@material-design-icons/svg/outlined/a
 import styles from "./UserTags.module.css";
 import { Heading } from "react-aria-components";
 
-const UserTags = ({ className = "", ...props }: UserTagsProps) => {
+export default function ({ className = "", ...props }: UserTagsProps) {
   const [isOpenForm, setIsOpenForm] = useState(false);
   return (
-    <UserTagsRoot className={`${styles.UserTags} ${className}`} {...props}>
+    <UserTags className={`${styles.UserTags} ${className}`} {...props}>
       {({ isLoading, isLoginUser }) => {
         return (
           <>
             <Heading className={styles.Heading}>
               <span className={styles.CountBox}>
-                Tags (<UserTagsRoot.Count />)
+                Tags (<UserTags.Count />)
               </span>
               {isLoginUser && (
                 <span
@@ -34,15 +34,15 @@ const UserTags = ({ className = "", ...props }: UserTagsProps) => {
                 return <LoadingSpokes className={styles.LoadingSpokes} />;
               }
               return (
-                <UserTagsRoot.List className={styles.List}>
+                <UserTags.List className={styles.List}>
                   {(item) => (
-                    <UserTagsRoot.Item
+                    <UserTags.Item
                       key={item.tag}
                       value={item}
                       className={styles.Item}
                     />
                   )}
-                </UserTagsRoot.List>
+                </UserTags.List>
               );
             })()}
 
@@ -65,8 +65,6 @@ const UserTags = ({ className = "", ...props }: UserTagsProps) => {
           </>
         );
       }}
-    </UserTagsRoot>
+    </UserTags>
   );
-};
-
-export default UserTags;
+}

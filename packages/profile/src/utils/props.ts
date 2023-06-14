@@ -9,6 +9,9 @@ export interface StyleProps {
 
 export type ChildrenRenderProps<T, V> = Omit<T, "children"> &
   StyleProps & {
+    /**
+     * The children render function or ReactNode.
+     */
     children?: React.ReactNode | ((values: V) => ReactNode);
   };
 

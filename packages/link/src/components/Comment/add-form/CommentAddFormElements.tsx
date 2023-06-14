@@ -10,7 +10,7 @@ import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import { AriaButtonProps } from "react-aria";
 import LoadingSpokes from "../../common/Loading/LoadingSpokes";
 
-export function TextInput(props: InputProps) {
+function TextInput(props: InputProps) {
   const { text, setText, isDisabled } = useCommentAddFormState();
   return (
     <Input
@@ -26,7 +26,7 @@ export function TextInput(props: InputProps) {
   );
 }
 
-export function SubmitButton({
+function SubmitButton({
   children,
   ...props
 }: ChildrenRenderProps<
@@ -54,7 +54,7 @@ export function SubmitButton({
   );
 }
 
-export function ErrorMessage({
+function ErrorMessage({
   children,
   ...props
 }: ChildrenRenderProps<
@@ -70,3 +70,9 @@ export function ErrorMessage({
     </span>
   );
 }
+
+export default {
+  TextInput,
+  SubmitButton,
+  ErrorMessage,
+};

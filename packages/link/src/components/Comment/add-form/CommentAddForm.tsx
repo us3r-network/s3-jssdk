@@ -1,6 +1,6 @@
 import { HTMLAttributes, useCallback, useEffect, useState } from "react";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
-import * as CommentAddFormElements from "./CommentAddFormElements";
+import CommentAddFormElements from "./CommentAddFormElements";
 import {
   CommentAddFormContext,
   CommentAddFormContextValue,

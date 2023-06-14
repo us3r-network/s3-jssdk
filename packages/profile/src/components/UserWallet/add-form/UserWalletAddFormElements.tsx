@@ -2,7 +2,7 @@ import { Button, ButtonProps, Input, InputProps } from "react-aria-components";
 import { HTMLAttributes } from "react";
 import { useUserWalletAddFormState } from "./UserWalletAddFormContext";
 
-export function AddressInput(props: InputProps) {
+function AddressInput(props: InputProps) {
   const { address, setAddress, isDisabled } = useUserWalletAddFormState();
   return (
     <Input
@@ -18,7 +18,7 @@ export function AddressInput(props: InputProps) {
   );
 }
 
-export function SubmitButton(props: ButtonProps) {
+function SubmitButton(props: ButtonProps) {
   const { isDisabled, submitAdd } = useUserWalletAddFormState();
   return (
     <Button
@@ -30,7 +30,7 @@ export function SubmitButton(props: ButtonProps) {
   );
 }
 
-export function ErrorMessage(props: HTMLAttributes<HTMLSpanElement>) {
+function ErrorMessage(props: HTMLAttributes<HTMLSpanElement>) {
   const { errMsg } = useUserWalletAddFormState();
   return (
     <span data-state-element="ErrorMessage" {...props}>
@@ -38,3 +38,9 @@ export function ErrorMessage(props: HTMLAttributes<HTMLSpanElement>) {
     </span>
   );
 }
+
+export default {
+  AddressInput,
+  SubmitButton,
+  ErrorMessage,
+};

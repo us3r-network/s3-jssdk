@@ -1,6 +1,6 @@
-import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
-
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
 import * as LoginButtonStories from "./LoginButton.stories";
+import { RenderProps } from "./stories/Table";
 import StyleCode from "!!raw-loader!../../ui/LoginButton/LoginButton.module.css";
 
 <Meta of={LoginButtonStories} />
@@ -17,6 +17,10 @@ import { LoginButton } from "@us3r-network/profile";
 
 <Canvas />
 
+## Props
+
+<Controls />
+
 <p>
   <details>
     <summary>View custom styles</summary>
@@ -25,3 +29,7 @@ import { LoginButton } from "@us3r-network/profile";
 </p>
 
 ## Render Props
+
+LoginButton's children can be a function that receives an object as a parameter, which contains the following properties:
+
+<ArgTypes of={RenderProps} />

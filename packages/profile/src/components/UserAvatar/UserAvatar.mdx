@@ -1,6 +1,7 @@
-import { Canvas, Meta, Controls, Source } from "@storybook/blocks";
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
 
 import * as UserAvatarStories from "./UserAvatar.stories";
+import { RenderProps } from "./stories/Table";
 import StyleCode from "!!raw-loader!../../ui/UserAvatar/UserAvatar.module.css";
 
 <Meta of={UserAvatarStories} />
@@ -27,3 +28,7 @@ import { UserAvatar } from "@us3r-network/profile";
 <Controls />
 
 ## Render Props
+
+UserAvatar's children can be a function that receives an object as a parameter, which contains the following properties:
+
+<ArgTypes of={RenderProps} />

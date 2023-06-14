@@ -1,5 +1,5 @@
 import {
-  UserInfo as UserInfoRoot,
+  UserInfo,
   UserInfoProps,
   AvatarUploadOpts,
 } from "@us3r-network/profile";
@@ -9,23 +9,23 @@ import ModalBase from "../../common/modal/ModalBase";
 import LoadingSpokes from "../../common/loading/LoadingSpokes";
 import styles from "./UserInfo.module.css";
 
-const UserInfo = <T,>({
+export default function <T>({
   className = "",
   avatarUploadOpts,
   ...props
 }: UserInfoProps<T> & {
   avatarUploadOpts?: AvatarUploadOpts<T>;
-}) => {
+}) {
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   return (
-    <UserInfoRoot className={`${styles.UserInfo} ${className}`} {...props}>
+    <UserInfo className={`${styles.UserInfo} ${className}`} {...props}>
       {({ isLoading, isLoginUser }) => {
         if (isLoading) {
           return <LoadingSpokes className={styles.LoadingSpokes} />;
         }
         return (
           <>
-            <UserInfoRoot.Avatar
+            <UserInfo.Avatar
               className={styles.Avatar}
               onClick={() => {
                 if (isLoginUser) {
@@ -36,9 +36,9 @@ const UserInfo = <T,>({
               {({ avatarSrc }) => (
                 <img className={styles.AvatarImg} src={avatarSrc} />
               )}
-            </UserInfoRoot.Avatar>
-            <UserInfoRoot.Name className={styles.Name} />
-            <UserInfoRoot.Bio className={styles.Bio} />
+            </UserInfo.Avatar>
+            <UserInfo.Name className={styles.Name} />
+            <UserInfo.Bio className={styles.Bio} />
             {(() => {
               if (!isLoginUser) return;
               if (!avatarUploadOpts) {
@@ -62,8 +62,6 @@ const UserInfo = <T,>({
           </>
         );
       }}
-    </UserInfoRoot>
+    </UserInfo>
   );
-};
-
-export default UserInfo;
+}

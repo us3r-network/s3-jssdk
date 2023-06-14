@@ -1,24 +1,19 @@
-import {
-  UserTagAddForm as UserTagAddFormRoot,
-  UserTagAddFormProps,
-} from "@us3r-network/profile";
+import { UserTagAddForm, UserTagAddFormProps } from "@us3r-network/profile";
 import styles from "./UserTagAddForm.module.css";
 
-const UserTagAddForm = ({ className = "", ...props }: UserTagAddFormProps) => {
+export default function ({ className = "", ...props }: UserTagAddFormProps) {
   return (
-    <UserTagAddFormRoot
+    <UserTagAddForm
       className={`${styles.UserTagAddForm} ${className}`}
       {...props}
     >
-      <UserTagAddFormRoot.TagInput className={styles.TagInput} />
+      <UserTagAddForm.TagInput className={styles.TagInput} />
 
-      <UserTagAddFormRoot.SubmitButton className={styles.SubmitButton}>
+      <UserTagAddForm.SubmitButton className={styles.SubmitButton}>
         Submit
-      </UserTagAddFormRoot.SubmitButton>
+      </UserTagAddForm.SubmitButton>
 
-      <UserTagAddFormRoot.ErrorMessage className={styles.ErrorMessage} />
-    </UserTagAddFormRoot>
+      <UserTagAddForm.ErrorMessage className={styles.ErrorMessage} />
+    </UserTagAddForm>
   );
-};
-
-export default UserTagAddForm;
+}

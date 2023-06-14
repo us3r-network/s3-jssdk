@@ -19,7 +19,7 @@ type AvatarFieldRenderProps = {
   avatar: string;
 };
 
-export function AvatarField({
+function AvatarField({
   children,
   ...props
 }: ChildrenRenderProps<TextFieldProps, AvatarFieldRenderProps>) {
@@ -75,7 +75,7 @@ function AvatarFieldDefaultChildren({
   );
 }
 
-export function AvatarPreviewImg(props: HTMLAttributes<HTMLImageElement>) {
+function AvatarPreviewImg(props: HTMLAttributes<HTMLImageElement>) {
   const { avatar } = useUserInfoEditFormState();
   return (
     <img
@@ -88,7 +88,7 @@ export function AvatarPreviewImg(props: HTMLAttributes<HTMLImageElement>) {
   );
 }
 
-export function AvatarUploadInput(props: InputProps) {
+function AvatarUploadInput(props: InputProps) {
   const { setAvatar, isDisabled, avatarUploadOpts, setIsUploadingAvatar } =
     useUserInfoEditFormState();
   if (!avatarUploadOpts) {
@@ -122,7 +122,7 @@ export function AvatarUploadInput(props: InputProps) {
   );
 }
 
-export function NameInput(props: InputProps) {
+function NameInput(props: InputProps) {
   const { name, setName, isDisabled } = useUserInfoEditFormState();
   return (
     <Input
@@ -138,7 +138,7 @@ export function NameInput(props: InputProps) {
   );
 }
 
-export function BioTextArea(props: TextAreaProps) {
+function BioTextArea(props: TextAreaProps) {
   const { bio, setBio, isDisabled } = useUserInfoEditFormState();
   return (
     <TextArea
@@ -154,7 +154,7 @@ export function BioTextArea(props: TextAreaProps) {
   );
 }
 
-export function SubmitButton(props: ButtonProps) {
+function SubmitButton(props: ButtonProps) {
   const { isDisabled, submitEdit } = useUserInfoEditFormState();
   return (
     <Button
@@ -166,7 +166,7 @@ export function SubmitButton(props: ButtonProps) {
   );
 }
 
-export function ErrorMessage(props: HTMLAttributes<HTMLSpanElement>) {
+function ErrorMessage(props: HTMLAttributes<HTMLSpanElement>) {
   const { errMsg } = useUserInfoEditFormState();
   return (
     <span data-state-element="AvatarPreview" {...props}>
@@ -174,3 +174,13 @@ export function ErrorMessage(props: HTMLAttributes<HTMLSpanElement>) {
     </span>
   );
 }
+
+export default {
+  AvatarField,
+  AvatarPreviewImg,
+  AvatarUploadInput,
+  NameInput,
+  BioTextArea,
+  SubmitButton,
+  ErrorMessage,
+};

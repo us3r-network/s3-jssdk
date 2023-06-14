@@ -1,27 +1,22 @@
 import {
-  UserWalletAddForm as UserWalletAddFormRoot,
+  UserWalletAddForm,
   UserWalletAddFormProps,
 } from "@us3r-network/profile";
 import styles from "./UserWalletAddForm.module.css";
 
-const UserWalletAddForm = ({
-  className = "",
-  ...props
-}: UserWalletAddFormProps) => {
+export default function ({ className = "", ...props }: UserWalletAddFormProps) {
   return (
-    <UserWalletAddFormRoot
+    <UserWalletAddForm
       className={`${styles.UserWalletAddForm} ${className}`}
       {...props}
     >
-      <UserWalletAddFormRoot.AddressInput className={styles.AddressInput} />
+      <UserWalletAddForm.AddressInput className={styles.AddressInput} />
 
-      <UserWalletAddFormRoot.SubmitButton className={styles.SubmitButton}>
+      <UserWalletAddForm.SubmitButton className={styles.SubmitButton}>
         Submit
-      </UserWalletAddFormRoot.SubmitButton>
+      </UserWalletAddForm.SubmitButton>
 
-      <UserWalletAddFormRoot.ErrorMessage className={styles.ErrorMessage} />
-    </UserWalletAddFormRoot>
+      <UserWalletAddForm.ErrorMessage className={styles.ErrorMessage} />
+    </UserWalletAddForm>
   );
-};
-
-export default UserWalletAddForm;
+}

@@ -1,4 +1,4 @@
-import * as CommentAddForm from "./CommentAddFormElements";
+import CommentAddForm from "./CommentAddFormElements";
 
 export function CommentAddFormDefaultChildren() {
   return (

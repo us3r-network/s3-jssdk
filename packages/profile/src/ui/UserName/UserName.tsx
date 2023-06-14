@@ -1,12 +1,10 @@
-import { UserName as UserNameRoot, UserNameProps } from "@us3r-network/profile";
+import { UserName, UserNameProps } from "@us3r-network/profile";
 import styles from "./UserName.module.css";
 
-const UserName = ({ className = "", ...props }: UserNameProps) => {
+export default function ({ className = "", ...props }: UserNameProps) {
   return (
-    <UserNameRoot className={`${styles.UserName} ${className}`} {...props}>
+    <UserName className={`${styles.UserName} ${className}`} {...props}>
       {({ isLoading, username }) => (isLoading ? "" : username)}
-    </UserNameRoot>
+    </UserName>
   );
-};
-
-export default UserName;
+}

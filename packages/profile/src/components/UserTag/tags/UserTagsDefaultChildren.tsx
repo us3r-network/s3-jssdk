@@ -1,5 +1,5 @@
 import { useState } from "react";
-import * as UserTags from "./UserTagsElements";
+import UserTags from "./UserTagsElements";
 import {
   Button,
   Dialog,

@@ -1,31 +1,25 @@
-import {
-  UserWallets as UserWalletsRoot,
-  UserWalletsProps,
-} from "@us3r-network/profile";
-import { useCallback, useEffect, useState } from "react";
+import { UserWallets, UserWalletsProps } from "@us3r-network/profile";
+import { useState } from "react";
 import UserWalletAddForm from "../add-form/UserWalletAddForm";
 import ModalBase from "../../common/modal/ModalBase";
 import LoadingSpokes from "../../common/loading/LoadingSpokes";
 import { ReactComponent as AddIcon } from "@material-design-icons/svg/outlined/add.svg";
 import { ReactComponent as CopyIcon } from "@material-design-icons/svg/outlined/content_copy.svg";
 import { ReactComponent as DeleteIcon } from "@material-design-icons/svg/outlined/delete.svg";
-import styles from "./UserWallets.module.css";
 import { Heading } from "react-aria-components";
+import styles from "./UserWallets.module.css";
 
-const UserWallets = ({ className = "", ...props }: UserWalletsProps) => {
+export default function ({ className = "", ...props }: UserWalletsProps) {
   const [isOpenForm, setIsOpenForm] = useState(false);
 
   return (
-    <UserWalletsRoot
-      className={`${styles.UserWallets} ${className}`}
-      {...props}
-    >
-      {({ isLoading, isLoginUser, wallets }) => {
+    <UserWallets className={`${styles.UserWallets} ${className}`} {...props}>
+      {({ isLoading, isLoginUser }) => {
         return (
           <>
             <Heading className={styles.Heading}>
               <span className={styles.CountBox}>
-                Wallets (<UserWalletsRoot.Count />)
+                Wallets (<UserWallets.Count />)
               </span>
               {isLoginUser && (
                 <span
@@ -43,33 +37,33 @@ const UserWallets = ({ className = "", ...props }: UserWalletsProps) => {
                 return <LoadingSpokes className={styles.LoadingSpokes} />;
               }
               return (
-                <UserWalletsRoot.List className={styles.List}>
+                <UserWallets.List className={styles.List}>
                   {(item) => (
-                    <UserWalletsRoot.Item
+                    <UserWallets.Item
                       className={styles.Item}
                       key={item.address}
                       value={item}
                     >
                       <div className={styles.ItemText}>
-                        <UserWalletsRoot.Address className={styles.Address} />
-                        <UserWalletsRoot.Network className={styles.Network} />
+                        <UserWallets.Address className={styles.Address} />
+                        <UserWallets.Network className={styles.Network} />
                       </div>
                       <div className={styles.ItemAction}>
-                        <UserWalletsRoot.Delete className={styles.Delete}>
+                        <UserWallets.Delete className={styles.Delete}>
                           <DeleteIcon className={styles.DeleteIcon} />
-                        </UserWalletsRoot.Delete>
-                        <UserWalletsRoot.Copy
+                        </UserWallets.Delete>
+                        <UserWallets.Copy
                           className={styles.Copy}
                           onCopied={() => {
                             alert("Copied!");
                           }}
                         >
                           <CopyIcon className={styles.CopyIcon} />
-                        </UserWalletsRoot.Copy>
+                        </UserWallets.Copy>
                       </div>
-                    </UserWalletsRoot.Item>
+                    </UserWallets.Item>
                   )}
-                </UserWalletsRoot.List>
+                </UserWallets.List>
               );
             })()}
 
@@ -92,8 +86,6 @@ const UserWallets = ({ className = "", ...props }: UserWalletsProps) => {
           </>
         );
       }}
-    </UserWalletsRoot>
+    </UserWallets>
   );
-};
-
-export default UserWallets;
+}

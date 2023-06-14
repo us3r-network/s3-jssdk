@@ -7,7 +7,7 @@ import {
 } from "react";
 import { useProfileState } from "../../../ProfileStateProvider";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
-import * as UserTagAddFormElements from "./UserTagAddFormElements";
+import UserTagAddFormElements from "./UserTagAddFormElements";
 import {
   UserTagAddFormContext,
   UserTagAddFormContextValue,

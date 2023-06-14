@@ -7,7 +7,7 @@ import {
 } from "react";
 import { useProfileState } from "../../../ProfileStateProvider";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
-import * as UserWalletAddFormElements from "./UserWalletAddFormElements";
+import UserWalletAddFormElements from "./UserWalletAddFormElements";
 import {
   UserWalletAddFormContext,
   UserWalletAddFormContextValue,

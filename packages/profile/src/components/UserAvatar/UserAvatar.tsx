@@ -12,7 +12,13 @@ export interface UserAvatarIncomingProps {
   did?: string;
 }
 export interface UserAvatarRenderProps {
+  /**
+   * Whether the user avatar is loading.
+   */
   isLoading: boolean;
+  /**
+   * The user avatar src.
+   */
   avatarSrc: string;
 }
 export interface UserAvatarProps

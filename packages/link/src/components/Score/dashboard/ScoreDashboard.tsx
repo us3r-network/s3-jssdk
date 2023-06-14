@@ -1,6 +1,6 @@
 import { HTMLAttributes, useMemo } from "react";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
-import * as ScoreDashboardElements from "./ScoreDashboardElements";
+import ScoreDashboardElements from "./ScoreDashboardElements";
 import {
   ScoreDashboardContext,
   ScoreDashboardContextValue,

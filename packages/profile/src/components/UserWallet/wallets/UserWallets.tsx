@@ -1,7 +1,7 @@
 import { HTMLAttributes, useCallback, useEffect, useState } from "react";
 import { useProfileState } from "../../../ProfileStateProvider";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
-import * as UserWalletsElements from "./UserWalletsElements";
+import UserWalletsElements from "./UserWalletsElements";
 import {
   UserWalletsContext,
   UserWalletsContextValue,

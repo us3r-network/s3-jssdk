@@ -3,7 +3,7 @@ import { UserAvatar, UserAvatarProps } from "../../UserAvatar";
 import { UserName, UserNameProps } from "../../UserName";
 import { useUserInfoState } from "./UserInfoContext";
 
-export function Avatar(props: UserAvatarProps) {
+function Avatar(props: UserAvatarProps) {
   const { isLoginUser, did } = useUserInfoState();
   const avatarProps = {
     "data-state-element": "Avatar",
@@ -15,7 +15,7 @@ export function Avatar(props: UserAvatarProps) {
   return <UserAvatar {...avatarProps} />;
 }
 
-export function Name(props: UserNameProps) {
+function Name(props: UserNameProps) {
   const { isLoginUser, did } = useUserInfoState();
   const nameProps = {
     "data-state-element": "Name",
@@ -27,7 +27,7 @@ export function Name(props: UserNameProps) {
   return <UserName {...nameProps} />;
 }
 
-export function Bio(props: HTMLAttributes<HTMLSpanElement>) {
+function Bio(props: HTMLAttributes<HTMLSpanElement>) {
   const { info } = useUserInfoState();
   return (
     <span data-state-element="Bio" {...props}>
@@ -35,3 +35,9 @@ export function Bio(props: HTMLAttributes<HTMLSpanElement>) {
     </span>
   );
 }
+
+export default {
+  Avatar,
+  Name,
+  Bio,
+};

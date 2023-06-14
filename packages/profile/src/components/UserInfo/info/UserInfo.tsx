@@ -3,7 +3,7 @@ import { useProfileState } from "../../../ProfileStateProvider";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import { Profile } from "@us3r-network/data-model";
-import * as UserInfoElements from "./UserInfoElements";
+import UserInfoElements from "./UserInfoElements";
 import { UserInfoContext, UserInfoContextValue } from "./UserInfoContext";
 import { UserInfoDefaultChildren } from "./UserInfoDefaultChildren";
 import type { AvatarUploadOpts } from "../edit-form";

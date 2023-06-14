@@ -17,43 +17,16 @@ const authToolStories = authToolPkg.map((pkgDir) => ({
 }));
 
 // model definition
-const modelDefDoc = ["Profile", "Link", "Collection", "Dapp"];
+const modelDefDoc = ["Profile", "Link"];
 const modelDefTitlePrefix = "model definition";
 const modelDefDirectory = path.join(__dirname, `../packages/data-model`);
 const modelDefStories = modelDefDoc
   // Generate the story navigation bar in the specified order
-  .map((file) => {
-    const story = {
-      titlePrefix: modelDefTitlePrefix,
-      directory: modelDefDirectory,
-    };
-    return [
-      {
-        ...story,
-        directory: `${modelDefDirectory}/stories`,
-        files: `${file}.mdx`,
-      },
-      {
-        ...story,
-        directory: `${modelDefDirectory}/src`,
-        files: `**/${file}.mdx`,
-      },
-    ];
-  })
-  .reduce((acc, val) => acc.concat(val), [])
-  // unsorted navigation
-  .concat([
-    {
-      titlePrefix: modelDefTitlePrefix,
-      directory: `${modelDefDirectory}/stories`,
-      files: `**/*.mdx`,
-    },
-    {
-      titlePrefix: modelDefTitlePrefix,
-      directory: `${modelDefDirectory}/src`,
-      files: `**/*.mdx`,
-    },
-  ]);
+  .map((file) => ({
+    titlePrefix: modelDefTitlePrefix,
+    directory: `${modelDefDirectory}/stories`,
+    files: `${file}.mdx`,
+  }));
 
 // components
 const componentPkgs = ["profile", "link"];

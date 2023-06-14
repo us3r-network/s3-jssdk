@@ -1,5 +1,5 @@
 import { useState } from "react";
-import * as UserInfo from "./UserInfoElements";
+import UserInfo from "./UserInfoElements";
 import {
   Button,
   Dialog,
