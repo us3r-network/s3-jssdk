@@ -12,14 +12,16 @@ npm install @us3r-network/auth-with-rainbowkit
 
 ### Wrap providers
 
-Wrap your application with `Us3rAuthProvider`.
+Wrap your application with `Us3rAuthWithRainbowkitProvider`.
 
 ```tsx
+import { Us3rAuthWithRainbowkitProvider } from "@us3r-network/auth-with-rainbowkit";
+
 const App = () => {
   return (
-    <Us3rAuthProvider>
+    <Us3rAuthWithRainbowkitProvider>
       <YourApp />
-    </Us3rAuthProvider>
+    </Us3rAuthWithRainbowkitProvider>
   );
 };
 ```
