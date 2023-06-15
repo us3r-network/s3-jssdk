@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - main
+      - 'F-CICD-bufan*'
       - 'release/*'
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
@@ -21,20 +21,15 @@ jobs:
         with:
           node-version: 16.x
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 7.0.0
-
       - name: Install Dependencies
-        run: pnpm install
+        run: yarn
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
         with:
-          version: pnpm run version
-          publish: pnpm release
+          version: yarn run version
+          publish: yarn run release
           commit: "[ci] release"
           title: "[ci] release"
         env:
