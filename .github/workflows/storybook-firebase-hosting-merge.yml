@@ -17,7 +17,7 @@ jobs:
           node-version: '18'
       - run: |
           yarn 
-          yarn build storybook
+          yarn build-storybook
         env:
           CI: false
           GENERATE_SOURCEMAP: false
