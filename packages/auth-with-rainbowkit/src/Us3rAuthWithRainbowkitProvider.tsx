@@ -3,7 +3,6 @@ import {
   connectorsForWallets,
   createAuthenticationAdapter,
   darkTheme,
-  getDefaultWallets,
   lightTheme,
   RainbowKitAuthenticationProvider,
   RainbowKitProvider,
@@ -29,9 +28,9 @@ import { arbitrum, goerli, mainnet, optimism, polygon } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import {
   argentWallet,
-  trustWallet,
   omniWallet,
   imTokenWallet,
+  metaMaskWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { Us3rAuth } from "@us3r-network/auth";
 
@@ -46,20 +45,17 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   [publicProvider()]
 );
 
-const { wallets } = getDefaultWallets({
-  appName: "RainbowKit App",
-  chains,
-});
-
 const connectors = connectorsForWallets([
-  ...wallets,
+  {
+    groupName: "Recommended Wallets",
+    wallets: [metaMaskWallet({ chains, walletConnectVersion: "1" })],
+  },
   {
     groupName: "Other Wallets",
     wallets: [
-      argentWallet({ chains }),
-      trustWallet({ chains }),
-      omniWallet({ chains }),
-      imTokenWallet({ chains }),
+      argentWallet({ chains, walletConnectVersion: "1" }),
+      omniWallet({ chains, walletConnectVersion: "1" }),
+      imTokenWallet({ chains, walletConnectVersion: "1" }),
     ],
   },
 ]);
