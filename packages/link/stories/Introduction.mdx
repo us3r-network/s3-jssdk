@@ -6,7 +6,9 @@ import * as PostsStories from "./Posts.stories";
 
 # @us3r-network/link
 
-We created a [data model](https://github.com/us3r-network/s3-jssdk/tree/main/packages/data-model) about user link based on ceramic, and provided crud SDK for the model, and commonly used react components related to link
+A React component library that provides some of the most commonly used UI components for [Link Data Model](?path=/docs/model-definition-link--docs)
+
+@us3r-network/link is also a library of unstyled components, provides a simpler way to build accessible components with custom styles, while offering the flexibility to drop down to hooks for even more customizability where needed.
 
 [![License](https://img.shields.io/badge/License-MIT.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://badge.fury.io/js/%40us3r-network%2Flink.svg)](https://badge.fury.io/js/%40us3r-network%2Flink)
@@ -26,10 +28,6 @@ You need to wrap your application with `Us3rAuthWithRainbowkitProvider`,`Profile
 
 <Source code={App} />
 
-## Headless Components
+`Us3rAuthWithRainbowkitProvider` establishes a session with Ceramic, which is necessary to retrieve information about the currently logged-in user or perform a write operation on the Ceramic node.
 
-@us3r-network/link is a unstyled component library that provides some commonly used components in social systems, such as follow, like, comment, rating, and so on.
-
-Regarding the characteristics of a unstyled component library, you can refer to [here](?path=/docs/components-profile-introduction--docs#headless-components).
-
-View the documentation for each component to learn more.
+`ProfileStateProvider` and `LinkStateProvider` can assist you in managing and synchronizing the state of all link components.
