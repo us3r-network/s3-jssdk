@@ -6,7 +6,6 @@ name: Deploy StoryBook DOC to Firebase Hosting on merge
   push:
     branches:
       - main
-      - F-CICD-bufan
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
