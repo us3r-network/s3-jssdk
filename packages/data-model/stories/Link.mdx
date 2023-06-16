@@ -1,8 +1,20 @@
 import { Meta, Source } from "@storybook/blocks";
+
+import LinkSchema from "!!raw-loader!../src/link/01 link-schema.graphql";
+import LinkOperationSchema from "!!raw-loader!../src/link/02 link-operations-schema.graphql";
+import LinkRelationSchema from "!!raw-loader!../src/link/03 link-relations-schema.graphql";
 import MainnetDefinition from "!!raw-loader!../src/link/link-runtime-composite.js";
 
 <Meta title="Link" />
 
 # Link Model
 
+## GraphQL Schema
+Link
+<Source code={LinkSchema} language="graphql" />
+Link Actions
+<Source code={LinkOperationSchema} language="graphql" />
+Link Relations
+<Source code={LinkRelationSchema} language="graphql" />
+## Runtime Definition 
 <Source code={MainnetDefinition.split("=").pop()} language="javascript" />
