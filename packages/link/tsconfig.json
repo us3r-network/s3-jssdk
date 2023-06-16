@@ -1,8 +1,12 @@
 {
-	"extends": "../../tsconfig.json",
-	"compilerOptions": {
-	},
-	"include": ["src"],
-	"exclude": ["node_modules", "build"]
-  }
-  
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "paths": {
+      "@us3r-network/link": ["./src/index.ts"]
+    }
+  },
+  "files": ["typings.d.ts"],
+  "include": ["src", "stories"],
+  "exclude": ["node_modules", "dist"]
+}

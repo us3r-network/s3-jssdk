@@ -1,0 +1,34 @@
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
+
+import * as ScoresAvgStories from "./ScoresAvg.stories";
+import { RenderProps } from "./stories/Table";
+import StyleCode from "!!raw-loader!../../../ui/Score/avg/ScoresAvg.module.css";
+
+<Meta of={ScoresAvgStories} />
+
+# ScoresAvg
+
+ScoresAvg 是一个用于计算和展示平均分的组件。它可以方便地接收评分数据，并计算出平均分数进行展示
+
+```jsx
+import { ScoresAvg } from "@us3r-network/link";
+```
+
+<Canvas />
+
+<p>
+  <details>
+    <summary>View custom styles</summary>
+    <Source code={StyleCode} />
+  </details>
+</p>
+
+## Props
+
+<Controls />
+
+## Render Props
+
+ScoresAvg's children can be a function that receives an object as a parameter, which contains the following properties:
+
+<ArgTypes of={RenderProps} />

@@ -1,0 +1,34 @@
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
+
+import * as UserNameStories from "./UserName.stories";
+import { RenderProps } from "./stories/Table";
+import StyleCode from "!!raw-loader!../../ui/UserName/UserName.module.css";
+
+<Meta of={UserNameStories} />
+
+# UserName
+
+UserName 用来显示用户的名称，它可以是当前登录用户的名称，也可以是其他用户的名称.
+
+```jsx
+import { UserName } from "@us3r-network/profile";
+```
+
+<Canvas />
+
+<p>
+  <details>
+    <summary>View custom styles</summary>
+    <Source code={StyleCode} />
+  </details>
+</p>
+
+## Props
+
+<Controls />
+
+## Render Props
+
+UserName's children can be a function that receives an object as a parameter, which contains the following properties:
+
+<ArgTypes of={RenderProps} />

@@ -1,0 +1,40 @@
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
+
+import * as UserWalletAddFormStories from "./UserWalletAddForm.stories";
+import { RenderProps, Subcomponents } from "./stories/Table";
+import StyleCode from "!!raw-loader!../../../ui/UserWallet/add-form/UserWalletAddForm.module.css";
+
+<Meta of={UserWalletAddFormStories} />
+
+# UserWalletAddForm
+
+UserWalletAddForm 用于添加用户钱包信息，只有在用户登录的情况下才会可用。
+
+```jsx
+import { UserWalletAddForm } from "@us3r-network/profile";
+```
+
+<Canvas />
+
+<p>
+  <details>
+    <summary>View custom styles</summary>
+    <Source code={StyleCode} />
+  </details>
+</p>
+
+## Props
+
+<Controls />
+
+## Render Props
+
+UserWalletAddForm's children can be a function that receives an object as a parameter, which contains the following properties:
+
+<ArgTypes of={RenderProps} />
+
+## Subcomponents
+
+UserWalletAddForm is a Context.Provider component that includes the following child components that can be used to render different parts of a form:
+
+<ArgTypes of={Subcomponents} />

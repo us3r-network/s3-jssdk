@@ -9,63 +9,76 @@ import {
   PropsWithChildren,
 } from "react";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
-import { S3ProfileModel, Profile } from "./data-model";
-import { Theme, ThemeMode, getTheme } from "./themes";
-import { ThemeProvider } from "styled-components";
+import { S3ProfileModel, Profile } from "@us3r-network/data-model";
+import { shortDid } from "./utils/short";
 
 let s3ProfileModel: S3ProfileModel | null = null;
 export const getS3ProfileModel = () => s3ProfileModel;
 
 export interface ProfileStateContextValue {
+  s3ProfileModalInitialed: boolean;
+  s3ProfileModalAuthed: boolean;
   profile: Profile | null;
   profileLoading: boolean;
   getProfileWithDid: (did: string) => Promise<Profile | null>;
+  updateProfile: (profile: Profile) => Promise<void>;
 }
 const defaultContextValue: ProfileStateContextValue = {
+  s3ProfileModalInitialed: false,
+  s3ProfileModalAuthed: false,
   profile: null,
   profileLoading: false,
   getProfileWithDid: async () => null,
+  updateProfile: async () => {},
 };
 const ProfileStateContext = createContext(defaultContextValue);
+
+const defaultNewProfile: Profile = {
+  name: "",
+  avatar: "",
+  bio: "",
+  tags: [],
+  wallets: [],
+};
 
 export interface ProfileStateProviderProps extends PropsWithChildren {
   // ceramic host
   ceramicHost: string;
-  // theme config
-  themeConfig?: {
-    mode?: ThemeMode;
-    darkTheme?: Theme;
-    lightTheme?: Theme;
-  };
 }
 
 export default function ProfileStateProvider({
   children,
   ceramicHost,
-  themeConfig,
 }: ProfileStateProviderProps) {
   if (!ceramicHost) throw Error("ceramicHost is required");
 
+  const [s3ProfileModalInitialed, setS3ProfileModalInitialed] = useState(false);
+  const [s3ProfileModalAuthed, setS3ProfileModalAuthed] = useState(false);
   // TODO: Whether ceramicHost allows switching
   useEffect(() => {
-    if (!s3ProfileModel) {
-      s3ProfileModel = new S3ProfileModel(ceramicHost);
-    }
+    s3ProfileModel = new S3ProfileModel(ceramicHost);
+    setS3ProfileModalInitialed(true);
   }, [ceramicHost]);
 
   // When the authorization is complete, query and store the profile
   const session = useSession();
+
   const [profile, setProfile] = useState(defaultContextValue.profile);
   const [profileLoading, setProfileLoading] = useState(true);
   useEffect(() => {
     if (!s3ProfileModel) return;
     if (session) {
       s3ProfileModel.authComposeClient(session);
+      setS3ProfileModalAuthed(true);
       setProfileLoading(true);
       s3ProfileModel
         .queryPersonalProfile()
         .then((res) => {
-          setProfile(res.data?.viewer?.profile || null);
+          if (res?.errors && res.errors.length > 0) {
+            setProfile(defaultNewProfile);
+          } else {
+            setProfile(res.data?.viewer?.profile || null);
+          }
         })
         .finally(() => {
           setProfileLoading(false);
@@ -73,6 +86,7 @@ export default function ProfileStateProvider({
     } else {
       setProfile(null);
       s3ProfileModel.resetComposeClient();
+      setS3ProfileModalAuthed(false);
     }
   }, [session]);
 
@@ -95,18 +109,51 @@ export default function ProfileStateProvider({
     []
   );
 
+  const updateProfile = useCallback(
+    async (data: Profile) => {
+      if (!session || !s3ProfileModalAuthed || !s3ProfileModel) {
+        throw Error("updateProfile: not authed");
+      }
+      const newProfile = { ...profile, ...data };
+
+      const res = await s3ProfileModel.mutationPersonalProfile({
+        name: newProfile.name || shortDid(session.id),
+        avatar: newProfile.avatar || "",
+        bio: newProfile.bio || "bio",
+        tags: [...(newProfile.tags || [])],
+        wallets: [...(newProfile.wallets || [])],
+      });
+
+      if (res?.errors && res.errors.length > 0) {
+        throw Error(res.errors[0].message);
+      }
+      setProfile(newProfile);
+    },
+    [session, s3ProfileModalAuthed, profile]
+  );
+
   return (
     <ProfileStateContext.Provider
       value={useMemo(
         () => ({
+          s3ProfileModalInitialed,
+          s3ProfileModalAuthed,
           profile,
           profileLoading,
           getProfileWithDid,
+          updateProfile,
         }),
-        [profile, profileLoading, getProfileWithDid]
+        [
+          s3ProfileModalInitialed,
+          s3ProfileModalAuthed,
+          profile,
+          profileLoading,
+          getProfileWithDid,
+          updateProfile,
+        ]
       )}
     >
-      <ThemeProvider theme={getTheme(themeConfig)}>{children}</ThemeProvider>
+      {children}
     </ProfileStateContext.Provider>
   );
 }

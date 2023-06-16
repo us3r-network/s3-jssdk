@@ -1,0 +1,35 @@
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
+import * as LoginButtonStories from "./LoginButton.stories";
+import { RenderProps } from "./stories/Table";
+import StyleCode from "!!raw-loader!../../ui/LoginButton/LoginButton.module.css";
+
+<Meta of={LoginButtonStories} />
+
+# LoginButton
+
+当需要获取当前登录的用户信息时，或者需要进行 Ceramic node 的写操作时我们需要先与 Ceramic 建立一个会话。
+
+LoginButton 组件内部调用 [@us3r-network/auth-with-rainbowkit](?path=/docs/auth-auth-with-rainbowkit--docs) 的授权流程。
+
+```jsx
+import { LoginButton } from "@us3r-network/profile";
+```
+
+<Canvas />
+
+## Props
+
+<Controls />
+
+<p>
+  <details>
+    <summary>View custom styles</summary>
+    <Source code={StyleCode} />
+  </details>
+</p>
+
+## Render Props
+
+LoginButton's children can be a function that receives an object as a parameter, which contains the following properties:
+
+<ArgTypes of={RenderProps} />

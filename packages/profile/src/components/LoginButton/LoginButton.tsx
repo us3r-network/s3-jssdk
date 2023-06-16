@@ -1,54 +1,70 @@
-import { ButtonHTMLAttributes } from "react";
-import { Text } from "rebass/styled-components";
-import UserAvatar from "../UserAvatar/UserAvatar";
-import { Button } from "rebass/styled-components";
-import Username from "../UserName/UserName";
 import {
   useAuthentication,
-  useSession,
+  useIsAuthenticated,
 } from "@us3r-network/auth-with-rainbowkit";
+import { useCallback, useMemo } from "react";
+import { Button, ButtonProps, ButtonRenderProps } from "react-aria-components";
+import { ChildrenRenderProps, childrenRender } from "../../utils/props";
+import { LoginButtonChildren } from "./LoginButtonChildren";
 
-export type LoginButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  avatarClassName?: string;
-  textClassName?: string;
-  nameTextClassName?: string;
-  loginTextClassName?: string;
-};
+export interface LoginButtonRenderProps {
+  /**
+   * Whether the user is authenticated.
+   */
+  isAuthenticated: boolean;
+  /**
+   * Whether the button is loading. (i.e. the user is being authenticated)
+   */
+  isLoading: boolean;
+  /**
+   * Whether the button is disabled.
+   */
+  isDisabled: boolean;
+}
+export interface LoginButtonProps
+  extends ChildrenRenderProps<
+    ButtonProps,
+    ButtonRenderProps & LoginButtonRenderProps
+  > {}
 
-function LoginButton({
-  onClick,
-  avatarClassName = "us3r-LoginButton__avatar",
-  nameTextClassName = "us3r-LoginButton__text--name",
-  loginTextClassName = "us3r-LoginButton__text--login",
-  ...otherProps
-}: LoginButtonProps) {
-  const { signIn } = useAuthentication();
-  const session = useSession();
+export function LoginButton({ children, ...props }: LoginButtonProps) {
+  const { ready, status, signIn } = useAuthentication();
+  const isAuthenticated = useIsAuthenticated();
+  const isLoading = ready && status === "loading";
+  const isDisabled = !ready || isLoading || isAuthenticated;
+  const onClick = useCallback(() => {
+    if (!isDisabled && !isAuthenticated) {
+      signIn();
+    }
+  }, [isDisabled, isAuthenticated, signIn]);
+  const businessProps = {
+    "data-us3r-component": "LoginButton",
+    "data-authenticated": isAuthenticated || undefined,
+    "data-loading": isLoading || undefined,
+    "data-disabled": isDisabled || undefined,
+    onClick,
+  };
+
+  const businessRenderProps = {
+    isAuthenticated,
+    isLoading,
+    isDisabled,
+  };
+
+  const defaultChildren = useMemo(
+    () => <LoginButtonChildren {...businessRenderProps} />,
+    [businessRenderProps]
+  );
+
   return (
-    <Button
-      variant="primary"
-      onClick={(e) => {
-        if (onClick) {
-          onClick(e);
-          return;
-        }
-        if (!session) {
-          signIn();
-        }
-      }}
-      {...otherProps}
-    >
-      {session ? (
-        <>
-          <UserAvatar did={session.id} className={avatarClassName} />
-          <Username did={session.id} className={nameTextClassName} />
-        </>
-      ) : (
-        <Text variant={"heading"} className={loginTextClassName}>
-          Login
-        </Text>
-      )}
+    <Button {...businessProps} {...props}>
+      {(buttonProps) =>
+        childrenRender(
+          children,
+          { ...buttonProps, ...businessRenderProps },
+          defaultChildren
+        )
+      }
     </Button>
   );
 }
-export default LoginButton;

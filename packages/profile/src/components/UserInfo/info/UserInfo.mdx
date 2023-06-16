@@ -1,0 +1,40 @@
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
+
+import * as UserInfoStories from "./UserInfo.stories";
+import { RenderProps, Subcomponents } from "./stories/Table";
+import StyleCode from "!!raw-loader!../../../ui/UserInfo/info/UserInfo.module.css";
+
+<Meta of={UserInfoStories} />
+
+# UserInfo
+
+UserInfo 用于展示用户的基本信息，它可以展示当期登录的用户信息，也可以是其它用户信息。
+
+```jsx
+import { UserInfo } from "@us3r-network/profile";
+```
+
+<Canvas />
+
+<p>
+  <details>
+    <summary>View custom styles</summary>
+    <Source code={StyleCode} />
+  </details>
+</p>
+
+## Props
+
+<Controls />
+
+## Render Props
+
+UserInfo's children can be a function that receives an object as a parameter, which contains the following properties:
+
+<ArgTypes of={RenderProps} />
+
+## Subcomponents
+
+UserInfo is a Context.Provider component that includes the following child components that can be used to render different parts of a form:
+
+<ArgTypes of={Subcomponents} />

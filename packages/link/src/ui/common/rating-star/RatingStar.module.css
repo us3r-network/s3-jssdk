@@ -1,0 +1,21 @@
+.ActivatedStarIcon {
+    fill: #cf9523;
+}
+
+.InactivatedStarIcon {
+    fill: #718096;
+}
+
+.RatingStarSelect {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+
+    >[data-disabled] {
+        cursor: not-allowed;
+    }
+
+    >[data-changeable] {
+        cursor: pointer;
+    }
+}

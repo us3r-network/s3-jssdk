@@ -1,0 +1,34 @@
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
+
+import * as VoteButtonStories from "./VoteButton.stories";
+import { RenderProps } from "./stories/Table";
+import StyleCode from "!!raw-loader!../../ui/VoteButton/VoteButton.module.css";
+
+<Meta of={VoteButtonStories} />
+
+# VoteButton
+
+VoteButton 是一个用于点赞的交互组件。它为用户提供了一种简单而直观的方式来表达对内容的喜爱和支持。
+
+```jsx
+import { VoteButton } from "@us3r-network/link";
+```
+
+<Canvas />
+
+<p>
+  <details>
+    <summary>View custom styles</summary>
+    <Source code={StyleCode} />
+  </details>
+</p>
+
+## Props
+
+<Controls />
+
+## Render Props
+
+VoteButton's children can be a function that receives an object as a parameter, which contains the following properties:
+
+<ArgTypes of={RenderProps} />

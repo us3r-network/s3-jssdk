@@ -1,0 +1,8 @@
+import { Meta, Source } from "@storybook/blocks";
+import MainnetDefinition from "!!raw-loader!../src/link/link-runtime-composite.js";
+
+<Meta title="Link" />
+
+# Link Model
+
+<Source code={MainnetDefinition.split("=").pop()} language="javascript" />

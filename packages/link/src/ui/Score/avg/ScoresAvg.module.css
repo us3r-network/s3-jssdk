@@ -1,0 +1,14 @@
+.ScoresAvg {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-weight: bolder;
+  font-size: 15px;
+  color: #cf9523;
+}
+
+.LoadingSpokes {
+  composes: LoadingSpokes from '../../common/loading/LoadingSpokes.module.css';
+  width: 24px;
+  height: 24px;
+}

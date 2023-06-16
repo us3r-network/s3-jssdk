@@ -1,0 +1,8 @@
+import { Meta, Source } from "@storybook/blocks";
+import MainnetDefinition from "!!raw-loader!../src/profile/profile-runtime-composite.js";
+
+<Meta title="Profile" />
+
+# Profile Model
+
+<Source code={MainnetDefinition.split("=").pop()} language="javascript" />

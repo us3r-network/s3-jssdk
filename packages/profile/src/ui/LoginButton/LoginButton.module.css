@@ -1,0 +1,8 @@
+.LoginButton {
+    composes: button from '../common/button/Button.module.css';
+}
+
+.UserAvatar {
+    width: 28px;
+    height: 28px;
+}

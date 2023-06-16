@@ -1,43 +1,59 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { StyledComponentPropsWithRef } from "styled-components";
-import multiavatar from "@multiavatar/multiavatar";
-import { Image } from "rebass/styled-components";
+import { HTMLAttributes, useEffect, useMemo, useState } from "react";
 import { useProfileState } from "../../ProfileStateProvider";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
-import AvatarLoadingSvg from "./avatar-loading.svg";
+import { ChildrenRenderProps, childrenRender } from "../../utils/props";
+import { UserAvatarChildren } from "./UserAvatarChildren";
+import { getDefaultUserAvatarWithDid } from "../../utils/avatar";
 
-type UserAvatarProps = StyledComponentPropsWithRef<"img"> & {
+export interface UserAvatarIncomingProps {
+  /**
+   * if not provided, will use the current user's did
+   */
   did?: string;
-};
-const getUserAvatarSrc = (did: string) =>
-  `data:image/svg+xml;utf-8,${encodeURIComponent(multiavatar(did))}`;
+}
+export interface UserAvatarRenderProps {
+  /**
+   * Whether the user avatar is loading.
+   */
+  isLoading: boolean;
+  /**
+   * The user avatar src.
+   */
+  avatarSrc: string;
+}
+export interface UserAvatarProps
+  extends ChildrenRenderProps<
+      HTMLAttributes<HTMLSpanElement>,
+      UserAvatarRenderProps
+    >,
+    UserAvatarIncomingProps {}
 
-export default function UserAvatar(props: UserAvatarProps) {
+export function UserAvatar({ children, ...props }: UserAvatarProps) {
   const session = useSession();
   const { profile, profileLoading, getProfileWithDid } = useProfileState();
   const isLoginUser = !props.hasOwnProperty("did");
   const did = (isLoginUser ? session?.id : props.did) || "";
   const defaultAvatarUrl = useMemo(
-    () => getUserAvatarSrc(did || "did:pkh:0"),
+    () => getDefaultUserAvatarWithDid(did),
     [did]
   );
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [avatarSrc, setAvatarSrc] = useState(defaultAvatarUrl);
 
   useEffect(() => {
     if (isLoginUser) {
       if (!profileLoading) {
-        setLoading(false);
+        setIsLoading(false);
         setAvatarSrc(profile?.avatar || defaultAvatarUrl);
       } else {
-        setLoading(true);
+        setIsLoading(true);
       }
     }
-  }, [isLoginUser, profileLoading, profile, defaultAvatarUrl]);
+  }, [isLoginUser, profileLoading, profile?.avatar, defaultAvatarUrl]);
 
   useEffect(() => {
     if (!isLoginUser) {
-      setLoading(true);
+      setIsLoading(true);
       getProfileWithDid(did)
         .then((data) => {
           if (data) {
@@ -45,18 +61,27 @@ export default function UserAvatar(props: UserAvatarProps) {
           }
         })
         .catch(console.error)
-        .finally(() => setLoading(false));
+        .finally(() => setIsLoading(false));
     }
   }, [isLoginUser, did, defaultAvatarUrl, getProfileWithDid]);
 
+  const businessProps = {
+    "data-us3r-component": "UserAvatar",
+    "data-loading": isLoading || undefined,
+  };
+  const businessRenderProps = {
+    isLoading,
+    avatarSrc,
+  };
+
+  const defaultChildren = useMemo(
+    () => <UserAvatarChildren {...businessRenderProps} />,
+    [businessRenderProps]
+  );
+
   return (
-    <Image
-      variant={"avatar"}
-      src={loading ? AvatarLoadingSvg : avatarSrc}
-      onError={(el: React.SyntheticEvent<HTMLImageElement, Event>) => {
-        el.currentTarget.src = defaultAvatarUrl;
-      }}
-      {...props}
-    />
+    <span {...businessProps} {...props}>
+      {childrenRender(children, businessRenderProps, defaultChildren)}
+    </span>
   );
 }

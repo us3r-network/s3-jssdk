@@ -1,27 +1,41 @@
-import { StyledComponentPropsWithRef } from "styled-components";
-import { Text } from "rebass/styled-components";
-import { useEffect, useState } from "react";
+import { HTMLAttributes, useEffect, useMemo, useState } from "react";
 import { useProfileState } from "../../ProfileStateProvider";
 import { shortDid } from "../../utils/short";
 import { useSession } from "@us3r-network/auth-with-rainbowkit";
-
-type Props = StyledComponentPropsWithRef<"div"> & {
+import { ChildrenRenderProps, childrenRender } from "../../utils/props";
+import { UserNameChildren } from "./UserNameChildren";
+export interface UserNameIncomingProps {
+  /**
+   * user did.
+   * if not provided, will use current login user's did.
+   */
   did?: string;
   name?: string;
-};
-export default function UserName({ name, ...props }: Props) {
+}
+export interface UserNameRenderProps {
+  isLoading: boolean;
+  username: string;
+}
+export interface UserNameProps
+  extends ChildrenRenderProps<
+      HTMLAttributes<HTMLSpanElement>,
+      UserNameRenderProps
+    >,
+    UserNameIncomingProps {}
+
+export function UserName({ name, children, ...props }: UserNameProps) {
   const session = useSession();
   const { profile, profileLoading, getProfileWithDid } = useProfileState();
   const isLoginUser = !props.hasOwnProperty("did");
   const did = (isLoginUser ? session?.id : props.did) || "";
 
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [username, setUsername] = useState("");
 
   useEffect(() => {
     if (name) {
       setUsername(name);
-      setLoading(false);
+      setIsLoading(false);
     }
   }, [name]);
 
@@ -29,10 +43,10 @@ export default function UserName({ name, ...props }: Props) {
     if (name) return;
     if (isLoginUser) {
       if (!profileLoading) {
-        setLoading(false);
+        setIsLoading(false);
         setUsername(profile?.name || shortDid(did));
       } else {
-        setLoading(true);
+        setIsLoading(true);
       }
     }
   }, [name, isLoginUser, did, profileLoading, profile]);
@@ -40,15 +54,31 @@ export default function UserName({ name, ...props }: Props) {
   useEffect(() => {
     if (name) return;
     if (!isLoginUser) {
-      setLoading(true);
+      setIsLoading(true);
       getProfileWithDid(did)
         .then((data) => {
           setUsername(data?.name || shortDid(did));
         })
         .catch(console.error)
-        .finally(() => setLoading(false));
+        .finally(() => setIsLoading(false));
     }
   }, [name, isLoginUser, did, getProfileWithDid]);
+  const businessProps = {
+    "data-us3r-component": "UserName",
+    "data-loading": isLoading || undefined,
+  };
+  const businessRenderProps = {
+    isLoading,
+    username,
+  };
 
-  return <Text {...props}>{!loading && username}</Text>;
+  const defaultChildren = useMemo(
+    () => <UserNameChildren {...businessRenderProps} />,
+    [businessRenderProps]
+  );
+  return (
+    <span {...businessProps} {...props}>
+      {childrenRender(children, businessRenderProps, defaultChildren)}
+    </span>
+  );
 }

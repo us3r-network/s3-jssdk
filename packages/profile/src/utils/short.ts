@@ -1,3 +1,5 @@
+import { DEFAULT_DID } from "./constants";
+
 export function shortPubKey(key: string, len = 4) {
   return key.slice(0, len) + "..".repeat(len / 4) + key.slice(-len);
 }
@@ -7,5 +9,5 @@ export function shortDid(did: string, len = 4) {
   if (key) {
     return shortPubKey(key, len);
   }
-  return "did:pkh:0";
+  return DEFAULT_DID;
 }

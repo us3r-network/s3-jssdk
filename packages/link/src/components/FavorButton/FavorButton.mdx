@@ -1,0 +1,34 @@
+import { Canvas, Meta, Controls, Source, ArgTypes } from "@storybook/blocks";
+
+import * as FavorButtonStories from "./FavorButton.stories";
+import { RenderProps } from "./stories/Table";
+import StyleCode from "!!raw-loader!../../ui/FavorButton/FavorButton.module.css";
+
+<Meta of={FavorButtonStories} />
+
+# FavorButton
+
+FavorButton 是一个用于添加关注的交互组件。它为用户提供了一种简单而直观的方式来标记他们感兴趣的链接，并随时获取更新。
+
+```jsx
+import { FavorButton } from "@us3r-network/link";
+```
+
+<Canvas />
+
+<p>
+  <details>
+    <summary>View custom styles</summary>
+    <Source code={StyleCode} />
+  </details>
+</p>
+
+## Props
+
+<Controls />
+
+## Render Props
+
+FavorButton's children can be a function that receives an object as a parameter, which contains the following properties:
+
+<ArgTypes of={RenderProps} />
