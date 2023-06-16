@@ -20,7 +20,6 @@ jobs:
         env:
           CI: false
           GENERATE_SOURCEMAP: false
-          REACT_APP_NAME: 'US3R DASHBOARD'
           REACT_APP_CERAMIC_HOST: 'https://ceramic.s3.xyz'
           US3R_UPLOAD_IMAGE_ENDPOINT: 'https://test-enchanft-backend.onrender.com/medium/upload'
       - uses: FirebaseExtended/action-hosting-deploy@v0
