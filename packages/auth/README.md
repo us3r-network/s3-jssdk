@@ -1,6 +1,7 @@
 # @us3r-network/auth
 
-The @us3r-network/auth package is the foundation of us3r-network and establishes a session with Ceramic through [DIDSession](https://github.com/ceramicnetwork/js-did/tree/main/packages/did-session).
+The @us3r-network/auth is a pure javascript lib to create authenticated sessions for users.
+It could establishes a session with Ceramic through [DIDSession](https://github.com/ceramicnetwork/js-did/tree/main/packages/did-session).
 
 ## Install
 

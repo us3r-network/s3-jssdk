@@ -1,8 +1,17 @@
 import { Meta, Source } from "@storybook/blocks";
+import ProfileSchema from "!!raw-loader!../src/profile/profile-schema.graphql";
 import MainnetDefinition from "!!raw-loader!../src/profile/profile-runtime-composite.js";
 
 <Meta title="Profile" />
 
 # Profile Model
 
+A data model, based on Ceramic ComposeDB, includes the following information for each user: name, bio, avatar, wallet address list, and user tags. 
+
+Additionally, we provide an SDK for performing CRUD operations on this data model.
+
+## GraphQL Schema
+<Source code={ProfileSchema} language="graphql" />
+
+## Runtime Definition 
 <Source code={MainnetDefinition.split("=").pop()} language="javascript" />

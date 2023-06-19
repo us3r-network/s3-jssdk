@@ -13,11 +13,13 @@ import LoginButtonStyledComponentCode from "!!raw-loader!./LoginButton/LoginButt
 
 import UserInfoCssModuleStyleCode from "!!raw-loader!../src/ui/UserInfo/info/UserInfo.module.css";
 
-<Meta title="Introduction" />;
+<Meta title="Introduction" />
 
 # @us3r-network/profile
 
-We created a [data model](https://github.com/us3r-network/s3-jssdk/tree/main/packages/data-model) about user profile based on ceramic, and provided crud SDK for the model, and commonly used react components related to profile
+A React component library that provides some of the most commonly used UI components for [Profile Data Model](?path=/docs/model-definition-profile--docs)
+
+@us3r-network/profile is also a library of unstyled components, provides a simpler way to build accessible components with custom styles, while offering the flexibility to drop down to hooks for even more customizability where needed.
 
 [![License](https://img.shields.io/badge/License-MIT.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://badge.fury.io/js/%40us3r-network%2Fprofile.svg)](https://badge.fury.io/js/%40us3r-network%2Fprofile)
@@ -33,76 +35,16 @@ Where [@us3r-network/auth-with-rainbowkit](?path=/docs/auth-auth-with-rainbowkit
 
 ## Usage
 
-在开始使用组件之前，需要先使用 `Us3rAuthWithRainbowkitProvider` 和 `ProfileStateProvider` 包装您的应用程序。
+To use the components, you must wrap your application with `Us3rAuthWithRainbowkitProvider` and `ProfileStateProvider`.
 
 <Source code={App} />
 
-## Headless Components
+`Us3rAuthWithRainbowkitProvider` establishes a session with Ceramic, which is necessary to retrieve information about the currently logged-in user or perform a write operation on the Ceramic node.
 
-@us3r-network/profile 是无样式组件库，提供了一些用户系统常用的组件，它们具有以下特征：
-
-- 有些组件会包含几个子组件, 并且为了可以直接向子组件传递数据状态，这种组件通常是一个 Context 组件 (Context.Provider).
-
-  - 每个 Context 组件和子组件内部都会和一个元素绑定, 可以直接对它们设置样式。
-
-  - 这些子组件会通过 useContext 从 Context 组件中获取最新的数据状态应用到它们绑定的元素，因此无需关心每个子组件的业务状态.
-
-  - 这些子组件只能在组件内部使用，通常以这种形式组合：
-
-    ```tsx
-    <UserInfo>
-      <UserInfo.Avatar />
-      <UserInfo.Name />
-      <UserInfo.Bio />
-    </UserInfo>
-    ```
-
-- 有些组件则没有其它子组件，它们通常没有更多的元素可以继续拆分下去, 查看其它组件文档以了解更多
-
-- 每个组件的 children 都可以接收一个渲染函数，这个渲染函数中会暴露出当前组件的数据及行为状态，你可以利用它们来渲染不同的内容。
-
-  <Source of={LoginButtonStories.LoginButtonStory} language="tsx" />
-
-由于以上特征，可以轻松地为每个子组件设置样式，并根据需要来控制每个子组件的 DOM 顺序以实现您的设计。
-
-## Example
-
-### Custom LoginButton
-
-[LoginButton](?path=/docs/components-profile-components-loginbutton--docs) 组件绑定了 button 元素，它没有其它的子组件了，只有它自身元素。
-
-> 虽然 LoginButton 没有其它子组件，但是可以利用 children 渲染函数来渲染不同的内容。
-> 比如在登录状态下 children 渲染用户的头像和名称，未登录状态下渲染 Login 文字，正在请求登录状态下渲染 Loading 文字。
-> 并且[UserAvatar](?path=/docs/components-profile-components-useravatar--docs)和[UserName](?path=/docs/components-profile-components-username--docs)都是单独的组件.
-> 这里的 UserAvatar 和 UserName 已经在其它地方进行单独封装并且自定义了样式。
-
-<Canvas of={LoginButtonStories.LoginButtonStory} />
-
-<details>
-  <summary>View custom styles</summary>
-  <Source code={LoginButtonCssModuleStyleCode} />
-</details>
-
-### Custom UserInfo
-
-[UserInfo](?path=/docs/components-profile-components-userinfo--docs) 组件绑定了 div 元素，并且是一个 context 组件。
-
-UserInfo 有一些子组件，是一些通常要展示出来的用户信息，`UserInfo.Avatar` `UserInfo.Name` `UserInfo.Bio`,... 它们都是无头组件，你可以自由组合它们。
-
-> 组件不仅可以组合它们携带的子组件，还可以同时将其它组件集成进来.
-> 比如 [UserInfoEditForm](?path=/docs/components-profile-components-userinfoeditform--docs) , 这是一个可以编辑用户信息的组件.
-> 在这里让用户头像 `UserInfo.Avatar` 点击后可以打开编辑表单 `UserInfoEditForm` 来编辑用户信息.
-
-<Canvas of={UserInfoStories.UserInfoStory} />
-
-<details>
-  <summary>View custom styles</summary>
-  <Source code={UserInfoCssModuleStyleCode} />
-</details>
-
+`ProfileStateProvider` can assist you in managing and synchronizing the state of all profile components.
 ## Styling
 
-因为是无样式组件库，所以你可以用各种方式来实现布局和样式
+As a unstyled component library, you can implement layout and style in various ways.
 
 ### import css
 

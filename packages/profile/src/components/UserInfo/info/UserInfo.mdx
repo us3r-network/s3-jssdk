@@ -8,12 +8,14 @@ import StyleCode from "!!raw-loader!../../../ui/UserInfo/info/UserInfo.module.cs
 
 # UserInfo
 
-UserInfo 用于展示用户的基本信息，它可以展示当期登录的用户信息，也可以是其它用户信息。
+UserInfo is used to display basic information about a user. It can show the information of the currently logged-in user or that of other users.
 
-```jsx
-import { UserInfo } from "@us3r-network/profile";
-```
+The UserInfo component serves as a context component. It has several sub-components that display typical user information, such as UserInfo.Avatar, UserInfo.Name, and UserInfo.Bio. These are all headless components that can be combined as needed.
 
+>Components can not only combine their child components, but also integrate other components. 
+>For example, the UserInfoEditForm is a component that enables users to edit their information. When a user clicks on their user avatar in UserInfo.Avatar, the editing form UserInfoEditForm can be opened to modify the user's information.
+
+## Example
 <Canvas />
 
 <p>

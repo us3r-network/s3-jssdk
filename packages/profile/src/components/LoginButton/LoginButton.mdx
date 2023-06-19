@@ -7,26 +7,26 @@ import StyleCode from "!!raw-loader!../../ui/LoginButton/LoginButton.module.css"
 
 # LoginButton
 
-当需要获取当前登录的用户信息时，或者需要进行 Ceramic node 的写操作时我们需要先与 Ceramic 建立一个会话。
+The LoginButton component internally triggers the authorization process of [@us3r-network/auth-with-rainbowkit](?path=/docs/auth-auth-with-rainbowkit--docs).
 
-LoginButton 组件内部调用 [@us3r-network/auth-with-rainbowkit](?path=/docs/auth-auth-with-rainbowkit--docs) 的授权流程。
+Although LoginButton has no other child components, it can use the children render function to display different content based on the login status. For example, it can render the user's avatar and name when logged in, the text "Login" when not logged in, and the text "Loading" when requesting login. Additionally, UserAvatar and UserName are separate components that have already been encapsulated elsewhere and have custom styles.
 
-```jsx
-import { LoginButton } from "@us3r-network/profile";
-```
 
+## Example
 <Canvas />
-
-## Props
-
-<Controls />
-
 <p>
   <details>
     <summary>View custom styles</summary>
     <Source code={StyleCode} />
   </details>
 </p>
+
+
+## Props
+
+<Controls />
+
+
 
 ## Render Props
 
