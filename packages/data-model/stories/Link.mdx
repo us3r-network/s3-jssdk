@@ -1,8 +1,23 @@
 import { Meta, Source } from "@storybook/blocks";
+
+import LinkSchema from "!!raw-loader!../src/link/01 link-schema.graphql";
+import LinkOperationSchema from "!!raw-loader!../src/link/02 link-operations-schema.graphql";
+import LinkRelationSchema from "!!raw-loader!../src/link/03 link-relations-schema.graphql";
 import MainnetDefinition from "!!raw-loader!../src/link/link-runtime-composite.js";
 
 <Meta title="Link" />
 
 # Link Model
+Link is a data model based on Ceramic ComposeDB. It represents the content of a URL that users can comment on, bookmark, vote on, and rate.
 
+Additionally, we provide an SDK for performing CRUD operations on this data model.
+
+## GraphQL Schema
+Link
+<Source code={LinkSchema} language="graphql" />
+Link Actions
+<Source code={LinkOperationSchema} language="graphql" />
+## Composite
+<Source code={LinkRelationSchema} language="graphql" />
+## Runtime Definition 
 <Source code={MainnetDefinition.split("=").pop()} language="javascript" />

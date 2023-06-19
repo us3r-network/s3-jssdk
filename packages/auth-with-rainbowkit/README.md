@@ -1,6 +1,6 @@
 # @us3r-network/auth-with-rainbowkit
 
-The @us3r-network/auth-with-rainbowkit package is a react component, that uses [rainbowKit](https://www.rainbowkit.com/) combined with [@us3r-network/auth](https://github.com/us3r-network/s3-jssdk/tree/main/packages/auth) to establish a session
+The @us3r-network/auth-with-rainbowkit package is a react component, that create authenticated sessions for users with [rainbowKit](https://www.rainbowkit.com/).
 
 ## Install
 
