@@ -12,6 +12,7 @@
     "@types/react-dom": "^18.2.6",
     "@us3r-network/auth-with-rainbowkit": "^0.1.6",
     "@us3r-network/data-model": "^0.3.0",
+    "@us3r-network/link": "^0.2.1",
     "@us3r-network/profile": "^0.5.2",
     "cross-env": "^7.0.3",
     "react": "^18.2.0",
