@@ -92,6 +92,53 @@ export class S3LinkModel extends S3Model {
     return linkListData;
   }
 
+  public async queryPersonalLinksDesc({
+    last = 10,
+    before = "",
+  }: {
+    last: number;
+    before?: string;
+  }) {
+    const composeClient = this.composeClient;
+    const linkListData = await composeClient.executeQuery<{
+      viewer: {
+        linkList: Page<Link>;
+      };
+    }>(`
+      query {
+        viewer {
+          linkList(last: ${last}, before: "${before}") {
+            edges {
+              node {
+                id
+                creator {
+                  id
+                }
+                url
+                data
+                type
+                title
+                createAt
+                modifiedAt
+                votesCount
+                commentsCount
+                favorsCount
+                scoresCount
+              }
+            }
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
+              startCursor
+              endCursor
+            }
+          }
+        }
+      }
+    `);
+    return linkListData;
+  }
+
   public async queryLinks({
     first = 10,
     after = "",
@@ -105,6 +152,51 @@ export class S3LinkModel extends S3Model {
     }>(`
       query {
         linkIndex(first: ${first}, after: "${after}") {
+          edges {
+            node {
+              id
+              creator {
+                id
+              }
+              url
+              data
+              type
+              title
+              createAt
+              modifiedAt
+              votesCount
+              commentsCount
+              favorsCount
+              scoresCount
+            }
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
+        }
+      }
+    `);
+
+    return res;
+  }
+
+
+  public async queryLinksDesc({
+    last = 10,
+    before = "",
+  }: {
+    last: number;
+    before?: string;
+  }) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      linkIndex: Page<Link>;
+    }>(`
+      query {
+        linkIndex(last: ${last}, before: "${before}") {
           edges {
             node {
               id
