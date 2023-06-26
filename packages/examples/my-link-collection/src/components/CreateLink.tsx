@@ -1,8 +1,6 @@
 import { useSession } from '@us3r-network/auth-with-rainbowkit'
-
 import { S3LinkModel } from '@us3r-network/data-model'
 import { useState } from 'react'
-
 import {
   Button,
   DialogTrigger,
@@ -13,9 +11,7 @@ import {
   Label,
   Input
 } from 'react-aria-components'
-
-const CERAMIC_HOST =
-  process.env.CERAMIC_HOST || 'https://gcp-ceramic-testnet-dev.s3.xyz'
+import { CERAMIC_HOST } from '../constants'
 
 const s3LinkModel = new S3LinkModel(CERAMIC_HOST)
 

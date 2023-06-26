@@ -1,8 +1,8 @@
 import { S3LinkModel, Link } from '@us3r-network/data-model'
 import { useEffect, useState } from 'react'
 import { GridList, Item } from 'react-aria-components'
-const CERAMIC_HOST =
-  process.env.CERAMIC_HOST || 'https://gcp-ceramic-testnet-dev.s3.xyz'
+import { CERAMIC_HOST } from '../constants'
+import { UserAvatar, UserName } from '@us3r-network/profile'
 
 const s3LinkModel = new S3LinkModel(CERAMIC_HOST)
 
@@ -35,8 +35,13 @@ export default function Links () {
     <GridList aria-label='Links' selectionMode='none'>
       {links.map(link => (
         <Item textValue={link?.url}>
-          <a href={link?.url} target="_blank" rel="noreferrer">{link?.title}</a>
-          <span aria-label='creator'>{link?.creator?.id}</span>
+          <a href={link?.url} target='_blank' rel='noreferrer'>
+            {link?.title}
+          </a>
+          <div aria-label='creator'>
+            <UserAvatar did={link?.creator?.id} />
+            <UserName did={link?.creator?.id} />
+          </div>
           <span aria-label='createAt'>{link?.createAt}</span>
         </Item>
       ))}
