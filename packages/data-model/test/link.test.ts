@@ -102,11 +102,49 @@ describe("client", () => {
     expect(linkList?.edges.length).toBe(1);
   });
 
+  test("create personal desc success", async () => {
+    const arr: number[] = new Array(12).fill(0).map((_, i) => i);
+    for await (const i of arr) {
+      const data = {
+        url: testURL + i,
+        type: testType + i,
+        title: testTitle + i,
+      };
+      const resp = await s3Link.createLink(data);
+      expect(resp.data?.createLink.document.id).not.toBeNull();
+      linkId = resp.data?.createLink.document.id || "";
+      expect(linkId).not.toBe("");
+    }
+  });
+
+  test("query personal desc success", async () => {
+    const resp = await s3Link.queryPersonalLinksDesc({ last: 2 });
+    const linkList = resp.data?.viewer.linkList;
+
+    expect(linkList).not.toBeNull();
+    expect(linkList?.edges.length).toBe(2);
+
+    expect(linkList?.edges[0].node.title).toBe("title10");
+    expect(linkList?.edges[1].node.title).toBe("title11");
+  });
+
   test("query linkIndex", async () => {
     const resp = await s3Link.queryLinks({ first: 10 });
     const linkIndex = resp.data?.linkIndex;
     expect(linkIndex).not.toBeNull();
-    expect(linkIndex?.edges.length).toBe(1);
+    expect(linkIndex?.edges.length).toBe(10);
+  });
+
+  test("query linkIndex desc", async () => {
+    const resp = await s3Link.queryLinksDesc({ last: 3 });
+    const linkIndex = resp.data?.linkIndex;
+    expect(linkIndex).not.toBeNull();
+
+    expect(linkIndex?.edges.length).toBe(3);
+
+    expect(linkIndex?.edges[0].node.title).toBe("title9");
+    expect(linkIndex?.edges[1].node.title).toBe("title10");
+    expect(linkIndex?.edges[2].node.title).toBe("title11");
   });
 
   // votes
