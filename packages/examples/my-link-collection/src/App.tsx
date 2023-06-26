@@ -1,26 +1,14 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Us3rAuthWithRainbowkitProvider } from '@us3r-network/auth-with-rainbowkit'
 
-function App() {
+import './App.css'
+import SignButton from './components/SignButton'
+
+function App () {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Us3rAuthWithRainbowkitProvider>
+      <SignButton />
+    </Us3rAuthWithRainbowkitProvider>
+  )
 }
 
-export default App;
+export default App
