@@ -21,7 +21,7 @@ export default function Links () {
   const session = useSession()
 
   return (
-    <>
+    <div className='createLink'>
       {session && (
         <DialogTrigger>
           <Button>Create New Link</Button>
@@ -46,27 +46,36 @@ export default function Links () {
                       onChange={e => setTitle(e.target.value)}
                     />
                   </TextField>
-                  <Button
-                    onPress={() => {
-                      if (!session) return
-                      s3LinkModel.authComposeClient(session)
-                      s3LinkModel.createLink({
-                        title: title,
-                        url: url,
-                        type: 'example',
-                        createAt: new Date().toISOString()
-                      })
-                      close()
-                    }}
-                  >
-                    Submit
-                  </Button>
+                  <div className='create-link-buttons'>
+                    <Button
+                      onPress={() => {
+                        close()
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onPress={() => {
+                        if (!session) return
+                        s3LinkModel.authComposeClient(session)
+                        s3LinkModel.createLink({
+                          title: title,
+                          url: url,
+                          type: 'example',
+                          createAt: new Date().toISOString()
+                        })
+                        close()
+                      }}
+                    >
+                      Submit
+                    </Button>
+                  </div>
                 </form>
               )}
             </Dialog>
           </Modal>
         </DialogTrigger>
       )}
-    </>
+    </div>
   )
 }

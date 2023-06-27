@@ -13,9 +13,11 @@ function App () {
     <Us3rAuthWithRainbowkitProvider>
       <ProfileStateProvider ceramicHost={CERAMIC_HOST}>
         <LinkStateProvider ceramicHost={CERAMIC_HOST}>
-          <SignButton />
-          <Links />
-          <CreateLink />
+          <div className='app'>
+            <SignButton />
+            <Links />
+            <CreateLink />
+          </div>
         </LinkStateProvider>
       </ProfileStateProvider>
     </Us3rAuthWithRainbowkitProvider>

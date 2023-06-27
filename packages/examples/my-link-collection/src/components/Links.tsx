@@ -1,6 +1,15 @@
 import { S3LinkModel, Link } from '@us3r-network/data-model'
 import { useEffect, useState } from 'react'
-import { Button, GridList, Item, Switch } from 'react-aria-components'
+import {
+  Button,
+  Cell,
+  Column,
+  Row,
+  Switch,
+  Table,
+  TableBody,
+  TableHeader
+} from 'react-aria-components'
 import { CERAMIC_HOST } from '../constants'
 import { UserAvatar, UserName } from '@us3r-network/profile'
 import { FavorButton } from '@us3r-network/link'
@@ -13,7 +22,7 @@ import type {
 } from '@ceramicnetwork/common'
 
 const s3LinkModel = new S3LinkModel(CERAMIC_HOST)
-const PAGE_SIZE = 1
+const PAGE_SIZE = 20
 
 export enum PaginationKind {
   FORWARD,
@@ -108,11 +117,39 @@ export default function Links () {
     setQueryParamsInfo({ last: PAGE_SIZE, before: pageInfo?.startCursor })
   }
   return (
-    <>
+    <div className='links'>
       <Switch onChange={setShowFavorOnly}>
+        <div className='indicator' />
         {showFavorOnly ? 'Show All Links' : 'Show Favor Links Only'}
       </Switch>
-      <>
+      <Table aria-label='Links' selectionMode='multiple'>
+        <TableHeader>
+          <Column>Favor</Column>
+          <Column isRowHeader>Link</Column>
+          <Column>Creator</Column>
+          <Column>Date</Column>
+        </TableHeader>
+        <TableBody>
+          {links.map(link => (
+            <Row key={link?.id} textValue={link?.url}>
+              <Cell aria-label='user-actions'>
+                <FavorButton linkId={link.id!} />
+              </Cell>
+              <Cell>
+                <a href={link?.url} target='_blank' rel='noreferrer'>
+                  {link?.title}
+                </a>
+              </Cell>
+              <Cell aria-label='creator'>
+                <UserAvatar did={link?.creator?.id} />
+                <UserName did={link?.creator?.id} />
+              </Cell>
+              <Cell aria-label='createAt'>{link?.createAt}</Cell>
+            </Row>
+          ))}
+        </TableBody>
+      </Table>
+      <div>
         {/* when query backward, hasNextPage is always false */}
         <Button
           isDisabled={
@@ -137,25 +174,7 @@ export default function Links () {
         >
           Next Page
         </Button>
-      </>
-      <GridList aria-label='links' selectionMode='none'>
-        {links.map(link => (
-          <Item key={link?.id} textValue={link?.url}>
-            <a href={link?.url} target='_blank' rel='noreferrer'>
-              {link?.title}
-            </a>
-            <div aria-label='creator'>
-              <UserAvatar did={link?.creator?.id} />
-              <UserName did={link?.creator?.id} />
-            </div>
-            <span aria-label='createAt'>{link?.createAt}</span>
-
-            <div aria-label='user-actions'>
-              <FavorButton linkId={link.id!} />
-            </div>
-          </Item>
-        ))}
-      </GridList>
-    </>
+      </div>
+    </div>
   )
 }
