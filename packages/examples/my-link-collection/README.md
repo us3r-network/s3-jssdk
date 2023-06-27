@@ -1,46 +1,27 @@
-# Getting Started with Create React App
+# Example
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a comprehensive example demonstrating how to quickly develop a dapp using our sdk and components.
 
-## Available Scripts
+In this example, we are creating a shared bookmark dapp.
+- Users can create a link for specific url.
+- Users can see all links created by others and add any link to their own favor list.
+- All this data is stored on the decentralized data network, Ceramic.
+- No servers, databases, or any backend technologies are required.
 
-In the project directory, you can run:
+> Prior knowledge of typescript, react and GraphQL is helpful.
+## STEPS
+### [Step 0 Create React App](https://github.com/us3r-network/s3-jssdk/commit/695c242821f4e9a00595ae0f89fc602538958de5).
 
-### `npm start`
+### [Step 1 auth](https://github.com/us3r-network/s3-jssdk/commit/335c1d4771511929e8f3e209f4e8384f8d78b369).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### [Step 2 show link list](https://github.com/us3r-network/s3-jssdk/commit/036de7fb5a5328e157c1d890f7e7730149196528).
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### [Step 3 add create link](https://github.com/us3r-network/s3-jssdk/commit/01ce769217e24f938a07cd41e45f4bdc77e614b4).
 
-### `npm test`
+### [Step 4 use profile components](https://github.com/us3r-network/s3-jssdk/commit/a0c7c6072e7b5e7e341bb3f6d3ef5d090e0f511a).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### [Step 5 use link component to favor](https://github.com/us3r-network/s3-jssdk/commit/c19027abc16b81ecd8af21f01a7ba0de3fa2b8cf).
 
-### `npm run build`
+### [Step 6 add pagination to link list](https://github.com/us3r-network/s3-jssdk/commit/c237d1050a35c25de8c6c709817052e3c41bcfba).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+### [Step 7 adjust layout and style](https://github.com/us3r-network/s3-jssdk/commit/18cf9a281a6857296907138216a0e2636f7d1bf0).
