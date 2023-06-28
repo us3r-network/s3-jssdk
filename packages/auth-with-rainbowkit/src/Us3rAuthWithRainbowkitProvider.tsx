@@ -1,6 +1,5 @@
 import "@rainbow-me/rainbowkit/styles.css";
 import {
-  connectorsForWallets,
   createAuthenticationAdapter,
   darkTheme,
   lightTheme,
@@ -17,55 +16,13 @@ import {
   useMemo,
   useState,
 } from "react";
-import {
-  configureChains,
-  createConfig,
-  useAccount,
-  useDisconnect,
-  WagmiConfig,
-} from "wagmi";
-import { arbitrum, goerli, mainnet, optimism, polygon } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
-import {
-  argentWallet,
-  omniWallet,
-  imTokenWallet,
-  metaMaskWallet,
-} from "@rainbow-me/rainbowkit/wallets";
+import { useAccount, useDisconnect, WagmiConfig } from "wagmi";
 import { Us3rAuth } from "@us3r-network/auth";
-
-const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [
-    mainnet,
-    polygon,
-    optimism,
-    arbitrum,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli] : []),
-  ],
-  [publicProvider()]
-);
-
-const connectors = connectorsForWallets([
-  {
-    groupName: "Recommended Wallets",
-    wallets: [metaMaskWallet({ chains, walletConnectVersion: "1" })],
-  },
-  {
-    groupName: "Other Wallets",
-    wallets: [
-      argentWallet({ chains, walletConnectVersion: "1" }),
-      omniWallet({ chains, walletConnectVersion: "1" }),
-      imTokenWallet({ chains, walletConnectVersion: "1" }),
-    ],
-  },
-]);
-
-const wagmiConfig = createConfig({
-  autoConnect: false,
-  connectors,
-  publicClient,
-  webSocketPublicClient,
-});
+import {
+  chains,
+  getDefaultWagmiConfig,
+  getWagmiConfigByProjectId,
+} from "./config";
 
 let us3rAuthInstance: Us3rAuth | null = null;
 export const getUs3rAuthInstance = () => us3rAuthInstance;
@@ -214,6 +171,7 @@ const defaultLightTheme = lightTheme();
 type ThemeMode = "light" | "dark";
 type ThemeVars = typeof defaultDarkTheme | typeof defaultLightTheme;
 export interface Us3rAuthWithRainbowkitProviderProps extends PropsWithChildren {
+  projectId?: string;
   appName?: string;
   themeConfig?: {
     mode: ThemeMode;
@@ -223,9 +181,18 @@ export interface Us3rAuthWithRainbowkitProviderProps extends PropsWithChildren {
 }
 export default function Us3rAuthWithRainbowkitProvider({
   children,
-  appName,
+  projectId,
+  appName = "Us3rAuth",
   themeConfig,
 }: Us3rAuthWithRainbowkitProviderProps) {
+  const wagmiConfig = useMemo(
+    () =>
+      !!projectId
+        ? getWagmiConfigByProjectId(projectId, appName)
+        : getDefaultWagmiConfig(),
+    [projectId, appName]
+  );
+
   const mode = themeConfig?.mode || "dark";
   const darkVars = themeConfig?.darkTheme || defaultDarkTheme;
   const lightVars = themeConfig?.lightTheme || defaultLightTheme;
