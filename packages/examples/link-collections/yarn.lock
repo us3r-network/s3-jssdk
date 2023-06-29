@@ -1185,7 +1185,7 @@
     multiformats "^11.0.1"
     uint8arrays "^4.0.3"
 
-"@ceramicnetwork/common@^2.26.0":
+"@ceramicnetwork/common@^2.24.0", "@ceramicnetwork/common@^2.26.0":
   version "2.26.0"
   resolved "https://registry.npmmirror.com/@ceramicnetwork/common/-/common-2.26.0.tgz#b0b6d10ec08b1cb40ff387e5ca143224914ff3c0"
   integrity sha512-bNLQw6LJsyMcxA7vSY4uLVryWAIJCLAESaJfWtSJSLh0pJxC7Jrf9ESt7knvcoETSSD91klHaBCjf9NeW9mGXA==
@@ -1209,7 +1209,101 @@
     rxjs "^7.5.2"
     uint8arrays "^4.0.3"
 
-"@ceramicnetwork/stream-tile@^2.16.0":
+"@ceramicnetwork/http-client@2.21.0":
+  version "2.21.0"
+  resolved "https://registry.npmmirror.com/@ceramicnetwork/http-client/-/http-client-2.21.0.tgz#a234d819faca54788dbe1b1b9213658d4d52f522"
+  integrity sha512-endVa4X3M727VcDVK11z52yxK9Okcdk7/t6gRqNS8kG9EIlhjwZV82WOi0LoiaxayF496F9xy8bAATbqnXXrgA==
+  dependencies:
+    "@ceramicnetwork/common" "^2.24.0"
+    "@ceramicnetwork/stream-caip10-link" "^2.19.0"
+    "@ceramicnetwork/stream-model" "^1.6.0"
+    "@ceramicnetwork/stream-model-instance" "^1.6.0"
+    "@ceramicnetwork/stream-tile" "^2.20.0"
+    "@ceramicnetwork/streamid" "^2.14.0"
+    query-string "^7.1.0"
+    rxjs "^7.5.2"
+
+"@ceramicnetwork/http-client@^2.21.0":
+  version "2.23.0"
+  resolved "https://registry.npmmirror.com/@ceramicnetwork/http-client/-/http-client-2.23.0.tgz#a90a34337aedd3298b92c2bcf3256d4c5024a5e5"
+  integrity sha512-wu4RWW4mTR0ISAR3PA58k5l5XvNxik8fPJsQ4oh3ymIZmwibQuMky/51jGn4ZwT92b6tbFqNQX83md7r1K2DoQ==
+  dependencies:
+    "@ceramicnetwork/common" "^2.26.0"
+    "@ceramicnetwork/stream-caip10-link" "^2.21.0"
+    "@ceramicnetwork/stream-model" "^1.8.0"
+    "@ceramicnetwork/stream-model-instance" "^1.8.0"
+    "@ceramicnetwork/stream-tile" "^2.22.0"
+    "@ceramicnetwork/streamid" "^2.14.0"
+    query-string "^7.1.0"
+    rxjs "^7.5.2"
+
+"@ceramicnetwork/stream-caip10-link@^2.19.0", "@ceramicnetwork/stream-caip10-link@^2.21.0":
+  version "2.21.0"
+  resolved "https://registry.npmmirror.com/@ceramicnetwork/stream-caip10-link/-/stream-caip10-link-2.21.0.tgz#47466dac80cfb62e8603ec374f92f9949dfe8bad"
+  integrity sha512-8nlBrSwjGSOTpRavEWmJ2WYYoYGOebJ2fg/GLReqeBxf/OFC8dBTaScYHOvifhzfYuO6r00CzU/6H40CcUvQnA==
+  dependencies:
+    "@ceramicnetwork/common" "^2.26.0"
+    "@ceramicnetwork/streamid" "^2.14.0"
+    caip "~1.1.0"
+    did-resolver "^4.0.1"
+    lodash.clonedeep "^4.5.0"
+
+"@ceramicnetwork/stream-model-instance@1.6.0":
+  version "1.6.0"
+  resolved "https://registry.npmmirror.com/@ceramicnetwork/stream-model-instance/-/stream-model-instance-1.6.0.tgz#1f9546b827e23f2008f7968ffb9a2b7c31bdad24"
+  integrity sha512-qa7EUFV+/eZTiCyT0AvpNyvFMNbzH4sbXAJUsSKJ2YxXy3fo3X5QEVx51pKnVnc6JomNBz6S/pQj0kOR8o+hqA==
+  dependencies:
+    "@ceramicnetwork/common" "^2.24.0"
+    "@ceramicnetwork/streamid" "^2.14.0"
+    "@ipld/dag-cbor" "^7.0.0"
+    "@stablelib/random" "^1.0.1"
+    fast-json-patch "^3.1.0"
+    object-sizeof "^2.6.1"
+    uint8arrays "^4.0.3"
+
+"@ceramicnetwork/stream-model-instance@^1.6.0", "@ceramicnetwork/stream-model-instance@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.npmmirror.com/@ceramicnetwork/stream-model-instance/-/stream-model-instance-1.8.0.tgz#de2c8590011ebc8112331e4c8ab5fb13caaabc54"
+  integrity sha512-uzPxpwopnAbJKxQVROCCokTuI/FqNLzQCS8ds21ChFbqib7h9ENPHN+srBEQ3oSMEdKVtUe31zIK/cA0mqSdwQ==
+  dependencies:
+    "@ceramicnetwork/common" "^2.26.0"
+    "@ceramicnetwork/streamid" "^2.14.0"
+    "@ipld/dag-cbor" "^7.0.0"
+    "@stablelib/random" "^1.0.1"
+    fast-json-patch "^3.1.0"
+    object-sizeof "^2.6.1"
+    uint8arrays "^4.0.3"
+
+"@ceramicnetwork/stream-model@1.6.0":
+  version "1.6.0"
+  resolved "https://registry.npmmirror.com/@ceramicnetwork/stream-model/-/stream-model-1.6.0.tgz#f89cd9b89d6720a7cf6908f7e34d9580bd3e278c"
+  integrity sha512-rdX2bZmYLbpjQexLWBOGe37jg+5FV+1/GlwAleZjgBS6zc0mzWpwn901FmuXB+P6Lan2fQ1py5EOICoVYklqnA==
+  dependencies:
+    "@ceramicnetwork/common" "^2.24.0"
+    "@ceramicnetwork/streamid" "^2.14.0"
+    "@ipld/dag-cbor" "^7.0.0"
+    "@stablelib/random" "^1.0.1"
+    fast-json-patch "^3.1.0"
+    json-schema-typed "^8.0.1"
+    multiformats "^11.0.1"
+    multihashes "^4.0.3"
+    uint8arrays "^4.0.3"
+
+"@ceramicnetwork/stream-model@^1.6.0", "@ceramicnetwork/stream-model@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.npmmirror.com/@ceramicnetwork/stream-model/-/stream-model-1.8.0.tgz#40093b60058297774a74ff99a8c70e7bcecbad79"
+  integrity sha512-AGng+0mXiLPCIzwr920iEhV1wVG67bGgJBAFD1Fep1mDOqiC2PKd7RPZkHbPCfmydsAfCOW+EqAvS6bKMTsUrQ==
+  dependencies:
+    "@ceramicnetwork/common" "^2.26.0"
+    "@ceramicnetwork/streamid" "^2.14.0"
+    "@ipld/dag-cbor" "^7.0.0"
+    "@stablelib/random" "^1.0.1"
+    fast-json-patch "^3.1.0"
+    json-schema-typed "^8.0.1"
+    multiformats "^11.0.1"
+    uint8arrays "^4.0.3"
+
+"@ceramicnetwork/stream-tile@^2.16.0", "@ceramicnetwork/stream-tile@^2.20.0", "@ceramicnetwork/stream-tile@^2.22.0":
   version "2.22.0"
   resolved "https://registry.npmmirror.com/@ceramicnetwork/stream-tile/-/stream-tile-2.22.0.tgz#6f4ec71ff30bf83e9cf41a4f83576f0a7e37f7c2"
   integrity sha512-l2LFvalrZiixJusFk0KnMs9PAk/THZ9wPGuTWEwv9ZpHAywRq6vp+VBJwGs4HakD0ZG5dhfXX7QxL7NplbK9fQ==
@@ -1223,7 +1317,7 @@
     lodash.clonedeep "^4.5.0"
     uint8arrays "^4.0.3"
 
-"@ceramicnetwork/streamid@^2.14.0":
+"@ceramicnetwork/streamid@2.14.0", "@ceramicnetwork/streamid@^2.14.0":
   version "2.14.0"
   resolved "https://registry.npmmirror.com/@ceramicnetwork/streamid/-/streamid-2.14.0.tgz#ba5c34da90d30f25a517d3265cc9f600ad08bff9"
   integrity sha512-Pv28GZA77Zth+aC65NJeimrH4pIl91SKMCBAkOHORk/UCH++HTTItAjhu/RqMCsGpfnsIvZAXwsGqNH7dfJz1A==
@@ -1256,6 +1350,65 @@
     sha.js "^2.4.11"
     stream-browserify "^3.0.0"
     util "^0.12.4"
+
+"@composedb/client@^0.4.3":
+  version "0.4.4"
+  resolved "https://registry.npmmirror.com/@composedb/client/-/client-0.4.4.tgz#e001d508593d024435a2a9a04c1daaa970d24448"
+  integrity sha512-vJPHwv42RLBWm/TJyWmeAzxF0o2ureQ+0ndJuOrtRYmiHpxFZ9DKAFxymKMdPIiKJOBU4/KmjzwYg7JS2l+yTQ==
+  dependencies:
+    "@ceramicnetwork/http-client" "^2.21.0"
+    "@ceramicnetwork/stream-model-instance" "^1.6.0"
+    "@ceramicnetwork/streamid" "^2.14.0"
+    "@composedb/constants" "^0.4.0"
+    "@composedb/graphql-scalars" "^0.4.4"
+    "@composedb/runtime" "^0.4.2"
+    "@graphql-tools/batch-execute" "^8.5.19"
+    "@graphql-tools/stitch" "^8.7.48"
+    "@graphql-tools/utils" "^9.2.1"
+    dataloader "^2.2.2"
+    graphql "^16.5.0"
+    graphql-relay "^0.10.0"
+
+"@composedb/constants@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.npmmirror.com/@composedb/constants/-/constants-0.4.0.tgz#67749c629580e7fb0271401a06e949ed979b6f9f"
+  integrity sha512-juphxE0LPqzOh9Yojw6JrkvV3UI1RIhiI11MUHfsxC4m6KP8uxq0or1xKP7jQPNHGhqgtOomMezCXFUTcPVotQ==
+
+"@composedb/graphql-scalars@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.npmmirror.com/@composedb/graphql-scalars/-/graphql-scalars-0.4.4.tgz#4195ade433cc6523746d58bcbf213de0b3ba66af"
+  integrity sha512-fiFmf2wAuoSYXhSeTpFjHmMNdH/mwP5UVe96sMetsQ4jAfLDNNVw1/W3JxmWBsowtQRM/+x147ecONvs3TdVZw==
+  dependencies:
+    "@ceramicnetwork/streamid" "^2.14.0"
+    "@composedb/types" "^0.4.4"
+    caip "^1.1.0"
+    graphql "^16.5.0"
+    graphql-scalars "^1.21.3"
+    multiformats "^11.0.2"
+
+"@composedb/runtime@^0.4.2":
+  version "0.4.2"
+  resolved "https://registry.npmmirror.com/@composedb/runtime/-/runtime-0.4.2.tgz#0124bc90f1734f5aeb9547c8f4ae17ac43f75f15"
+  integrity sha512-0x9t/ESEQ5ZkqkOoP5glgQTrj+jOZHTuKnHCPfn6uUTEGpeByqWTDZqRnSVXPe0rHt/rl3MxsDyFEG6sJDpAww==
+  dependencies:
+    "@ceramicnetwork/http-client" "2.21.0"
+    "@ceramicnetwork/stream-model" "1.6.0"
+    "@ceramicnetwork/stream-model-instance" "1.6.0"
+    "@ceramicnetwork/streamid" "2.14.0"
+    "@composedb/graphql-scalars" "^0.4.4"
+    dataloader "^2.2.2"
+    graphql "^16.5.0"
+    graphql-relay "^0.10.0"
+
+"@composedb/types@^0.4.3", "@composedb/types@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.npmmirror.com/@composedb/types/-/types-0.4.4.tgz#d6564453767cb64360688025662e377b29b55153"
+  integrity sha512-XNqbTullzkogZAI/9S6AI9tlA23LrB6NYu50m4sLH+M5UIv8cuI6ngRpgarV5tVS6MvB5XuyAQf8o+1lXVr7YQ==
+  dependencies:
+    "@ceramicnetwork/stream-model" "^1.6.0"
+    "@ceramicnetwork/stream-model-instance" "^1.6.0"
+    dids "^4.0.0"
+    json-schema-typed "^8.0.1"
 
 "@csstools/normalize.css@*":
   version "12.0.0"
@@ -1803,6 +1956,108 @@
   dependencies:
     tslib "^2.4.0"
 
+"@graphql-tools/batch-delegate@^8.4.27":
+  version "8.4.27"
+  resolved "https://registry.npmmirror.com/@graphql-tools/batch-delegate/-/batch-delegate-8.4.27.tgz#af6fd26ba02ef03b6a3c63a106b47175188bbd97"
+  integrity sha512-efgDDJhljma9d3Ky/LswIu1xm/if2oS27XA1sOcxcShW+Ze+Qxi0hZZ6iyI4eQxVDX5Lyy/n+NvQEZAK1riqnQ==
+  dependencies:
+    "@graphql-tools/delegate" "^9.0.35"
+    "@graphql-tools/utils" "^9.2.1"
+    dataloader "2.2.2"
+    tslib "^2.4.0"
+    value-or-promise "^1.0.12"
+
+"@graphql-tools/batch-execute@^8.5.19", "@graphql-tools/batch-execute@^8.5.22":
+  version "8.5.22"
+  resolved "https://registry.npmmirror.com/@graphql-tools/batch-execute/-/batch-execute-8.5.22.tgz#a742aa9d138fe794e786d8fb6429665dc7df5455"
+  integrity sha512-hcV1JaY6NJQFQEwCKrYhpfLK8frSXDbtNMoTur98u10Cmecy1zrqNKSqhEyGetpgHxaJRqszGzKeI3RuroDN6A==
+  dependencies:
+    "@graphql-tools/utils" "^9.2.1"
+    dataloader "^2.2.2"
+    tslib "^2.4.0"
+    value-or-promise "^1.0.12"
+
+"@graphql-tools/delegate@^9.0.31", "@graphql-tools/delegate@^9.0.35":
+  version "9.0.35"
+  resolved "https://registry.npmmirror.com/@graphql-tools/delegate/-/delegate-9.0.35.tgz#94683f4bcec63520b4a6c8b2abf2e2e9324ea4f1"
+  integrity sha512-jwPu8NJbzRRMqi4Vp/5QX1vIUeUPpWmlQpOkXQD2r1X45YsVceyUUBnktCrlJlDB4jPRVy7JQGwmYo3KFiOBMA==
+  dependencies:
+    "@graphql-tools/batch-execute" "^8.5.22"
+    "@graphql-tools/executor" "^0.0.20"
+    "@graphql-tools/schema" "^9.0.19"
+    "@graphql-tools/utils" "^9.2.1"
+    dataloader "^2.2.2"
+    tslib "^2.5.0"
+    value-or-promise "^1.0.12"
+
+"@graphql-tools/executor@^0.0.20":
+  version "0.0.20"
+  resolved "https://registry.npmmirror.com/@graphql-tools/executor/-/executor-0.0.20.tgz#d51d159696e839522dd49d936636af251670e425"
+  integrity sha512-GdvNc4vszmfeGvUqlcaH1FjBoguvMYzxAfT6tDd4/LgwymepHhinqLNA5otqwVLW+JETcDaK7xGENzFomuE6TA==
+  dependencies:
+    "@graphql-tools/utils" "^9.2.1"
+    "@graphql-typed-document-node/core" "3.2.0"
+    "@repeaterjs/repeater" "^3.0.4"
+    tslib "^2.4.0"
+    value-or-promise "^1.0.12"
+
+"@graphql-tools/merge@^8.4.1", "@graphql-tools/merge@^8.4.2":
+  version "8.4.2"
+  resolved "https://registry.npmmirror.com/@graphql-tools/merge/-/merge-8.4.2.tgz#95778bbe26b635e8d2f60ce9856b388f11fe8288"
+  integrity sha512-XbrHAaj8yDuINph+sAfuq3QCZ/tKblrTLOpirK0+CAgNlZUCHs0Fa+xtMUURgwCVThLle1AF7svJCxFizygLsw==
+  dependencies:
+    "@graphql-tools/utils" "^9.2.1"
+    tslib "^2.4.0"
+
+"@graphql-tools/schema@^9.0.18", "@graphql-tools/schema@^9.0.19":
+  version "9.0.19"
+  resolved "https://registry.npmmirror.com/@graphql-tools/schema/-/schema-9.0.19.tgz#c4ad373b5e1b8a0cf365163435b7d236ebdd06e7"
+  integrity sha512-oBRPoNBtCkk0zbUsyP4GaIzCt8C0aCI4ycIRUL67KK5pOHljKLBBtGT+Jr6hkzA74C8Gco8bpZPe7aWFjiaK2w==
+  dependencies:
+    "@graphql-tools/merge" "^8.4.1"
+    "@graphql-tools/utils" "^9.2.1"
+    tslib "^2.4.0"
+    value-or-promise "^1.0.12"
+
+"@graphql-tools/stitch@^8.7.48":
+  version "8.7.50"
+  resolved "https://registry.npmmirror.com/@graphql-tools/stitch/-/stitch-8.7.50.tgz#bcadf4b0dd20e22fb568042e94d711750c10f122"
+  integrity sha512-VB1/uZyXjj1P5Wj0c4EKX3q8Q1Maj4dy6uNwodEPaO3EHMpaJU/DqyN0Bvnhxu0ol7RzdY3kgsvsdUjU2QMImw==
+  dependencies:
+    "@graphql-tools/batch-delegate" "^8.4.27"
+    "@graphql-tools/delegate" "^9.0.35"
+    "@graphql-tools/executor" "^0.0.20"
+    "@graphql-tools/merge" "^8.4.2"
+    "@graphql-tools/schema" "^9.0.18"
+    "@graphql-tools/utils" "^9.2.1"
+    "@graphql-tools/wrap" "^9.4.2"
+    tslib "^2.4.0"
+    value-or-promise "^1.0.11"
+
+"@graphql-tools/utils@^9.2.1":
+  version "9.2.1"
+  resolved "https://registry.npmmirror.com/@graphql-tools/utils/-/utils-9.2.1.tgz#1b3df0ef166cfa3eae706e3518b17d5922721c57"
+  integrity sha512-WUw506Ql6xzmOORlriNrD6Ugx+HjVgYxt9KCXD9mHAak+eaXSwuGGPyE60hy9xaDEoXKBsG7SkG69ybitaVl6A==
+  dependencies:
+    "@graphql-typed-document-node/core" "^3.1.1"
+    tslib "^2.4.0"
+
+"@graphql-tools/wrap@^9.4.2":
+  version "9.4.2"
+  resolved "https://registry.npmmirror.com/@graphql-tools/wrap/-/wrap-9.4.2.tgz#30835587c4c73be1780908a7cb077d8013aa2703"
+  integrity sha512-DFcd9r51lmcEKn0JW43CWkkI2D6T9XI1juW/Yo86i04v43O9w2/k4/nx2XTJv4Yv+iXwUw7Ok81PGltwGJSDSA==
+  dependencies:
+    "@graphql-tools/delegate" "^9.0.31"
+    "@graphql-tools/schema" "^9.0.18"
+    "@graphql-tools/utils" "^9.2.1"
+    tslib "^2.4.0"
+    value-or-promise "^1.0.12"
+
+"@graphql-typed-document-node/core@3.2.0", "@graphql-typed-document-node/core@^3.1.1":
+  version "3.2.0"
+  resolved "https://registry.npmmirror.com/@graphql-typed-document-node/core/-/core-3.2.0.tgz#5f3d96ec6b2354ad6d8a28bf216a1d97b5426861"
+  integrity sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==
+
 "@humanwhocodes/config-array@^0.11.10":
   version "0.11.10"
   resolved "https://registry.npmmirror.com/@humanwhocodes/config-array/-/config-array-0.11.10.tgz#5a3ffe32cc9306365fb3fd572596cd602d5e12d2"
@@ -2269,6 +2524,11 @@
   dependencies:
     "@motionone/dom" "^10.16.2"
     tslib "^2.3.1"
+
+"@multiformats/base-x@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.npmmirror.com/@multiformats/base-x/-/base-x-4.0.1.tgz#95ff0fa58711789d53aefb2590a8b7a4e715d121"
+  integrity sha512-eMk0b9ReBbV23xXU693TAIrLyeO5iTgBZGSJfpqriG8UkYvr/hC9u9pyMlAakDNHWmbhMZCDs6KQO0jzKD8OTw==
 
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
@@ -3375,6 +3635,11 @@
     "@react-types/overlays" "^3.8.0"
     "@react-types/shared" "^3.18.1"
 
+"@repeaterjs/repeater@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.npmmirror.com/@repeaterjs/repeater/-/repeater-3.0.4.tgz#a04d63f4d1bf5540a41b01a921c9a7fddc3bd1ca"
+  integrity sha512-AW8PKd6iX3vAZ0vA43nOUOnbq/X5ihgU+mSXXqunMkeQADGiqw/PY0JNeYtD5sr0PAy51YPgAPbDoeapv9r8WA==
+
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
   resolved "https://registry.npmmirror.com/@rollup/plugin-babel/-/plugin-babel-5.3.1.tgz#04bc0608f4aa4b2e4b1aebf284344d0f68fda283"
@@ -4418,6 +4683,17 @@
     "@didtools/pkh-ethereum" "^0.2.1"
     "@didtools/pkh-solana" "^0.1.0"
     did-session "^2.0.0"
+
+"@us3r-network/data-model@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.npmmirror.com/@us3r-network/data-model/-/data-model-0.3.0.tgz#4d38b12dc476067fdaf507491fbadc238fd9e1e3"
+  integrity sha512-tth+D/z3lTREUn7qdo3vnwbuzfTD1gDcpt+8+LmG727q8jq7uFhkOPMx4/lLikWuxh9Hx+iaCaIYzKQh/fkdHg==
+  dependencies:
+    "@ceramicnetwork/common" "^2.24.0"
+    "@composedb/client" "^0.4.3"
+    "@composedb/types" "^0.4.3"
+    did-session "^2.0.0"
+    dids "^4.0.0"
 
 "@vanilla-extract/css@1.9.1":
   version "1.9.1"
@@ -6368,6 +6644,11 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
+dataloader@2.2.2, dataloader@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.npmmirror.com/dataloader/-/dataloader-2.2.2.tgz#216dc509b5abe39d43a9b9d97e6e5e473dfbe3e0"
+  integrity sha512-8YnDaaf7N3k/q5HnTJVuzSyLETjoZjVmHc4AeKAzOvKHEFQKcn64OKBfzHYtE9zGjctNM7V9I0MfnUVLpi7M5g==
+
 debug@2.6.9, debug@^2.6.0:
   version "2.6.9"
   resolved "https://registry.npmmirror.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
@@ -6540,7 +6821,7 @@ did-jwt@^7.0.0, did-jwt@^7.2.0:
     multiformats "^12.0.0"
     uint8arrays "^4.0.3"
 
-did-resolver@^4.1.0:
+did-resolver@^4.0.1, did-resolver@^4.1.0:
   version "4.1.0"
   resolved "https://registry.npmmirror.com/did-resolver/-/did-resolver-4.1.0.tgz#740852083c4fd5bf9729d528eca5d105aff45eb6"
   integrity sha512-S6fWHvCXkZg2IhS4RcVHxwuyVejPR7c+a4Go0xbQ9ps5kILa8viiYQgrM4gfTyeTjJ0ekgJH9gk/BawTpmkbZA==
@@ -7813,6 +8094,23 @@ graphemer@^1.4.0:
   version "1.4.0"
   resolved "https://registry.npmmirror.com/graphemer/-/graphemer-1.4.0.tgz#fb2f1d55e0e3a1849aeffc90c4fa0dd53a0e66c6"
   integrity sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==
+
+graphql-relay@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.npmmirror.com/graphql-relay/-/graphql-relay-0.10.0.tgz#3b661432edf1cb414cd4a132cf595350e524db2b"
+  integrity sha512-44yBuw2/DLNEiMypbNZBt1yMDbBmyVPVesPywnteGGALiBmdyy1JP8jSg8ClLePg8ZZxk0O4BLhd1a6U/1jDOQ==
+
+graphql-scalars@^1.21.3:
+  version "1.22.2"
+  resolved "https://registry.npmmirror.com/graphql-scalars/-/graphql-scalars-1.22.2.tgz#6326e6fe2d0ad4228a9fea72a977e2bf26b86362"
+  integrity sha512-my9FB4GtghqXqi/lWSVAOPiTzTnnEzdOXCsAC2bb5V7EFNQjVjwy3cSSbUvgYOtDuDibd+ZsCDhz+4eykYOlhQ==
+  dependencies:
+    tslib "^2.5.0"
+
+graphql@^16.5.0:
+  version "16.7.1"
+  resolved "https://registry.npmmirror.com/graphql/-/graphql-16.7.1.tgz#11475b74a7bff2aefd4691df52a0eca0abd9b642"
+  integrity sha512-DRYR9tf+UGU0KOsMcKAlXeFfX89UiiIZ0dRU3mR0yJfu6OjZqUcp68NnFLnqQU5RexygFoDy1EW+ccOYcPfmHg==
 
 gzip-size@^6.0.0:
   version "6.0.0"
@@ -9159,6 +9457,11 @@ json-schema-traverse@^1.0.0:
   resolved "https://registry.npmmirror.com/json-schema-traverse/-/json-schema-traverse-1.0.0.tgz#ae7bcb3656ab77a73ba5c49bf654f38e6b6860e2"
   integrity sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==
 
+json-schema-typed@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.npmmirror.com/json-schema-typed/-/json-schema-typed-8.0.1.tgz#826ee39e3b6cef536f85412ff048d3ff6f19dfa0"
+  integrity sha512-XQmWYj2Sm4kn4WeTYvmpKEbyPsL7nBsb647c7pMe6l02/yx2+Jfc4dT6UZkEXnIUb5LhD55r2HPsJ1milQ4rDg==
+
 json-schema@^0.4.0:
   version "0.4.0"
   resolved "https://registry.npmmirror.com/json-schema/-/json-schema-0.4.0.tgz#f7de4cf6efab838ebaeb3236474cbba5a1930ab5"
@@ -9655,6 +9958,13 @@ ms@2.1.3, ms@^2.0.0, ms@^2.1.1:
   resolved "https://registry.npmmirror.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
+multibase@^4.0.1:
+  version "4.0.6"
+  resolved "https://registry.npmmirror.com/multibase/-/multibase-4.0.6.tgz#6e624341483d6123ca1ede956208cb821b440559"
+  integrity sha512-x23pDe5+svdLz/k5JPGCVdfn7Q5mZVMBETiC+ORfO+sor9Sgs0smJzAjfTbM5tckeCqnaUuMYoz+k3RXMmJClQ==
+  dependencies:
+    "@multiformats/base-x" "^4.0.1"
+
 multicast-dns@^7.2.5:
   version "7.2.5"
   resolved "https://registry.npmmirror.com/multicast-dns/-/multicast-dns-7.2.5.tgz#77eb46057f4d7adbd16d9290fa7299f6fa64cced"
@@ -9677,6 +9987,15 @@ multiformats@^9.4.2, multiformats@^9.5.4, multiformats@^9.6.5:
   version "9.9.0"
   resolved "https://registry.npmmirror.com/multiformats/-/multiformats-9.9.0.tgz#c68354e7d21037a8f1f8833c8ccd68618e8f1d37"
   integrity sha512-HoMUjhH9T8DDBNT+6xzkrd9ga/XiBI4xLr58LJACwK6G3HTOPeMz4nB4KJs33L2BelrIJa7P0VuNaVF3hMYfjg==
+
+multihashes@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.npmmirror.com/multihashes/-/multihashes-4.0.3.tgz#426610539cd2551edbf533adeac4c06b3b90fb05"
+  integrity sha512-0AhMH7Iu95XjDLxIeuCOOE4t9+vQZsACyKZ9Fxw2pcsRmlX4iCn1mby0hS0bb+nQOVpdQYWPpnyusw4da5RPhA==
+  dependencies:
+    multibase "^4.0.1"
+    uint8arrays "^3.0.0"
+    varint "^5.0.2"
 
 mz@^2.7.0:
   version "2.7.0"
@@ -9828,6 +10147,13 @@ object-keys@^1.1.1:
   version "1.1.1"
   resolved "https://registry.npmmirror.com/object-keys/-/object-keys-1.1.1.tgz#1c47f272df277f3b1daf061677d9c82e2322c60e"
   integrity sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==
+
+object-sizeof@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.npmmirror.com/object-sizeof/-/object-sizeof-2.6.1.tgz#1e2b6a01d182c268dbb07ee3403f539de45f63d3"
+  integrity sha512-a7VJ1Zx7ZuHceKwjgfsSqzV/X0PVGvpZz7ho3Dn4Cs0LLcR5e5WuV+gsbizmplD8s0nAXMJmckKB2rkSiPm/Gg==
+  dependencies:
+    buffer "^6.0.3"
 
 object.assign@^4.1.4:
   version "4.1.4"
@@ -10878,7 +11204,7 @@ qs@^6.10.3:
   dependencies:
     side-channel "^1.0.4"
 
-query-string@7.1.3:
+query-string@7.1.3, query-string@^7.1.0:
   version "7.1.3"
   resolved "https://registry.npmmirror.com/query-string/-/query-string-7.1.3.tgz#a1cf90e994abb113a325804a972d98276fe02328"
   integrity sha512-hh2WYhq4fi8+b+/2Kg9CEge4fDPvHS534aOOvOZeQ3+Vf2mCFsaFBYj0i+iXcAq6I9Vzp5fjMFBlONvayDC1qg==
@@ -12376,7 +12702,7 @@ tslib@1.14.1, tslib@^1.8.1, tslib@^1.9.0:
   resolved "https://registry.npmmirror.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.0, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.3.1, tslib@^2.4.0:
+tslib@^2.0.0, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.3.1, tslib@^2.4.0, tslib@^2.5.0:
   version "2.6.0"
   resolved "https://registry.npmmirror.com/tslib/-/tslib-2.6.0.tgz#b295854684dbda164e181d259a22cd779dcd7bc3"
   integrity sha512-7At1WUettjcSRHXCyYtTselblcHl9PJFFVKiCAy/bY97+BPZXSQ2wbq0P9s8tK2G7dFQfNnlJnPAiArVBVBsfA==
@@ -12644,6 +12970,16 @@ valtio@1.10.6:
   dependencies:
     proxy-compare "2.5.1"
     use-sync-external-store "1.2.0"
+
+value-or-promise@^1.0.11, value-or-promise@^1.0.12:
+  version "1.0.12"
+  resolved "https://registry.npmmirror.com/value-or-promise/-/value-or-promise-1.0.12.tgz#0e5abfeec70148c78460a849f6b003ea7986f15c"
+  integrity sha512-Z6Uz+TYwEqE7ZN50gwn+1LCVo9ZVrpxRPOhOLnncYkY1ZzOYtrX8Fwf/rFktZ8R5mJms6EZf5TqNOMeZmnPq9Q==
+
+varint@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.npmmirror.com/varint/-/varint-5.0.2.tgz#5b47f8a947eb668b848e034dcfa87d0ff8a7f7a4"
+  integrity sha512-lKxKYG6H03yCZUpAGOPOsMcGxd1RHCu1iKvEHYDPmTyq2HueGhD73ssNBqqQWfvYs04G9iUFRvmAVLW20Jw6ow==
 
 varint@^6.0.0:
   version "6.0.0"
