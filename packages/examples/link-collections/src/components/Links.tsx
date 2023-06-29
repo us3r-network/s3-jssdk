@@ -4,6 +4,8 @@ import {
   Button,
   Cell,
   Column,
+  Radio,
+  RadioGroup,
   Row,
   Table,
   TableBody,
@@ -37,6 +39,12 @@ export function parsePagination (query: Pagination): PaginationKind | undefined 
   }
 }
 
+enum ListType {
+  ALL = 'all',
+  FAVOR = 'favor',
+  PERSONAL = 'personal'
+}
+
 export default function Links () {
   const [links, setLinks] = useState<Link[]>([])
 
@@ -46,7 +54,12 @@ export default function Links () {
   const [pageInfo, setPageInfo] = useState<PageInfo>()
   const session = useSession()
 
+  const [selectedListType, setSelectedListType] = useState('all')
+
   useEffect(() => {
+    switch (selectedListType) {
+      case ListType.ALL:
+        //all links
         if (parsePagination(queryParamsInfo) === PaginationKind.FORWARD) {
           //prev page
           s3LinkModel
@@ -72,7 +85,39 @@ export default function Links () {
               setPageInfo(res.data?.linkIndex?.pageInfo)
             })
         }
-  }, [session, queryParamsInfo])
+        break
+      case ListType.PERSONAL:
+        //personal links
+        if (!session) return
+        s3LinkModel.authComposeClient(session)
+        if (parsePagination(queryParamsInfo) === PaginationKind.FORWARD) {
+          //prev page
+          s3LinkModel
+            .queryPersonalLinks(queryParamsInfo as ForwardPagination)
+            .then(res => {
+              const resLinks =
+                res.data?.viewer?.linkList?.edges
+                  ?.filter(edge => !!edge?.node)
+                  .map(edge => edge?.node) || []
+              setLinks(resLinks.reverse())
+              setPageInfo(res.data?.viewer?.linkList?.pageInfo)
+            })
+        } else {
+          //next page
+          s3LinkModel
+            .queryPersonalLinksDesc(queryParamsInfo as BackwardPagination)
+            .then(res => {
+              const resLinks =
+                res.data?.viewer?.linkList?.edges
+                  ?.filter(edge => !!edge?.node)
+                  .map(edge => edge?.node) || []
+              setLinks(resLinks.reverse())
+              setPageInfo(res.data?.viewer?.linkList?.pageInfo)
+            })
+        }
+        break
+    }
+  }, [session, queryParamsInfo, selectedListType])
 
   const prevPage = () => {
     setQueryParamsInfo({ first: PAGE_SIZE, after: pageInfo?.endCursor })
@@ -82,6 +127,12 @@ export default function Links () {
   }
   return (
     <div className='links'>
+      <RadioGroup value={selectedListType} onChange={setSelectedListType}>
+        <Radio value={ListType.ALL}>{ListType.ALL}</Radio>
+        <Radio value={ListType.PERSONAL} isDisabled={!session}>
+          {ListType.PERSONAL}
+        </Radio>
+      </RadioGroup>
       <Table aria-label='Links' selectionMode='multiple'>
         <TableHeader>
           <Column isRowHeader>Link</Column>
