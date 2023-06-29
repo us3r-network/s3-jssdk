@@ -8,6 +8,8 @@ The @us3r-network/auth-with-rainbowkit package is a react component, that create
 npm install @us3r-network/auth-with-rainbowkit
 ```
 
+This library bundles some [polyfills](https://github.com/us3r-network/s3-jssdk/tree/main/packages/auth-with-rainbowkit/src/polyfills.ts), but you should still understand what [additional settings](https://www.rainbowkit.com/docs/installation#additional-build-tooling-setup) are required for rainbowkit in different frameworks and build tools.
+
 ## Usage
 
 ### Wrap providers

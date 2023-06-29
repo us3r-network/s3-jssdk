@@ -1,3 +1,4 @@
+import "./polyfills";
 export { default as Us3rAuthWithRainbowkitProvider } from "./Us3rAuthWithRainbowkitProvider";
 export {
   useAuthentication,
