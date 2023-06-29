@@ -12,34 +12,46 @@ export default function <T>({
       className={`${styles.UserInfoEditForm} ${className}`}
       {...props}
     >
-      <UserInfoEditForm.AvatarField className={styles.AvatarField}>
-        {({ isLoading, isUploadingAvatar }) => {
-          return isLoading || isUploadingAvatar ? (
-            <LoadingSpokes className={styles.AvatarLoadingSpokes} />
-          ) : (
-            <>
-              <Label>
-                <UserInfoEditForm.AvatarPreviewImg
-                  className={styles.AvatarPreviewImg}
-                />
-              </Label>
-              <UserInfoEditForm.AvatarUploadInput
-                className={styles.AvatarUploadInput}
-              />
-            </>
-          );
-        }}
-      </UserInfoEditForm.AvatarField>
-
-      <UserInfoEditForm.NameInput className={styles.NameInput} />
-
-      <UserInfoEditForm.BioTextArea className={styles.BioTextArea} />
-
-      <UserInfoEditForm.SubmitButton className={styles.SubmitButton}>
-        Submit
-      </UserInfoEditForm.SubmitButton>
-
-      <UserInfoEditForm.ErrorMessage className={styles.ErrorMessage} />
+      {({ avatarUploadOpts }) => {
+        return (
+          <>
+            <UserInfoEditForm.AvatarField className={styles.AvatarField}>
+              {({ isLoading, isUploadingAvatar }) => {
+                if (isLoading || isUploadingAvatar) {
+                  return (
+                    <LoadingSpokes className={styles.AvatarLoadingSpokes} />
+                  );
+                }
+                if (avatarUploadOpts) {
+                  return (
+                    <>
+                      <Label>
+                        <UserInfoEditForm.AvatarPreviewImg
+                          className={styles.AvatarPreviewImg}
+                        />
+                      </Label>
+                      <UserInfoEditForm.AvatarUploadInput
+                        className={styles.AvatarUploadInput}
+                      />
+                    </>
+                  );
+                }
+                return (
+                  <UserInfoEditForm.AvatarPreviewImg
+                    className={styles.AvatarPreviewImg}
+                  />
+                );
+              }}
+            </UserInfoEditForm.AvatarField>
+            <UserInfoEditForm.NameInput className={styles.NameInput} />
+            <UserInfoEditForm.BioTextArea className={styles.BioTextArea} />
+            <UserInfoEditForm.SubmitButton className={styles.SubmitButton}>
+              Submit
+            </UserInfoEditForm.SubmitButton>
+            <UserInfoEditForm.ErrorMessage className={styles.ErrorMessage} />
+          </>
+        );
+      }}
     </UserInfoEditForm>
   );
 }

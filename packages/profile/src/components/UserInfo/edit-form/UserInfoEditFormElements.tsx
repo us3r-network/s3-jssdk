@@ -63,16 +63,21 @@ function AvatarFieldDefaultChildren({
   isLoading,
   isUploadingAvatar,
 }: AvatarFieldRenderProps) {
-  return isLoading || isUploadingAvatar ? (
-    <LoadingSpokes color="#666" width={32} />
-  ) : (
-    <>
-      <Label>
-        <AvatarPreviewImg />
-      </Label>
-      <AvatarUploadInput />
-    </>
-  );
+  const { avatarUploadOpts } = useUserInfoEditFormState();
+  if (isLoading || isUploadingAvatar) {
+    return <LoadingSpokes color="#666" width={32} />;
+  }
+  if (avatarUploadOpts) {
+    return (
+      <>
+        <Label>
+          <AvatarPreviewImg />
+        </Label>
+        <AvatarUploadInput />
+      </>
+    );
+  }
+  return <AvatarPreviewImg />;
 }
 
 function AvatarPreviewImg(props: HTMLAttributes<HTMLImageElement>) {

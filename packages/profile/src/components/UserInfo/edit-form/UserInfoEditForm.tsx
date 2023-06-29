@@ -37,7 +37,7 @@ export interface UserInfoEditFormIncomingProps<T> {
   /**
    * avatar upload options
    */
-  avatarUploadOpts: AvatarUploadOpts<T>;
+  avatarUploadOpts?: AvatarUploadOpts<T>;
   /**
    * callback when profile is successfully updated.
    */
