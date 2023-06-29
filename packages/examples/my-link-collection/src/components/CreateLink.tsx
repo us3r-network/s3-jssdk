@@ -15,7 +15,7 @@ import { CERAMIC_HOST } from '../constants'
 
 const s3LinkModel = new S3LinkModel(CERAMIC_HOST)
 
-export default function Links () {
+export default function CreateLink () {
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const session = useSession()

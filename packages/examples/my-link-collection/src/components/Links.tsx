@@ -4,8 +4,9 @@ import {
   Button,
   Cell,
   Column,
+  Radio,
+  RadioGroup,
   Row,
-  Switch,
   Table,
   TableBody,
   TableHeader
@@ -23,6 +24,12 @@ import type {
 
 const s3LinkModel = new S3LinkModel(CERAMIC_HOST)
 const PAGE_SIZE = 20
+
+enum ListType {
+  ALL = 'all',
+  FAVOR = 'favor',
+  PERSONAL = 'personal'
+}
 
 export enum PaginationKind {
   FORWARD,
@@ -42,7 +49,9 @@ export function parsePagination (query: Pagination): PaginationKind | undefined 
 
 export default function Links () {
   const [links, setLinks] = useState<Link[]>([])
-  const [showFavorOnly, setShowFavorOnly] = useState<Boolean>(false)
+  const [selectedListType, setSelectedListType] = useState(
+    "all"
+  )
 
   const [queryParamsInfo, setQueryParamsInfo] = useState<Pagination>({
     last: PAGE_SIZE
@@ -51,64 +60,103 @@ export default function Links () {
   const session = useSession()
 
   useEffect(() => {
-    if (showFavorOnly) {
-      //personal links
-      if (!session) return
-      s3LinkModel.authComposeClient(session)
-      if (parsePagination(queryParamsInfo) === PaginationKind.FORWARD) {
-        //prev page
-        s3LinkModel
-          .queryPersonalLinks(queryParamsInfo as ForwardPagination)
-          .then(res => {
-            const resLinks =
-              res.data?.viewer?.linkList?.edges
-                ?.filter(edge => !!edge?.node)
-                .map(edge => edge?.node) || []
-            setLinks(resLinks.reverse())
-            setPageInfo(res.data?.viewer?.linkList?.pageInfo)
-          })
-      } else {
-        //next page
-        s3LinkModel
-          .queryPersonalLinksDesc(queryParamsInfo as BackwardPagination)
-          .then(res => {
-            const resLinks =
-              res.data?.viewer?.linkList?.edges
-                ?.filter(edge => !!edge?.node)
-                .map(edge => edge?.node) || []
-            setLinks(resLinks.reverse())
-            setPageInfo(res.data?.viewer?.linkList?.pageInfo)
-          })
-      }
-    } else {
-      //all links
-      if (parsePagination(queryParamsInfo) === PaginationKind.FORWARD) {
-        //prev page
-        s3LinkModel
-          .queryLinks(queryParamsInfo as ForwardPagination)
-          .then(res => {
-            const resLinks =
-              res.data?.linkIndex?.edges
-                ?.filter(edge => !!edge?.node)
-                .map(edge => edge?.node) || []
-            setLinks(resLinks.reverse())
-            setPageInfo(res.data?.linkIndex?.pageInfo)
-          })
-      } else {
-        //next page
-        s3LinkModel
-          .queryLinksDesc(queryParamsInfo as BackwardPagination)
-          .then(res => {
-            const resLinks =
-              res.data?.linkIndex?.edges
-                ?.filter(edge => !!edge?.node)
-                .map(edge => edge?.node) || []
-            setLinks(resLinks.reverse())
-            setPageInfo(res.data?.linkIndex?.pageInfo)
-          })
-      }
+    switch (selectedListType) {
+      case ListType.ALL:
+        //all links
+        if (parsePagination(queryParamsInfo) === PaginationKind.FORWARD) {
+          //prev page
+          s3LinkModel
+            .queryLinks(queryParamsInfo as ForwardPagination)
+            .then(res => {
+              const resLinks =
+                res.data?.linkIndex?.edges
+                  ?.filter(edge => !!edge?.node)
+                  .map(edge => edge?.node) || []
+              setLinks(resLinks.reverse())
+              setPageInfo(res.data?.linkIndex?.pageInfo)
+            })
+        } else {
+          //next page
+          s3LinkModel
+            .queryLinksDesc(queryParamsInfo as BackwardPagination)
+            .then(res => {
+              const resLinks =
+                res.data?.linkIndex?.edges
+                  ?.filter(edge => !!edge?.node)
+                  .map(edge => edge?.node) || []
+              setLinks(resLinks.reverse())
+              setPageInfo(res.data?.linkIndex?.pageInfo)
+            })
+        }
+        break
+      case ListType.PERSONAL:
+        //personal links
+        if (!session) return
+        s3LinkModel.authComposeClient(session)
+        if (parsePagination(queryParamsInfo) === PaginationKind.FORWARD) {
+          //prev page
+          s3LinkModel
+            .queryPersonalLinks(queryParamsInfo as ForwardPagination)
+            .then(res => {
+              const resLinks =
+                res.data?.viewer?.linkList?.edges
+                  ?.filter(edge => !!edge?.node)
+                  .map(edge => edge?.node) || []
+              setLinks(resLinks.reverse())
+              setPageInfo(res.data?.viewer?.linkList?.pageInfo)
+            })
+        } else {
+          //next page
+          s3LinkModel
+            .queryPersonalLinksDesc(queryParamsInfo as BackwardPagination)
+            .then(res => {
+              const resLinks =
+                res.data?.viewer?.linkList?.edges
+                  ?.filter(edge => !!edge?.node)
+                  .map(edge => edge?.node) || []
+              setLinks(resLinks.reverse())
+              setPageInfo(res.data?.viewer?.linkList?.pageInfo)
+            })
+        }
+        break
+      case ListType.FAVOR:
+        //favor links
+        if (!session) return
+        s3LinkModel.authComposeClient(session)
+        if (parsePagination(queryParamsInfo) === PaginationKind.FORWARD) {
+          //prev page
+          s3LinkModel
+            .queryPersonalFavors(queryParamsInfo as ForwardPagination)
+            .then(res => {
+              const resLinks =
+                res.data?.viewer?.favorList?.edges
+                  ?.filter(
+                    edge =>
+                      !!edge?.node && !!edge?.node?.link && !edge?.node?.revoke
+                  )
+                  .map(edge => edge?.node?.link!) || []
+              setLinks(resLinks.reverse())
+              setPageInfo(res.data?.viewer?.favorList?.pageInfo)
+            })
+        } else {
+          //next page
+          s3LinkModel
+            .queryPersonalFavors(queryParamsInfo as ForwardPagination) //todo should be desc
+            .then(res => {
+              const resLinks =
+                res.data?.viewer?.favorList?.edges
+                  ?.filter(
+                    edge =>
+                      !!edge?.node && !!edge?.node?.link && !edge?.node?.revoke
+                  )
+                  .map(edge => edge?.node?.link!) || []
+              setLinks(resLinks.reverse())
+              setPageInfo(res.data?.viewer?.favorList?.pageInfo)
+            })
+        }
+        break
     }
-  }, [session, showFavorOnly, queryParamsInfo])
+  }, [session, selectedListType, queryParamsInfo])
 
   const prevPage = () => {
     setQueryParamsInfo({ first: PAGE_SIZE, after: pageInfo?.endCursor })
@@ -118,10 +166,11 @@ export default function Links () {
   }
   return (
     <div className='links'>
-      <Switch onChange={setShowFavorOnly}>
-        <div className='indicator' />
-        {showFavorOnly ? 'Show All Links' : 'Show Favor Links Only'}
-      </Switch>
+      <RadioGroup value={selectedListType} onChange={setSelectedListType}>
+        <Radio value={ListType.ALL}>{ListType.ALL}</Radio>
+        <Radio value={ListType.PERSONAL} isDisabled={!session}>{ListType.PERSONAL}</Radio>
+        <Radio value={ListType.FAVOR} isDisabled={!session}>{ListType.FAVOR}</Radio>
+      </RadioGroup>
       <Table aria-label='Links' selectionMode='multiple'>
         <TableHeader>
           <Column>Favor</Column>
