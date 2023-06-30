@@ -1,30 +1,35 @@
+import { useSession } from '@us3r-network/auth-with-rainbowkit'
 import {
-  useAuthentication,
-  useSession,
-} from "@us3r-network/auth-with-rainbowkit";
-import { useCallback } from "react";
-import {Button} from 'react-aria-components';
+  LoginButton,
+  LogoutButton,
+  UserInfo
+} from '@us3r-network/profile'
+import {
+  DialogTrigger,
+  Popover,
+  Dialog,
+  OverlayArrow
+} from 'react-aria-components'
 
-export default function AuthButton() {
-  const { ready, signIn, signOut } = useAuthentication();
-  const session = useSession();
-
-  const clickAction = useCallback(() => {
-    if (session) {
-      signOut();
-    } else {
-      signIn();
-    }
-  }, [session, signIn, signOut]);
+export default function AuthButton () {
+  const session = useSession()
 
   return (
-    <Button isDisabled={!ready} onPress={clickAction}>
-      {(() => {
-        if (!ready) {
-          return "Initializing session...";
-        }
-        return session ? "SignOut" : "SignIn";
-      })()}
-    </Button>
-  );
+    <DialogTrigger>
+      <LoginButton />
+      {session && (
+        <Popover placement='start'>
+          <OverlayArrow>
+            <svg width={12} height={12}>
+              <path d='M0 0,L6 6,L12 0' />
+            </svg>
+          </OverlayArrow>
+          <Dialog>
+            <UserInfo />
+            <LogoutButton />
+          </Dialog>
+        </Popover>
+      )}
+    </DialogTrigger>
+  )
 }

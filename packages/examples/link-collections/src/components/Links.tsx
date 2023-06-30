@@ -19,6 +19,7 @@ import type {
   ForwardPagination,
   BackwardPagination
 } from '@ceramicnetwork/common'
+import { UserAvatar, UserName } from '@us3r-network/profile'
 
 const s3LinkModel = new S3LinkModel(CERAMIC_HOST)
 const PAGE_SIZE = 20
@@ -147,7 +148,10 @@ export default function Links () {
                   {link?.title}
                 </a>
               </Cell>
-              <Cell aria-label='creator'>{link?.creator?.id}</Cell>
+              <Cell aria-label='creator'>
+                <UserAvatar did={link?.creator?.id} />
+                <UserName did={link?.creator?.id} />
+              </Cell>
               <Cell aria-label='createAt'>{link?.createAt}</Cell>
             </Row>
           ))}
