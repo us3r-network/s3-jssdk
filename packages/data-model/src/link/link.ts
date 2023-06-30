@@ -440,6 +440,7 @@ export class S3LinkModel extends S3Model {
                 link {
                   id
                   title
+                  createAt
                   creator {
                     id
                   }
@@ -541,6 +542,7 @@ export class S3LinkModel extends S3Model {
                 link {
                   id
                   title
+                  createAt
                   creator {
                     id
                   }
@@ -645,6 +647,7 @@ export class S3LinkModel extends S3Model {
                 link {
                   id
                   title
+                  createAt
                   creator {
                     id
                   }
@@ -745,6 +748,7 @@ export class S3LinkModel extends S3Model {
                   id
                   url
                   type
+                  createAt
                   creator {
                     id
                   }
@@ -795,6 +799,7 @@ export class S3LinkModel extends S3Model {
                   id
                   url
                   type
+                  createAt
                   creator {
                     id
                   }
