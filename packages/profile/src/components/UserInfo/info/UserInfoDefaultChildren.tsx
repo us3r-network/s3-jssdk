@@ -35,9 +35,6 @@ export function UserInfoDefaultChildren() {
       </section>
       {(() => {
         if (!isLoginUser) return;
-        if (!avatarUploadOpts) {
-          throw new Error("avatarUploadOpts is required");
-        }
         return (
           <Modal isOpen={isOpenEdit} onOpenChange={setIsOpenEdit}>
             <Dialog>

@@ -41,9 +41,6 @@ export default function <T>({
             <UserInfo.Bio className={styles.Bio} />
             {(() => {
               if (!isLoginUser) return;
-              if (!avatarUploadOpts) {
-                throw new Error("avatarUploadOpts is required");
-              }
               return (
                 <ModalBase
                   title="Edit Info"
