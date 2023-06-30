@@ -183,7 +183,6 @@ export class S3LinkModel extends S3Model {
     return res;
   }
 
-
   public async queryLinksDesc({
     last = 10,
     before = "",
@@ -733,6 +732,56 @@ export class S3LinkModel extends S3Model {
       query {
         viewer {
           favorList(first: ${first}, after: "${after}") {
+            edges {
+              node {
+                id
+                creator {
+                  id
+                }
+                revoke
+                createAt
+                modifiedAt
+                link {
+                  id
+                  url
+                  type
+                  creator {
+                    id
+                  }
+                  data
+                  title
+                }
+              }
+            }
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
+              startCursor
+              endCursor
+            }
+          }
+        }
+      }
+    `);
+    return res;
+  }
+
+  public async queryPersonalFavorsDesc({
+    last = 10,
+    before = "",
+  }: {
+    last: number;
+    before?: string;
+  }) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      viewer: {
+        favorList: Page<Favor>;
+      };
+    }>(`
+      query {
+        viewer {
+          favorList(last: ${last}, before: "${before}") {
             edges {
               node {
                 id

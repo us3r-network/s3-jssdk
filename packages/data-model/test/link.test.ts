@@ -207,6 +207,40 @@ describe("client", () => {
     expect(favorList?.edges.length).toBe(1);
   });
 
+  const favorIdList: string[] = [];
+  test("create favors desc success", async () => {
+    const arr: number[] = new Array(12).fill(0).map((_, i) => i);
+    for await (const i of arr) {
+      const data = {
+        url: testURL + i,
+        type: testType + i,
+        title: testTitle + i,
+      };
+      const resp = await s3Link.createLink(data);
+      expect(resp.data?.createLink.document.id).not.toBeNull();
+      linkId = resp.data?.createLink.document.id || "";
+      expect(linkId).not.toBe("");
+      const favorResp = await s3Link.createFavor({
+        linkID: linkId,
+        revoke: false,
+      });
+      expect(favorResp.errors).not.toBeDefined();
+      const createFavor = favorResp.data?.createFavor;
+      expect(createFavor).not.toBeNull();
+      favorIdList.push(linkId);
+    }
+  });
+
+  test("query personal favors desc success", async () => {
+    const resp = await s3Link.queryPersonalFavorsDesc({ last: 3 });
+    const favorList = resp.data?.viewer.favorList;
+    expect(resp.errors).not.toBeDefined();
+    expect(favorList).not.toBeNull();
+    expect(favorList?.edges.length).toBe(3);
+    const last3LinkId = favorList?.edges.map((e) => e.node.link?.id);
+    expect(last3LinkId).toStrictEqual(favorIdList.slice(-3));
+  });
+
   // score
   test("create link score success", async () => {
     const resp = await s3Link.createScore({
