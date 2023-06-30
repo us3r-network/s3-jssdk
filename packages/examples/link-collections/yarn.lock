@@ -2468,6 +2468,11 @@
   resolved "https://registry.npmmirror.com/@material-design-icons/svg/-/svg-0.14.9.tgz#356c9c7c7b088c60c0869823667256a9f36d2c4c"
   integrity sha512-YRPon593EAx13GpVSvSd6N8T8j3oCk9RQ6M676hC7RV/28xkyHhw2uxxxbkrL6/WsoFGl00fJJSs8SlrViOoJA==
 
+"@material-design-icons/svg@^0.14.9":
+  version "0.14.9"
+  resolved "https://registry.npmjs.org/@material-design-icons/svg/-/svg-0.14.9.tgz#356c9c7c7b088c60c0869823667256a9f36d2c4c"
+  integrity sha512-YRPon593EAx13GpVSvSd6N8T8j3oCk9RQ6M676hC7RV/28xkyHhw2uxxxbkrL6/WsoFGl00fJJSs8SlrViOoJA==
+
 "@metamask/safe-event-emitter@2.0.0", "@metamask/safe-event-emitter@^2.0.0":
   version "2.0.0"
   resolved "https://registry.npmmirror.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
@@ -4727,10 +4732,10 @@
     did-session "^2.0.0"
     dids "^4.0.0"
 
-"@us3r-network/data-model@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.npmmirror.com/@us3r-network/data-model/-/data-model-0.3.0.tgz#4d38b12dc476067fdaf507491fbadc238fd9e1e3"
-  integrity sha512-tth+D/z3lTREUn7qdo3vnwbuzfTD1gDcpt+8+LmG727q8jq7uFhkOPMx4/lLikWuxh9Hx+iaCaIYzKQh/fkdHg==
+"@us3r-network/data-model@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.npmjs.org/@us3r-network/data-model/-/data-model-0.4.1.tgz#63c69974e158a2fb6a314d5eb5752b19a0ac2c23"
+  integrity sha512-CxXm6NVupnC6B5YXiYNMdpDQe05o6SSTPkx9fUhhoFBjlWbUHtzCIfoDoMYIEQ+/f34qj660CTP6RvOzlnSuLA==
   dependencies:
     "@ceramicnetwork/common" "^2.24.0"
     "@composedb/client" "^0.4.3"
@@ -4738,7 +4743,19 @@
     did-session "^2.0.0"
     dids "^4.0.0"
 
-"@us3r-network/profile@0.5.4":
+"@us3r-network/link@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.npmjs.org/@us3r-network/link/-/link-0.2.1.tgz#8b5827556101060fcc5e09e52d5ad45cc9cc56e1"
+  integrity sha512-F7cH8KTEJytojCZe0UzQU6Of/SifRJlj2xe4PkP+2jkVk+zhUucll+e3/3cKdcTdlTcn6gNydLxB1Fk9Umpt0w==
+  dependencies:
+    "@material-design-icons/svg" "^0.14.7"
+    "@us3r-network/data-model" "^0.2.0"
+    dayjs "^2.0.0-alpha.4"
+    react-aria "^3.24.0"
+    react-aria-components "^1.0.0-alpha.3"
+    zustand "^4.3.7"
+
+"@us3r-network/profile@^0.5.4":
   version "0.5.4"
   resolved "https://registry.npmjs.org/@us3r-network/profile/-/profile-0.5.4.tgz#be7ef7473186f4dcb45f765654fa2e2d10eb7a7b"
   integrity sha512-U5GbGEoUscFwRxLlL9TPtPU/XHFQS/khS3WgbsomYTZhZfKtxyrnK2A5byJoNp0o5N1akedFiaWNao7w6IoG1w==
@@ -6734,6 +6751,11 @@ dataloader@2.2.2, dataloader@^2.2.2:
   version "2.2.2"
   resolved "https://registry.npmmirror.com/dataloader/-/dataloader-2.2.2.tgz#216dc509b5abe39d43a9b9d97e6e5e473dfbe3e0"
   integrity sha512-8YnDaaf7N3k/q5HnTJVuzSyLETjoZjVmHc4AeKAzOvKHEFQKcn64OKBfzHYtE9zGjctNM7V9I0MfnUVLpi7M5g==
+
+dayjs@^2.0.0-alpha.4:
+  version "2.0.0-alpha.4"
+  resolved "https://registry.npmjs.org/dayjs/-/dayjs-2.0.0-alpha.4.tgz#7a3981964caf96ad58a6bec6a0cc508149c100f2"
+  integrity sha512-1iNcyGuh1/uip1b3tP2LSK8pWIO0CZuBC3XI4ShYO9oeJUJP7DfvDEOkr1I8aElvATTYKeY4J+N1b4d+qA5XEg==
 
 debug@2.6.9, debug@^2.6.0:
   version "2.6.9"
@@ -13750,7 +13772,7 @@ yocto-queue@^0.1.0:
   resolved "https://registry.npmmirror.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zustand@^4.3.1:
+zustand@^4.3.1, zustand@^4.3.7:
   version "4.3.8"
   resolved "https://registry.npmmirror.com/zustand/-/zustand-4.3.8.tgz#37113df8e9e1421b0be1b2dca02b49b76210e7c4"
   integrity sha512-4h28KCkHg5ii/wcFFJ5Fp+k1J3gJoasaIbppdgZFO4BPJnsNxL0mQXBSFgOgAdCdBj35aDTPvdAJReTMntFPGg==

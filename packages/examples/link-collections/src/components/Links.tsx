@@ -4,6 +4,10 @@ import {
   Button,
   Cell,
   Column,
+  Dialog,
+  DialogTrigger,
+  OverlayArrow,
+  Popover,
   Radio,
   RadioGroup,
   Row,
@@ -20,6 +24,13 @@ import type {
   BackwardPagination
 } from '@ceramicnetwork/common'
 import { UserAvatar, UserName } from '@us3r-network/profile'
+import {
+  CommentAddForm,
+  Comments,
+  FavorButton,
+  VoteButton
+} from '@us3r-network/link'
+import { ReactComponent as MessageIcon } from '@material-design-icons/svg/outlined/message.svg'
 
 const s3LinkModel = new S3LinkModel(CERAMIC_HOST)
 const PAGE_SIZE = 20
@@ -44,6 +55,12 @@ enum ListType {
   ALL = 'all',
   FAVOR = 'favor',
   PERSONAL = 'personal'
+}
+
+// remove duplicate form array based on filed
+const unique = (arr: any[], filed: string) => {
+  const res = new Map()
+  return arr.filter(item => !res.has(item[filed]) && res.set(item[filed], 1))
 }
 
 export default function Links () {
@@ -117,6 +134,43 @@ export default function Links () {
             })
         }
         break
+      case ListType.FAVOR:
+        //favor links
+        if (!session) return
+        s3LinkModel.authComposeClient(session)
+        if (parsePagination(queryParamsInfo) === PaginationKind.FORWARD) {
+          //prev page
+          s3LinkModel
+            .queryPersonalFavors(queryParamsInfo as ForwardPagination)
+            .then(res => {
+              const resLinks =
+                res.data?.viewer?.favorList?.edges
+                  ?.filter(
+                    edge =>
+                      !!edge?.node && !!edge?.node?.link && !edge?.node?.revoke
+                  )
+                  .map(edge => edge?.node?.link!) || []
+              setLinks(unique(resLinks.reverse(), 'id'))
+              setPageInfo(res.data?.viewer?.favorList?.pageInfo)
+            })
+        } else {
+          //next page
+          s3LinkModel
+            .queryPersonalFavorsDesc(queryParamsInfo as BackwardPagination) //todo should be desc
+            .then(res => {
+              const resLinks =
+                res.data?.viewer?.favorList?.edges
+                  ?.filter(
+                    edge =>
+                      !!edge?.node && !!edge?.node?.link && !edge?.node?.revoke
+                  )
+                  .map(edge => edge?.node?.link!) || []
+              setLinks(unique(resLinks.reverse(), 'id'))
+              console.log(resLinks)
+              setPageInfo(res.data?.viewer?.favorList?.pageInfo)
+            })
+        }
+        break
     }
   }, [session, queryParamsInfo, selectedListType])
 
@@ -133,9 +187,15 @@ export default function Links () {
         <Radio value={ListType.PERSONAL} isDisabled={!session}>
           {ListType.PERSONAL}
         </Radio>
+        <Radio value={ListType.FAVOR} isDisabled={!session}>
+          {ListType.FAVOR}
+        </Radio>
       </RadioGroup>
       <Table aria-label='Links' selectionMode='multiple'>
         <TableHeader>
+          <Column>Favor</Column>
+          <Column>Vote</Column>
+          <Column>Comment</Column>
           <Column isRowHeader>Link</Column>
           <Column>Creator</Column>
           <Column>Date</Column>
@@ -143,6 +203,58 @@ export default function Links () {
         <TableBody>
           {links.map(link => (
             <Row key={link?.id} textValue={link?.url}>
+              <Cell aria-label='user-actions-favor'>
+                <FavorButton linkId={link.id!} />
+              </Cell>
+              <Cell aria-label='user-actions-vote'>
+                <VoteButton linkId={link.id!} />
+              </Cell>
+              <Cell aria-label='user-actions-vote'>
+                <Comments linkId={link.id!} className='link-comments'>
+                  <DialogTrigger>
+                    <Button className='link-comments-number-button'>
+                      <MessageIcon />
+                      <Comments.Count />
+                    </Button>
+                    {session && (
+                      <Popover placement='end'>
+                        <OverlayArrow>
+                          <svg width={12} height={12}>
+                            <path d='M0 0,L6 6,L12 0' />
+                          </svg>
+                        </OverlayArrow>
+                        <Dialog className='link-comments-dialog'>
+                          <CommentAddForm
+                            linkId={link.id!}
+                            className='link-comments-form'
+                          />
+                          <Comments.List className='link-comments-list'>
+                            {item => (
+                              <Comments.Item
+                                value={item}
+                                key={item.id}
+                                className='link-comments-item'
+                              >
+                                <div className='item-divide-line' />
+                                <div className='item-contents'>
+                                  <Comments.Avatar />
+                                  <div className='link-comments-contents'>
+                                    <div className='link-comments-meta'>
+                                      <Comments.Name className='link-comments-creator' />
+                                      <Comments.CreateAt className='link-comments-time' />
+                                    </div>
+                                    <Comments.Text className='link-comments-text' />
+                                  </div>
+                                </div>
+                              </Comments.Item>
+                            )}
+                          </Comments.List>
+                        </Dialog>
+                      </Popover>
+                    )}
+                  </DialogTrigger>
+                </Comments>
+              </Cell>
               <Cell>
                 <a href={link?.url} target='_blank' rel='noreferrer'>
                   {link?.title}

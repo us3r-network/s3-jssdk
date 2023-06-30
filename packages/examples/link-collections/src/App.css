@@ -292,3 +292,68 @@ body {
     --border-color: ButtonBorder;
   }
 }
+
+.link-comments {
+  .link-comments-number-button {
+    padding: 2px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+}
+.link-comments-dialog {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  outline: none;
+}
+.link-comments-form {
+  width: 100%;
+  [data-layout-element='FormBox'] {
+    width: 100%;
+    display: flex;
+    gap: 2px;
+    :first-child {
+      flex-grow: 1;
+    }
+  }
+}
+.link-comments-list {
+  width: 100%;
+}
+.link-comments-item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+
+  .item-divide-line {
+    width: 100%;
+    height: 1px;
+    margin: 6px 0px;
+    background-color: gray;
+  }
+
+  .item-contents {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+
+    .link-comments-contents {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .link-comments-meta {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        color: gray;
+      }
+    }
+  }
+}
