@@ -173,6 +173,40 @@ describe("client", () => {
     expect(voteList?.edges.length).toBe(1);
   });
 
+  const votesIdList: string[] = [];
+  test("create vote for desc success", async () => {
+    const arr: number[] = new Array(12).fill(0).map((_, i) => i);
+    for await (const i of arr) {
+      const data = {
+        url: testURL + i,
+        type: testType + i,
+        title: testTitle + i,
+      };
+      const resp = await s3Link.createLink(data);
+      expect(resp.data?.createLink.document.id).not.toBeNull();
+      linkId = resp.data?.createLink.document.id || "";
+      expect(linkId).not.toBe("");
+      const voteResp = await s3Link.createVote({
+        linkID: linkId,
+        type: "UP_VOTE",
+      });
+
+      expect(resp.errors).not.toBeDefined();
+      const createVote = voteResp.data?.createVote;
+      expect(createVote).not.toBeNull();
+      votesIdList.push(linkId);
+    }
+  });
+
+  test("query personal vote desc success", async () => {
+    const resp = await s3Link.queryPersonalVotesDesc({ last: 3 });
+    const voteList = resp.data?.viewer.voteList;
+    expect(voteList).not.toBeNull();
+    expect(voteList?.edges.length).toBe(3);
+    const last3LinkId = voteList?.edges.map((e) => e.node.link?.id);
+    expect(last3LinkId).toStrictEqual(votesIdList.slice(-3));
+  });
+
   // favor
   test("create link favor success", async () => {
     const resp = await s3Link.createFavor({
@@ -276,6 +310,41 @@ describe("client", () => {
     expect(scoreList?.edges.length).toBe(1);
   });
 
+  const scoreIdList: string[] = [];
+  test("create scores desc success", async () => {
+    const arr: number[] = new Array(12).fill(0).map((_, i) => i);
+    for await (const i of arr) {
+      const data = {
+        url: testURL + i,
+        type: testType + i,
+        title: testTitle + i,
+      };
+      const resp = await s3Link.createLink(data);
+      expect(resp.data?.createLink.document.id).not.toBeNull();
+      linkId = resp.data?.createLink.document.id || "";
+      expect(linkId).not.toBe("");
+      const scoreResp = await s3Link.createScore({
+        linkID: linkId,
+        text: "string" + i,
+        value: 10,
+      });
+      expect(scoreResp.errors).not.toBeDefined();
+      const createScore = scoreResp.data?.createScore;
+      expect(createScore).not.toBeNull();
+      scoreIdList.push(linkId);
+    }
+  });
+
+  test("query personal scores desc success", async () => {
+    const resp = await s3Link.queryPersonalScoresDesc({ last: 3 });
+    const scoreList = resp.data?.viewer.scoreList;
+    expect(resp.errors).not.toBeDefined();
+    expect(scoreList).not.toBeNull();
+    expect(scoreList?.edges.length).toBe(3);
+    const last3LinkId = scoreList?.edges.map((e) => e.node.link?.id);
+    expect(last3LinkId).toStrictEqual(scoreIdList.slice(-3));
+  });
+
   // comment
   test("create link comment success", async () => {
     const resp = await s3Link.createComment({
@@ -307,5 +376,39 @@ describe("client", () => {
     expect(resp.errors).not.toBeDefined();
     expect(commentList).not.toBeNull();
     expect(commentList?.edges.length).toBe(1);
+  });
+
+  const commentsIdList: string[] = [];
+  test("create comment for desc success", async () => {
+    const arr: number[] = new Array(12).fill(0).map((_, i) => i);
+    for await (const i of arr) {
+      const data = {
+        url: testURL + i,
+        type: testType + i,
+        title: testTitle + i,
+      };
+      const resp = await s3Link.createLink(data);
+      expect(resp.data?.createLink.document.id).not.toBeNull();
+      linkId = resp.data?.createLink.document.id || "";
+      expect(linkId).not.toBe("");
+      const commentResp = await s3Link.createComment({
+        linkID: linkId,
+        text: "string",
+      });
+      expect(commentResp.errors).not.toBeDefined();
+      const createComment = commentResp.data?.createComment;
+      expect(createComment).not.toBeNull();
+      commentsIdList.push(linkId);
+    }
+  });
+
+  test("query personal comments desc success", async () => {
+    const resp = await s3Link.queryPersonalCommentsDesc({ last: 3 });
+    const commentList = resp.data?.viewer.commentList;
+    expect(resp.errors).not.toBeDefined();
+    expect(commentList).not.toBeNull();
+    expect(commentList?.edges.length).toBe(3);
+    const last3LinkId = commentList?.edges.map((e) => e.node.link?.id);
+    expect(last3LinkId).toStrictEqual(commentsIdList.slice(-3));
   });
 });
