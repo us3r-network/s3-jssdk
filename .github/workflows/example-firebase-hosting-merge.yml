@@ -31,4 +31,3 @@ jobs:
           channelId: live
           projectId: us3r-network
           target: component-example
-          entryPoint: './packages/examples/link-collections/' 

@@ -17,7 +17,7 @@
     },
     {
       "target": "component-example",
-      "public": "storybook-static",
+      "public": "/packages/examples/link-collections/build",
       "ignore": [
         "firebase.json",
         "**/.*",
