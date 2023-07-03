@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: '18'
       - run: |
-          cd packages/example/link-collections
+          cd packages/examples/link-collections
           yarn 
           yarn build
         env:
