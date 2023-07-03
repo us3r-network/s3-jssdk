@@ -14,7 +14,7 @@
     "@us3r-network/auth-with-rainbowkit": "^0.1.7",
     "@us3r-network/data-model": "^0.4.1",
     "@us3r-network/link": "^0.2.1",
-    "@us3r-network/profile": "^0.5.4",
+    "@us3r-network/profile": "^0.5.5",
     "react": "^18.2.0",
     "react-aria-components": "^1.0.0-alpha.5",
     "react-dom": "^18.2.0",

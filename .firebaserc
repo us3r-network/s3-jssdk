@@ -7,6 +7,9 @@
       "hosting": {
         "component-doc": [
           "us3r-component-doc"
+        ],
+        "component-example": [
+          "us3r-component-example"
         ]
       }
     }

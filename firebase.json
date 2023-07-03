@@ -14,6 +14,21 @@
           "destination": "/index.html"
         }
       ]
+    },
+    {
+      "target": "component-example",
+      "public": "storybook-static",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
     }
   ]
 }
