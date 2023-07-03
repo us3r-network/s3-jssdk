@@ -37,8 +37,8 @@ https://component-doc.s3.xyz
 ## Examples
 
 - demo: <https://component-example.s3.xyz>
-- source code: [GitHub repository](https://github.com/us3r-network/s3-jssdk/tree/example)
-- tutorial: <https://github.com/us3r-network/s3-jssdk/blob/example/README.md>
+- source code: [GitHub repository](https://github.com/us3r-network/s3-jssdk/tree/example/packages/examples/link-collections)
+- tutorial: <https://github.com/us3r-network/s3-jssdk/blob/example/packages/examples/link-collections/README.md>
 
 ## Contributing
 
