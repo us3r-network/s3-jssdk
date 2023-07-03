@@ -51,6 +51,11 @@ export function UserInfoDefaultChildren() {
                       <UserInfoEditForm.AvatarField />
 
                       <TextField>
+                        <Label htmlFor="bio-input">Name</Label>
+                        <UserInfoEditForm.NameInput id="bio-input" />
+                      </TextField>
+
+                      <TextField>
                         <Label htmlFor="bio-textarea">Bio</Label>
                         <UserInfoEditForm.BioTextArea id="bio-textarea" />
                       </TextField>
