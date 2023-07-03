@@ -21,7 +21,6 @@ jobs:
         env:
           CI: false
           GENERATE_SOURCEMAP: false
-          REACT_APP_NAME: 'US3R Component-SDK Example'
           REACT_APP_CERAMIC_HOST: 'https://gcp-ceramic-testnet-dev.s3.xyz'
           US3R_UPLOAD_IMAGE_ENDPOINT: 'https://api-dev.s3.xyz/medium/upload'
       - uses: FirebaseExtended/action-hosting-deploy@v0
