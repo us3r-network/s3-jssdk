@@ -92,6 +92,53 @@ export class S3LinkModel extends S3Model {
     return linkListData;
   }
 
+  public async queryPersonalLinksDesc({
+    last = 10,
+    before = "",
+  }: {
+    last: number;
+    before?: string;
+  }) {
+    const composeClient = this.composeClient;
+    const linkListData = await composeClient.executeQuery<{
+      viewer: {
+        linkList: Page<Link>;
+      };
+    }>(`
+      query {
+        viewer {
+          linkList(last: ${last}, before: "${before}") {
+            edges {
+              node {
+                id
+                creator {
+                  id
+                }
+                url
+                data
+                type
+                title
+                createAt
+                modifiedAt
+                votesCount
+                commentsCount
+                favorsCount
+                scoresCount
+              }
+            }
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
+              startCursor
+              endCursor
+            }
+          }
+        }
+      }
+    `);
+    return linkListData;
+  }
+
   public async queryLinks({
     first = 10,
     after = "",
@@ -105,6 +152,50 @@ export class S3LinkModel extends S3Model {
     }>(`
       query {
         linkIndex(first: ${first}, after: "${after}") {
+          edges {
+            node {
+              id
+              creator {
+                id
+              }
+              url
+              data
+              type
+              title
+              createAt
+              modifiedAt
+              votesCount
+              commentsCount
+              favorsCount
+              scoresCount
+            }
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
+        }
+      }
+    `);
+
+    return res;
+  }
+
+  public async queryLinksDesc({
+    last = 10,
+    before = "",
+  }: {
+    last: number;
+    before?: string;
+  }) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      linkIndex: Page<Link>;
+    }>(`
+      query {
+        linkIndex(last: ${last}, before: "${before}") {
           edges {
             node {
               id
@@ -349,6 +440,56 @@ export class S3LinkModel extends S3Model {
                 link {
                   id
                   title
+                  createAt
+                  creator {
+                    id
+                  }
+                }
+              }
+            }
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
+              startCursor
+              endCursor
+            }
+          }
+        }
+      }
+    `);
+    return res;
+  }
+
+  public async queryPersonalVotesDesc({
+    last = 10,
+    before = "",
+  }: {
+    last: number;
+    before?: string;
+  }) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      viewer: {
+        voteList: Page<Vote>;
+      };
+    }>(`
+      query {
+        viewer {
+          voteList(last: ${last}, before: "${before}") {
+            edges {
+              node {
+                id
+                type
+                creator {
+                    id
+                }
+                revoke
+                createAt
+                modifiedAt
+                link {
+                  id
+                  title
+                  createAt
                   creator {
                     id
                   }
@@ -450,6 +591,61 @@ export class S3LinkModel extends S3Model {
                 link {
                   id
                   title
+                  createAt
+                  creator {
+                    id
+                  }
+                  url
+                  data
+                  type
+                  
+                }
+              }
+            }
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
+              startCursor
+              endCursor
+            }
+          }
+        }
+      }
+    `);
+    return res;
+  }
+
+  public async queryPersonalScoresDesc({
+    last = 10,
+    before = "",
+  }: {
+    last: number;
+    before?: string;
+  }) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      viewer: {
+        scoreList: Page<Score>;
+      };
+    }>(`
+      query {
+        viewer {
+          scoreList(last: ${last}, before: "${before}") {
+            edges {
+              node {
+                id
+                text
+                value
+                creator {
+                  id
+                }
+                revoke
+                createAt
+                modifiedAt
+                link {
+                  id
+                  title
+                  createAt
                   creator {
                     id
                   }
@@ -554,6 +750,56 @@ export class S3LinkModel extends S3Model {
                 link {
                   id
                   title
+                  createAt
+                  creator {
+                    id
+                  }
+                }
+              }
+            }
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
+              startCursor
+              endCursor
+            }
+          }
+        }
+      }
+    `);
+    return res;
+  }
+
+  public async queryPersonalCommentsDesc({
+    last = 10,
+    before = "",
+  }: {
+    last: number;
+    before?: string;
+  }) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      viewer: {
+        commentList: Page<Comment>;
+      };
+    }>(`
+      query {
+        viewer {
+          commentList(last: ${last}, before: "${before}") {
+            edges {
+              node {
+                id
+                text
+                creator {
+                  id
+                }
+                revoke
+                createAt
+                modifiedAt
+                link {
+                  id
+                  title
+                  createAt
                   creator {
                     id
                   }
@@ -654,6 +900,58 @@ export class S3LinkModel extends S3Model {
                   id
                   url
                   type
+                  createAt
+                  creator {
+                    id
+                  }
+                  data
+                  title
+                }
+              }
+            }
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
+              startCursor
+              endCursor
+            }
+          }
+        }
+      }
+    `);
+    return res;
+  }
+
+  public async queryPersonalFavorsDesc({
+    last = 10,
+    before = "",
+  }: {
+    last: number;
+    before?: string;
+  }) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      viewer: {
+        favorList: Page<Favor>;
+      };
+    }>(`
+      query {
+        viewer {
+          favorList(last: ${last}, before: "${before}") {
+            edges {
+              node {
+                id
+                creator {
+                  id
+                }
+                revoke
+                createAt
+                modifiedAt
+                link {
+                  id
+                  url
+                  type
+                  createAt
                   creator {
                     id
                   }

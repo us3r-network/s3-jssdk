@@ -57,7 +57,7 @@ export interface UserInfoEditFormContextValue<T> {
   /**
    * Avatar upload options
    */
-  avatarUploadOpts: AvatarUploadOpts<T>;
+  avatarUploadOpts?: AvatarUploadOpts<T>;
 }
 
 export const UserInfoEditFormContext =

@@ -35,9 +35,6 @@ export function UserInfoDefaultChildren() {
       </section>
       {(() => {
         if (!isLoginUser) return;
-        if (!avatarUploadOpts) {
-          throw new Error("avatarUploadOpts is required");
-        }
         return (
           <Modal isOpen={isOpenEdit} onOpenChange={setIsOpenEdit}>
             <Dialog>
@@ -52,6 +49,11 @@ export function UserInfoDefaultChildren() {
                   return (
                     <>
                       <UserInfoEditForm.AvatarField />
+
+                      <TextField>
+                        <Label htmlFor="bio-input">Name</Label>
+                        <UserInfoEditForm.NameInput id="bio-input" />
+                      </TextField>
 
                       <TextField>
                         <Label htmlFor="bio-textarea">Bio</Label>

@@ -16,7 +16,13 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
-      <Us3rAuthWithRainbowkitProvider>
+      <Us3rAuthWithRainbowkitProvider
+        projectId={
+          (process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID as string) ||
+          "c652d0148879353d7e965d7f6f361e59"
+        }
+        appName="S3 Docs"
+      >
         <ProfileStateProvider
           ceramicHost={
             (process.env.REACT_APP_CERAMIC_HOST as string) ||

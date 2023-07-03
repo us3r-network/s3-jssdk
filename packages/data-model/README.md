@@ -228,3 +228,16 @@ await s3Profile.queryProfileWithDid(/** did */)
 ...
 ```
 
+# Use With Nestjs
+
+```ts
+ ...
+ @Get()
+  async getHello(): Promise<string> {
+    const { S3LinkModel } = await import('@us3r-network/data-model');
+    const s3link = new S3LinkModel('https://ceramic-testnet.s3.xyz');
+    console.log(s3link);
+    return this.appService.getHello();
+  }
+  ...
+```

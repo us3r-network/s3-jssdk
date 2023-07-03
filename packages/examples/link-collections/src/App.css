@@ -1,0 +1,359 @@
+body {
+  margin: 10px;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.app {
+  max-width: 1024px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+/* Dialog */
+
+.react-aria-Dialog {
+  padding: 10px;
+  .react-aria-Heading {
+    font-size: 1.2rem;
+  }
+
+  .react-aria-TextField {
+    margin-top: 0.5rem;
+    .react-aria-Input {
+      width: 20rem;
+      margin-left: 0.5rem;
+    }
+  }
+  .create-link-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+}
+
+.react-aria-ModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: var(--visual-viewport-height);
+  width: 100vw;
+  background: rgba(0 0 0 / 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.react-aria-Modal {
+  background: white;
+  padding: 30px;
+}
+
+/* Radio */
+
+.react-aria-RadioGroup {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+
+  &[aria-orientation='horizontal'] {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  & [slot='description'] {
+    font-size: 12px;
+  }
+
+  & [slot='errorMessage'] {
+    font-size: 12px;
+    color: red;
+  }
+}
+
+.react-aria-Radio {
+  --label-color: black;
+  --deselected-color: gray;
+  --deselected-color-pressed: dimgray;
+  --background-color: white;
+  --selected-color: black;
+  --selected-color-pressed: lch(from slateblue calc(l - 10%) c h);
+  --invalid-color: red;
+  --invalid-color-pressed: darkred;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  color: var(--label-color);
+
+  &:before {
+    content: '';
+    display: block;
+    width: 1.286rem;
+    height: 1.286rem;
+    box-sizing: border-box;
+    border: 0.143rem solid var(--deselected-color);
+    background: var(--background-color);
+    border-radius: 1.286rem;
+    transition: all 200ms;
+  }
+
+  &[data-pressed]:before {
+    border-color: var(--deselected-color-pressed);
+  }
+
+  &[data-selected] {
+    &:before {
+      border-color: var(--selected-color);
+      border-width: 0.429rem;
+    }
+
+    &[data-pressed]:before {
+      border-color: var(--selected-color-pressed);
+    }
+  }
+
+  &[data-validation-state='invalid'] {
+    &:before {
+      border-color: var(--invalid-color);
+    }
+
+    &[data-pressed]:before {
+      border-color: var(--invalid-color-pressed);
+    }
+  }
+
+  &[data-disabled] {
+    opacity: 0.4;
+  }
+}
+
+/* Table */
+.react-aria-Table {
+  --border-color: gray;
+  --background-color: white;
+  --text-color: black;
+  --text-color-disabled: gray;
+
+  padding: 0.3rem;
+  border: 1px solid var(--border-color);
+  background: var(--background-color);
+  outline: none;
+  border-spacing: 0;
+  width: 100%;
+  min-height: 100px;
+  align-self: start;
+
+  .react-aria-TableHeader {
+    &:after {
+      content: '';
+      display: table-row;
+      height: 2px;
+    }
+
+    & tr:last-child .react-aria-Column {
+      border-bottom: 1px solid var(--border-color);
+      cursor: default;
+    }
+  }
+
+  .react-aria-Column {
+    &[colspan] {
+      text-align: center;
+    }
+
+    .sort-indicator {
+      padding: 0 2px;
+    }
+
+    &[aria-sort='none'] .sort-indicator {
+      visibility: hidden;
+    }
+  }
+
+  .react-aria-TableBody {
+    &[data-empty] {
+      text-align: center;
+      font-style: italic;
+    }
+  }
+
+  .react-aria-Row {
+    outline: none;
+    cursor: default;
+    color: var(--text-color);
+    font-size: 1rem;
+    position: relative;
+    transform: scale(1);
+  }
+
+  .react-aria-Cell,
+  .react-aria-Column {
+    padding: 4px 8px;
+    text-align: left;
+    outline: none;
+  }
+}
+
+/* Popover */
+.react-aria-Popover {
+  --background-color: white;
+  --border-color: gray;
+
+  border: 1px solid var(--border-color);
+  background: var(--background-color);
+  outline: none;
+  padding: 1rem;
+
+  .react-aria-Dialog {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .react-aria-OverlayArrow svg {
+    display: block;
+    fill: var(--background-color);
+    stroke: var(--border-color);
+    stroke-width: 1px;
+  }
+
+  &[data-placement='top'] {
+    margin-bottom: 6px;
+    --origin: translateY(8px);
+  }
+
+  &[data-placement='bottom'] {
+    margin-top: 6px;
+    --origin: translateY(-8px);
+    & .react-aria-OverlayArrow svg {
+      transform: rotate(180deg);
+    }
+  }
+
+  &[data-placement='right'] {
+    margin-left: 6px;
+    --origin: translateX(-8px);
+    & .react-aria-OverlayArrow svg {
+      transform: rotate(90deg);
+    }
+  }
+
+  &[data-placement='left'] {
+    margin-right: 6px;
+    --origin: translateX(8px);
+    & .react-aria-OverlayArrow svg {
+      transform: rotate(-90deg);
+    }
+  }
+
+  &[data-entering] {
+    animation: slide 200ms;
+  }
+
+  &[data-exiting] {
+    animation: slide 200ms reverse ease-in;
+  }
+}
+
+@keyframes slide {
+  from {
+    transform: var(--origin);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.react-aria-Dialog {
+  outline: none;
+}
+
+@media (forced-colors: active) {
+  .react-aria-Popover {
+    --background-color: Canvas;
+    --border-color: ButtonBorder;
+  }
+}
+
+.link-comments {
+  .link-comments-number-button {
+    padding: 2px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+}
+.link-comments-dialog {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  outline: none;
+}
+.link-comments-form {
+  width: 100%;
+  [data-layout-element='FormBox'] {
+    width: 100%;
+    display: flex;
+    gap: 2px;
+    :first-child {
+      flex-grow: 1;
+    }
+  }
+}
+.link-comments-list {
+  width: 100%;
+}
+.link-comments-item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+
+  .item-divide-line {
+    width: 100%;
+    height: 1px;
+    margin: 6px 0px;
+    background-color: gray;
+  }
+
+  .item-contents {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+
+    .link-comments-contents {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .link-comments-meta {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        color: gray;
+      }
+    }
+  }
+}
