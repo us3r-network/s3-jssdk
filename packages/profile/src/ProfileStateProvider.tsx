@@ -74,11 +74,7 @@ export default function ProfileStateProvider({
       s3ProfileModel
         .queryPersonalProfile()
         .then((res) => {
-          if (res?.errors && res.errors.length > 0) {
-            setProfile(defaultNewProfile);
-          } else {
-            setProfile(res.data?.viewer?.profile || null);
-          }
+          setProfile(res.data?.viewer?.profile || defaultNewProfile);
         })
         .finally(() => {
           setProfileLoading(false);
