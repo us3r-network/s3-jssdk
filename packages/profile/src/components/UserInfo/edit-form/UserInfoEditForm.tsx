@@ -13,8 +13,6 @@ import {
   UserInfoEditFormContextValue,
 } from "./UserInfoEditFormContext";
 import { UserInfoEditFormDefaultChildren } from "./UserInfoEditFormDefaultChildren";
-import { getDefaultUserAvatarWithDid } from "../../../utils/avatar";
-import { useSession } from "@us3r-network/auth-with-rainbowkit";
 
 export interface AvatarUploadOpts<T> {
   /**
@@ -57,7 +55,6 @@ function UserInfoEditFormRoot<T>({
   onSuccessfullySubmit,
   ...props
 }: UserInfoEditFormProps<T>) {
-  const session = useSession();
   const { profile, profileLoading, updateProfile } = useProfileState();
 
   const [avatar, setAvatar] = useState("");
@@ -80,9 +77,9 @@ function UserInfoEditFormRoot<T>({
 
   useEffect(() => {
     if (!isUpdating) {
-      setAvatar(profile?.avatar || getDefaultUserAvatarWithDid(session?.id));
+      setAvatar(profile?.avatar || "");
     }
-  }, [session, profile?.avatar, isUpdating]);
+  }, [profile?.avatar, isUpdating]);
 
   useEffect(() => {
     setErrMsg("");
