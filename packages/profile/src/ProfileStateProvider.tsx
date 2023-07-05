@@ -115,8 +115,8 @@ export default function ProfileStateProvider({
         name: data?.name || profile?.name || shortDid(session.id),
         avatar: data?.avatar || profile?.avatar || "",
         bio: data?.bio || profile?.bio || "bio",
-        tags: [...(data.tags || profile?.tags || [])],
-        wallets: [...(data.wallets || profile?.wallets || [])],
+        tags: [...(data?.tags || profile?.tags || [])],
+        wallets: [...(data?.wallets || profile?.wallets || [])],
       };
 
       const res = await s3ProfileModel.mutationPersonalProfile(newProfile);
