@@ -54,6 +54,12 @@ export class S3LinkModel extends S3Model {
     );
   }
 
+  public async executeQuery<T>(query: string, variables?: any) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<T>(query, variables);
+    return res;
+  }
+
   /**
    *
    */
@@ -270,62 +276,6 @@ export class S3LinkModel extends S3Model {
               id
             },
             ${linkFields.join(",")}
-            votes (first: 1000) {
-              edges {
-                node {
-                  id
-                  type
-                  revoke
-                  createAt
-                  modifiedAt
-                  creator {
-                    id
-                  }
-                }
-              }
-            }
-            comments (first: 1000) {
-              edges {
-                node {
-                  id
-                  text
-                  revoke
-                  createAt
-                  modifiedAt
-                  creator {
-                    id
-                  }
-                }
-              }
-            }
-            favors (first: 1000) {
-              edges {
-                node {
-                  id
-                  revoke
-                  createAt
-                  modifiedAt
-                  creator {
-                    id
-                  }
-                }
-              }
-            }
-            scores (first: 1000) {
-              edges {
-                node {
-                  id
-                  text
-                  value
-                  revoke
-                  createAt
-                  modifiedAt
-                  creator {
-                    id
-                  }
-                }
-              }
-            }
           }
         }
       }
