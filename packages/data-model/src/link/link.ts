@@ -31,6 +31,18 @@ export type Link = {
   scores?: Page<Score>;
 };
 
+export type LinkField =
+  | "url"
+  | "data"
+  | "type"
+  | "title"
+  | "createAt"
+  | "modifiedAt"
+  | "votesCount"
+  | "commentsCount"
+  | "favorsCount"
+  | "scoresCount";
+
 export class S3LinkModel extends S3Model {
   constructor(
     ceramic: CeramicApi | string,
@@ -48,9 +60,11 @@ export class S3LinkModel extends S3Model {
   public async queryPersonalLinks({
     first = 10,
     after = "",
+    linkFields = [],
   }: {
     first: number;
     after?: string;
+    linkFields?: LinkField[];
   }) {
     const composeClient = this.composeClient;
     const linkListData = await composeClient.executeQuery<{
@@ -63,20 +77,11 @@ export class S3LinkModel extends S3Model {
           linkList(first: ${first}, after: "${after}") {
             edges {
               node {
-                id
+                id,
                 creator {
                   id
-                }
-                url
-                data
-                type
-                title
-                createAt
-                modifiedAt
-                votesCount
-                commentsCount
-                favorsCount
-                scoresCount
+                },
+                ${linkFields.join(",")}
               }
             }
             pageInfo {
@@ -95,9 +100,11 @@ export class S3LinkModel extends S3Model {
   public async queryPersonalLinksDesc({
     last = 10,
     before = "",
+    linkFields = [],
   }: {
     last: number;
     before?: string;
+    linkFields?: LinkField[];
   }) {
     const composeClient = this.composeClient;
     const linkListData = await composeClient.executeQuery<{
@@ -110,20 +117,11 @@ export class S3LinkModel extends S3Model {
           linkList(last: ${last}, before: "${before}") {
             edges {
               node {
-                id
+                id,
                 creator {
                   id
-                }
-                url
-                data
-                type
-                title
-                createAt
-                modifiedAt
-                votesCount
-                commentsCount
-                favorsCount
-                scoresCount
+                },
+                ${linkFields.join(",")}
               }
             }
             pageInfo {
@@ -142,9 +140,11 @@ export class S3LinkModel extends S3Model {
   public async queryLinks({
     first = 10,
     after = "",
+    linkFields = [],
   }: {
     first: number;
     after?: string;
+    linkFields?: LinkField[];
   }) {
     const composeClient = this.composeClient;
     const res = await composeClient.executeQuery<{
@@ -154,20 +154,11 @@ export class S3LinkModel extends S3Model {
         linkIndex(first: ${first}, after: "${after}") {
           edges {
             node {
-              id
+              id,
               creator {
                 id
-              }
-              url
-              data
-              type
-              title
-              createAt
-              modifiedAt
-              votesCount
-              commentsCount
-              favorsCount
-              scoresCount
+              },
+              ${linkFields.join(",")}
             }
           }
           pageInfo {
@@ -186,9 +177,11 @@ export class S3LinkModel extends S3Model {
   public async queryLinksDesc({
     last = 10,
     before = "",
+    linkFields = [],
   }: {
     last: number;
     before?: string;
+    linkFields?: LinkField[];
   }) {
     const composeClient = this.composeClient;
     const res = await composeClient.executeQuery<{
@@ -198,20 +191,11 @@ export class S3LinkModel extends S3Model {
         linkIndex(last: ${last}, before: "${before}") {
           edges {
             node {
-              id
+              id,
               creator {
                 id
-              }
-              url
-              data
-              type
-              title
-              createAt
-              modifiedAt
-              votesCount
-              commentsCount
-              favorsCount
-              scoresCount
+              },
+              ${linkFields.join(",")}
             }
           }
           pageInfo {
@@ -272,7 +256,7 @@ export class S3LinkModel extends S3Model {
     return res;
   }
 
-  public async queryLink(id: string) {
+  public async queryLink(id: string, linkFields: LinkField[] = []) {
     const composeClient = this.composeClient;
     const res = await composeClient.executeQuery<{
       node: Link;
@@ -281,20 +265,11 @@ export class S3LinkModel extends S3Model {
         node(id: "${id}") {
           id
           ...on Link {
-            id
+            id,
             creator {
               id
-            }
-            url
-            data
-            type
-            title
-            createAt
-            modifiedAt
-            votesCount
-            commentsCount
-            favorsCount
-            scoresCount
+            },
+            ${linkFields.join(",")}
             votes (first: 1000) {
               edges {
                 node {
