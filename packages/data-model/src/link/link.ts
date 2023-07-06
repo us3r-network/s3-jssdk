@@ -43,6 +43,15 @@ export type LinkField =
   | "favorsCount"
   | "scoresCount";
 
+const DEFAULT_LINK_FIELDS: LinkField[] = [
+  "url",
+  "data",
+  "type",
+  "title",
+  "createAt",
+  "modifiedAt",
+];
+
 export class S3LinkModel extends S3Model {
   constructor(
     ceramic: CeramicApi | string,
@@ -66,7 +75,7 @@ export class S3LinkModel extends S3Model {
   public async queryPersonalLinks({
     first = 10,
     after = "",
-    linkFields = [],
+    linkFields = DEFAULT_LINK_FIELDS,
   }: {
     first: number;
     after?: string;
@@ -106,7 +115,7 @@ export class S3LinkModel extends S3Model {
   public async queryPersonalLinksDesc({
     last = 10,
     before = "",
-    linkFields = [],
+    linkFields = DEFAULT_LINK_FIELDS,
   }: {
     last: number;
     before?: string;
@@ -146,7 +155,7 @@ export class S3LinkModel extends S3Model {
   public async queryLinks({
     first = 10,
     after = "",
-    linkFields = [],
+    linkFields = DEFAULT_LINK_FIELDS,
   }: {
     first: number;
     after?: string;
@@ -183,7 +192,7 @@ export class S3LinkModel extends S3Model {
   public async queryLinksDesc({
     last = 10,
     before = "",
-    linkFields = [],
+    linkFields = DEFAULT_LINK_FIELDS,
   }: {
     last: number;
     before?: string;
@@ -262,7 +271,10 @@ export class S3LinkModel extends S3Model {
     return res;
   }
 
-  public async queryLink(id: string, linkFields: LinkField[] = []) {
+  public async queryLink(
+    id: string,
+    linkFields: LinkField[] = DEFAULT_LINK_FIELDS
+  ) {
     const composeClient = this.composeClient;
     const res = await composeClient.executeQuery<{
       node: Link;
