@@ -62,7 +62,7 @@ describe("client", () => {
   });
 
   test("query link success", async () => {
-    const resp = await s3Link.queryLink(linkId);
+    const resp = await s3Link.queryLink(linkId, ["url", "title", "type"]);
     const link = resp.data?.node;
     expect(link).not.toBeNull();
     expect(link).toHaveProperty("url", testURL);
@@ -87,7 +87,7 @@ describe("client", () => {
   });
 
   test("query link success after update", async () => {
-    const resp = await s3Link.queryLink(linkId);
+    const resp = await s3Link.queryLink(linkId, ["url", "title", "type"]);
     const link = resp.data?.node;
     expect(link).not.toBeNull();
     expect(link).toHaveProperty("url", testURL);
@@ -118,7 +118,10 @@ describe("client", () => {
   });
 
   test("query personal desc success", async () => {
-    const resp = await s3Link.queryPersonalLinksDesc({ last: 2 });
+    const resp = await s3Link.queryPersonalLinksDesc({
+      last: 2,
+      linkFields: ["title"],
+    });
     const linkList = resp.data?.viewer.linkList;
 
     expect(linkList).not.toBeNull();
@@ -136,7 +139,10 @@ describe("client", () => {
   });
 
   test("query linkIndex desc", async () => {
-    const resp = await s3Link.queryLinksDesc({ last: 3 });
+    const resp = await s3Link.queryLinksDesc({
+      last: 3,
+      linkFields: ["title"],
+    });
     const linkIndex = resp.data?.linkIndex;
     expect(linkIndex).not.toBeNull();
 
@@ -160,7 +166,7 @@ describe("client", () => {
   });
 
   test("query link success with vote", async () => {
-    const resp = await s3Link.queryLink(linkId);
+    const resp = await s3Link.queryLink(linkId, ["votesCount"]);
     const link = resp.data?.node;
     expect(link).not.toBeNull();
     expect(link).toHaveProperty("votesCount", 1);
@@ -227,7 +233,7 @@ describe("client", () => {
   });
 
   test("query link success with favor", async () => {
-    const resp = await s3Link.queryLink(linkId);
+    const resp = await s3Link.queryLink(linkId, ["favorsCount"]);
     const link = resp.data?.node;
     expect(link).not.toBeNull();
     expect(link).toHaveProperty("favorsCount", 1);
@@ -296,7 +302,7 @@ describe("client", () => {
   });
 
   test("query link success with score", async () => {
-    const resp = await s3Link.queryLink(linkId);
+    const resp = await s3Link.queryLink(linkId, ["scoresCount"]);
     const link = resp.data?.node;
     expect(link).not.toBeNull();
     expect(link).toHaveProperty("scoresCount", 1);
@@ -364,7 +370,7 @@ describe("client", () => {
   });
 
   test("query link success with comment", async () => {
-    const resp = await s3Link.queryLink(linkId);
+    const resp = await s3Link.queryLink(linkId, ["commentsCount"]);
     const link = resp.data?.node;
     expect(link).not.toBeNull();
     expect(link).toHaveProperty("commentsCount", 1);
