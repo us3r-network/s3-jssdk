@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { useLink } from "./useLink";
+import { useLinkComments } from "./useLinkComments";
 import {
   useAuthentication,
   useIsAuthenticated,
@@ -15,7 +15,7 @@ export const useCommentAction = (
     onFailedComment?: (errMsg: string) => void;
   }
 ) => {
-  const { link } = useLink(linkId);
+  const { linkComments } = useLinkComments(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
   const isAuthenticated = useIsAuthenticated();
@@ -29,11 +29,11 @@ export const useCommentAction = (
   const removeOneFromCommentingLinkIds = useStore(
     (state) => state.removeOneFromCommentingLinkIds
   );
-  const addCommentToCacheLinks = useStore(
-    (state) => state.addCommentToCacheLinks
+  const addCommentToCacheLinkComments = useStore(
+    (state) => state.addCommentToCacheLinkComments
   );
-  const updateCommentInCacheLinks = useStore(
-    (state) => state.updateCommentInCacheLinks
+  const updateCommentInCacheLinkComments = useStore(
+    (state) => state.updateCommentInCacheLinkComments
   );
 
   const isCommenting = useMemo(
@@ -41,7 +41,10 @@ export const useCommentAction = (
     [commentingLinkIds, linkId]
   );
 
-  const isDisabled = useMemo(() => !link || isCommenting, [link, isCommenting]);
+  const isDisabled = useMemo(
+    () => !linkComments || isCommenting,
+    [linkComments, isCommenting]
+  );
 
   const onComment = useCallback(
     async (text: string) => {
@@ -63,7 +66,7 @@ export const useCommentAction = (
         const id = res?.data?.createComment.document.id;
         if (id) {
           // update store
-          addCommentToCacheLinks(linkId, {
+          addCommentToCacheLinkComments(linkId, {
             id,
             text,
             linkID: linkId,
@@ -92,8 +95,8 @@ export const useCommentAction = (
       linkId,
       addOneToCommentingLinkIds,
       removeOneFromCommentingLinkIds,
-      addCommentToCacheLinks,
-      updateCommentInCacheLinks,
+      addCommentToCacheLinkComments,
+      updateCommentInCacheLinkComments,
       opts?.onSuccessfullyComment,
       opts?.onFailedComment,
     ]

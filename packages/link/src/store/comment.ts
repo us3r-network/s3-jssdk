@@ -1,28 +1,145 @@
 import { StateCreator } from "zustand";
-import { LinkSlice } from "./link";
-import { linkDataFieldFilling } from "../utils/store";
-import { Comment } from "@us3r-network/data-model";
+import { Page } from "@ceramicnetwork/common";
+import { DateTime } from "./types";
+
+export type Comment = {
+  id: string;
+  linkID: string;
+  text: string;
+  revoke: boolean;
+  createAt: DateTime;
+  modifiedAt: DateTime;
+  creator: {
+    id: string;
+  };
+};
+
+export type LinkComments = {
+  comments: Page<Comment>;
+  commentsCount: number;
+};
+
+const fetchingCommentsLinkIds = new Set<string>();
+export const isFetchingComments = (linkId: string) =>
+  fetchingCommentsLinkIds.has(linkId);
 
 export interface CommentSlice {
+  cacheLinkComments: Map<string, LinkComments>;
+  fetchingCommentsLinkIds: Set<string>;
   commentingLinkIds: Set<string>;
-  addOneToCommentingLinkIds: (linkId: string) => void;
-  removeOneFromCommentingLinkIds: (linkId: string) => void;
-  addCommentToCacheLinks: (linkId: string, comment: Comment) => void;
-  updateCommentInCacheLinks: (
+
+  setOneInCacheLinkComments: (
+    linkId: string,
+    linkComments: LinkComments
+  ) => void;
+  addCommentToCacheLinkComments: (linkId: string, comment: Comment) => void;
+  updateCommentInCacheLinkComments: (
     linkId: string,
     commentId: string,
     comment: Partial<Comment>
   ) => void;
-  removeCommentFromCacheLinks: (linkId: string, commentId: string) => void;
+  removeCommentFromCacheLinkComments: (
+    linkId: string,
+    commentId: string
+  ) => void;
+
+  addOneToFetchingCommentsLinkIds: (linkId: string) => void;
+  removeOneFromFetchingCommentsLinkIds: (linkId: string) => void;
+
+  addOneToCommentingLinkIds: (linkId: string) => void;
+  removeOneFromCommentingLinkIds: (linkId: string) => void;
 }
 
 export const createCommentSlice: StateCreator<
-  LinkSlice & CommentSlice,
+  CommentSlice,
   [],
   [],
   CommentSlice
 > = (set, get) => ({
+  cacheLinkComments: new Map(),
+  fetchingCommentsLinkIds: fetchingCommentsLinkIds,
   commentingLinkIds: new Set(),
+
+  setOneInCacheLinkComments: (linkId, linkComments) => {
+    set((state) => ({
+      cacheLinkComments: new Map(state.cacheLinkComments).set(linkId, {
+        ...linkComments,
+      }),
+    }));
+  },
+  addCommentToCacheLinkComments: (linkId, comment) => {
+    const linkComments = get().cacheLinkComments.get(linkId);
+    if (!linkComments) return;
+    linkComments.comments.edges.push({
+      cursor: comment.id,
+      node: { ...comment },
+    });
+    linkComments.comments = { ...linkComments.comments };
+    linkComments.commentsCount++;
+    set((state) => ({
+      cacheLinkComments: new Map(state.cacheLinkComments).set(linkId, {
+        ...linkComments,
+      }),
+    }));
+  },
+  updateCommentInCacheLinkComments: (linkId, commentId, comment) => {
+    const linkComments = get().cacheLinkComments.get(linkId);
+    if (!linkComments) return;
+    const commentIndex = linkComments.comments.edges.findIndex(
+      (edge) => edge.node.id === commentId
+    );
+    if (commentIndex === -1) return;
+    linkComments.comments.edges[commentIndex].node = {
+      ...linkComments.comments.edges[commentIndex].node,
+      ...comment,
+    };
+    linkComments.comments = { ...linkComments.comments };
+    if (comment.hasOwnProperty("revoke")) {
+      if (comment.revoke) {
+        linkComments.commentsCount--;
+      } else {
+        linkComments.commentsCount++;
+      }
+    }
+    set((state) => ({
+      cacheLinkComments: new Map(state.cacheLinkComments).set(linkId, {
+        ...linkComments,
+      }),
+    }));
+  },
+  removeCommentFromCacheLinkComments: (linkId, commentId) => {
+    const linkComments = get().cacheLinkComments.get(linkId);
+    if (!linkComments) return;
+    const commentIndex = linkComments.comments.edges.findIndex(
+      (edge) => edge.node.id === commentId
+    );
+    if (commentIndex === -1) return;
+    linkComments.comments.edges.splice(commentIndex, 1);
+    linkComments.comments = { ...linkComments.comments };
+    linkComments.commentsCount--;
+    set((state) => ({
+      cacheLinkComments: new Map(state.cacheLinkComments).set(linkId, {
+        ...linkComments,
+      }),
+    }));
+  },
+
+  addOneToFetchingCommentsLinkIds: (linkId) => {
+    fetchingCommentsLinkIds.add(linkId);
+    set(() => {
+      const updatedSet = new Set(fetchingCommentsLinkIds);
+      updatedSet.add(linkId);
+      return { fetchingCommentsLinkIds: updatedSet };
+    });
+  },
+  removeOneFromFetchingCommentsLinkIds: (linkId) => {
+    set(() => {
+      const updatedSet = new Set(fetchingCommentsLinkIds);
+      updatedSet.delete(linkId);
+      return { fetchingCommentsLinkIds: updatedSet };
+    });
+  },
+
   addOneToCommentingLinkIds: (linkId: string) => {
     set((state) => {
       const updatedSet = new Set(state.commentingLinkIds);
@@ -36,58 +153,5 @@ export const createCommentSlice: StateCreator<
       updatedSet.delete(linkId);
       return { commentingLinkIds: updatedSet };
     });
-  },
-  addCommentToCacheLinks: (linkId, comment) => {
-    const link = get().cacheLinks.get(linkId);
-    if (!link) return;
-    const newLink = linkDataFieldFilling(link);
-    newLink.comments.edges.push({
-      cursor: comment.id,
-      node: { ...comment },
-    });
-    newLink.comments = { ...newLink.comments };
-    newLink.commentsCount++;
-    set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
-    }));
-  },
-  updateCommentInCacheLinks: (linkId, commentId, comment) => {
-    const link = get().cacheLinks.get(linkId);
-    if (!link) return;
-    const newLink = linkDataFieldFilling(link);
-    const commentIndex = newLink.comments.edges.findIndex(
-      (edge) => edge.node.id === commentId
-    );
-    if (commentIndex === -1) return;
-    newLink.comments.edges[commentIndex].node = {
-      ...newLink.comments.edges[commentIndex].node,
-      ...comment,
-    };
-    newLink.comments = { ...newLink.comments };
-    if (comment.hasOwnProperty("revoke")) {
-      if (comment.revoke) {
-        newLink.commentsCount--;
-      } else {
-        newLink.commentsCount++;
-      }
-    }
-    set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
-    }));
-  },
-  removeCommentFromCacheLinks: (linkId, commentId) => {
-    const link = get().cacheLinks.get(linkId);
-    if (!link) return;
-    const newLink = linkDataFieldFilling(link);
-    const commentIndex = newLink.comments.edges.findIndex(
-      (edge) => edge.node.id === commentId
-    );
-    if (commentIndex === -1) return;
-    newLink.comments.edges.splice(commentIndex, 1);
-    newLink.comments = { ...newLink.comments };
-    newLink.commentsCount--;
-    set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
-    }));
   },
 });

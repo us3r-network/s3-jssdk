@@ -18,8 +18,13 @@ export type LinkFavors = {
   favorsCount: number;
 };
 
+const fetchingFavorsLinkIds = new Set<string>();
+export const isFetchingFavors = (linkId: string) =>
+  fetchingFavorsLinkIds.has(linkId);
+
 export interface FavorSlice {
   cacheLinkFavors: Map<string, LinkFavors>;
+  fetchingFavorsLinkIds: Set<string>;
   favoringLinkIds: Set<string>;
 
   setOneInCacheLinkFavors: (linkId: string, linkFavors: LinkFavors) => void;
@@ -31,6 +36,9 @@ export interface FavorSlice {
   ) => void;
   removeFavorFromCacheLinkFavors: (linkId: string, favorId: string) => void;
 
+  addOneToFetchingFavorsLinkIds: (linkId: string) => void;
+  removeOneFromFetchingFavorsLinkIds: (linkId: string) => void;
+
   addOneToFavoringLinkIds: (linkId: string) => void;
   removeOneFromFavoringLinkIds: (linkId: string) => void;
 }
@@ -40,6 +48,7 @@ export const createFavorSlice: StateCreator<FavorSlice, [], [], FavorSlice> = (
   get
 ) => ({
   cacheLinkFavors: new Map(),
+  fetchingFavorsLinkIds: fetchingFavorsLinkIds,
   favoringLinkIds: new Set(),
 
   setOneInCacheLinkFavors: (linkId, linkFavors) => {
@@ -104,6 +113,22 @@ export const createFavorSlice: StateCreator<FavorSlice, [], [], FavorSlice> = (
         ...linkFavors,
       }),
     }));
+  },
+
+  addOneToFetchingFavorsLinkIds: (linkId) => {
+    fetchingFavorsLinkIds.add(linkId);
+    set(() => {
+      const updatedSet = new Set(fetchingFavorsLinkIds);
+      updatedSet.add(linkId);
+      return { fetchingFavorsLinkIds: updatedSet };
+    });
+  },
+  removeOneFromFetchingFavorsLinkIds: (linkId) => {
+    set(() => {
+      const updatedSet = new Set(fetchingFavorsLinkIds);
+      updatedSet.delete(linkId);
+      return { fetchingFavorsLinkIds: updatedSet };
+    });
   },
 
   addOneToFavoringLinkIds: (linkId: string) => {

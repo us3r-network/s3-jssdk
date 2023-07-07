@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import type { LinkFavors } from "../store/favor";
-const fetchingFavorsLinkIds = new Set();
-const fetchedFavorsLinkIds = new Set();
+import { isFetchingFavors, type LinkFavors } from "../store/favor";
 
 export const useLinkFavors = (linkId: string) => {
   const s3LinkModel = getS3LinkModel();
@@ -12,6 +10,17 @@ export const useLinkFavors = (linkId: string) => {
   const cacheLinkFavors = useStore((state) => state.cacheLinkFavors);
   const setOneInCacheLinkFavors = useStore(
     (state) => state.setOneInCacheLinkFavors
+  );
+  const addOneToFetchingFavorsLinkIds = useStore(
+    (state) => state.addOneToFetchingFavorsLinkIds
+  );
+  const removeOneFromFetchingFavorsLinkIds = useStore(
+    (state) => state.removeOneFromFetchingFavorsLinkIds
+  );
+
+  const isFetched = useMemo(
+    () => cacheLinkFavors.has(linkId),
+    [cacheLinkFavors, linkId]
   );
   const linkFavors = useMemo(
     () => cacheLinkFavors.get(linkId),
@@ -23,13 +32,13 @@ export const useLinkFavors = (linkId: string) => {
     (async () => {
       if (!linkId) return;
       if (!s3LinkModalInitialed || !s3LinkModel) return;
-      if (fetchingFavorsLinkIds.has(linkId)) return;
-      if (fetchedFavorsLinkIds.has(linkId)) return;
+      if (isFetched) return;
+      if (isFetchingFavors(linkId)) return;
 
       try {
         setErrMsg("");
 
-        fetchingFavorsLinkIds.add(linkId);
+        addOneToFetchingFavorsLinkIds(linkId);
         const res = await s3LinkModel.executeQuery<{
           node: LinkFavors;
         }>(`
@@ -63,15 +72,22 @@ export const useLinkFavors = (linkId: string) => {
         if (data) {
           setOneInCacheLinkFavors(linkId, data);
         }
-        fetchingFavorsLinkIds.delete(linkId);
       } catch (error) {
         const errMsg = (error as any)?.message;
         setErrMsg(errMsg);
       } finally {
-        fetchedFavorsLinkIds.add(linkId);
+        removeOneFromFetchingFavorsLinkIds(linkId);
       }
     })();
-  }, [s3LinkModalInitialed, linkId, setOneInCacheLinkFavors]);
+  }, [s3LinkModalInitialed, linkId, isFetched]);
 
-  return { linkFavors, errMsg };
+  const fetchingFavorsLinkIds = useStore(
+    (state) => state.fetchingFavorsLinkIds
+  );
+  const isFetching = useMemo(
+    () => fetchingFavorsLinkIds.has(linkId),
+    [fetchingFavorsLinkIds, linkId]
+  );
+
+  return { linkFavors, isFetching, isFetched, errMsg };
 };

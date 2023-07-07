@@ -1,30 +1,30 @@
 import { useEffect, useMemo, useState } from "react";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { isFetchingVotes, type LinkVotes } from "../store/vote";
+import { isFetchingComments, type LinkComments } from "../store/comment";
 
-export const useLinkVotes = (linkId: string) => {
+export const useLinkComments = (linkId: string) => {
   const s3LinkModel = getS3LinkModel();
   const { s3LinkModalInitialed } = useLinkState();
 
-  const cacheLinkVotes = useStore((state) => state.cacheLinkVotes);
-  const setOneInCacheLinkVotes = useStore(
-    (state) => state.setOneInCacheLinkVotes
+  const cacheLinkComments = useStore((state) => state.cacheLinkComments);
+  const setOneInCacheLinkComments = useStore(
+    (state) => state.setOneInCacheLinkComments
   );
-  const addOneToFetchingVotesLinkIds = useStore(
-    (state) => state.addOneToFetchingVotesLinkIds
+  const addOneToFetchingCommentsLinkIds = useStore(
+    (state) => state.addOneToFetchingCommentsLinkIds
   );
-  const removeOneFromFetchingVotesLinkIds = useStore(
-    (state) => state.removeOneFromFetchingVotesLinkIds
+  const removeOneFromFetchingCommentsLinkIds = useStore(
+    (state) => state.removeOneFromFetchingCommentsLinkIds
   );
 
   const isFetched = useMemo(
-    () => cacheLinkVotes.has(linkId),
-    [cacheLinkVotes, linkId]
+    () => cacheLinkComments.has(linkId),
+    [cacheLinkComments, linkId]
   );
-  const linkVotes = useMemo(
-    () => cacheLinkVotes.get(linkId),
-    [cacheLinkVotes, linkId]
+  const linkComments = useMemo(
+    () => cacheLinkComments.get(linkId),
+    [cacheLinkComments, linkId]
   );
   const [errMsg, setErrMsg] = useState("");
 
@@ -33,25 +33,25 @@ export const useLinkVotes = (linkId: string) => {
       if (!linkId) return;
       if (!s3LinkModalInitialed || !s3LinkModel) return;
       if (isFetched) return;
-      if (isFetchingVotes(linkId)) return;
+      if (isFetchingComments(linkId)) return;
 
       try {
         setErrMsg("");
 
-        addOneToFetchingVotesLinkIds(linkId);
+        addOneToFetchingCommentsLinkIds(linkId);
         const res = await s3LinkModel.executeQuery<{
-          node: LinkVotes;
+          node: LinkComments;
         }>(`
           query {
             node(id: "${linkId}") {
               ...on Link {
-                votesCount
-                votes (first: 1000) {
+                commentsCount
+                comments (first: 1000) {
                   edges {
                     node {
                       id
                       linkID
-                      type
+                      text
                       revoke
                       createAt
                       modifiedAt
@@ -71,22 +71,29 @@ export const useLinkVotes = (linkId: string) => {
         }
         const data = res.data?.node;
         if (data) {
-          setOneInCacheLinkVotes(linkId, data);
+          setOneInCacheLinkComments(linkId, data);
         }
       } catch (error) {
         const errMsg = (error as any)?.message;
         setErrMsg(errMsg);
       } finally {
-        removeOneFromFetchingVotesLinkIds(linkId);
+        removeOneFromFetchingCommentsLinkIds(linkId);
       }
     })();
-  }, [s3LinkModalInitialed, linkId, isFetched]);
+  }, [s3LinkModalInitialed, linkId, setOneInCacheLinkComments]);
 
-  const fetchingVotesLinkIds = useStore((state) => state.fetchingVotesLinkIds);
+  const fetchingCommentsLinkIds = useStore(
+    (state) => state.fetchingCommentsLinkIds
+  );
   const isFetching = useMemo(
-    () => fetchingVotesLinkIds.has(linkId),
-    [fetchingVotesLinkIds, linkId]
+    () => fetchingCommentsLinkIds.has(linkId),
+    [fetchingCommentsLinkIds, linkId]
   );
 
-  return { linkVotes, isFetching, isFetched, errMsg };
+  return {
+    linkComments,
+    isFetching,
+    isFetched,
+    errMsg,
+  };
 };

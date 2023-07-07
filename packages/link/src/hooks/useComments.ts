@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useLink } from "./useLink";
+import { useLinkComments } from "./useLinkComments";
 
 export const useComments = (
   linkId: string,
@@ -7,14 +7,14 @@ export const useComments = (
     order: "asc" | "desc";
   }
 ) => {
-  const { isFetching, link } = useLink(linkId);
+  const { isFetching, linkComments } = useLinkComments(linkId);
   const { order = "asc" } = opts || {};
 
   const comments = useMemo(
     () =>
       (isFetching
         ? []
-        : link?.comments?.edges
+        : linkComments?.comments?.edges
             ?.filter((edge) => !!edge?.node && !edge.node?.revoke)
             ?.map((e) => e.node) || []
       ).sort((a, b) => {
@@ -26,12 +26,12 @@ export const useComments = (
           return bTime - aTime;
         }
       }),
-    [isFetching, link?.comments]
+    [isFetching, linkComments?.comments]
   );
 
   const commentsCount = useMemo(
-    () => link?.commentsCount || comments.length,
-    [link?.commentsCount, comments]
+    () => linkComments?.commentsCount || comments.length,
+    [linkComments?.commentsCount, comments]
   );
 
   return { isFetching, comments, commentsCount };

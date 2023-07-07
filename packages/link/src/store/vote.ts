@@ -20,8 +20,13 @@ export type LinkVotes = {
   votesCount: number;
 };
 
+const fetchingVotesLinkIds = new Set<string>();
+export const isFetchingVotes = (linkId: string) =>
+  fetchingVotesLinkIds.has(linkId);
+
 export interface VoteSlice {
   cacheLinkVotes: Map<string, LinkVotes>;
+  fetchingVotesLinkIds: Set<string>;
   votingLinkIds: Set<string>;
 
   setOneInCacheLinkVotes: (linkId: string, linkVotes: LinkVotes) => void;
@@ -32,6 +37,9 @@ export interface VoteSlice {
     vote: Partial<Vote>
   ) => void;
   removeVoteFromCacheLinkVotes: (linkId: string, voteId: string) => void;
+
+  addOneToFetchingVotesLinkIds: (linkId: string) => void;
+  removeOneFromFetchingVotesLinkIds: (linkId: string) => void;
 
   addOneToVotingLinkIds: (linkId: string) => void;
   removeOneFromVotingLinkIds: (linkId: string) => void;
@@ -44,6 +52,7 @@ export const createVoteSlice: StateCreator<
   VoteSlice
 > = (set, get) => ({
   cacheLinkVotes: new Map(),
+  fetchingVotesLinkIds: fetchingVotesLinkIds,
   votingLinkIds: new Set(),
 
   setOneInCacheLinkVotes: (linkId, linkVotes) => {
@@ -108,6 +117,22 @@ export const createVoteSlice: StateCreator<
         ...linkVotes,
       }),
     }));
+  },
+
+  addOneToFetchingVotesLinkIds: (linkId) => {
+    fetchingVotesLinkIds.add(linkId);
+    set(() => {
+      const updatedSet = new Set(fetchingVotesLinkIds);
+      updatedSet.add(linkId);
+      return { fetchingVotesLinkIds: updatedSet };
+    });
+  },
+  removeOneFromFetchingVotesLinkIds: (linkId) => {
+    set(() => {
+      const updatedSet = new Set(fetchingVotesLinkIds);
+      updatedSet.delete(linkId);
+      return { fetchingVotesLinkIds: updatedSet };
+    });
   },
 
   addOneToVotingLinkIds: (linkId: string) => {
