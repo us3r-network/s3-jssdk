@@ -6,6 +6,7 @@ import { ChildrenRenderProps, childrenRender } from "../../utils/props";
 import { FavorButtonChildren } from "./FavorButtonChildren";
 import { useLink } from "../../hooks/useLink";
 import { useFavorAction } from "../../hooks/useFavorAction";
+import { useLinkFavors } from "../../hooks/useLinkFavors";
 
 export interface FavorButtonIncomingProps {
   /**
@@ -45,7 +46,7 @@ export function FavorButton({
   ...props
 }: FavorButtonProps) {
   const isAuthenticated = useIsAuthenticated();
-  const { link } = useLink(linkId);
+  const { linkFavors } = useLinkFavors(linkId);
   const { isFavored, isFavoring, isDisabled, onFavor } = useFavorAction(
     linkId,
     {
@@ -69,7 +70,7 @@ export function FavorButton({
     isFavored,
     isFavoring,
     isDisabled,
-    favorsCount: link?.favorsCount || 0,
+    favorsCount: linkFavors?.favorsCount || 0,
   };
 
   const defaultChildren = useMemo(

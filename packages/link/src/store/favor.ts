@@ -1,28 +1,111 @@
 import { StateCreator } from "zustand";
-import { LinkSlice } from "./link";
-import { linkDataFieldFilling } from "../utils/store";
-import { Favor } from "@us3r-network/data-model";
+import { Page } from "@ceramicnetwork/common";
+import { DateTime } from "./types";
+
+export type Favor = {
+  id: string;
+  linkID: string;
+  revoke: boolean;
+  createAt: DateTime;
+  modifiedAt: DateTime;
+  creator: {
+    id: string;
+  };
+};
+
+export type LinkFavors = {
+  favors: Page<Favor>;
+  favorsCount: number;
+};
 
 export interface FavorSlice {
+  cacheLinkFavors: Map<string, LinkFavors>;
   favoringLinkIds: Set<string>;
-  addOneToFavoringLinkIds: (linkId: string) => void;
-  removeOneFromFavoringLinkIds: (linkId: string) => void;
-  addFavorToCacheLinks: (linkId: string, favor: Favor) => void;
-  updateFavorInCacheLinks: (
+
+  setOneInCacheLinkFavors: (linkId: string, linkFavors: LinkFavors) => void;
+  addFavorToCacheLinkFavors: (linkId: string, favor: Favor) => void;
+  updateFavorInCacheLinkFavors: (
     linkId: string,
     favorId: string,
     favor: Partial<Favor>
   ) => void;
-  removeFavorFromCacheLinks: (linkId: string, favorId: string) => void;
+  removeFavorFromCacheLinkFavors: (linkId: string, favorId: string) => void;
+
+  addOneToFavoringLinkIds: (linkId: string) => void;
+  removeOneFromFavoringLinkIds: (linkId: string) => void;
 }
 
-export const createFavorSlice: StateCreator<
-  LinkSlice & FavorSlice,
-  [],
-  [],
-  FavorSlice
-> = (set, get) => ({
+export const createFavorSlice: StateCreator<FavorSlice, [], [], FavorSlice> = (
+  set,
+  get
+) => ({
+  cacheLinkFavors: new Map(),
   favoringLinkIds: new Set(),
+
+  setOneInCacheLinkFavors: (linkId, linkFavors) => {
+    set((state) => ({
+      cacheLinkFavors: new Map(state.cacheLinkFavors).set(linkId, {
+        ...linkFavors,
+      }),
+    }));
+  },
+  addFavorToCacheLinkFavors: (linkId, favor) => {
+    const linkFavors = get().cacheLinkFavors.get(linkId);
+    if (!linkFavors) return;
+    linkFavors.favors.edges.push({
+      cursor: favor.id,
+      node: { ...favor },
+    });
+    linkFavors.favors = { ...linkFavors.favors };
+    linkFavors.favorsCount++;
+    set((state) => ({
+      cacheLinkFavors: new Map(state.cacheLinkFavors).set(linkId, {
+        ...linkFavors,
+      }),
+    }));
+  },
+  updateFavorInCacheLinkFavors: (linkId, favorId, favor) => {
+    const linkFavors = get().cacheLinkFavors.get(linkId);
+    if (!linkFavors) return;
+    const favorIndex = linkFavors.favors.edges.findIndex(
+      (edge) => edge.node.id === favorId
+    );
+    if (favorIndex === -1) return;
+    linkFavors.favors.edges[favorIndex].node = {
+      ...linkFavors.favors.edges[favorIndex].node,
+      ...favor,
+    };
+    linkFavors.favors = { ...linkFavors.favors };
+    if (favor.hasOwnProperty("revoke")) {
+      if (favor.revoke) {
+        linkFavors.favorsCount--;
+      } else {
+        linkFavors.favorsCount++;
+      }
+    }
+    set((state) => ({
+      cacheLinkFavors: new Map(state.cacheLinkFavors).set(linkId, {
+        ...linkFavors,
+      }),
+    }));
+  },
+  removeFavorFromCacheLinkFavors: (linkId, favorId) => {
+    const linkFavors = get().cacheLinkFavors.get(linkId);
+    if (!linkFavors) return;
+    const favorIndex = linkFavors.favors.edges.findIndex(
+      (edge) => edge.node.id === favorId
+    );
+    if (favorIndex === -1) return;
+    linkFavors.favors.edges.splice(favorIndex, 1);
+    linkFavors.favors = { ...linkFavors.favors };
+    linkFavors.favorsCount--;
+    set((state) => ({
+      cacheLinkFavors: new Map(state.cacheLinkFavors).set(linkId, {
+        ...linkFavors,
+      }),
+    }));
+  },
+
   addOneToFavoringLinkIds: (linkId: string) => {
     set((state) => {
       const updatedSet = new Set(state.favoringLinkIds);
@@ -36,58 +119,5 @@ export const createFavorSlice: StateCreator<
       updatedSet.delete(linkId);
       return { favoringLinkIds: updatedSet };
     });
-  },
-  addFavorToCacheLinks: (linkId, favor) => {
-    const link = get().cacheLinks.get(linkId);
-    if (!link) return;
-    const newLink = linkDataFieldFilling(link);
-    newLink.favors.edges.push({
-      cursor: favor.id,
-      node: { ...favor },
-    });
-    newLink.favors = { ...newLink.favors };
-    newLink.favorsCount++;
-    set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
-    }));
-  },
-  updateFavorInCacheLinks: (linkId, favorId, favor) => {
-    const link = get().cacheLinks.get(linkId);
-    if (!link) return;
-    const newLink = linkDataFieldFilling(link);
-    const favorIndex = newLink.favors.edges.findIndex(
-      (edge) => edge.node.id === favorId
-    );
-    if (favorIndex === -1) return;
-    newLink.favors.edges[favorIndex].node = {
-      ...newLink.favors.edges[favorIndex].node,
-      ...favor,
-    };
-    newLink.favors = { ...newLink.favors };
-    if (favor.hasOwnProperty("revoke")) {
-      if (favor.revoke) {
-        newLink.favorsCount--;
-      } else {
-        newLink.favorsCount++;
-      }
-    }
-    set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
-    }));
-  },
-  removeFavorFromCacheLinks: (linkId, favorId) => {
-    const link = get().cacheLinks.get(linkId);
-    if (!link) return;
-    const newLink = linkDataFieldFilling(link);
-    const favorIndex = newLink.favors.edges.findIndex(
-      (edge) => edge.node.id === favorId
-    );
-    if (favorIndex === -1) return;
-    newLink.favors.edges.splice(favorIndex, 1);
-    newLink.favors = { ...newLink.favors };
-    newLink.favorsCount--;
-    set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
-    }));
   },
 });

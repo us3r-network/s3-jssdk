@@ -1,12 +1,11 @@
 import { useCallback, useMemo } from "react";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { useLink } from "./useLink";
 import {
   useAuthentication,
-  useIsAuthenticated,
   useSession,
 } from "@us3r-network/auth-with-rainbowkit";
+import { useLinkFavors } from "./useLinkFavors";
 
 export const useFavorAction = (
   linkId: string,
@@ -15,10 +14,9 @@ export const useFavorAction = (
     onFailedFavor?: (errMsg: string) => void;
   }
 ) => {
-  const { link } = useLink(linkId);
+  const { linkFavors } = useLinkFavors(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
-  const isAuthenticated = useIsAuthenticated();
   const session = useSession();
   const { s3LinkModalAuthed } = useLinkState();
 
@@ -29,9 +27,11 @@ export const useFavorAction = (
   const removeOneFromFavoringLinkIds = useStore(
     (state) => state.removeOneFromFavoringLinkIds
   );
-  const addFavorToCacheLinks = useStore((state) => state.addFavorToCacheLinks);
-  const updateFavorInCacheLinks = useStore(
-    (state) => state.updateFavorInCacheLinks
+  const addFavorToCacheLinkFavors = useStore(
+    (state) => state.addFavorToCacheLinkFavors
+  );
+  const updateFavorInCacheLinkFavors = useStore(
+    (state) => state.updateFavorInCacheLinkFavors
   );
 
   const addOneToPersonalFavors = useStore(
@@ -43,12 +43,12 @@ export const useFavorAction = (
 
   const findCurrUserFavor = useMemo(
     () =>
-      !link?.favors || !session
+      !linkFavors?.favors || !session
         ? null
-        : link.favors?.edges?.find(
+        : linkFavors.favors?.edges?.find(
             (edge) => edge?.node?.creator?.id === session?.id
           )?.node,
-    [link?.favors, session]
+    [linkFavors?.favors, session]
   );
 
   const isFavored = useMemo(
@@ -61,11 +61,14 @@ export const useFavorAction = (
     [favoringLinkIds, linkId]
   );
 
-  const isDisabled = useMemo(() => !link || isFavoring, [link, isFavoring]);
+  const isDisabled = useMemo(
+    () => !linkFavors || isFavoring,
+    [linkFavors, isFavoring]
+  );
 
   const onFavor = useCallback(async () => {
     if (isDisabled) return;
-    if (!isAuthenticated || !session || !s3LinkModalAuthed) {
+    if (!session || !s3LinkModalAuthed) {
       signIn();
       return;
     }
@@ -81,11 +84,11 @@ export const useFavorAction = (
           throw new Error(res?.errors[0]?.message);
         }
         // update store
-        updateFavorInCacheLinks(linkId, id, { revoke });
+        updateFavorInCacheLinkFavors(linkId, id, { revoke });
         if (revoke) {
           removeOneFromPersonalFavors(id);
         } else {
-          addOneToPersonalFavors({ ...findCurrUserFavor, link: link });
+          addOneToPersonalFavors({ ...findCurrUserFavor });
         }
         if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(!revoke);
       } else {
@@ -110,8 +113,8 @@ export const useFavorAction = (
             },
           };
           // update store
-          addFavorToCacheLinks(linkId, favorData);
-          addOneToPersonalFavors({ ...favorData, link: link });
+          addFavorToCacheLinkFavors(linkId, favorData);
+          addOneToPersonalFavors({ ...favorData });
         }
         if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(true);
       }
@@ -123,17 +126,15 @@ export const useFavorAction = (
     }
   }, [
     isDisabled,
-    isAuthenticated,
     session,
     s3LinkModalAuthed,
     signIn,
     linkId,
-    link,
     findCurrUserFavor,
     addOneToFavoringLinkIds,
     removeOneFromFavoringLinkIds,
-    addFavorToCacheLinks,
-    updateFavorInCacheLinks,
+    addFavorToCacheLinkFavors,
+    updateFavorInCacheLinkFavors,
     opts?.onSuccessfullyFavor,
     opts?.onFailedFavor,
     addOneToPersonalFavors,

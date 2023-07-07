@@ -20,7 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "@material-design-icons/svg": "^0.14.7",
-    "@us3r-network/data-model": "^0.2.0",
+    "@us3r-network/data-model": "^0.5.0",
     "dayjs": "^2.0.0-alpha.4",
     "react-aria": "^3.24.0",
     "react-aria-components": "^1.0.0-alpha.3",

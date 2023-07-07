@@ -4,8 +4,8 @@ import { Button, ButtonRenderProps } from "react-aria-components";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
 import { AriaButtonProps } from "react-aria";
 import { VoteButtonChildren } from "./VoteButtonChildren";
-import { useLink } from "../../hooks/useLink";
 import { useVoteAction } from "../../hooks/useVoteAction";
+import { useLinkVotes } from "../../hooks/useLinkVotes";
 
 export interface VoteButtonIncomingProps {
   /**
@@ -45,7 +45,7 @@ export function VoteButton({
   ...props
 }: VoteButtonProps) {
   const isAuthenticated = useIsAuthenticated();
-  const { link } = useLink(linkId);
+  const { linkVotes } = useLinkVotes(linkId);
   const { isVoted, isVoting, isDisabled, onVote } = useVoteAction(linkId, {
     onSuccessfullyVote,
     onFailedVote,
@@ -66,7 +66,7 @@ export function VoteButton({
     isVoted,
     isVoting,
     isDisabled,
-    votesCount: link?.votesCount || 0,
+    votesCount: linkVotes?.votesCount || 0,
   };
 
   const defaultChildren = useMemo(
