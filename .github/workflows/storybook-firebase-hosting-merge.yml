@@ -20,8 +20,8 @@ jobs:
         env:
           CI: false
           GENERATE_SOURCEMAP: false
-          REACT_APP_CERAMIC_HOST: 'https://ceramic.s3.xyz'
-          US3R_UPLOAD_IMAGE_ENDPOINT: 'https://test-enchanft-backend.onrender.com/medium/upload'
+          REACT_APP_CERAMIC_HOST: 'https://gcp-ceramic-testnet-dev.s3.xyz'
+          US3R_UPLOAD_IMAGE_ENDPOINT: 'https://api-dev.u3.xyz/medium/upload'
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
