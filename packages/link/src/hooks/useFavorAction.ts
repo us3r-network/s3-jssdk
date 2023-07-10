@@ -14,7 +14,7 @@ export const useFavorAction = (
     onFailedFavor?: (errMsg: string) => void;
   }
 ) => {
-  const { linkFavors } = useLinkFavors(linkId);
+  const { favors, isFetched } = useLinkFavors(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
   const session = useSession();
@@ -43,12 +43,10 @@ export const useFavorAction = (
 
   const findCurrUserFavor = useMemo(
     () =>
-      !linkFavors?.favors || !session
+      !session
         ? null
-        : linkFavors.favors?.edges?.find(
-            (edge) => edge?.node?.creator?.id === session?.id
-          )?.node,
-    [linkFavors?.favors, session]
+        : favors.find((node) => node?.creator?.id === session?.id),
+    [favors, session]
   );
 
   const isFavored = useMemo(
@@ -62,8 +60,8 @@ export const useFavorAction = (
   );
 
   const isDisabled = useMemo(
-    () => !linkFavors || isFavoring,
-    [linkFavors, isFavoring]
+    () => !isFetched || isFavoring,
+    [isFetched, isFavoring]
   );
 
   const onFavor = useCallback(async () => {

@@ -22,10 +22,35 @@ export const useLinkFavors = (linkId: string) => {
     () => cacheLinkFavors.has(linkId),
     [cacheLinkFavors, linkId]
   );
+
+  const fetchingFavorsLinkIds = useStore(
+    (state) => state.fetchingFavorsLinkIds
+  );
+  const isFetching = useMemo(
+    () => fetchingFavorsLinkIds.has(linkId),
+    [fetchingFavorsLinkIds, linkId]
+  );
+
   const linkFavors = useMemo(
     () => cacheLinkFavors.get(linkId),
     [cacheLinkFavors, linkId]
   );
+
+  const favors = useMemo(
+    () =>
+      isFetching
+        ? []
+        : linkFavors?.favors?.edges
+            ?.filter((edge) => !!edge?.node && !edge.node?.revoke)
+            ?.map((e) => e.node) || [],
+    [isFetching, linkFavors?.favors]
+  );
+
+  const favorsCount = useMemo(
+    () => linkFavors?.favorsCount || favors.length,
+    [linkFavors?.favorsCount, favors]
+  );
+
   const [errMsg, setErrMsg] = useState("");
 
   useEffect(() => {
@@ -81,13 +106,5 @@ export const useLinkFavors = (linkId: string) => {
     })();
   }, [s3LinkModalInitialed, linkId, isFetched]);
 
-  const fetchingFavorsLinkIds = useStore(
-    (state) => state.fetchingFavorsLinkIds
-  );
-  const isFetching = useMemo(
-    () => fetchingFavorsLinkIds.has(linkId),
-    [fetchingFavorsLinkIds, linkId]
-  );
-
-  return { linkFavors, isFetching, isFetched, errMsg };
+  return { favors, favorsCount, isFetching, isFetched, errMsg };
 };

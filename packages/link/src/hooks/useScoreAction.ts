@@ -1,12 +1,12 @@
 import { useCallback, useMemo } from "react";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { useLink } from "./useLink";
 import {
   useAuthentication,
   useIsAuthenticated,
   useSession,
 } from "@us3r-network/auth-with-rainbowkit";
+import { useLinkScores } from "./useLinkScores";
 
 export const useScoreAction = (
   linkId: string,
@@ -15,7 +15,7 @@ export const useScoreAction = (
     onFailedScore?: (errMsg: string) => void;
   }
 ) => {
-  const { link } = useLink(linkId);
+  const { scores, isFetched } = useLinkScores(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
   const isAuthenticated = useIsAuthenticated();
@@ -29,9 +29,11 @@ export const useScoreAction = (
   const removeOneFromScoringLinkIds = useStore(
     (state) => state.removeOneFromScoringLinkIds
   );
-  const addScoreToCacheLinks = useStore((state) => state.addScoreToCacheLinks);
-  const updateScoreInCacheLinks = useStore(
-    (state) => state.updateScoreInCacheLinks
+  const addScoreToCacheLinkScores = useStore(
+    (state) => state.addScoreToCacheLinkScores
+  );
+  const updateScoreInCacheLinkScores = useStore(
+    (state) => state.updateScoreInCacheLinkScores
   );
 
   const addOneToPersonalScores = useStore(
@@ -46,16 +48,17 @@ export const useScoreAction = (
     [scoringLinkIds, linkId]
   );
 
-  const isDisabled = useMemo(() => !link || isScoring, [link, isScoring]);
+  const isDisabled = useMemo(
+    () => !isFetched || isScoring,
+    [isFetched, isScoring]
+  );
 
   const findCurrUserScore = useMemo(
     () =>
-      !link?.scores || !session
+      !session
         ? null
-        : link.scores?.edges?.find(
-            (edge) => edge?.node?.creator?.id === session?.id
-          )?.node,
-    [link?.scores, session]
+        : scores?.find((node) => node?.creator?.id === session?.id),
+    [scores, session]
   );
 
   const isScored = useMemo(
@@ -96,8 +99,8 @@ export const useScoreAction = (
             },
           };
           // update store
-          addScoreToCacheLinks(linkId, scoreData);
-          addOneToPersonalScores({ ...scoreData, link: link });
+          addScoreToCacheLinkScores(linkId, scoreData);
+          addOneToPersonalScores({ ...scoreData });
         }
 
         if (opts?.onSuccessfullyScore) opts.onSuccessfullyScore();
@@ -115,10 +118,9 @@ export const useScoreAction = (
       s3LinkModalAuthed,
       signIn,
       linkId,
-      link,
       addOneToScoringLinkIds,
       removeOneFromScoringLinkIds,
-      addScoreToCacheLinks,
+      addScoreToCacheLinkScores,
       opts?.onSuccessfullyScore,
       opts?.onFailedScore,
       addOneToPersonalScores,
@@ -157,7 +159,7 @@ export const useScoreAction = (
             modifiedAt: new Date().toISOString(),
           };
           // update store
-          updateScoreInCacheLinks(linkId, scoreId, scoreData);
+          updateScoreInCacheLinkScores(linkId, scoreId, scoreData);
           updateOneInPersonalScores(scoreId, scoreData);
         }
 
@@ -178,7 +180,7 @@ export const useScoreAction = (
       linkId,
       addOneToScoringLinkIds,
       removeOneFromScoringLinkIds,
-      updateScoreInCacheLinks,
+      updateScoreInCacheLinkScores,
       opts?.onSuccessfullyScore,
       opts?.onFailedScore,
       updateOneInPersonalScores,

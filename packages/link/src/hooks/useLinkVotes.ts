@@ -22,10 +22,33 @@ export const useLinkVotes = (linkId: string) => {
     () => cacheLinkVotes.has(linkId),
     [cacheLinkVotes, linkId]
   );
+
+  const fetchingVotesLinkIds = useStore((state) => state.fetchingVotesLinkIds);
+  const isFetching = useMemo(
+    () => fetchingVotesLinkIds.has(linkId),
+    [fetchingVotesLinkIds, linkId]
+  );
+
   const linkVotes = useMemo(
     () => cacheLinkVotes.get(linkId),
     [cacheLinkVotes, linkId]
   );
+
+  const votes = useMemo(
+    () =>
+      isFetching
+        ? []
+        : linkVotes?.votes?.edges
+            ?.filter((edge) => !!edge?.node && !edge.node?.revoke)
+            ?.map((e) => e.node) || [],
+    [isFetching, linkVotes?.votes]
+  );
+
+  const votesCount = useMemo(
+    () => linkVotes?.votesCount || votes.length,
+    [linkVotes?.votesCount, votes]
+  );
+
   const [errMsg, setErrMsg] = useState("");
 
   useEffect(() => {
@@ -82,11 +105,5 @@ export const useLinkVotes = (linkId: string) => {
     })();
   }, [s3LinkModalInitialed, linkId, isFetched]);
 
-  const fetchingVotesLinkIds = useStore((state) => state.fetchingVotesLinkIds);
-  const isFetching = useMemo(
-    () => fetchingVotesLinkIds.has(linkId),
-    [fetchingVotesLinkIds, linkId]
-  );
-
-  return { linkVotes, isFetching, isFetched, errMsg };
+  return { votes, votesCount, isFetching, isFetched, errMsg };
 };

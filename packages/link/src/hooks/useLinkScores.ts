@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { isFetchingComments, type LinkComments } from "../store/comment";
+import { isFetchingScores, type LinkScores } from "../store/score";
 
-export const useLinkComments = (
+export const useLinkScores = (
   linkId: string,
   opts?: {
     order: "asc" | "desc";
@@ -12,55 +12,55 @@ export const useLinkComments = (
   const s3LinkModel = getS3LinkModel();
   const { s3LinkModalInitialed } = useLinkState();
 
-  const cacheLinkComments = useStore((state) => state.cacheLinkComments);
-  const setOneInCacheLinkComments = useStore(
-    (state) => state.setOneInCacheLinkComments
+  const cacheLinkScores = useStore((state) => state.cacheLinkScores);
+  const setOneInCacheLinkScores = useStore(
+    (state) => state.setOneInCacheLinkScores
   );
-  const addOneToFetchingCommentsLinkIds = useStore(
-    (state) => state.addOneToFetchingCommentsLinkIds
+  const addOneToFetchingScoresLinkIds = useStore(
+    (state) => state.addOneToFetchingScoresLinkIds
   );
-  const removeOneFromFetchingCommentsLinkIds = useStore(
-    (state) => state.removeOneFromFetchingCommentsLinkIds
+  const removeOneFromFetchingScoresLinkIds = useStore(
+    (state) => state.removeOneFromFetchingScoresLinkIds
   );
 
   const isFetched = useMemo(
-    () => cacheLinkComments.has(linkId),
-    [cacheLinkComments, linkId]
+    () => cacheLinkScores.has(linkId),
+    [cacheLinkScores, linkId]
   );
 
-  const fetchingCommentsLinkIds = useStore(
-    (state) => state.fetchingCommentsLinkIds
+  const fetchingScoresLinkIds = useStore(
+    (state) => state.fetchingScoresLinkIds
   );
   const isFetching = useMemo(
-    () => fetchingCommentsLinkIds.has(linkId),
-    [fetchingCommentsLinkIds, linkId]
+    () => fetchingScoresLinkIds.has(linkId),
+    [fetchingScoresLinkIds, linkId]
   );
 
-  const linkComments = useMemo(
-    () => cacheLinkComments.get(linkId),
-    [cacheLinkComments, linkId]
+  const linkScores = useMemo(
+    () => cacheLinkScores.get(linkId),
+    [cacheLinkScores, linkId]
   );
 
-  const comments = useMemo(
+  const scores = useMemo(
     () =>
       isFetching
         ? []
-        : linkComments?.comments?.edges
+        : linkScores?.scores?.edges
             ?.filter((edge) => !!edge?.node && !edge.node?.revoke)
             ?.map((e) => e.node) || [],
-    [isFetching, linkComments?.comments]
+    [isFetching, linkScores?.scores]
   );
 
-  const commentsCount = useMemo(
-    () => linkComments?.commentsCount || comments.length,
-    [linkComments?.commentsCount, comments]
+  const scoresCount = useMemo(
+    () => linkScores?.scoresCount || scores.length,
+    [linkScores?.scoresCount, scores]
   );
 
   const [errMsg, setErrMsg] = useState("");
 
   const { order = "desc" } = opts || {};
 
-  const commentsVariablesStr = useMemo(() => {
+  const scoresVariablesStr = useMemo(() => {
     const variables: any = {};
     if (order === "desc") {
       Object.assign(variables, {
@@ -84,20 +84,20 @@ export const useLinkComments = (
       if (!linkId) return;
       if (!s3LinkModalInitialed || !s3LinkModel) return;
       if (isFetched) return;
-      if (isFetchingComments(linkId)) return;
+      if (isFetchingScores(linkId)) return;
 
       try {
         setErrMsg("");
 
-        addOneToFetchingCommentsLinkIds(linkId);
+        addOneToFetchingScoresLinkIds(linkId);
         const res = await s3LinkModel.executeQuery<{
-          node: LinkComments;
+          node: LinkScores;
         }>(`
           query {
             node(id: "${linkId}") {
               ...on Link {
-                commentsCount
-                comments (${commentsVariablesStr}) {
+                scoresCount
+                scores (${scoresVariablesStr}) {
                   edges {
                     node {
                       id
@@ -122,22 +122,22 @@ export const useLinkComments = (
         }
         const data = res.data?.node;
         if (data) {
-          setOneInCacheLinkComments(linkId, data);
+          setOneInCacheLinkScores(linkId, data);
         }
       } catch (error) {
         const errMsg = (error as any)?.message;
         setErrMsg(errMsg);
       } finally {
-        removeOneFromFetchingCommentsLinkIds(linkId);
+        removeOneFromFetchingScoresLinkIds(linkId);
       }
     })();
-  }, [s3LinkModalInitialed, linkId, order, setOneInCacheLinkComments]);
+  }, [s3LinkModalInitialed, linkId, order, setOneInCacheLinkScores]);
 
   return {
     isFetching,
     isFetched,
-    comments,
-    commentsCount,
+    scores,
+    scoresCount,
     errMsg,
   };
 };

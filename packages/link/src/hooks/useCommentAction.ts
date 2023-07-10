@@ -15,7 +15,7 @@ export const useCommentAction = (
     onFailedComment?: (errMsg: string) => void;
   }
 ) => {
-  const { linkComments } = useLinkComments(linkId);
+  const { isFetched } = useLinkComments(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
   const isAuthenticated = useIsAuthenticated();
@@ -42,8 +42,8 @@ export const useCommentAction = (
   );
 
   const isDisabled = useMemo(
-    () => !linkComments || isCommenting,
-    [linkComments, isCommenting]
+    () => !isFetched || isCommenting,
+    [isFetched, isCommenting]
   );
 
   const onComment = useCallback(

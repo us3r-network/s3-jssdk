@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { Comment } from "@us3r-network/data-model";
+import { Comment } from "../../../store/comment";
 
 export interface CommentsContextValue {
   linkId: string;

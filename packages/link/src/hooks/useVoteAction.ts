@@ -15,7 +15,7 @@ export const useVoteAction = (
     onFailedVote?: (errMsg: string) => void;
   }
 ) => {
-  const { linkVotes } = useLinkVotes(linkId);
+  const { votes, isFetched } = useLinkVotes(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
   const isAuthenticated = useIsAuthenticated();
@@ -38,12 +38,10 @@ export const useVoteAction = (
 
   const findCurrUserVote = useMemo(
     () =>
-      !linkVotes?.votes || !session
+      !session
         ? null
-        : linkVotes.votes?.edges?.find(
-            (edge) => edge?.node?.creator?.id === session?.id
-          )?.node,
-    [linkVotes?.votes, session]
+        : votes?.find((node) => node?.creator?.id === session?.id),
+    [votes, session]
   );
 
   const isVoted = useMemo(
@@ -57,8 +55,8 @@ export const useVoteAction = (
   );
 
   const isDisabled = useMemo(
-    () => !linkVotes || isVoting,
-    [linkVotes, isVoting]
+    () => !isFetched || isVoting,
+    [isFetched, isVoting]
   );
 
   const onVote = useCallback(async () => {
