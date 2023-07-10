@@ -45,7 +45,7 @@ export function VoteButton({
   ...props
 }: VoteButtonProps) {
   const isAuthenticated = useIsAuthenticated();
-  const { linkVotes } = useLinkVotes(linkId);
+  const { votesCount } = useLinkVotes(linkId);
   const { isVoted, isVoting, isDisabled, onVote } = useVoteAction(linkId, {
     onSuccessfullyVote,
     onFailedVote,
@@ -66,7 +66,7 @@ export function VoteButton({
     isVoted,
     isVoting,
     isDisabled,
-    votesCount: linkVotes?.votesCount || 0,
+    votesCount,
   };
 
   const defaultChildren = useMemo(
