@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { LinkSlice, createLinkSlice } from "./link";
 import { FavorSlice, createFavorSlice } from "./favor";
 import { VoteSlice, createVoteSlice } from "./vote";
 import { CommentSlice, createCommentSlice } from "./comment";
@@ -14,8 +13,7 @@ import {
 } from "./personalScores";
 
 interface Store
-  extends LinkSlice,
-    FavorSlice,
+  extends FavorSlice,
     VoteSlice,
     CommentSlice,
     ScoreSlice,
@@ -23,7 +21,6 @@ interface Store
     PersonalScoresSlice {}
 
 export const useStore = create<Store>()((...a) => ({
-  ...createLinkSlice(...a),
   ...createFavorSlice(...a),
   ...createVoteSlice(...a),
   ...createCommentSlice(...a),
