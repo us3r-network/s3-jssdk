@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { Page } from "@ceramicnetwork/common";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { isFetchingVotes, type LinkVotes } from "../store/vote";
+import { Vote, isFetchingVotes } from "../store/vote";
 
 export const useLinkVotes = (linkId: string) => {
   const s3LinkModel = getS3LinkModel();
@@ -38,9 +39,7 @@ export const useLinkVotes = (linkId: string) => {
     () =>
       isFetching
         ? []
-        : linkVotes?.votes?.edges
-            ?.filter((edge) => !!edge?.node && !edge.node?.revoke)
-            ?.map((e) => e.node) || [],
+        : linkVotes?.votes?.filter((item) => !!item && !item?.revoke) || [],
     [isFetching, linkVotes?.votes]
   );
 
@@ -63,7 +62,10 @@ export const useLinkVotes = (linkId: string) => {
 
         addOneToFetchingVotesLinkIds(linkId);
         const res = await s3LinkModel.executeQuery<{
-          node: LinkVotes;
+          node: {
+            votes: Page<Vote>;
+            votesCount: number;
+          };
         }>(`
           query {
             node(id: "${linkId}") {
@@ -93,8 +95,16 @@ export const useLinkVotes = (linkId: string) => {
           throw new Error(res?.errors[0]?.message);
         }
         const data = res.data?.node;
-        if (data) {
-          setOneInCacheLinkVotes(linkId, data);
+        const votes =
+          data?.votes?.edges
+            ?.map((edge) => edge?.node)
+            ?.filter((node) => !!node) || [];
+        const votesCount = data?.votesCount || 0;
+        if (votes.length > 0) {
+          setOneInCacheLinkVotes(linkId, {
+            votes,
+            votesCount,
+          });
         }
       } catch (error) {
         const errMsg = (error as any)?.message;

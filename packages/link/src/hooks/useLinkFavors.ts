@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { Page } from "@ceramicnetwork/common";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { isFetchingFavors, type LinkFavors } from "../store/favor";
+import { Favor, isFetchingFavors } from "../store/favor";
 
 export const useLinkFavors = (linkId: string) => {
   const s3LinkModel = getS3LinkModel();
@@ -40,9 +41,7 @@ export const useLinkFavors = (linkId: string) => {
     () =>
       isFetching
         ? []
-        : linkFavors?.favors?.edges
-            ?.filter((edge) => !!edge?.node && !edge.node?.revoke)
-            ?.map((e) => e.node) || [],
+        : linkFavors?.favors?.filter((item) => !!item && !item?.revoke) || [],
     [isFetching, linkFavors?.favors]
   );
 
@@ -65,7 +64,10 @@ export const useLinkFavors = (linkId: string) => {
 
         addOneToFetchingFavorsLinkIds(linkId);
         const res = await s3LinkModel.executeQuery<{
-          node: LinkFavors;
+          node: {
+            favors: Page<Favor>;
+            favorsCount: number;
+          };
         }>(`
           query {
             node(id: "${linkId}") {
@@ -94,8 +96,16 @@ export const useLinkFavors = (linkId: string) => {
           throw new Error(res?.errors[0]?.message);
         }
         const data = res.data?.node;
-        if (data) {
-          setOneInCacheLinkFavors(linkId, data);
+        const favors =
+          data?.favors?.edges
+            ?.map((edge) => edge?.node)
+            ?.filter((node) => !!node) || [];
+        const favorsCount = data?.favorsCount || 0;
+        if (favors.length > 0) {
+          setOneInCacheLinkFavors(linkId, {
+            favors,
+            favorsCount,
+          });
         }
       } catch (error) {
         const errMsg = (error as any)?.message;

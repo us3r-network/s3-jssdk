@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { Page } from "@ceramicnetwork/common";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { isFetchingComments, type LinkComments } from "../store/comment";
+import { Comment, isFetchingComments } from "../store/comment";
 
 export const useLinkComments = (
   linkId: string,
@@ -45,9 +46,8 @@ export const useLinkComments = (
     () =>
       isFetching
         ? []
-        : linkComments?.comments?.edges
-            ?.filter((edge) => !!edge?.node && !edge.node?.revoke)
-            ?.map((e) => e.node) || [],
+        : linkComments?.comments?.filter((item) => !!item && !item?.revoke) ||
+          [],
     [isFetching, linkComments?.comments]
   );
 
@@ -91,7 +91,10 @@ export const useLinkComments = (
 
         addOneToFetchingCommentsLinkIds(linkId);
         const res = await s3LinkModel.executeQuery<{
-          node: LinkComments;
+          node: {
+            comments: Page<Comment>;
+            commentsCount: number;
+          };
         }>(`
           query {
             node(id: "${linkId}") {
@@ -121,8 +124,16 @@ export const useLinkComments = (
           throw new Error(res?.errors[0]?.message);
         }
         const data = res.data?.node;
-        if (data) {
-          setOneInCacheLinkComments(linkId, data);
+        const comments =
+          data?.comments?.edges
+            ?.map((edge) => edge?.node)
+            ?.filter((node) => !!node) || [];
+        const commentsCount = data?.commentsCount || 0;
+        if (comments.length > 0) {
+          setOneInCacheLinkComments(linkId, {
+            comments,
+            commentsCount,
+          });
         }
       } catch (error) {
         const errMsg = (error as any)?.message;
@@ -131,7 +142,12 @@ export const useLinkComments = (
         removeOneFromFetchingCommentsLinkIds(linkId);
       }
     })();
-  }, [s3LinkModalInitialed, linkId, order, setOneInCacheLinkComments]);
+  }, [
+    s3LinkModalInitialed,
+    linkId,
+    commentsVariablesStr,
+    setOneInCacheLinkComments,
+  ]);
 
   return {
     isFetching,

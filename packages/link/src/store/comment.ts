@@ -1,5 +1,4 @@
 import { StateCreator } from "zustand";
-import { Page } from "@ceramicnetwork/common";
 import { DateTime } from "./types";
 
 export type Comment = {
@@ -15,7 +14,7 @@ export type Comment = {
 };
 
 export type LinkComments = {
-  comments: Page<Comment>;
+  comments: Array<Comment>;
   commentsCount: number;
 };
 
@@ -52,106 +51,82 @@ export interface CommentSlice {
 
 export const createCommentSlice: StateCreator<
   CommentSlice,
-  [],
+  [["zustand/immer", never]],
   [],
   CommentSlice
-> = (set, get) => ({
+> = (set) => ({
   cacheLinkComments: new Map(),
-  fetchingCommentsLinkIds: fetchingCommentsLinkIds,
+  fetchingCommentsLinkIds: new Set(),
   commentingLinkIds: new Set(),
 
   setOneInCacheLinkComments: (linkId, linkComments) => {
-    set((state) => ({
-      cacheLinkComments: new Map(state.cacheLinkComments).set(linkId, {
-        ...linkComments,
-      }),
-    }));
+    set((state) => {
+      state.cacheLinkComments.set(linkId, linkComments);
+    });
   },
   addCommentToCacheLinkComments: (linkId, comment) => {
-    const linkComments = get().cacheLinkComments.get(linkId);
-    if (!linkComments) return;
-    linkComments.comments.edges.push({
-      cursor: comment.id,
-      node: { ...comment },
+    set((state) => {
+      const linkComments = state.cacheLinkComments.get(linkId);
+      if (!linkComments) return;
+      linkComments.comments.push(comment);
+      linkComments.commentsCount++;
     });
-    linkComments.comments = { ...linkComments.comments };
-    linkComments.commentsCount++;
-    set((state) => ({
-      cacheLinkComments: new Map(state.cacheLinkComments).set(linkId, {
-        ...linkComments,
-      }),
-    }));
   },
   updateCommentInCacheLinkComments: (linkId, commentId, comment) => {
-    const linkComments = get().cacheLinkComments.get(linkId);
-    if (!linkComments) return;
-    const commentIndex = linkComments.comments.edges.findIndex(
-      (edge) => edge.node.id === commentId
-    );
-    if (commentIndex === -1) return;
-    linkComments.comments.edges[commentIndex].node = {
-      ...linkComments.comments.edges[commentIndex].node,
-      ...comment,
-    };
-    linkComments.comments = { ...linkComments.comments };
-    if (comment.hasOwnProperty("revoke")) {
-      if (comment.revoke) {
-        linkComments.commentsCount--;
-      } else {
-        linkComments.commentsCount++;
+    set((state) => {
+      const linkComments = state.cacheLinkComments.get(linkId);
+      if (!linkComments) return;
+
+      const commentIndex = linkComments.comments.findIndex(
+        (item) => item.id === commentId
+      );
+      if (commentIndex === -1) return;
+
+      const item = linkComments.comments[commentIndex];
+      Object.assign(item, comment);
+
+      if (comment.hasOwnProperty("revoke")) {
+        if (comment.revoke) {
+          linkComments.commentsCount--;
+        } else {
+          linkComments.commentsCount++;
+        }
       }
-    }
-    set((state) => ({
-      cacheLinkComments: new Map(state.cacheLinkComments).set(linkId, {
-        ...linkComments,
-      }),
-    }));
+    });
   },
   removeCommentFromCacheLinkComments: (linkId, commentId) => {
-    const linkComments = get().cacheLinkComments.get(linkId);
-    if (!linkComments) return;
-    const commentIndex = linkComments.comments.edges.findIndex(
-      (edge) => edge.node.id === commentId
-    );
-    if (commentIndex === -1) return;
-    linkComments.comments.edges.splice(commentIndex, 1);
-    linkComments.comments = { ...linkComments.comments };
-    linkComments.commentsCount--;
-    set((state) => ({
-      cacheLinkComments: new Map(state.cacheLinkComments).set(linkId, {
-        ...linkComments,
-      }),
-    }));
+    set((state) => {
+      const linkComments = state.cacheLinkComments.get(linkId);
+      if (!linkComments) return;
+      const commentIndex = linkComments.comments.findIndex(
+        (item) => item.id === commentId
+      );
+      if (commentIndex === -1) return;
+      linkComments.comments.splice(commentIndex, 1);
+      linkComments.commentsCount--;
+    });
   },
-
   addOneToFetchingCommentsLinkIds: (linkId) => {
     fetchingCommentsLinkIds.add(linkId);
-    set(() => {
-      const updatedSet = new Set(fetchingCommentsLinkIds);
-      updatedSet.add(linkId);
-      return { fetchingCommentsLinkIds: updatedSet };
+    set((state) => {
+      state.fetchingCommentsLinkIds.add(linkId);
     });
   },
   removeOneFromFetchingCommentsLinkIds: (linkId) => {
-    set(() => {
-      const updatedSet = new Set(fetchingCommentsLinkIds);
-      updatedSet.delete(linkId);
-      return { fetchingCommentsLinkIds: updatedSet };
+    fetchingCommentsLinkIds.delete(linkId);
+    set((state) => {
+      state.fetchingCommentsLinkIds.delete(linkId);
     });
   },
 
   addOneToCommentingLinkIds: (linkId: string) => {
     set((state) => {
-      const updatedSet = new Set(state.commentingLinkIds);
-      updatedSet.add(linkId);
-      return { commentingLinkIds: updatedSet };
+      state.commentingLinkIds.add(linkId);
     });
   },
   removeOneFromCommentingLinkIds: (linkId: string) => {
     set((state) => {
-      const updatedSet = new Set(state.commentingLinkIds);
-      updatedSet.delete(linkId);
-      return { commentingLinkIds: updatedSet };
+      state.commentingLinkIds.delete(linkId);
     });
   },
 });

@@ -1,5 +1,4 @@
 import { StateCreator } from "zustand";
-import { Page } from "@ceramicnetwork/common";
 import { DateTime } from "./types";
 
 export type Score = {
@@ -7,16 +6,16 @@ export type Score = {
   text: string;
   value: number;
   linkID: string;
-  revoke?: Boolean;
-  createAt?: DateTime;
-  modifiedAt?: DateTime;
+  revoke: Boolean;
+  createAt: DateTime;
+  modifiedAt: DateTime;
   creator: {
     id: string;
   };
 };
 
 export type LinkScores = {
-  scores: Page<Score>;
+  scores: Array<Score>;
   scoresCount: number;
 };
 
@@ -45,106 +44,84 @@ export interface ScoreSlice {
   removeOneFromScoringLinkIds: (linkId: string) => void;
 }
 
-export const createScoreSlice: StateCreator<ScoreSlice, [], [], ScoreSlice> = (
-  set,
-  get
-) => ({
+export const createScoreSlice: StateCreator<
+  ScoreSlice,
+  [["zustand/immer", never]],
+  [],
+  ScoreSlice
+> = (set) => ({
   cacheLinkScores: new Map(),
-  fetchingScoresLinkIds: fetchingScoresLinkIds,
+  fetchingScoresLinkIds: new Set(),
   scoringLinkIds: new Set(),
 
   setOneInCacheLinkScores: (linkId, linkScores) => {
-    set((state) => ({
-      cacheLinkScores: new Map(state.cacheLinkScores).set(linkId, {
-        ...linkScores,
-      }),
-    }));
+    set((state) => {
+      state.cacheLinkScores.set(linkId, linkScores);
+    });
   },
   addScoreToCacheLinkScores: (linkId, score) => {
-    const linkScores = get().cacheLinkScores.get(linkId);
-    if (!linkScores) return;
-    linkScores.scores.edges.push({
-      cursor: score.id,
-      node: { ...score },
+    set((state) => {
+      const linkScores = state.cacheLinkScores.get(linkId);
+      if (!linkScores) return;
+      linkScores.scores.push(score);
+      linkScores.scoresCount++;
     });
-    linkScores.scores = { ...linkScores.scores };
-    linkScores.scoresCount++;
-    set((state) => ({
-      cacheLinkScores: new Map(state.cacheLinkScores).set(linkId, {
-        ...linkScores,
-      }),
-    }));
   },
   updateScoreInCacheLinkScores: (linkId, scoreId, score) => {
-    const linkScores = get().cacheLinkScores.get(linkId);
-    if (!linkScores) return;
-    const scoreIndex = linkScores.scores.edges.findIndex(
-      (edge) => edge.node.id === scoreId
-    );
-    if (scoreIndex === -1) return;
-    linkScores.scores.edges[scoreIndex].node = {
-      ...linkScores.scores.edges[scoreIndex].node,
-      ...score,
-    };
-    linkScores.scores = { ...linkScores.scores };
-    if (score.hasOwnProperty("revoke")) {
-      if (score.revoke) {
-        linkScores.scoresCount--;
-      } else {
-        linkScores.scoresCount++;
+    set((state) => {
+      const linkScores = state.cacheLinkScores.get(linkId);
+      if (!linkScores) return;
+
+      const scoreIndex = linkScores.scores.findIndex(
+        (item) => item.id === scoreId
+      );
+      if (scoreIndex === -1) return;
+
+      const item = linkScores.scores[scoreIndex];
+      Object.assign(item, score);
+
+      if (score.hasOwnProperty("revoke")) {
+        if (score.revoke) {
+          linkScores.scoresCount--;
+        } else {
+          linkScores.scoresCount++;
+        }
       }
-    }
-    set((state) => ({
-      cacheLinkScores: new Map(state.cacheLinkScores).set(linkId, {
-        ...linkScores,
-      }),
-    }));
+    });
   },
   removeScoreFromCacheLinkScores: (linkId, scoreId) => {
-    const linkScores = get().cacheLinkScores.get(linkId);
-    if (!linkScores) return;
-    const scoreIndex = linkScores.scores.edges.findIndex(
-      (edge) => edge.node.id === scoreId
-    );
-    if (scoreIndex === -1) return;
-    linkScores.scores.edges.splice(scoreIndex, 1);
-    linkScores.scores = { ...linkScores.scores };
-    linkScores.scoresCount--;
-    set((state) => ({
-      cacheLinkScores: new Map(state.cacheLinkScores).set(linkId, {
-        ...linkScores,
-      }),
-    }));
+    set((state) => {
+      const linkScores = state.cacheLinkScores.get(linkId);
+      if (!linkScores) return;
+      const scoreIndex = linkScores.scores.findIndex(
+        (item) => item.id === scoreId
+      );
+      if (scoreIndex === -1) return;
+      linkScores.scores.splice(scoreIndex, 1);
+      linkScores.scoresCount--;
+    });
   },
-
   addOneToFetchingScoresLinkIds: (linkId) => {
     fetchingScoresLinkIds.add(linkId);
-    set(() => {
-      const updatedSet = new Set(fetchingScoresLinkIds);
-      updatedSet.add(linkId);
-      return { fetchingScoresLinkIds: updatedSet };
+    set((state) => {
+      state.fetchingScoresLinkIds.add(linkId);
     });
   },
   removeOneFromFetchingScoresLinkIds: (linkId) => {
-    set(() => {
-      const updatedSet = new Set(fetchingScoresLinkIds);
-      updatedSet.delete(linkId);
-      return { fetchingScoresLinkIds: updatedSet };
+    fetchingScoresLinkIds.delete(linkId);
+    set((state) => {
+      state.fetchingScoresLinkIds.delete(linkId);
     });
   },
 
   addOneToScoringLinkIds: (linkId: string) => {
     set((state) => {
-      const updatedSet = new Set(state.scoringLinkIds);
-      updatedSet.add(linkId);
-      return { scoringLinkIds: updatedSet };
+      state.scoringLinkIds.add(linkId);
     });
   },
   removeOneFromScoringLinkIds: (linkId: string) => {
     set((state) => {
-      const updatedSet = new Set(state.scoringLinkIds);
-      updatedSet.delete(linkId);
-      return { scoringLinkIds: updatedSet };
+      state.scoringLinkIds.delete(linkId);
     });
   },
 });

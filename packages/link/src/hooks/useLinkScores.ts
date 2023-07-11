@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { Page } from "@ceramicnetwork/common";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { isFetchingScores, type LinkScores } from "../store/score";
+import { Score, isFetchingScores } from "../store/score";
 
 export const useLinkScores = (
   linkId: string,
@@ -45,9 +46,7 @@ export const useLinkScores = (
     () =>
       isFetching
         ? []
-        : linkScores?.scores?.edges
-            ?.filter((edge) => !!edge?.node && !edge.node?.revoke)
-            ?.map((e) => e.node) || [],
+        : linkScores?.scores?.filter((item) => !!item && !item?.revoke) || [],
     [isFetching, linkScores?.scores]
   );
 
@@ -91,7 +90,10 @@ export const useLinkScores = (
 
         addOneToFetchingScoresLinkIds(linkId);
         const res = await s3LinkModel.executeQuery<{
-          node: LinkScores;
+          node: {
+            scores: Page<Score>;
+            scoresCount: number;
+          };
         }>(`
           query {
             node(id: "${linkId}") {
@@ -101,8 +103,9 @@ export const useLinkScores = (
                   edges {
                     node {
                       id
-                      linkID
                       text
+                      value
+                      linkID
                       revoke
                       createAt
                       modifiedAt
@@ -121,8 +124,16 @@ export const useLinkScores = (
           throw new Error(res?.errors[0]?.message);
         }
         const data = res.data?.node;
-        if (data) {
-          setOneInCacheLinkScores(linkId, data);
+        const scores =
+          data?.scores?.edges
+            ?.map((edge) => edge?.node)
+            ?.filter((node) => !!node) || [];
+        const scoresCount = data?.scoresCount || 0;
+        if (scores.length > 0) {
+          setOneInCacheLinkScores(linkId, {
+            scores,
+            scoresCount,
+          });
         }
       } catch (error) {
         const errMsg = (error as any)?.message;
@@ -131,7 +142,12 @@ export const useLinkScores = (
         removeOneFromFetchingScoresLinkIds(linkId);
       }
     })();
-  }, [s3LinkModalInitialed, linkId, order, setOneInCacheLinkScores]);
+  }, [
+    s3LinkModalInitialed,
+    linkId,
+    scoresVariablesStr,
+    setOneInCacheLinkScores,
+  ]);
 
   return {
     isFetching,

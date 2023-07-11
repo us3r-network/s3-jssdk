@@ -1,5 +1,4 @@
 import { StateCreator } from "zustand";
-import { Page } from "@ceramicnetwork/common";
 import { DateTime } from "./types";
 
 export type Favor = {
@@ -14,7 +13,7 @@ export type Favor = {
 };
 
 export type LinkFavors = {
-  favors: Page<Favor>;
+  favors: Array<Favor>;
   favorsCount: number;
 };
 
@@ -43,106 +42,84 @@ export interface FavorSlice {
   removeOneFromFavoringLinkIds: (linkId: string) => void;
 }
 
-export const createFavorSlice: StateCreator<FavorSlice, [], [], FavorSlice> = (
-  set,
-  get
-) => ({
+export const createFavorSlice: StateCreator<
+  FavorSlice,
+  [["zustand/immer", never]],
+  [],
+  FavorSlice
+> = (set) => ({
   cacheLinkFavors: new Map(),
-  fetchingFavorsLinkIds: fetchingFavorsLinkIds,
+  fetchingFavorsLinkIds: new Set(),
   favoringLinkIds: new Set(),
 
   setOneInCacheLinkFavors: (linkId, linkFavors) => {
-    set((state) => ({
-      cacheLinkFavors: new Map(state.cacheLinkFavors).set(linkId, {
-        ...linkFavors,
-      }),
-    }));
+    set((state) => {
+      state.cacheLinkFavors.set(linkId, linkFavors);
+    });
   },
   addFavorToCacheLinkFavors: (linkId, favor) => {
-    const linkFavors = get().cacheLinkFavors.get(linkId);
-    if (!linkFavors) return;
-    linkFavors.favors.edges.push({
-      cursor: favor.id,
-      node: { ...favor },
+    set((state) => {
+      const linkFavors = state.cacheLinkFavors.get(linkId);
+      if (!linkFavors) return;
+      linkFavors.favors.push(favor);
+      linkFavors.favorsCount++;
     });
-    linkFavors.favors = { ...linkFavors.favors };
-    linkFavors.favorsCount++;
-    set((state) => ({
-      cacheLinkFavors: new Map(state.cacheLinkFavors).set(linkId, {
-        ...linkFavors,
-      }),
-    }));
   },
   updateFavorInCacheLinkFavors: (linkId, favorId, favor) => {
-    const linkFavors = get().cacheLinkFavors.get(linkId);
-    if (!linkFavors) return;
-    const favorIndex = linkFavors.favors.edges.findIndex(
-      (edge) => edge.node.id === favorId
-    );
-    if (favorIndex === -1) return;
-    linkFavors.favors.edges[favorIndex].node = {
-      ...linkFavors.favors.edges[favorIndex].node,
-      ...favor,
-    };
-    linkFavors.favors = { ...linkFavors.favors };
-    if (favor.hasOwnProperty("revoke")) {
-      if (favor.revoke) {
-        linkFavors.favorsCount--;
-      } else {
-        linkFavors.favorsCount++;
+    set((state) => {
+      const linkFavors = state.cacheLinkFavors.get(linkId);
+      if (!linkFavors) return;
+
+      const favorIndex = linkFavors.favors.findIndex(
+        (item) => item.id === favorId
+      );
+      if (favorIndex === -1) return;
+
+      const item = linkFavors.favors[favorIndex];
+      Object.assign(item, favor);
+
+      if (favor.hasOwnProperty("revoke")) {
+        if (favor.revoke) {
+          linkFavors.favorsCount--;
+        } else {
+          linkFavors.favorsCount++;
+        }
       }
-    }
-    set((state) => ({
-      cacheLinkFavors: new Map(state.cacheLinkFavors).set(linkId, {
-        ...linkFavors,
-      }),
-    }));
+    });
   },
   removeFavorFromCacheLinkFavors: (linkId, favorId) => {
-    const linkFavors = get().cacheLinkFavors.get(linkId);
-    if (!linkFavors) return;
-    const favorIndex = linkFavors.favors.edges.findIndex(
-      (edge) => edge.node.id === favorId
-    );
-    if (favorIndex === -1) return;
-    linkFavors.favors.edges.splice(favorIndex, 1);
-    linkFavors.favors = { ...linkFavors.favors };
-    linkFavors.favorsCount--;
-    set((state) => ({
-      cacheLinkFavors: new Map(state.cacheLinkFavors).set(linkId, {
-        ...linkFavors,
-      }),
-    }));
+    set((state) => {
+      const linkFavors = state.cacheLinkFavors.get(linkId);
+      if (!linkFavors) return;
+      const favorIndex = linkFavors.favors.findIndex(
+        (item) => item.id === favorId
+      );
+      if (favorIndex === -1) return;
+      linkFavors.favors.splice(favorIndex, 1);
+      linkFavors.favorsCount--;
+    });
   },
-
   addOneToFetchingFavorsLinkIds: (linkId) => {
     fetchingFavorsLinkIds.add(linkId);
-    set(() => {
-      const updatedSet = new Set(fetchingFavorsLinkIds);
-      updatedSet.add(linkId);
-      return { fetchingFavorsLinkIds: updatedSet };
+    set((state) => {
+      state.fetchingFavorsLinkIds.add(linkId);
     });
   },
   removeOneFromFetchingFavorsLinkIds: (linkId) => {
-    set(() => {
-      const updatedSet = new Set(fetchingFavorsLinkIds);
-      updatedSet.delete(linkId);
-      return { fetchingFavorsLinkIds: updatedSet };
+    fetchingFavorsLinkIds.delete(linkId);
+    set((state) => {
+      state.fetchingFavorsLinkIds.delete(linkId);
     });
   },
 
   addOneToFavoringLinkIds: (linkId: string) => {
     set((state) => {
-      const updatedSet = new Set(state.favoringLinkIds);
-      updatedSet.add(linkId);
-      return { favoringLinkIds: updatedSet };
+      state.favoringLinkIds.add(linkId);
     });
   },
   removeOneFromFavoringLinkIds: (linkId: string) => {
     set((state) => {
-      const updatedSet = new Set(state.favoringLinkIds);
-      updatedSet.delete(linkId);
-      return { favoringLinkIds: updatedSet };
+      state.favoringLinkIds.delete(linkId);
     });
   },
 });
