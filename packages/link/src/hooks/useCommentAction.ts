@@ -1,12 +1,11 @@
 import { useCallback, useMemo } from "react";
-import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
-import { useStore } from "../store";
-import { useLink } from "./useLink";
 import {
   useAuthentication,
-  useIsAuthenticated,
   useSession,
 } from "@us3r-network/auth-with-rainbowkit";
+import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
+import { useStore } from "../store";
+import { useLinkComments } from "./useLinkComments";
 
 export const useCommentAction = (
   linkId: string,
@@ -15,10 +14,9 @@ export const useCommentAction = (
     onFailedComment?: (errMsg: string) => void;
   }
 ) => {
-  const { link } = useLink(linkId);
+  const { isFetched } = useLinkComments(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
-  const isAuthenticated = useIsAuthenticated();
   const session = useSession();
   const { s3LinkModalAuthed } = useLinkState();
 
@@ -29,11 +27,11 @@ export const useCommentAction = (
   const removeOneFromCommentingLinkIds = useStore(
     (state) => state.removeOneFromCommentingLinkIds
   );
-  const addCommentToCacheLinks = useStore(
-    (state) => state.addCommentToCacheLinks
+  const addCommentToCacheLinkComments = useStore(
+    (state) => state.addCommentToCacheLinkComments
   );
-  const updateCommentInCacheLinks = useStore(
-    (state) => state.updateCommentInCacheLinks
+  const updateCommentInCacheLinkComments = useStore(
+    (state) => state.updateCommentInCacheLinkComments
   );
 
   const isCommenting = useMemo(
@@ -41,12 +39,15 @@ export const useCommentAction = (
     [commentingLinkIds, linkId]
   );
 
-  const isDisabled = useMemo(() => !link || isCommenting, [link, isCommenting]);
+  const isDisabled = useMemo(
+    () => !isFetched || isCommenting,
+    [isFetched, isCommenting]
+  );
 
   const onComment = useCallback(
     async (text: string) => {
       if (isDisabled) return;
-      if (!isAuthenticated || !session || !s3LinkModalAuthed) {
+      if (!session || !s3LinkModalAuthed) {
         signIn();
         return;
       }
@@ -63,7 +64,7 @@ export const useCommentAction = (
         const id = res?.data?.createComment.document.id;
         if (id) {
           // update store
-          addCommentToCacheLinks(linkId, {
+          addCommentToCacheLinkComments(linkId, {
             id,
             text,
             linkID: linkId,
@@ -85,15 +86,14 @@ export const useCommentAction = (
     },
     [
       isDisabled,
-      isAuthenticated,
       session,
       s3LinkModalAuthed,
       signIn,
       linkId,
       addOneToCommentingLinkIds,
       removeOneFromCommentingLinkIds,
-      addCommentToCacheLinks,
-      updateCommentInCacheLinks,
+      addCommentToCacheLinkComments,
+      updateCommentInCacheLinkComments,
       opts?.onSuccessfullyComment,
       opts?.onFailedComment,
     ]

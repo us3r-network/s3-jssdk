@@ -1,12 +1,11 @@
 import { useCallback, useMemo } from "react";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { useLink } from "./useLink";
 import {
   useAuthentication,
-  useIsAuthenticated,
   useSession,
 } from "@us3r-network/auth-with-rainbowkit";
+import { useLinkVotes } from "./useLinkVotes";
 
 export const useVoteAction = (
   linkId: string,
@@ -15,10 +14,9 @@ export const useVoteAction = (
     onFailedVote?: (errMsg: string) => void;
   }
 ) => {
-  const { link } = useLink(linkId);
+  const { votes, isFetched } = useLinkVotes(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
-  const isAuthenticated = useIsAuthenticated();
   const session = useSession();
   const { s3LinkModalAuthed } = useLinkState();
 
@@ -29,19 +27,19 @@ export const useVoteAction = (
   const removeOneFromVotingLinkIds = useStore(
     (state) => state.removeOneFromVotingLinkIds
   );
-  const addVoteToCacheLinks = useStore((state) => state.addVoteToCacheLinks);
-  const updateVoteInCacheLinks = useStore(
-    (state) => state.updateVoteInCacheLinks
+  const addVoteToCacheLinkVotes = useStore(
+    (state) => state.addVoteToCacheLinkVotes
+  );
+  const updateVoteInCacheLinkVotes = useStore(
+    (state) => state.updateVoteInCacheLinkVotes
   );
 
   const findCurrUserVote = useMemo(
     () =>
-      !link?.votes || !session
+      !session
         ? null
-        : link.votes?.edges?.find(
-            (edge) => edge?.node?.creator?.id === session?.id
-          )?.node,
-    [link?.votes, session]
+        : votes?.find((node) => node?.creator?.id === session?.id),
+    [votes, session]
   );
 
   const isVoted = useMemo(
@@ -54,11 +52,14 @@ export const useVoteAction = (
     [votingLinkIds, linkId]
   );
 
-  const isDisabled = useMemo(() => !link || isVoting, [link, isVoting]);
+  const isDisabled = useMemo(
+    () => !isFetched || isVoting,
+    [isFetched, isVoting]
+  );
 
   const onVote = useCallback(async () => {
     if (isDisabled) return;
-    if (!isAuthenticated || !session || !s3LinkModalAuthed) {
+    if (!session || !s3LinkModalAuthed) {
       signIn();
       return;
     }
@@ -74,7 +75,7 @@ export const useVoteAction = (
           throw new Error(res?.errors[0]?.message);
         }
         // update store
-        updateVoteInCacheLinks(linkId, id, {
+        updateVoteInCacheLinkVotes(linkId, id, {
           revoke,
           type,
           modifiedAt: new Date().toDateString(),
@@ -95,7 +96,7 @@ export const useVoteAction = (
         const id = res?.data?.createVote.document.id;
         if (id) {
           // update store
-          addVoteToCacheLinks(linkId, {
+          addVoteToCacheLinkVotes(linkId, {
             id,
             linkID: linkId,
             revoke,
@@ -117,15 +118,14 @@ export const useVoteAction = (
     }
   }, [
     isDisabled,
-    isAuthenticated,
     session,
     s3LinkModalAuthed,
     linkId,
     findCurrUserVote,
     addOneToVotingLinkIds,
     removeOneFromVotingLinkIds,
-    addVoteToCacheLinks,
-    updateVoteInCacheLinks,
+    addVoteToCacheLinkVotes,
+    updateVoteInCacheLinkVotes,
     opts?.onSuccessfullyVote,
     opts?.onFailedVote,
   ]);

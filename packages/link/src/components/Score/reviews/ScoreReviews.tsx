@@ -6,7 +6,7 @@ import {
   ScoreReviewsContextValue,
 } from "./ScoreReviewsContext";
 import { ScoreReviewsDefaultChildren } from "./ScoreReviewsDefaultChildren";
-import { useScores } from "../../../hooks/useScores";
+import { useLinkScores } from "../../../hooks/useLinkScores";
 
 export interface ScoreReviewsIncomingProps {
   /**
@@ -32,7 +32,7 @@ function ScoreReviewsRoot({
   children,
   ...props
 }: ScoreReviewsProps) {
-  const { isFetching, scores } = useScores(linkId, { order });
+  const { isFetching, scores } = useLinkScores(linkId, { order });
 
   const businessProps = {
     "data-us3r-component": "ScoreReviews",

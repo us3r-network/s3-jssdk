@@ -2,7 +2,7 @@ import { HTMLAttributes, useMemo } from "react";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import { getScoresAvgFromScores } from "../../../utils/score";
 import { ActivatedStarIcon } from "../../common/RatingStar/StarIcon";
-import { useScores } from "../../../hooks/useScores";
+import { useLinkScores } from "../../../hooks/useLinkScores";
 
 export interface ScoresAvgIncomingProps {
   /** The link id to get the scores from */
@@ -23,7 +23,7 @@ export interface ScoresAvgProps
     ScoresAvgIncomingProps {}
 
 export function ScoresAvg({ linkId, children, ...props }: ScoresAvgProps) {
-  const { isFetching, scores, scoresCount } = useScores(linkId);
+  const { isFetching, scores, scoresCount } = useLinkScores(linkId);
   const scoresAvg = useMemo(
     () => getScoresAvgFromScores(scores, scoresCount) || 0,
     [scores, scoresCount]
