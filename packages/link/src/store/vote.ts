@@ -1,13 +1,14 @@
 import { StateCreator } from "zustand";
 import { VoteType } from "@us3r-network/data-model";
+import { DateTime } from "./types";
 
 export type Vote = {
   id: string;
   linkID: string;
   type: VoteType;
   revoke: boolean;
-  createAt: string;
-  modifiedAt: string;
+  createAt: DateTime;
+  modifiedAt: DateTime;
   creator: {
     id: string;
   };
