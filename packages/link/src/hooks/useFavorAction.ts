@@ -1,10 +1,10 @@
 import { useCallback, useMemo } from "react";
-import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
-import { useStore } from "../store";
 import {
   useAuthentication,
   useSession,
 } from "@us3r-network/auth-with-rainbowkit";
+import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
+import { useStore } from "../store";
 import { useLinkFavors } from "./useLinkFavors";
 
 export const useFavorAction = (

@@ -1,17 +1,5 @@
 import { StateCreator } from "zustand";
-import { DateTime } from "./types";
-
-export type Comment = {
-  id: string;
-  linkID: string;
-  text: string;
-  revoke: boolean;
-  createAt: DateTime;
-  modifiedAt: DateTime;
-  creator: {
-    id: string;
-  };
-};
+import { Comment } from "@us3r-network/data-model";
 
 export type LinkComments = {
   comments: Array<Comment>;

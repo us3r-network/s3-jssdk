@@ -3,7 +3,6 @@ import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
 import {
   useAuthentication,
-  useIsAuthenticated,
   useSession,
 } from "@us3r-network/auth-with-rainbowkit";
 import { useLinkScores } from "./useLinkScores";
@@ -18,7 +17,6 @@ export const useScoreAction = (
   const { scores, isFetched } = useLinkScores(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
-  const isAuthenticated = useIsAuthenticated();
   const session = useSession();
   const { s3LinkModalAuthed } = useLinkState();
 
@@ -69,7 +67,7 @@ export const useScoreAction = (
   const onScoreAdd = useCallback(
     async ({ value, text }: { value: number; text: string }) => {
       if (isDisabled) return;
-      if (!isAuthenticated || !session || !s3LinkModalAuthed) {
+      if (!session || !s3LinkModalAuthed) {
         signIn();
         return;
       }
@@ -113,7 +111,6 @@ export const useScoreAction = (
     },
     [
       isDisabled,
-      isAuthenticated,
       session,
       s3LinkModalAuthed,
       signIn,
@@ -138,7 +135,7 @@ export const useScoreAction = (
       text: string;
     }) => {
       if (isDisabled) return;
-      if (!isAuthenticated || !session || !s3LinkModalAuthed) {
+      if (!session || !s3LinkModalAuthed) {
         signIn();
         return;
       }
@@ -173,7 +170,6 @@ export const useScoreAction = (
     },
     [
       isDisabled,
-      isAuthenticated,
       session,
       s3LinkModalAuthed,
       signIn,

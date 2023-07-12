@@ -1,12 +1,11 @@
 import { useCallback, useMemo } from "react";
+import {
+  useAuthentication,
+  useSession,
+} from "@us3r-network/auth-with-rainbowkit";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
 import { useLinkComments } from "./useLinkComments";
-import {
-  useAuthentication,
-  useIsAuthenticated,
-  useSession,
-} from "@us3r-network/auth-with-rainbowkit";
 
 export const useCommentAction = (
   linkId: string,
@@ -18,7 +17,6 @@ export const useCommentAction = (
   const { isFetched } = useLinkComments(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
-  const isAuthenticated = useIsAuthenticated();
   const session = useSession();
   const { s3LinkModalAuthed } = useLinkState();
 
@@ -49,7 +47,7 @@ export const useCommentAction = (
   const onComment = useCallback(
     async (text: string) => {
       if (isDisabled) return;
-      if (!isAuthenticated || !session || !s3LinkModalAuthed) {
+      if (!session || !s3LinkModalAuthed) {
         signIn();
         return;
       }
@@ -88,7 +86,6 @@ export const useCommentAction = (
     },
     [
       isDisabled,
-      isAuthenticated,
       session,
       s3LinkModalAuthed,
       signIn,

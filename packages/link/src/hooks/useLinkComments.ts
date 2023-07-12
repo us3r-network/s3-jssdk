@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Page } from "@ceramicnetwork/common";
+import { Comment } from "@us3r-network/data-model";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { Comment, isFetchingComments } from "../store/comment";
+import { isFetchingComments } from "../store/comment";
 
 export const useLinkComments = (
   linkId: string,

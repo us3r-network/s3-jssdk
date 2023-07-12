@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Page } from "@ceramicnetwork/common";
+import { Vote } from "@us3r-network/data-model";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { Vote, isFetchingVotes } from "../store/vote";
+import { isFetchingVotes } from "../store/vote";
 
 export const useLinkVotes = (linkId: string) => {
   const s3LinkModel = getS3LinkModel();

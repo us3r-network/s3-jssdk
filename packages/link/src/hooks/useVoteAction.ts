@@ -3,7 +3,6 @@ import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
 import {
   useAuthentication,
-  useIsAuthenticated,
   useSession,
 } from "@us3r-network/auth-with-rainbowkit";
 import { useLinkVotes } from "./useLinkVotes";
@@ -18,7 +17,6 @@ export const useVoteAction = (
   const { votes, isFetched } = useLinkVotes(linkId);
   const s3LinkModel = getS3LinkModel();
   const { signIn } = useAuthentication();
-  const isAuthenticated = useIsAuthenticated();
   const session = useSession();
   const { s3LinkModalAuthed } = useLinkState();
 
@@ -61,7 +59,7 @@ export const useVoteAction = (
 
   const onVote = useCallback(async () => {
     if (isDisabled) return;
-    if (!isAuthenticated || !session || !s3LinkModalAuthed) {
+    if (!session || !s3LinkModalAuthed) {
       signIn();
       return;
     }
@@ -120,7 +118,6 @@ export const useVoteAction = (
     }
   }, [
     isDisabled,
-    isAuthenticated,
     session,
     s3LinkModalAuthed,
     linkId,

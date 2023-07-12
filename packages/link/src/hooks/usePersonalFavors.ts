@@ -1,9 +1,6 @@
 import { useEffect, useMemo } from "react";
+import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { useStore } from "../store";
-import {
-  useIsAuthenticated,
-  useSession,
-} from "@us3r-network/auth-with-rainbowkit";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 
 export const usePersonalFavors = (opts?: {
@@ -11,7 +8,6 @@ export const usePersonalFavors = (opts?: {
   onFailedFetch?: (errMsg: string) => void;
 }) => {
   const s3LinkModel = getS3LinkModel();
-  const isAuthenticated = useIsAuthenticated();
   const session = useSession();
   const { s3LinkModalAuthed } = useLinkState();
   const isBlockFetchPersonalFavors = useStore(
@@ -35,8 +31,7 @@ export const usePersonalFavors = (opts?: {
     (async () => {
       if (isBlockFetchPersonalFavors) return;
       if (isFetchingPersonalFavors) return;
-      if (!isAuthenticated || !session || !s3LinkModalAuthed || !s3LinkModel)
-        return;
+      if (!session || !s3LinkModalAuthed || !s3LinkModel) return;
       try {
         setIsFetchingPersonalFavors(true);
         const res = await s3LinkModel.queryPersonalFavors({ first: 1000 });
@@ -59,7 +54,6 @@ export const usePersonalFavors = (opts?: {
   }, [
     isBlockFetchPersonalFavors,
     isFetchingPersonalFavors,
-    isAuthenticated,
     session,
     s3LinkModalAuthed,
     setIsFetchingPersonalFavors,

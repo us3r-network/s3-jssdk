@@ -1,18 +1,5 @@
 import { StateCreator } from "zustand";
-import { DateTime } from "./types";
-
-export type Score = {
-  id: string;
-  text: string;
-  value: number;
-  linkID: string;
-  revoke: Boolean;
-  createAt: DateTime;
-  modifiedAt: DateTime;
-  creator: {
-    id: string;
-  };
-};
+import { Score } from "@us3r-network/data-model";
 
 export type LinkScores = {
   scores: Array<Score>;

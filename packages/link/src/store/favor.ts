@@ -1,16 +1,5 @@
 import { StateCreator } from "zustand";
-import { DateTime } from "./types";
-
-export type Favor = {
-  id: string;
-  linkID: string;
-  revoke: boolean;
-  createAt: DateTime;
-  modifiedAt: DateTime;
-  creator: {
-    id: string;
-  };
-};
+import { Favor } from "@us3r-network/data-model";
 
 export type LinkFavors = {
   favors: Array<Favor>;

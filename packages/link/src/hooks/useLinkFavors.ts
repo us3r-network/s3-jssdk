@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Page } from "@ceramicnetwork/common";
+import { Favor } from "@us3r-network/data-model";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { Favor, isFetchingFavors } from "../store/favor";
+import { isFetchingFavors } from "../store/favor";
 
 export const useLinkFavors = (linkId: string) => {
   const s3LinkModel = getS3LinkModel();

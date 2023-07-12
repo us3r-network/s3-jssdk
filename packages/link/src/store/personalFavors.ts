@@ -1,16 +1,6 @@
 import { StateCreator } from "zustand";
-import { DateTime } from "./types";
+import { Favor } from "@us3r-network/data-model";
 
-export type Favor = {
-  id: string;
-  linkID: string;
-  revoke: boolean;
-  createAt: DateTime;
-  modifiedAt: DateTime;
-  creator: {
-    id: string;
-  };
-};
 export interface PersonalFavorsSlice {
   personalFavors: Map<string, Favor>;
   isFetchingPersonalFavors: boolean;
