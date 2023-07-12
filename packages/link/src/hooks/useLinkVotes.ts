@@ -100,12 +100,10 @@ export const useLinkVotes = (linkId: string) => {
             ?.map((edge) => edge?.node)
             ?.filter((node) => !!node) || [];
         const votesCount = data?.votesCount || 0;
-        if (votes.length > 0) {
-          setOneInCacheLinkVotes(linkId, {
-            votes,
-            votesCount,
-          });
-        }
+        setOneInCacheLinkVotes(linkId, {
+          votes,
+          votesCount,
+        });
       } catch (error) {
         const errMsg = (error as any)?.message;
         setErrMsg(errMsg);

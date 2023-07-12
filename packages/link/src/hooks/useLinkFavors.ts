@@ -101,12 +101,10 @@ export const useLinkFavors = (linkId: string) => {
             ?.map((edge) => edge?.node)
             ?.filter((node) => !!node) || [];
         const favorsCount = data?.favorsCount || 0;
-        if (favors.length > 0) {
-          setOneInCacheLinkFavors(linkId, {
-            favors,
-            favorsCount,
-          });
-        }
+        setOneInCacheLinkFavors(linkId, {
+          favors,
+          favorsCount,
+        });
       } catch (error) {
         const errMsg = (error as any)?.message;
         setErrMsg(errMsg);

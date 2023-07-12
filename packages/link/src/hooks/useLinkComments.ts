@@ -129,12 +129,10 @@ export const useLinkComments = (
             ?.map((edge) => edge?.node)
             ?.filter((node) => !!node) || [];
         const commentsCount = data?.commentsCount || 0;
-        if (comments.length > 0) {
-          setOneInCacheLinkComments(linkId, {
-            comments,
-            commentsCount,
-          });
-        }
+        setOneInCacheLinkComments(linkId, {
+          comments,
+          commentsCount,
+        });
       } catch (error) {
         const errMsg = (error as any)?.message;
         setErrMsg(errMsg);

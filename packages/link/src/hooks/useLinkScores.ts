@@ -129,12 +129,10 @@ export const useLinkScores = (
             ?.map((edge) => edge?.node)
             ?.filter((node) => !!node) || [];
         const scoresCount = data?.scoresCount || 0;
-        if (scores.length > 0) {
-          setOneInCacheLinkScores(linkId, {
-            scores,
-            scoresCount,
-          });
-        }
+        setOneInCacheLinkScores(linkId, {
+          scores,
+          scoresCount,
+        });
       } catch (error) {
         const errMsg = (error as any)?.message;
         setErrMsg(errMsg);
