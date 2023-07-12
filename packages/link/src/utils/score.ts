@@ -1,5 +1,5 @@
+import { Score } from "@us3r-network/data-model";
 import { SCORE_VALUE_MAX } from "../constants";
-import { Score } from "../store/score";
 
 export const getScoresAvgFromScores = (
   scores: Score[],
