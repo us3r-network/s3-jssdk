@@ -1,46 +1,48 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Page } from "@ceramicnetwork/common";
 import { Comment } from "@us3r-network/data-model";
+import isEqual from "lodash.isequal";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { isFetchingComments } from "../store/comment";
+import { OrderType } from "../store/types";
 
 export const useLinkComments = (
   linkId: string,
   opts?: {
-    order: "asc" | "desc";
+    order?: OrderType;
   }
 ) => {
   const s3LinkModel = getS3LinkModel();
   const { s3LinkModalInitialed } = useLinkState();
 
   const cacheLinkComments = useStore((state) => state.cacheLinkComments);
-  const setOneInCacheLinkComments = useStore(
-    (state) => state.setOneInCacheLinkComments
-  );
-  const addOneToFetchingCommentsLinkIds = useStore(
-    (state) => state.addOneToFetchingCommentsLinkIds
-  );
-  const removeOneFromFetchingCommentsLinkIds = useStore(
-    (state) => state.removeOneFromFetchingCommentsLinkIds
-  );
-
-  const isFetched = useMemo(
-    () => cacheLinkComments.has(linkId),
-    [cacheLinkComments, linkId]
-  );
-
-  const fetchingCommentsLinkIds = useStore(
-    (state) => state.fetchingCommentsLinkIds
-  );
-  const isFetching = useMemo(
-    () => fetchingCommentsLinkIds.has(linkId),
-    [fetchingCommentsLinkIds, linkId]
+  const upsertOneInCacheLinkComments = useStore(
+    (state) => state.upsertOneInCacheLinkComments
   );
 
   const linkComments = useMemo(
     () => cacheLinkComments.get(linkId),
     [cacheLinkComments, linkId]
+  );
+
+  const isFetched = useMemo(
+    () => linkComments?.status === "success",
+    [linkComments?.status]
+  );
+
+  const isFetching = useMemo(
+    () => linkComments?.status === "loading",
+    [linkComments?.status]
+  );
+
+  const isFetchFailed = useMemo(
+    () => linkComments?.status === "error",
+    [linkComments?.status]
+  );
+
+  const errMsg = useMemo(
+    () => linkComments?.errMsg || "",
+    [linkComments?.errMsg]
   );
 
   const comments = useMemo(
@@ -57,40 +59,46 @@ export const useLinkComments = (
     [linkComments?.commentsCount, comments]
   );
 
-  const [errMsg, setErrMsg] = useState("");
-
-  const { order = "desc" } = opts || {};
-
-  const commentsVariablesStr = useMemo(() => {
-    const variables: any = {};
-    if (order === "desc") {
-      Object.assign(variables, {
-        last: 1000,
-      });
-    }
-    if (order === "asc") {
-      Object.assign(variables, {
-        first: 1000,
-      });
-    }
-    return Object.keys(variables)
-      .map((key) => {
-        return `${key}: ${variables[key]}`;
-      })
-      .join(", ");
-  }, [order]);
-
   useEffect(() => {
     (async () => {
       if (!linkId) return;
       if (!s3LinkModalInitialed || !s3LinkModel) return;
-      if (isFetched) return;
-      if (isFetchingComments(linkId)) return;
+      const linkComments = useStore.getState().cacheLinkComments.get(linkId);
+      const oldParams = linkComments?.params;
+      const params = {
+        order: opts?.order || "desc",
+      };
+
+      if (!!linkComments && !!oldParams) {
+        if (!opts || isEqual(oldParams, params)) {
+          return;
+        }
+      }
 
       try {
-        setErrMsg("");
+        upsertOneInCacheLinkComments(linkId, {
+          params,
+          status: "loading",
+          errMsg: "",
+        });
 
-        addOneToFetchingCommentsLinkIds(linkId);
+        const variables: any = {};
+        if (params.order === "desc") {
+          Object.assign(variables, {
+            last: 1000,
+          });
+        }
+        if (params.order === "asc") {
+          Object.assign(variables, {
+            first: 1000,
+          });
+        }
+        const commentsVariablesStr = Object.keys(variables)
+          .map((key) => {
+            return `${key}: ${variables[key]}`;
+          })
+          .join(", ");
+
         const res = await s3LinkModel.executeQuery<{
           node: {
             comments: Page<Comment>;
@@ -130,29 +138,29 @@ export const useLinkComments = (
             ?.map((edge) => edge?.node)
             ?.filter((node) => !!node) || [];
         const commentsCount = data?.commentsCount || 0;
-        setOneInCacheLinkComments(linkId, {
+        // TODO Last cannot be set to sort in reverse, manually flip the data here
+        if (params.order === "desc") comments.reverse();
+        upsertOneInCacheLinkComments(linkId, {
+          status: "success",
           comments,
           commentsCount,
         });
       } catch (error) {
         const errMsg = (error as any)?.message;
-        setErrMsg(errMsg);
-      } finally {
-        removeOneFromFetchingCommentsLinkIds(linkId);
+        upsertOneInCacheLinkComments(linkId, {
+          status: "error",
+          errMsg,
+        });
       }
     })();
-  }, [
-    s3LinkModalInitialed,
-    linkId,
-    commentsVariablesStr,
-    setOneInCacheLinkComments,
-  ]);
+  }, [s3LinkModalInitialed, linkId, opts]);
 
   return {
-    isFetching,
-    isFetched,
     comments,
     commentsCount,
+    isFetching,
+    isFetched,
+    isFetchFailed,
     errMsg,
   };
 };

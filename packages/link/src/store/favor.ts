@@ -1,21 +1,31 @@
 import { StateCreator } from "zustand";
 import { Favor } from "@us3r-network/data-model";
+import { FetchStatus } from "./types";
 
 export type LinkFavors = {
   favors: Array<Favor>;
   favorsCount: number;
+  status: FetchStatus;
+  errMsg: string;
 };
 
-const fetchingFavorsLinkIds = new Set<string>();
-export const isFetchingFavors = (linkId: string) =>
-  fetchingFavorsLinkIds.has(linkId);
+const defaultLinkFavors: LinkFavors = {
+  favors: [],
+  favorsCount: 0,
+  status: "idle",
+  errMsg: "",
+};
 
 export interface FavorSlice {
   cacheLinkFavors: Map<string, LinkFavors>;
-  fetchingFavorsLinkIds: Set<string>;
   favoringLinkIds: Set<string>;
 
-  setOneInCacheLinkFavors: (linkId: string, linkFavors: LinkFavors) => void;
+  upsertOneInCacheLinkFavors: (
+    linkId: string,
+    linkFavors: Partial<LinkFavors>
+  ) => void;
+
+  // favors mutations
   addFavorToCacheLinkFavors: (linkId: string, favor: Favor) => void;
   updateFavorInCacheLinkFavors: (
     linkId: string,
@@ -24,9 +34,7 @@ export interface FavorSlice {
   ) => void;
   removeFavorFromCacheLinkFavors: (linkId: string, favorId: string) => void;
 
-  addOneToFetchingFavorsLinkIds: (linkId: string) => void;
-  removeOneFromFetchingFavorsLinkIds: (linkId: string) => void;
-
+  // favoring
   addOneToFavoringLinkIds: (linkId: string) => void;
   removeOneFromFavoringLinkIds: (linkId: string) => void;
 }
@@ -38,14 +46,23 @@ export const createFavorSlice: StateCreator<
   FavorSlice
 > = (set) => ({
   cacheLinkFavors: new Map(),
-  fetchingFavorsLinkIds: new Set(),
   favoringLinkIds: new Set(),
 
-  setOneInCacheLinkFavors: (linkId, linkFavors) => {
+  upsertOneInCacheLinkFavors: (linkId, linkFavors) => {
     set((state) => {
-      state.cacheLinkFavors.set(linkId, linkFavors);
+      const prevLinkFavors = state.cacheLinkFavors.get(linkId);
+      if (!prevLinkFavors) {
+        state.cacheLinkFavors.set(linkId, {
+          ...defaultLinkFavors,
+          ...linkFavors,
+        });
+        return;
+      }
+      Object.assign(prevLinkFavors, linkFavors);
     });
   },
+
+  // favors mutations
   addFavorToCacheLinkFavors: (linkId, favor) => {
     set((state) => {
       const linkFavors = state.cacheLinkFavors.get(linkId);
@@ -88,19 +105,8 @@ export const createFavorSlice: StateCreator<
       linkFavors.favorsCount--;
     });
   },
-  addOneToFetchingFavorsLinkIds: (linkId) => {
-    fetchingFavorsLinkIds.add(linkId);
-    set((state) => {
-      state.fetchingFavorsLinkIds.add(linkId);
-    });
-  },
-  removeOneFromFetchingFavorsLinkIds: (linkId) => {
-    fetchingFavorsLinkIds.delete(linkId);
-    set((state) => {
-      state.fetchingFavorsLinkIds.delete(linkId);
-    });
-  },
 
+  // favoring
   addOneToFavoringLinkIds: (linkId: string) => {
     set((state) => {
       state.favoringLinkIds.add(linkId);

@@ -1,42 +1,39 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Page } from "@ceramicnetwork/common";
 import { Favor } from "@us3r-network/data-model";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { isFetchingFavors } from "../store/favor";
 
 export const useLinkFavors = (linkId: string) => {
   const s3LinkModel = getS3LinkModel();
   const { s3LinkModalInitialed } = useLinkState();
 
   const cacheLinkFavors = useStore((state) => state.cacheLinkFavors);
-  const setOneInCacheLinkFavors = useStore(
-    (state) => state.setOneInCacheLinkFavors
-  );
-  const addOneToFetchingFavorsLinkIds = useStore(
-    (state) => state.addOneToFetchingFavorsLinkIds
-  );
-  const removeOneFromFetchingFavorsLinkIds = useStore(
-    (state) => state.removeOneFromFetchingFavorsLinkIds
-  );
-
-  const isFetched = useMemo(
-    () => cacheLinkFavors.has(linkId),
-    [cacheLinkFavors, linkId]
-  );
-
-  const fetchingFavorsLinkIds = useStore(
-    (state) => state.fetchingFavorsLinkIds
-  );
-  const isFetching = useMemo(
-    () => fetchingFavorsLinkIds.has(linkId),
-    [fetchingFavorsLinkIds, linkId]
+  const upsertOneInCacheLinkFavors = useStore(
+    (state) => state.upsertOneInCacheLinkFavors
   );
 
   const linkFavors = useMemo(
     () => cacheLinkFavors.get(linkId),
     [cacheLinkFavors, linkId]
   );
+
+  const isFetched = useMemo(
+    () => linkFavors?.status === "success",
+    [linkFavors?.status]
+  );
+
+  const isFetching = useMemo(
+    () => linkFavors?.status === "loading",
+    [linkFavors?.status]
+  );
+
+  const isFetchFailed = useMemo(
+    () => linkFavors?.status === "error",
+    [linkFavors?.status]
+  );
+
+  const errMsg = useMemo(() => linkFavors?.errMsg || "", [linkFavors?.errMsg]);
 
   const favors = useMemo(
     () =>
@@ -51,19 +48,18 @@ export const useLinkFavors = (linkId: string) => {
     [linkFavors?.favorsCount, favors]
   );
 
-  const [errMsg, setErrMsg] = useState("");
-
   useEffect(() => {
     (async () => {
       if (!linkId) return;
       if (!s3LinkModalInitialed || !s3LinkModel) return;
-      if (isFetched) return;
-      if (isFetchingFavors(linkId)) return;
+      const linkFavors = useStore.getState().cacheLinkFavors.get(linkId);
+      if (!!linkFavors) return;
 
       try {
-        setErrMsg("");
-
-        addOneToFetchingFavorsLinkIds(linkId);
+        upsertOneInCacheLinkFavors(linkId, {
+          status: "loading",
+          errMsg: "",
+        });
         const res = await s3LinkModel.executeQuery<{
           node: {
             favors: Page<Favor>;
@@ -102,18 +98,20 @@ export const useLinkFavors = (linkId: string) => {
             ?.map((edge) => edge?.node)
             ?.filter((node) => !!node) || [];
         const favorsCount = data?.favorsCount || 0;
-        setOneInCacheLinkFavors(linkId, {
+        upsertOneInCacheLinkFavors(linkId, {
+          status: "success",
           favors,
           favorsCount,
         });
       } catch (error) {
         const errMsg = (error as any)?.message;
-        setErrMsg(errMsg);
-      } finally {
-        removeOneFromFetchingFavorsLinkIds(linkId);
+        upsertOneInCacheLinkFavors(linkId, {
+          status: "error",
+          errMsg,
+        });
       }
     })();
-  }, [s3LinkModalInitialed, linkId, isFetched]);
+  }, [s3LinkModalInitialed, linkId]);
 
-  return { favors, favorsCount, isFetching, isFetched, errMsg };
+  return { favors, favorsCount, isFetching, isFetched, isFetchFailed, errMsg };
 };

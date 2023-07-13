@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Page } from "@ceramicnetwork/common";
 import { Score } from "@us3r-network/data-model";
+import isEqual from "lodash.isequal";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { isFetchingScores } from "../store/score";
 
 export const useLinkScores = (
   linkId: string,
@@ -15,33 +15,31 @@ export const useLinkScores = (
   const { s3LinkModalInitialed } = useLinkState();
 
   const cacheLinkScores = useStore((state) => state.cacheLinkScores);
-  const setOneInCacheLinkScores = useStore(
-    (state) => state.setOneInCacheLinkScores
-  );
-  const addOneToFetchingScoresLinkIds = useStore(
-    (state) => state.addOneToFetchingScoresLinkIds
-  );
-  const removeOneFromFetchingScoresLinkIds = useStore(
-    (state) => state.removeOneFromFetchingScoresLinkIds
-  );
-
-  const isFetched = useMemo(
-    () => cacheLinkScores.has(linkId),
-    [cacheLinkScores, linkId]
-  );
-
-  const fetchingScoresLinkIds = useStore(
-    (state) => state.fetchingScoresLinkIds
-  );
-  const isFetching = useMemo(
-    () => fetchingScoresLinkIds.has(linkId),
-    [fetchingScoresLinkIds, linkId]
+  const upsertOneInCacheLinkScores = useStore(
+    (state) => state.upsertOneInCacheLinkScores
   );
 
   const linkScores = useMemo(
     () => cacheLinkScores.get(linkId),
     [cacheLinkScores, linkId]
   );
+
+  const isFetched = useMemo(
+    () => linkScores?.status === "success",
+    [linkScores?.status]
+  );
+
+  const isFetching = useMemo(
+    () => linkScores?.status === "loading",
+    [linkScores?.status]
+  );
+
+  const isFetchFailed = useMemo(
+    () => linkScores?.status === "error",
+    [linkScores?.status]
+  );
+
+  const errMsg = useMemo(() => linkScores?.errMsg || "", [linkScores?.errMsg]);
 
   const scores = useMemo(
     () =>
@@ -56,40 +54,48 @@ export const useLinkScores = (
     [linkScores?.scoresCount, scores]
   );
 
-  const [errMsg, setErrMsg] = useState("");
-
   const { order = "desc" } = opts || {};
-
-  const scoresVariablesStr = useMemo(() => {
-    const variables: any = {};
-    if (order === "desc") {
-      Object.assign(variables, {
-        last: 1000,
-      });
-    }
-    if (order === "asc") {
-      Object.assign(variables, {
-        first: 1000,
-      });
-    }
-    return Object.keys(variables)
-      .map((key) => {
-        return `${key}: ${variables[key]}`;
-      })
-      .join(", ");
-  }, [order]);
 
   useEffect(() => {
     (async () => {
       if (!linkId) return;
       if (!s3LinkModalInitialed || !s3LinkModel) return;
-      if (isFetched) return;
-      if (isFetchingScores(linkId)) return;
+      const linkScores = useStore.getState().cacheLinkScores.get(linkId);
+      const oldParams = linkScores?.params;
+      const params = {
+        order: opts?.order || "desc",
+      };
+
+      if (!!linkScores && !!oldParams) {
+        if (!opts || isEqual(oldParams, params)) {
+          return;
+        }
+      }
 
       try {
-        setErrMsg("");
+        upsertOneInCacheLinkScores(linkId, {
+          params,
+          status: "loading",
+          errMsg: "",
+        });
 
-        addOneToFetchingScoresLinkIds(linkId);
+        const variables: any = {};
+        if (params.order === "desc") {
+          Object.assign(variables, {
+            last: 1000,
+          });
+        }
+        if (params.order === "asc") {
+          Object.assign(variables, {
+            first: 1000,
+          });
+        }
+        const scoresVariablesStr = Object.keys(variables)
+          .map((key) => {
+            return `${key}: ${variables[key]}`;
+          })
+          .join(", ");
+
         const res = await s3LinkModel.executeQuery<{
           node: {
             scores: Page<Score>;
@@ -130,29 +136,29 @@ export const useLinkScores = (
             ?.map((edge) => edge?.node)
             ?.filter((node) => !!node) || [];
         const scoresCount = data?.scoresCount || 0;
-        setOneInCacheLinkScores(linkId, {
+        // TODO Last cannot be set to sort in reverse, manually flip the data here
+        if (params.order === "desc") scores.reverse();
+        upsertOneInCacheLinkScores(linkId, {
+          status: "success",
           scores,
           scoresCount,
         });
       } catch (error) {
         const errMsg = (error as any)?.message;
-        setErrMsg(errMsg);
-      } finally {
-        removeOneFromFetchingScoresLinkIds(linkId);
+        upsertOneInCacheLinkScores(linkId, {
+          status: "error",
+          errMsg,
+        });
       }
     })();
-  }, [
-    s3LinkModalInitialed,
-    linkId,
-    scoresVariablesStr,
-    setOneInCacheLinkScores,
-  ]);
+  }, [s3LinkModalInitialed, linkId, opts]);
 
   return {
-    isFetching,
-    isFetched,
     scores,
     scoresCount,
+    isFetching,
+    isFetched,
+    isFetchFailed,
     errMsg,
   };
 };

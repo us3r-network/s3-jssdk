@@ -1,21 +1,37 @@
 import { StateCreator } from "zustand";
 import { Score } from "@us3r-network/data-model";
+import { FetchStatus, OrderType } from "./types";
 
 export type LinkScores = {
   scores: Array<Score>;
   scoresCount: number;
+  params: {
+    order: OrderType;
+  };
+  status: FetchStatus;
+  errMsg: string;
 };
 
-const fetchingScoresLinkIds = new Set<string>();
-export const isFetchingScores = (linkId: string) =>
-  fetchingScoresLinkIds.has(linkId);
+const defaultLinkScores: LinkScores = {
+  scores: [],
+  scoresCount: 0,
+  params: {
+    order: "desc",
+  },
+  status: "idle",
+  errMsg: "",
+};
 
 export interface ScoreSlice {
   cacheLinkScores: Map<string, LinkScores>;
-  fetchingScoresLinkIds: Set<string>;
   scoringLinkIds: Set<string>;
 
-  setOneInCacheLinkScores: (linkId: string, linkScores: LinkScores) => void;
+  upsertOneInCacheLinkScores: (
+    linkId: string,
+    linkScores: Partial<LinkScores>
+  ) => void;
+
+  // scores mutations
   addScoreToCacheLinkScores: (linkId: string, score: Score) => void;
   updateScoreInCacheLinkScores: (
     linkId: string,
@@ -24,9 +40,7 @@ export interface ScoreSlice {
   ) => void;
   removeScoreFromCacheLinkScores: (linkId: string, scoreId: string) => void;
 
-  addOneToFetchingScoresLinkIds: (linkId: string) => void;
-  removeOneFromFetchingScoresLinkIds: (linkId: string) => void;
-
+  // scoring
   addOneToScoringLinkIds: (linkId: string) => void;
   removeOneFromScoringLinkIds: (linkId: string) => void;
 }
@@ -41,11 +55,21 @@ export const createScoreSlice: StateCreator<
   fetchingScoresLinkIds: new Set(),
   scoringLinkIds: new Set(),
 
-  setOneInCacheLinkScores: (linkId, linkScores) => {
+  upsertOneInCacheLinkScores: (linkId, linkScores) => {
     set((state) => {
-      state.cacheLinkScores.set(linkId, linkScores);
+      const prevLinkScores = state.cacheLinkScores.get(linkId);
+      if (!prevLinkScores) {
+        state.cacheLinkScores.set(linkId, {
+          ...defaultLinkScores,
+          ...linkScores,
+        });
+        return;
+      }
+      Object.assign(prevLinkScores, linkScores);
     });
   },
+
+  // scores
   addScoreToCacheLinkScores: (linkId, score) => {
     set((state) => {
       const linkScores = state.cacheLinkScores.get(linkId);
@@ -88,19 +112,8 @@ export const createScoreSlice: StateCreator<
       linkScores.scoresCount--;
     });
   },
-  addOneToFetchingScoresLinkIds: (linkId) => {
-    fetchingScoresLinkIds.add(linkId);
-    set((state) => {
-      state.fetchingScoresLinkIds.add(linkId);
-    });
-  },
-  removeOneFromFetchingScoresLinkIds: (linkId) => {
-    fetchingScoresLinkIds.delete(linkId);
-    set((state) => {
-      state.fetchingScoresLinkIds.delete(linkId);
-    });
-  },
 
+  // scoring
   addOneToScoringLinkIds: (linkId: string) => {
     set((state) => {
       state.scoringLinkIds.add(linkId);
