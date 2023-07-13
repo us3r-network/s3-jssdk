@@ -1,24 +1,37 @@
 import { StateCreator } from "zustand";
 import { Comment } from "@us3r-network/data-model";
+import { FetchStatus, OrderType } from "./types";
 
 export type LinkComments = {
   comments: Array<Comment>;
   commentsCount: number;
+  params: {
+    order: OrderType;
+  };
+  status: FetchStatus;
+  errMsg: string;
 };
 
-const fetchingCommentsLinkIds = new Set<string>();
-export const isFetchingComments = (linkId: string) =>
-  fetchingCommentsLinkIds.has(linkId);
+const defaultLinkComments: LinkComments = {
+  comments: [],
+  commentsCount: 0,
+  params: {
+    order: "desc",
+  },
+  status: "idle",
+  errMsg: "",
+};
 
 export interface CommentSlice {
   cacheLinkComments: Map<string, LinkComments>;
-  fetchingCommentsLinkIds: Set<string>;
   commentingLinkIds: Set<string>;
 
-  setOneInCacheLinkComments: (
+  upsertOneInCacheLinkComments: (
     linkId: string,
-    linkComments: LinkComments
+    linkComments: Partial<LinkComments>
   ) => void;
+
+  // comments mutations
   addCommentToCacheLinkComments: (linkId: string, comment: Comment) => void;
   updateCommentInCacheLinkComments: (
     linkId: string,
@@ -30,9 +43,7 @@ export interface CommentSlice {
     commentId: string
   ) => void;
 
-  addOneToFetchingCommentsLinkIds: (linkId: string) => void;
-  removeOneFromFetchingCommentsLinkIds: (linkId: string) => void;
-
+  // commenting
   addOneToCommentingLinkIds: (linkId: string) => void;
   removeOneFromCommentingLinkIds: (linkId: string) => void;
 }
@@ -47,11 +58,21 @@ export const createCommentSlice: StateCreator<
   fetchingCommentsLinkIds: new Set(),
   commentingLinkIds: new Set(),
 
-  setOneInCacheLinkComments: (linkId, linkComments) => {
+  upsertOneInCacheLinkComments: (linkId, linkComments) => {
     set((state) => {
-      state.cacheLinkComments.set(linkId, linkComments);
+      const prevLinkComments = state.cacheLinkComments.get(linkId);
+      if (!prevLinkComments) {
+        state.cacheLinkComments.set(linkId, {
+          ...defaultLinkComments,
+          ...linkComments,
+        });
+        return;
+      }
+      Object.assign(prevLinkComments, linkComments);
     });
   },
+
+  // comments
   addCommentToCacheLinkComments: (linkId, comment) => {
     set((state) => {
       const linkComments = state.cacheLinkComments.get(linkId);
@@ -94,19 +115,8 @@ export const createCommentSlice: StateCreator<
       linkComments.commentsCount--;
     });
   },
-  addOneToFetchingCommentsLinkIds: (linkId) => {
-    fetchingCommentsLinkIds.add(linkId);
-    set((state) => {
-      state.fetchingCommentsLinkIds.add(linkId);
-    });
-  },
-  removeOneFromFetchingCommentsLinkIds: (linkId) => {
-    fetchingCommentsLinkIds.delete(linkId);
-    set((state) => {
-      state.fetchingCommentsLinkIds.delete(linkId);
-    });
-  },
 
+  // commenting
   addOneToCommentingLinkIds: (linkId: string) => {
     set((state) => {
       state.commentingLinkIds.add(linkId);

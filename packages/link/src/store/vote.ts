@@ -1,21 +1,31 @@
 import { StateCreator } from "zustand";
 import { Vote } from "@us3r-network/data-model";
+import { FetchStatus } from "./types";
 
 export type LinkVotes = {
   votes: Array<Vote>;
   votesCount: number;
+  status: FetchStatus;
+  errMsg: string;
 };
 
-const fetchingVotesLinkIds = new Set<string>();
-export const isFetchingVotes = (linkId: string) =>
-  fetchingVotesLinkIds.has(linkId);
+const defaultLinkVotes: LinkVotes = {
+  votes: [],
+  votesCount: 0,
+  status: "idle",
+  errMsg: "",
+};
 
 export interface VoteSlice {
   cacheLinkVotes: Map<string, LinkVotes>;
-  fetchingVotesLinkIds: Set<string>;
   votingLinkIds: Set<string>;
 
-  setOneInCacheLinkVotes: (linkId: string, linkVotes: LinkVotes) => void;
+  upsertOneInCacheLinkVotes: (
+    linkId: string,
+    linkVotes: Partial<LinkVotes>
+  ) => void;
+
+  // votes mutations
   addVoteToCacheLinkVotes: (linkId: string, vote: Vote) => void;
   updateVoteInCacheLinkVotes: (
     linkId: string,
@@ -24,9 +34,7 @@ export interface VoteSlice {
   ) => void;
   removeVoteFromCacheLinkVotes: (linkId: string, voteId: string) => void;
 
-  addOneToFetchingVotesLinkIds: (linkId: string) => void;
-  removeOneFromFetchingVotesLinkIds: (linkId: string) => void;
-
+  // voting
   addOneToVotingLinkIds: (linkId: string) => void;
   removeOneFromVotingLinkIds: (linkId: string) => void;
 }
@@ -38,14 +46,23 @@ export const createVoteSlice: StateCreator<
   VoteSlice
 > = (set) => ({
   cacheLinkVotes: new Map(),
-  fetchingVotesLinkIds: new Set(),
   votingLinkIds: new Set(),
 
-  setOneInCacheLinkVotes: (linkId, linkVotes) => {
+  upsertOneInCacheLinkVotes: (linkId, linkVotes) => {
     set((state) => {
-      state.cacheLinkVotes.set(linkId, linkVotes);
+      const prevLinkVotes = state.cacheLinkVotes.get(linkId);
+      if (!prevLinkVotes) {
+        state.cacheLinkVotes.set(linkId, {
+          ...defaultLinkVotes,
+          ...linkVotes,
+        });
+        return;
+      }
+      Object.assign(prevLinkVotes, linkVotes);
     });
   },
+
+  // votes mutations
   addVoteToCacheLinkVotes: (linkId, vote) => {
     set((state) => {
       const linkVotes = state.cacheLinkVotes.get(linkId);
@@ -84,19 +101,8 @@ export const createVoteSlice: StateCreator<
       linkVotes.votesCount--;
     });
   },
-  addOneToFetchingVotesLinkIds: (linkId) => {
-    fetchingVotesLinkIds.add(linkId);
-    set((state) => {
-      state.fetchingVotesLinkIds.add(linkId);
-    });
-  },
-  removeOneFromFetchingVotesLinkIds: (linkId) => {
-    fetchingVotesLinkIds.delete(linkId);
-    set((state) => {
-      state.fetchingVotesLinkIds.delete(linkId);
-    });
-  },
 
+  // voting
   addOneToVotingLinkIds: (linkId: string) => {
     set((state) => {
       state.votingLinkIds.add(linkId);

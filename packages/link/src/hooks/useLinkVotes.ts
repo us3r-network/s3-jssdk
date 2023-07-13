@@ -1,40 +1,39 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Page } from "@ceramicnetwork/common";
 import { Vote } from "@us3r-network/data-model";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
-import { isFetchingVotes } from "../store/vote";
 
 export const useLinkVotes = (linkId: string) => {
   const s3LinkModel = getS3LinkModel();
   const { s3LinkModalInitialed } = useLinkState();
 
   const cacheLinkVotes = useStore((state) => state.cacheLinkVotes);
-  const setOneInCacheLinkVotes = useStore(
-    (state) => state.setOneInCacheLinkVotes
-  );
-  const addOneToFetchingVotesLinkIds = useStore(
-    (state) => state.addOneToFetchingVotesLinkIds
-  );
-  const removeOneFromFetchingVotesLinkIds = useStore(
-    (state) => state.removeOneFromFetchingVotesLinkIds
-  );
-
-  const isFetched = useMemo(
-    () => cacheLinkVotes.has(linkId),
-    [cacheLinkVotes, linkId]
-  );
-
-  const fetchingVotesLinkIds = useStore((state) => state.fetchingVotesLinkIds);
-  const isFetching = useMemo(
-    () => fetchingVotesLinkIds.has(linkId),
-    [fetchingVotesLinkIds, linkId]
+  const upsertOneInCacheLinkVotes = useStore(
+    (state) => state.upsertOneInCacheLinkVotes
   );
 
   const linkVotes = useMemo(
     () => cacheLinkVotes.get(linkId),
     [cacheLinkVotes, linkId]
   );
+
+  const isFetched = useMemo(
+    () => linkVotes?.status === "success",
+    [linkVotes?.status]
+  );
+
+  const isFetching = useMemo(
+    () => linkVotes?.status === "loading",
+    [linkVotes?.status]
+  );
+
+  const isFetchFailed = useMemo(
+    () => linkVotes?.status === "error",
+    [linkVotes?.status]
+  );
+
+  const errMsg = useMemo(() => linkVotes?.errMsg || "", [linkVotes?.errMsg]);
 
   const votes = useMemo(
     () =>
@@ -49,19 +48,18 @@ export const useLinkVotes = (linkId: string) => {
     [linkVotes?.votesCount, votes]
   );
 
-  const [errMsg, setErrMsg] = useState("");
-
   useEffect(() => {
     (async () => {
       if (!linkId) return;
       if (!s3LinkModalInitialed || !s3LinkModel) return;
-      if (isFetched) return;
-      if (isFetchingVotes(linkId)) return;
+      const linkVotes = useStore.getState().cacheLinkVotes.get(linkId);
+      if (!!linkVotes) return;
 
       try {
-        setErrMsg("");
-
-        addOneToFetchingVotesLinkIds(linkId);
+        upsertOneInCacheLinkVotes(linkId, {
+          status: "loading",
+          errMsg: "",
+        });
         const res = await s3LinkModel.executeQuery<{
           node: {
             votes: Page<Vote>;
@@ -101,18 +99,20 @@ export const useLinkVotes = (linkId: string) => {
             ?.map((edge) => edge?.node)
             ?.filter((node) => !!node) || [];
         const votesCount = data?.votesCount || 0;
-        setOneInCacheLinkVotes(linkId, {
+        upsertOneInCacheLinkVotes(linkId, {
+          status: "success",
           votes,
           votesCount,
         });
       } catch (error) {
         const errMsg = (error as any)?.message;
-        setErrMsg(errMsg);
-      } finally {
-        removeOneFromFetchingVotesLinkIds(linkId);
+        upsertOneInCacheLinkVotes(linkId, {
+          status: "error",
+          errMsg,
+        });
       }
     })();
-  }, [s3LinkModalInitialed, linkId, isFetched]);
+  }, [s3LinkModalInitialed, linkId]);
 
-  return { votes, votesCount, isFetching, isFetched, errMsg };
+  return { votes, votesCount, isFetching, isFetched, isFetchFailed, errMsg };
 };
