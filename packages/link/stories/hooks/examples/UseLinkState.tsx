@@ -1,6 +1,6 @@
 import { useLinkState, getS3LinkModel } from "@us3r-network/link";
 
-export default function () {
+export function useCustomLinkQuery() {
   const { s3LinkModalInitialed, s3LinkModalAuthed } = useLinkState();
   const s3LinkModel = getS3LinkModel();
 
