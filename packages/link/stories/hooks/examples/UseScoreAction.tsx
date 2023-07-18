@@ -23,7 +23,6 @@ export default function ({
 
   return (
     <form
-      aria-disabled={isDisabled}
       onSubmit={(e) => {
         e.preventDefault();
         if (isScored && scoreId) {
@@ -36,6 +35,7 @@ export default function ({
       <input
         type="number"
         placeholder="Score"
+        disabled={isDisabled}
         onChange={(e) => {
           setValue(parseInt(e.target.value));
         }}
@@ -43,11 +43,14 @@ export default function ({
       <input
         type="text"
         placeholder="Comment"
+        disabled={isDisabled}
         onChange={(e) => {
           setText(e.target.value);
         }}
       />
-      <button type="submit">{isScoring ? "Scoring..." : "Score"}</button>
+      <button type="submit" disabled={isDisabled}>
+        {isScoring ? "Scoring..." : "Score"}
+      </button>
     </form>
   );
 }

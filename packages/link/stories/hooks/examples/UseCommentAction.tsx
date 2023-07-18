@@ -15,20 +15,20 @@ export default function ({ linkId }: { linkId: string }) {
 
   return (
     <form
-      aria-disabled={isDisabled}
       onSubmit={(e) => {
         e.preventDefault();
         onComment(value);
       }}
     >
       <input
+        disabled={isDisabled}
         type="text"
         placeholder="Leave a comment..."
         onChange={(e) => {
           setValue(e.target.value);
         }}
       />
-      <button type="submit">
+      <button type="submit" disabled={isDisabled}>
         {isCommenting ? "Commenting..." : "Comment"}
       </button>
     </form>
