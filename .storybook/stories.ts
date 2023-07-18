@@ -40,7 +40,7 @@ const componentStories = componentPkgs
     };
     /**
      * Generate the story navigation bar in the specified order
-     * order : Introduction, Components, Examples, ...
+     * order : Introduction, React Hooks, Components, Examples, ...
      */
     return [
       // Introduction
@@ -48,6 +48,12 @@ const componentStories = componentPkgs
         ...story,
         directory: `${story.directory}/stories`,
         files: `**/Introduction.mdx`,
+      },
+      // React Hooks
+      {
+        ...story,
+        directory: `${story.directory}/stories`,
+        files: "**/hooks/**/*.{stories.@(js|jsx|ts|tsx),mdx}",
       },
       // Components
       {
