@@ -8,6 +8,8 @@ import {
   useLinkComments,
   useScoreAction,
   useLinkScores,
+  usePersonalFavors,
+  usePersonalScores,
 } from "@us3r-network/link";
 
 // useLinkState
@@ -73,4 +75,20 @@ export const UseLinkScoresArgs = (
 ) => {};
 export const UseLinkScoresReturns = (
   props: Partial<ReturnType<typeof useLinkScores>>
+) => {};
+
+// usePersonalFavors
+export const UsePersonalFavorsArgs = (
+  props: Omit<Parameters<typeof usePersonalFavors>, "length">
+) => {};
+export const UsePersonalFavorsReturns = (
+  props: Partial<ReturnType<typeof usePersonalFavors>>
+) => {};
+
+// usePersonalScores
+export const UsePersonalScoresArgs = (
+  props: Omit<Parameters<typeof usePersonalScores>, "length">
+) => {};
+export const UsePersonalScoresReturns = (
+  props: Partial<ReturnType<typeof usePersonalScores>>
 ) => {};
