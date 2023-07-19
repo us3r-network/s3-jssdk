@@ -1,5 +1,4 @@
 import { StateCreator } from "zustand";
-import { LinkSlice } from "./link";
 import { Favor } from "@us3r-network/data-model";
 
 export interface PersonalFavorsSlice {
@@ -15,8 +14,8 @@ export interface PersonalFavorsSlice {
 }
 
 export const createPersonalFavorsSlice: StateCreator<
-  LinkSlice & PersonalFavorsSlice,
-  [],
+  PersonalFavorsSlice,
+  [["zustand/immer", never]],
   [],
   PersonalFavorsSlice
 > = (set) => ({
@@ -24,35 +23,35 @@ export const createPersonalFavorsSlice: StateCreator<
   isFetchingPersonalFavors: false,
   isBlockFetchPersonalFavors: false,
   setIsFetchingPersonalFavors: (isFetching) => {
-    set(() => ({ isFetchingPersonalFavors: isFetching }));
+    set((state) => {
+      state.isFetchingPersonalFavors = isFetching;
+    });
   },
   setIsBlockFetchPersonalFavors: (isBlock) => {
-    set(() => ({ isBlockFetchPersonalFavors: isBlock }));
+    set((state) => {
+      state.isBlockFetchPersonalFavors = isBlock;
+    });
   },
   setAllInPersonalFavors: (favors) => {
-    set(() => ({
-      personalFavors: new Map(favors.map((favor) => [favor.id, favor])),
-    }));
+    set((state) => {
+      state.personalFavors = new Map(favors.map((favor) => [favor.id, favor]));
+    });
   },
   setManyInPersonalFavors: (favors) => {
     set((state) => {
-      const updatedMap = new Map(state.personalFavors);
       favors.forEach((favor) => {
-        updatedMap.set(favor.id, favor);
+        state.personalFavors.set(favor.id, favor);
       });
-      return { personalFavors: updatedMap };
     });
   },
   addOneToPersonalFavors: (favor) => {
-    set((state) => ({
-      personalFavors: new Map(state.personalFavors).set(favor.id, favor),
-    }));
+    set((state) => {
+      state.personalFavors.set(favor.id, favor);
+    });
   },
   removeOneFromPersonalFavors: (favorId) => {
     set((state) => {
-      const updatedMap = new Map(state.personalFavors);
-      updatedMap.delete(favorId);
-      return { personalFavors: updatedMap };
+      state.personalFavors.delete(favorId);
     });
   },
 });

@@ -12,7 +12,14 @@ body {
   align-items: flex-end;
   gap: 1rem;
 }
-
+.header {
+  width: 100%;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+  
+}
 .links {
   display: flex;
   flex-direction: column;

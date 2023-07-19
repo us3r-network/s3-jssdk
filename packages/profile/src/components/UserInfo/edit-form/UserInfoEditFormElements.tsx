@@ -12,6 +12,8 @@ import { HTMLAttributes, useMemo } from "react";
 import { TextArea, TextAreaProps } from "../../common/TextArea";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import LoadingSpokes from "../../common/Loading/LoadingSpokes";
+import { useSession } from "@us3r-network/auth-with-rainbowkit";
+import { getDefaultUserAvatarWithDid } from "../../../utils/avatar";
 
 type AvatarFieldRenderProps = {
   isLoading: boolean;
@@ -82,10 +84,15 @@ function AvatarFieldDefaultChildren({
 
 function AvatarPreviewImg(props: HTMLAttributes<HTMLImageElement>) {
   const { avatar } = useUserInfoEditFormState();
+  const session = useSession();
+  const imgSrc = useMemo(
+    () => avatar || getDefaultUserAvatarWithDid(session?.id),
+    [avatar, session]
+  );
   return (
     <img
       data-state-element="AvatarPreviewImg"
-      src={avatar}
+      src={imgSrc}
       width={32}
       height={32}
       {...props}

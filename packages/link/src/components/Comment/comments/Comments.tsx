@@ -3,7 +3,7 @@ import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import CommentsElements from "./CommentsElements";
 import { CommentsContext, CommentsContextValue } from "./CommentsContext";
 import { CommentsDefaultChildren } from "./CommentsDefaultChildren";
-import { useComments } from "../../../hooks/useComments";
+import { useLinkComments } from "../../../hooks/useLinkComments";
 
 export interface CommentsIncomingProps {
   /**
@@ -30,7 +30,7 @@ function CommentsRoot({
   children,
   ...props
 }: CommentsProps) {
-  const { isFetching, comments, commentsCount } = useComments(linkId, {
+  const { isFetching, comments, commentsCount } = useLinkComments(linkId, {
     order,
   });
 

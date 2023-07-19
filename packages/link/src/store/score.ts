@@ -1,93 +1,127 @@
 import { StateCreator } from "zustand";
-import { LinkSlice } from "./link";
-import { linkDataFieldFilling } from "../utils/store";
 import { Score } from "@us3r-network/data-model";
+import { FetchStatus, OrderType } from "./types";
+
+export type LinkScores = {
+  scores: Array<Score>;
+  scoresCount: number;
+  params: {
+    order: OrderType;
+  };
+  status: FetchStatus;
+  errMsg: string;
+};
+
+const defaultLinkScores: LinkScores = {
+  scores: [],
+  scoresCount: 0,
+  params: {
+    order: "desc",
+  },
+  status: "idle",
+  errMsg: "",
+};
 
 export interface ScoreSlice {
+  cacheLinkScores: Map<string, LinkScores>;
   scoringLinkIds: Set<string>;
-  addOneToScoringLinkIds: (linkId: string) => void;
-  removeOneFromScoringLinkIds: (linkId: string) => void;
-  addScoreToCacheLinks: (linkId: string, score: Score) => void;
-  updateScoreInCacheLinks: (
+
+  upsertOneInCacheLinkScores: (
+    linkId: string,
+    linkScores: Partial<LinkScores>
+  ) => void;
+
+  // scores mutations
+  addScoreToCacheLinkScores: (linkId: string, score: Score) => void;
+  updateScoreInCacheLinkScores: (
     linkId: string,
     scoreId: string,
     score: Partial<Score>
   ) => void;
-  removeScoreFromCacheLinks: (linkId: string, scoreId: string) => void;
+  removeScoreFromCacheLinkScores: (linkId: string, scoreId: string) => void;
+
+  // scoring
+  addOneToScoringLinkIds: (linkId: string) => void;
+  removeOneFromScoringLinkIds: (linkId: string) => void;
 }
 
 export const createScoreSlice: StateCreator<
-  LinkSlice & ScoreSlice,
-  [],
+  ScoreSlice,
+  [["zustand/immer", never]],
   [],
   ScoreSlice
-> = (set, get) => ({
+> = (set) => ({
+  cacheLinkScores: new Map(),
+  fetchingScoresLinkIds: new Set(),
   scoringLinkIds: new Set(),
+
+  upsertOneInCacheLinkScores: (linkId, linkScores) => {
+    set((state) => {
+      const prevLinkScores = state.cacheLinkScores.get(linkId);
+      if (!prevLinkScores) {
+        state.cacheLinkScores.set(linkId, {
+          ...defaultLinkScores,
+          ...linkScores,
+        });
+        return;
+      }
+      Object.assign(prevLinkScores, linkScores);
+    });
+  },
+
+  // scores
+  addScoreToCacheLinkScores: (linkId, score) => {
+    set((state) => {
+      const linkScores = state.cacheLinkScores.get(linkId);
+      if (!linkScores) return;
+      linkScores.scores.push(score);
+      linkScores.scoresCount++;
+    });
+  },
+  updateScoreInCacheLinkScores: (linkId, scoreId, score) => {
+    set((state) => {
+      const linkScores = state.cacheLinkScores.get(linkId);
+      if (!linkScores) return;
+
+      const scoreIndex = linkScores.scores.findIndex(
+        (item) => item.id === scoreId
+      );
+      if (scoreIndex === -1) return;
+
+      const item = linkScores.scores[scoreIndex];
+      Object.assign(item, score);
+
+      if (score.hasOwnProperty("revoke")) {
+        if (score.revoke) {
+          linkScores.scoresCount--;
+        } else {
+          linkScores.scoresCount++;
+        }
+      }
+    });
+  },
+  removeScoreFromCacheLinkScores: (linkId, scoreId) => {
+    set((state) => {
+      const linkScores = state.cacheLinkScores.get(linkId);
+      if (!linkScores) return;
+      const scoreIndex = linkScores.scores.findIndex(
+        (item) => item.id === scoreId
+      );
+      if (scoreIndex === -1) return;
+      linkScores.scores.splice(scoreIndex, 1);
+      linkScores.scoresCount--;
+    });
+  },
+
+  // scoring
   addOneToScoringLinkIds: (linkId: string) => {
     set((state) => {
-      const updatedSet = new Set(state.scoringLinkIds);
-      updatedSet.add(linkId);
-      return { scoringLinkIds: updatedSet };
+      state.scoringLinkIds.add(linkId);
     });
   },
   removeOneFromScoringLinkIds: (linkId: string) => {
     set((state) => {
-      const updatedSet = new Set(state.scoringLinkIds);
-      updatedSet.delete(linkId);
-      return { scoringLinkIds: updatedSet };
+      state.scoringLinkIds.delete(linkId);
     });
-  },
-  addScoreToCacheLinks: (linkId, score) => {
-    const link = get().cacheLinks.get(linkId);
-    if (!link) return;
-    const newLink = { ...linkDataFieldFilling(link) };
-    newLink.scores.edges.push({
-      cursor: score.id,
-      node: { ...score },
-    });
-    newLink.scores = { ...newLink.scores };
-    newLink.scoresCount++;
-    set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
-    }));
-  },
-  updateScoreInCacheLinks: (linkId, scoreId, score) => {
-    const link = get().cacheLinks.get(linkId);
-    if (!link) return;
-    const newLink = linkDataFieldFilling(link);
-    const scoreIndex = newLink.scores.edges.findIndex(
-      (edge) => edge.node.id === scoreId
-    );
-    if (scoreIndex === -1) return;
-    newLink.scores.edges[scoreIndex].node = {
-      ...newLink.scores.edges[scoreIndex].node,
-      ...score,
-    };
-    newLink.scores = { ...newLink.scores };
-    if (score.hasOwnProperty("revoke")) {
-      if (score.revoke) {
-        newLink.scoresCount--;
-      } else {
-        newLink.scoresCount++;
-      }
-    }
-    set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
-    }));
-  },
-  removeScoreFromCacheLinks: (linkId, scoreId) => {
-    const link = get().cacheLinks.get(linkId);
-    if (!link) return;
-    const newLink = linkDataFieldFilling(link);
-    const scoreIndex = newLink.scores.edges.findIndex(
-      (edge) => edge.node.id === scoreId
-    );
-    if (scoreIndex === -1) return;
-    newLink.scores.edges.splice(scoreIndex, 1);
-    newLink.scores = { ...newLink.scores };
-    newLink.scoresCount--;
-    set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
-    }));
   },
 });

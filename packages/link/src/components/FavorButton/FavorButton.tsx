@@ -4,8 +4,8 @@ import { Button, ButtonRenderProps } from "react-aria-components";
 import { useIsAuthenticated } from "@us3r-network/auth-with-rainbowkit";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
 import { FavorButtonChildren } from "./FavorButtonChildren";
-import { useLink } from "../../hooks/useLink";
 import { useFavorAction } from "../../hooks/useFavorAction";
+import { useLinkFavors } from "../../hooks/useLinkFavors";
 
 export interface FavorButtonIncomingProps {
   /**
@@ -45,7 +45,7 @@ export function FavorButton({
   ...props
 }: FavorButtonProps) {
   const isAuthenticated = useIsAuthenticated();
-  const { link } = useLink(linkId);
+  const { favorsCount } = useLinkFavors(linkId);
   const { isFavored, isFavoring, isDisabled, onFavor } = useFavorAction(
     linkId,
     {
@@ -69,7 +69,7 @@ export function FavorButton({
     isFavored,
     isFavoring,
     isDisabled,
-    favorsCount: link?.favorsCount || 0,
+    favorsCount,
   };
 
   const defaultChildren = useMemo(

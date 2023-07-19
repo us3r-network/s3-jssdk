@@ -1,95 +1,116 @@
 import { StateCreator } from "zustand";
-import { LinkSlice } from "./link";
 import { Vote } from "@us3r-network/data-model";
-import { linkDataFieldFilling } from "../utils/store";
+import { FetchStatus } from "./types";
+
+export type LinkVotes = {
+  votes: Array<Vote>;
+  votesCount: number;
+  status: FetchStatus;
+  errMsg: string;
+};
+
+const defaultLinkVotes: LinkVotes = {
+  votes: [],
+  votesCount: 0,
+  status: "idle",
+  errMsg: "",
+};
 
 export interface VoteSlice {
+  cacheLinkVotes: Map<string, LinkVotes>;
   votingLinkIds: Set<string>;
-  addOneToVotingLinkIds: (linkId: string) => void;
-  removeOneFromVotingLinkIds: (linkId: string) => void;
-  addVoteToCacheLinks: (linkId: string, vote: Vote) => void;
-  updateVoteInCacheLinks: (
+
+  upsertOneInCacheLinkVotes: (
+    linkId: string,
+    linkVotes: Partial<LinkVotes>
+  ) => void;
+
+  // votes mutations
+  addVoteToCacheLinkVotes: (linkId: string, vote: Vote) => void;
+  updateVoteInCacheLinkVotes: (
     linkId: string,
     voteId: string,
     vote: Partial<Vote>
   ) => void;
-  removeVoteFromCacheLinks: (linkId: string, voteId: string) => void;
+  removeVoteFromCacheLinkVotes: (linkId: string, voteId: string) => void;
+
+  // voting
+  addOneToVotingLinkIds: (linkId: string) => void;
+  removeOneFromVotingLinkIds: (linkId: string) => void;
 }
 
 export const createVoteSlice: StateCreator<
-  LinkSlice & VoteSlice,
-  [],
+  VoteSlice,
+  [["zustand/immer", never]],
   [],
   VoteSlice
-> = (set, get) => ({
+> = (set) => ({
+  cacheLinkVotes: new Map(),
   votingLinkIds: new Set(),
+
+  upsertOneInCacheLinkVotes: (linkId, linkVotes) => {
+    set((state) => {
+      const prevLinkVotes = state.cacheLinkVotes.get(linkId);
+      if (!prevLinkVotes) {
+        state.cacheLinkVotes.set(linkId, {
+          ...defaultLinkVotes,
+          ...linkVotes,
+        });
+        return;
+      }
+      Object.assign(prevLinkVotes, linkVotes);
+    });
+  },
+
+  // votes mutations
+  addVoteToCacheLinkVotes: (linkId, vote) => {
+    set((state) => {
+      const linkVotes = state.cacheLinkVotes.get(linkId);
+      if (!linkVotes) return;
+      linkVotes.votes.push(vote);
+      linkVotes.votesCount++;
+    });
+  },
+  updateVoteInCacheLinkVotes: (linkId, voteId, vote) => {
+    set((state) => {
+      const linkVotes = state.cacheLinkVotes.get(linkId);
+      if (!linkVotes) return;
+
+      const voteIndex = linkVotes.votes.findIndex((item) => item.id === voteId);
+      if (voteIndex === -1) return;
+
+      const item = linkVotes.votes[voteIndex];
+      Object.assign(item, vote);
+
+      if (vote.hasOwnProperty("revoke")) {
+        if (vote.revoke) {
+          linkVotes.votesCount--;
+        } else {
+          linkVotes.votesCount++;
+        }
+      }
+    });
+  },
+  removeVoteFromCacheLinkVotes: (linkId, voteId) => {
+    set((state) => {
+      const linkVotes = state.cacheLinkVotes.get(linkId);
+      if (!linkVotes) return;
+      const voteIndex = linkVotes.votes.findIndex((item) => item.id === voteId);
+      if (voteIndex === -1) return;
+      linkVotes.votes.splice(voteIndex, 1);
+      linkVotes.votesCount--;
+    });
+  },
+
+  // voting
   addOneToVotingLinkIds: (linkId: string) => {
     set((state) => {
-      const updatedSet = new Set(state.votingLinkIds);
-      updatedSet.add(linkId);
-      return { votingLinkIds: updatedSet };
+      state.votingLinkIds.add(linkId);
     });
   },
   removeOneFromVotingLinkIds: (linkId: string) => {
     set((state) => {
-      const updatedSet = new Set(state.votingLinkIds);
-      updatedSet.delete(linkId);
-      return { votingLinkIds: updatedSet };
+      state.votingLinkIds.delete(linkId);
     });
-  },
-  addVoteToCacheLinks: (linkId, vote) => {
-    const link = get().cacheLinks.get(linkId);
-    if (!link) return;
-    const newLink = linkDataFieldFilling(link);
-
-    newLink.votes.edges.push({
-      cursor: vote.id,
-      node: { ...vote },
-    });
-    newLink.votes = { ...newLink.votes };
-    newLink.votesCount++;
-
-    set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
-    }));
-  },
-  updateVoteInCacheLinks: (linkId, voteId, vote) => {
-    const link = get().cacheLinks.get(linkId);
-    if (!link) return;
-    const newLink = linkDataFieldFilling(link);
-    const voteIndex = newLink.votes.edges.findIndex(
-      (edge) => edge.node.id === voteId
-    );
-    if (voteIndex === -1) return;
-    newLink.votes.edges[voteIndex].node = {
-      ...newLink.votes.edges[voteIndex].node,
-      ...vote,
-    };
-    newLink.votes = { ...newLink.votes };
-    if (vote.hasOwnProperty("revoke")) {
-      if (vote.revoke) {
-        newLink.votesCount--;
-      } else {
-        newLink.votesCount++;
-      }
-    }
-    set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
-    }));
-  },
-  removeVoteFromCacheLinks: (linkId, voteId) => {
-    const link = get().cacheLinks.get(linkId);
-    if (!link) return;
-    const newLink = linkDataFieldFilling(link);
-    const voteIndex = newLink.votes.edges.findIndex(
-      (edge) => edge.node.id === voteId
-    );
-    if (voteIndex === -1) return;
-    newLink.votes.edges.splice(voteIndex, 1);
-    newLink.votes = { ...newLink.votes };
-    newLink.votesCount--;
-    set((state) => ({
-      cacheLinks: new Map(state.cacheLinks).set(linkId, { ...newLink }),
-    }));
   },
 });
