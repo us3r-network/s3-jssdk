@@ -10,7 +10,7 @@ import {
   useLinkScores,
   usePersonalFavors,
   usePersonalScores,
-} from "@us3r-network/link";
+} from "../../src/index";
 
 // useLinkState
 export const UseLinkStateReturns = (
