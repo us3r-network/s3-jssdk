@@ -1,4 +1,4 @@
-import { useProfileState } from "@us3r-network/profile";
+import { useProfileState } from "../../src/index";
 
 // useProfileState
 export const UseProfileStateReturns = (
