@@ -8,7 +8,7 @@ import {
 import { ScoreDashboardDefaultChildren } from "./ScoreDashboardDefaultChildren";
 import { SCORE_VALUE_MAX, SCORE_VALUE_MIN } from "../../../constants";
 import { getScoresAvgFromScores } from "../../../utils/score";
-import { useScores } from "../../../hooks/useScores";
+import { useLinkScores } from "../../../hooks/useLinkScores";
 export interface ScoreDashboardIncomingProps {
   /**
    * link stream id.
@@ -28,7 +28,7 @@ function ScoreDashboardRoot({
   children,
   ...props
 }: ScoreDashboardProps) {
-  const { isFetching, scores, scoresCount } = useScores(linkId);
+  const { isFetching, scores, scoresCount } = useLinkScores(linkId);
   const scoresAvg = useMemo(
     () => getScoresAvgFromScores(scores, scoresCount),
     [scores, scoresCount]

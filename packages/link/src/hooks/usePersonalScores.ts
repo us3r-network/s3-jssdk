@@ -1,17 +1,13 @@
 import { useEffect, useMemo } from "react";
-import { useStore } from "../store";
-import {
-  useIsAuthenticated,
-  useSession,
-} from "@us3r-network/auth-with-rainbowkit";
+import { useSession } from "@us3r-network/auth-with-rainbowkit";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
+import { useStore } from "../store";
 
 export const usePersonalScores = (opts?: {
   onSuccessfullyFetch?: () => void;
   onFailedFetch?: (errMsg: string) => void;
 }) => {
   const s3LinkModel = getS3LinkModel();
-  const isAuthenticated = useIsAuthenticated();
   const session = useSession();
   const { s3LinkModalAuthed } = useLinkState();
   const isBlockFetchPersonalScores = useStore(
@@ -35,8 +31,7 @@ export const usePersonalScores = (opts?: {
     (async () => {
       if (isBlockFetchPersonalScores) return;
       if (isFetchingPersonalScores) return;
-      if (!isAuthenticated || !session || !s3LinkModalAuthed || !s3LinkModel)
-        return;
+      if (!session || !s3LinkModalAuthed || !s3LinkModel) return;
       try {
         setIsFetchingPersonalScores(true);
         const res = await s3LinkModel.queryPersonalScores({ first: 1000 });
@@ -59,7 +54,6 @@ export const usePersonalScores = (opts?: {
   }, [
     isBlockFetchPersonalScores,
     isFetchingPersonalScores,
-    isAuthenticated,
     session,
     s3LinkModalAuthed,
     setIsFetchingPersonalScores,

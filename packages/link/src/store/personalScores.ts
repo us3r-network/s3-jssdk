@@ -1,5 +1,4 @@
 import { StateCreator } from "zustand";
-import { LinkSlice } from "./link";
 import { Score } from "@us3r-network/data-model";
 
 export interface PersonalScoresSlice {
@@ -16,8 +15,8 @@ export interface PersonalScoresSlice {
 }
 
 export const createPersonalScoresSlice: StateCreator<
-  LinkSlice & PersonalScoresSlice,
-  [],
+  PersonalScoresSlice,
+  [["zustand/immer", never]],
   [],
   PersonalScoresSlice
 > = (set, get) => ({
@@ -25,45 +24,45 @@ export const createPersonalScoresSlice: StateCreator<
   isFetchingPersonalScores: false,
   isBlockFetchPersonalScores: false,
   setIsFetchingPersonalScores: (isFetching) => {
-    set(() => ({ isFetchingPersonalScores: isFetching }));
+    set((state) => {
+      state.isFetchingPersonalScores = isFetching;
+    });
   },
   setIsBlockFetchPersonalScores: (isBlock) => {
-    set(() => ({ isBlockFetchPersonalScores: isBlock }));
+    set((state) => {
+      state.isBlockFetchPersonalScores = isBlock;
+    });
   },
   setAllInPersonalScores: (scores) => {
-    set(() => ({
-      personalScores: new Map(scores.map((score) => [score.id, score])),
-    }));
+    set((state) => {
+      state.personalScores = new Map(scores.map((score) => [score.id, score]));
+    });
   },
   setManyInPersonalScores: (scores) => {
     set((state) => {
-      const updatedMap = new Map(state.personalScores);
       scores.forEach((score) => {
-        updatedMap.set(score.id, score);
+        state.personalScores.set(score.id, score);
       });
-      return { personalScores: updatedMap };
     });
   },
   addOneToPersonalScores: (score) => {
-    set((state) => ({
-      personalScores: new Map(state.personalScores).set(score.id, score),
-    }));
-  },
-  updateOneInPersonalScores: (scoreId, score) => {
-    const oldScore = get().personalScores.get(scoreId);
-    if (!oldScore) return;
-    set((state) => ({
-      personalScores: new Map(state.personalScores).set(scoreId, {
-        ...oldScore,
-        ...score,
-      }),
-    }));
+    set((state) => {
+      state.personalScores.set(score.id, score);
+    });
   },
   removeOneFromPersonalScores: (scoreId) => {
     set((state) => {
-      const updatedMap = new Map(state.personalScores);
-      updatedMap.delete(scoreId);
-      return { personalScores: updatedMap };
+      state.personalScores.delete(scoreId);
+    });
+  },
+  updateOneInPersonalScores: (scoreId, score) => {
+    set((state) => {
+      const oldScore = state.personalScores.get(scoreId);
+      if (!oldScore) return;
+      state.personalScores.set(scoreId, {
+        ...oldScore,
+        ...score,
+      });
     });
   },
 });
