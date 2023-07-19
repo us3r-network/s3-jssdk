@@ -15,8 +15,7 @@ jobs:
         with:
           node-version: '18'
       - run: |
-          yarn 
-          yarn build
+          yarn
           yarn build-storybook
         env:
           CI: false
