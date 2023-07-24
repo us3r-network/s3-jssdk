@@ -71,9 +71,17 @@ const componentStories = componentPkgs
   })
   .reduce((acc, val) => acc.concat(val), []);
 
+// examples
+const examplePkgs = ["link-collections"];
+const exampleStories = examplePkgs.map((pkgDir) => ({
+  titlePrefix: `example`,
+  directory: path.join(__dirname, `../packages/examples/${pkgDir}`),
+}));
+
 export default [
   ...prodGuideStories,
   ...authToolStories,
   ...modelDefStories,
   ...componentStories,
+  ...exampleStories,
 ];
