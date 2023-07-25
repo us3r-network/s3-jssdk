@@ -1,12 +1,22 @@
 import { Meta, Source, ArgTypes, Canvas, Story } from "@storybook/blocks";
 import ExampleCode from "!!raw-loader!./example.tsx";
-
+import {
+    CreateProfileParams,
+    CreateProfileReturns,
+    WalletParams,
+    QueryProfileReturns,
+    QueryProfileParams,
+    UpdateProfileParams,
+    UpdateProfileReturns,
+    QueryProfileWithDIDParams,
+    QueryProfileWithDIDReturns
+} from "./TypeTable";
 
 # Profile JS-SDK
 
 Profile JS-SDK provides `queryPersonalProfile`, `mutationUpdatePersonalProfile`, `mutationPersonalProfile` and other methods for developers to use. 
 
-Before using the SDK, you need to create a Ceramic instance and pass it to the SDK. And you need to create a [DID Session](https://developers.ceramic.network/reference/accounts/did-session/) and pass it to the SDK for the write
+Before using the SDK, you need to create a Ceramic instance and pass it to the SDK. and you need to create a [DID Session](https://developers.ceramic.network/reference/accounts/did-session/) and pass it to the SDK for writing
 
 ## Usage
 
@@ -49,6 +59,16 @@ For use the `createProfile` method that you can create a profile document for th
 
 the prams is a `Partial<Profile>` object, the response is a Graphql response object, you can get the result by `resp.data.createProfile`, and the data is `document: { id: string }`.
 
+#### Params
+
+<ArgTypes of={CreateProfileParams} />
+
+and the `Wallet` is:
+<ArgTypes of={WalletParams} />
+
+#### Returns
+<ArgTypes of={CreateProfileReturns} />
+
 
 ### queryPersonalProfile
 
@@ -62,16 +82,8 @@ const resp = await s3Profile.queryPersonalProfile()
 
 the **resp** is a Graphql response object, you can get the data by `resp.data.viewer.profile`, and the data is a `Profile` object.
 
-```ts
-export type WalletChainType = "EVM" | "SOLANA";
-export type Profile = {
-  name?: string;
-  avatar?: string;
-  wallets?: Wallet[];
-  bio?: string;
-  tags?: string[];
-};
-```
+##### Returns
+<ArgTypes of={QueryProfileReturns} />
 
 ### mutationUpdatePersonalProfile
 
@@ -95,6 +107,11 @@ const resp = await s3Profile.mutationUpdatePersonalProfile({
 
 the prams is a `Partial<Profile>` object, the response is a Graphql response object, you can get the result by `resp.data.updateProfile`, and the data is `document: { id: string }`.
 
+#### Params
+<ArgTypes of={UpdateProfileParams} />
+#### Returns
+<ArgTypes of={UpdateProfileReturns} />
+
 ### queryProfileWithDid
 
 For use the `queryProfileWithDid` method that you can get others profile data of the user by the did.
@@ -108,12 +125,9 @@ const resp = await s3Profile.queryProfileWithDid(/* did-string */)
 
 the **resp** is a Graphql response object, you can get the data by `resp.data.node`, and the data is a `node` object with `Profile`.
 
-```ts
-{
-  id: string;
-  profile: Profile;
-}
-```
+#### Returns
+<ArgTypes of={QueryProfileWithDIDReturns} />
+
 
 ## Examples
 
