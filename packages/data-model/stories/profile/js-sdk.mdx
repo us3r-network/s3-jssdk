@@ -14,24 +14,8 @@ import {
 
 # Profile JS-SDK
 
-Profile JS-SDK provides `queryPersonalProfile`, `mutationUpdatePersonalProfile`, `mutationPersonalProfile` and other methods for developers to use. 
-
-Before using the SDK, you need to create a Ceramic instance and pass it to the SDK. and you need to create a [DID Session](https://developers.ceramic.network/reference/accounts/did-session/) and pass it to the SDK for writing
-
 ## Usage
-
-The `Profile` type:
-
-```ts 
-export type WalletChainType = "EVM" | "SOLANA";
-export type Profile = {
-  name?: string;
-  avatar?: string;
-  wallets?: Wallet[];
-  bio?: string;
-  tags?: string[];
-};
-```
+Before using the SDK, you need to create a Ceramic instance and pass it to the SDK. and you need to create a [DID Session](https://developers.ceramic.network/reference/accounts/did-session/) and pass it to the SDK for writing
 
 ### Unit Profile instance
 
@@ -56,6 +40,24 @@ const s3Profile = new S3ProfileModel(CERAMIC_HOST)
 let _ = s3Profile.authComposeClient(session);
 ...
 ```
+## Type
+
+### Profile
+
+```ts 
+export type WalletChainType = "EVM" | "SOLANA";
+export type Profile = {
+  name?: string;
+  avatar?: string;
+  wallets?: Wallet[];
+  bio?: string;
+  tags?: string[];
+};
+```
+
+## Method
+
+Profile JS-SDK provides `queryPersonalProfile`, `mutationUpdatePersonalProfile`, `mutationPersonalProfile` and other methods for developers to use. 
 
 ### createProfile
 
