@@ -40,6 +40,8 @@ const s3Profile = new S3ProfileModel(CERAMIC_HOST)
 let _ = s3Profile.authComposeClient(session);
 ...
 ```
+
+
 ## Type
 
 ### Profile
@@ -97,7 +99,7 @@ const resp = await s3Profile.queryPersonalProfile()
 
 the **resp** is a Graphql response object, you can get the data by `resp.data.viewer.profile`, and the data is a `Profile` object.
 
-##### Returns
+#### Returns
 <ArgTypes of={QueryProfileReturns} />
 
 ### mutationUpdatePersonalProfile

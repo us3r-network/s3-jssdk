@@ -1,3 +1,523 @@
+import { Meta, Source, ArgTypes, Canvas, Story } from "@storybook/blocks";
+import ExampleCode from "!!raw-loader!./example.tsx";
+import {
+    ExecuteQueryReturns,
+    CreateLinkParams,
+    CreateLinkReturns,
+    UpdateLinkReturns,
+    QueryLinkField,
+    QueryLinkReturns,
+    QueryPersonalLinkReturns,
+    QueryLinksReturns,
+    CreateVoteParams,
+    CreateVoteReturns,
+    UpdateVoteParams,
+    UpdateVoteReturns,
+    QueryPersonalVoteReturns,
+    CreateFavorParams,
+    CreateFavorReturns,
+    UpdateFavorParams,
+    UpdateFavorReturns,
+    QueryPersonalFavorReturns,
+    CreateScoreParams,
+    CreateScoreReturns,
+    UpdateScoreParams,
+    UpdateScoreReturns,
+    QueryPersonalScoreReturns,
+    CreateCommentParams,
+    CreateCommentReturns,
+    UpdateCommentParams,
+    UpdateCommentReturns,
+    QueryPersonalCommentReturns,
+} from './TypeTable'
+
 # Link JS-SDK
 
-TODO
+## Usage
+Before using the SDK, you need to create a Ceramic instance and pass it to the SDK. and you need to create a [DID Session](https://developers.ceramic.network/reference/accounts/did-session/) and pass it to the SDK for writing
+
+### Unit Profile instance
+
+```ts
+...
+
+import {S3LinkModel} from '@us3r-network/data-model'
+
+const CERAMIC_HOST = process.env.CERAMIC_HOST
+
+const s3Link = new S3LinkModel(CERAMIC_HOST)
+...
+
+```
+
+### Auth Profile instance
+
+ `authComposeClient` methods need a DID Session to sign the message for the write and update operation.
+
+```ts
+... // Some code to get gen the DID Session
+let _ = s3Link.authComposeClient(session);
+...
+```
+
+## Type
+
+### Link
+
+```ts
+export type Link = {
+  id?: string;
+  creator?: Creator;
+  url: string;
+  type: string;
+  title: string;
+  data?: string;
+  createAt?: DateTime;
+  modifiedAt?: DateTime;
+  votesCount?: number;
+  commentsCount?: number;
+  favorsCount?: number;
+  scoresCount?: number;
+  votes?: Page<Vote>;
+  comments?: Page<Comment>;
+  favors?: Page<Favor>;
+  scores?: Page<Score>;
+};
+```
+
+### Favor
+```ts
+export type Favor = {
+  id: string;
+  linkID: string;
+  revoke: boolean;
+  createAt: DateTime;
+  modifiedAt: DateTime;
+  link?: Link;
+  creator: Creator;
+};
+
+export type FavorInput = {
+  linkID: string;
+  revoke: boolean;
+  createAt?: DateTime;
+  modifiedAt?: DateTime;
+};
+
+```
+
+### Comment
+```ts
+export type Comment = {
+  id: string;
+  linkID: string;
+  revoke: boolean;
+  createAt: DateTime;
+  modifiedAt: DateTime;
+  link?: Link;
+  text: string;
+  creator: Creator;
+};
+
+export type CommentInput = {
+  text: string;
+  linkID: string;
+  revoke?: boolean;
+  createAt?: DateTime;
+  modifiedAt?: DateTime;
+};
+```
+
+### Score
+
+```ts
+export type Score = {
+  id: string;
+  text: string;
+  value: number;
+  linkID: string;
+  revoke?: Boolean;
+  createAt?: DateTime;
+  modifiedAt?: DateTime;
+  link?: Link;
+  creator: Creator;
+};
+
+export type ScoreInput = {
+  text: string;
+  value: number;
+  linkID: string;
+  revoke?: boolean;
+  createAt?: DateTime;
+  modifiedAt?: DateTime;
+};
+```
+
+### Vote
+
+```ts
+export type Vote = {
+  id: string;
+  linkID: string;
+  creator: Creator;
+  type?: VoteType;
+  revoke?: boolean;
+  createAt?: DateTime;
+  modifiedAt?: DateTime;
+  link?: Link;
+};
+
+export type VoteInput = {
+  linkID: string;
+  type?: VoteType;
+  revoke?: boolean;
+  createAt?: DateTime;
+  modifiedAt?: DateTime;
+};
+```
+
+## Method
+
+Link JS-SDK provides `executeQuery`, `queryPersonalLinks`, `queryLinks`, `createLink` and other methods for developers to use. 
+
+### executeQuery
+
+```ts 
+  public async executeQuery<T>(query: string, variables?: any) {
+    const composeClient = this.composeClient;
+    const resp = await composeClient.executeQuery<T>(query, variables);
+    return resp;
+  }
+```
+
+The executeQuery method is used to execute the GraphQL query statement. The developers can use the GraphQL query statement to query the data in the Ceramic network.
+
+the **resp** is a Graphql response object which contains the data and errors. and the data is generic type.
+
+#### Returns
+
+<ArgTypes of={ExecuteQueryReturns} />
+
+### createLink
+
+The `createLink` method is used to create a link. For example, if you want to create a link with the following code:
+
+```ts
+const resp = await s3Link.createLink({
+  url: 'testURL',
+  type: 'testType',
+  title: 'testTitle',
+});
+```
+#### Params
+<ArgTypes of={CreateLinkParams} />
+
+#### Returns
+<ArgTypes of={CreateLinkReturns} />
+
+### updateLink
+
+The `updateLink` method is used to update a link. For example, if you want to update a link with the following code:
+
+```ts
+const resp = await s3Link.updateLink(/*linkId to update*/, {
+    type: 'testUpdateType',
+    url: 'testURL',
+    title: 'testTitle',
+});
+```
+
+#### Params
+<ArgTypes of={CreateLinkParams} />
+
+#### Returns
+<ArgTypes of={UpdateLinkReturns} />
+
+### queryLink
+
+The `queryLink` method is used to query a link. For example, if you want to query a link with the following code:
+
+```ts
+const resp = await s3Link.queryLink(linkId, ["url", "title", "type"]);
+```
+
+#### Params
+<ArgTypes of={QueryLinkField} />
+
+#### Returns
+<ArgTypes of={QueryLinkReturns} />
+
+### queryPersonalLinks
+
+The `queryPersonalLinks` method is used to query the links created by the current user. For example, if you want to query the links created by the current user with the following code:
+
+```ts
+const resp = await s3Link.queryPersonalLinks({ first: 10 });
+```
+
+The **resp** is a GraphQL response object which contains the data and errors.
+
+#### Returns
+<ArgTypes of={QueryPersonalLinkReturns} />
+
+### queryPersonalLinksDesc
+
+Like `queryPersonalLinks`, but the result is sorted in descending order.
+
+### queryLinks
+
+The `queryLinks` method is used to query the links. For example, if you want to query the links with the following code:
+
+```ts
+const resp = await s3Link.queryLinks({ first: 10 });
+```
+
+The **resp** is a GraphQL response object which contains the data and errors.
+
+#### Returns
+<ArgTypes of={QueryLinksReturns} />
+
+
+### queryLinksDesc
+
+Like `queryLinks`, but the result is sorted in descending order.
+
+```ts
+const resp = await s3Link.queryLinksDesc({ last: 10 });
+```
+
+### createVote
+
+The `createVote` method is used to create a vote for a Link. For example, if you want to create a vote with the following code:
+
+```ts
+const resp = await s3Link.createVote({
+  linkID: linkId,
+  type: "UP_VOTE",
+});
+```
+
+The **resp** is a GraphQL response object which contains the data and errors.
+
+#### Params
+<ArgTypes of={CreateVoteParams} />
+
+#### Returns
+<ArgTypes of={CreateVoteReturns} />
+
+### updateVote
+
+```ts
+const resp = await s3Link.updateVote(voteId, {
+  linkID: 'linkID',
+  type: "UP_VOTE",
+});
+```
+
+The **resp** is a GraphQL response object which contains the data and errors.
+
+#### Params
+<ArgTypes of={UpdateVoteParams} />
+
+#### Returns
+<ArgTypes of={UpdateVoteReturns} />
+
+### queryPersonalVotes
+
+The `queryPersonalVotes` method is used to query the votes created by the current user. For example, if you want to query the votes created by the current user with the following code:
+
+```ts
+const resp = await s3Link.queryPersonalVotes({ first: 10 });
+```
+
+The **resp** is a GraphQL response object which contains the data and errors.
+
+#### Returns
+<ArgTypes of={QueryPersonalVoteReturns} />
+
+### queryPersonalVotesDesc
+
+Like `queryPersonalVotes`, but the result is sorted in descending order.
+
+```ts
+const resp = await s3Link.queryPersonalVotesDesc({ last: 3 });
+```
+
+### createFavor
+
+The `createFavor` method is used to create a favor for a Link. For example, if you want to create a favor with the following code:
+
+```ts
+const resp = await s3Link.createFavor({
+  linkID: linkId,
+  revoke: false,
+});
+```
+
+The **resp** is a GraphQL response object which contains the data and errors.
+
+#### Params
+<ArgTypes of={CreateFavorParams} />
+
+#### Returns
+<ArgTypes of={CreateFavorReturns} />
+
+### updateFavor
+
+The `updateFavor` method is used to update a favor for a Link. For example, if you want to update a favor with the following code:
+
+```ts
+const resp = await s3Link.updateFavor(/* favorId */, {
+  linkID: 'linkID',
+  revoke: true,
+});
+```
+
+The **resp** is a GraphQL response object which contains the data and errors.
+
+#### Params
+<ArgTypes of={UpdateFavorParams} />
+#### Returns
+<ArgTypes of={UpdateFavorReturns} />
+
+### queryPersonalFavors
+
+The `queryPersonalFavors` method is used to query the favors created by the current user. For example, if you want to query the favors created by the current user with the following code:
+
+```ts
+const resp = await s3Link.queryPersonalFavors({ first: 10 });
+```
+
+The **resp** is a GraphQL response object which contains the data and errors.
+
+#### Returns
+<ArgTypes of={QueryPersonalFavorReturns} />
+
+### queryPersonalFavorsDesc
+
+Like `queryPersonalFavors`, but the result is sorted in descending order.
+
+```ts
+const resp = await s3Link.queryPersonalFavorsDesc({ last: 3 });
+```
+
+### createScore
+
+The `createScore` method is used to create a score for a Link. For example, if you want to create a score with the following code:
+
+```ts
+const resp = await s3Link.createScore({
+  linkID: linkId,
+  text: "string",
+  value: 10,
+});
+```
+
+The **resp** is a GraphQL response object which contains the data and errors.
+
+#### Params
+<ArgTypes of={CreateScoreParams} />
+#### Returns
+<ArgTypes of={CreateFavorReturns} />
+
+### updateScore
+
+The `updateScore` method is used to update a score for a Link. For example, if you want to update a score with the following code:
+
+```ts
+const resp = await s3Link.updateScore(/* scoreId */, {
+  linkID: linkId,
+  text: "string",
+  value: 10,
+});
+```
+
+The **resp** is a GraphQL response object which contains the data and errors.
+
+#### Params
+<ArgTypes of={UpdateScoreParams} />
+#### Returns
+<ArgTypes of={UpdateScoreReturns} />
+
+### queryPersonalScores
+
+The `queryPersonalScores` method is used to query the scores created by the current user. For example, if you want to query the scores created by the current user with the following code:
+
+```ts
+const resp = await s3Link.queryPersonalScores({ first: 10 });
+```
+
+The **resp** is a GraphQL response object which contains the data and errors.
+
+#### Returns
+<ArgTypes of={QueryPersonalScoreReturns} />
+
+### queryPersonalScoresDesc
+
+Like `queryPersonalScores`, but the result is sorted in descending order.
+
+```ts
+const resp = await s3Link.queryPersonalScoresDesc({ last: 3 });
+```
+
+### createComment
+
+The `createComment` method is used to create a comment for a Link. For example, if you want to create a comment with the following code:
+
+```ts
+const resp = await s3Link.createComment({
+  linkID: linkId,
+  text: "string",
+});
+```
+
+The **resp** is a GraphQL response object which contains the data and errors.
+
+#### Params
+<ArgTypes of={CreateCommentParams} />
+#### Returns
+<ArgTypes of={CreateCommentReturns} />
+
+### updateComment
+
+The `updateComment` method is used to update a comment for a Link. For example, if you want to update a comment with the following code:
+
+```ts
+const resp = await s3Link.updateComment(/* commentId */, {
+  linkID: linkId,
+  text: "string",
+});
+```
+
+The **resp** is a GraphQL response object which contains the data and errors.
+
+#### Params
+<ArgTypes of={UpdateCommentParams} />
+#### Returns
+<ArgTypes of={UpdateCommentReturns} />
+
+### queryPersonalComments
+
+The `queryPersonalComments` method is used to query the comments created by the current user. For example, if you want to query the comments created by the current user with the following code:
+
+```ts
+const resp = await s3Link.queryPersonalComments({ first: 10 });
+```
+
+The **resp** is a GraphQL response object which contains the data and errors.
+
+#### Returns
+<ArgTypes of={QueryPersonalCommentReturns} />
+
+### queryPersonalCommentsDesc
+
+Like `queryPersonalComments`, but the result is sorted in descending order.
+
+```ts
+const resp = await s3Link.queryPersonalCommentsDesc({ last: 3 });
+```
+
+
+## Examples
+
+<Source code={ExampleCode} />
