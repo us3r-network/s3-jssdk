@@ -20,6 +20,19 @@ Before using the SDK, you need to create a Ceramic instance and pass it to the S
 
 ## Usage
 
+The `Profile` type:
+
+```ts 
+export type WalletChainType = "EVM" | "SOLANA";
+export type Profile = {
+  name?: string;
+  avatar?: string;
+  wallets?: Wallet[];
+  bio?: string;
+  tags?: string[];
+};
+```
+
 ### Unit Profile instance
 
 ```ts
