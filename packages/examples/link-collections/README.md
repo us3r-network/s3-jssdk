@@ -1,15 +1,15 @@
 # Example
 
-This project is a comprehensive example that demonstrates how to quickly develop a dapp using our SDK and components. 
+This project is a comprehensive example that demonstrates how to quickly develop a dapp using our SDK and components.
 
-In this example, we are creating a shared bookmark dapp. Users can create a link for a specific URL, see all links created by themselves or others, and can favor, vote, and comment on any link. 
- 
- All this data is stored on Ceramic, which is a decentralized data network, and belongs to the user. No servers, databases, or any backend technologies are required.
+In this example, we are creating a shared bookmark dapp. Users can create a link for a specific URL, see all links created by themselves or others, and can favor, vote, and comment on any link.
+
+All this data is stored on Ceramic, which is a decentralized data network, and belongs to the user. No servers, databases, or any backend technologies are required.
 
 > Prior knowledge of TypeScript, React, and GraphQL is helpful.
 
-
 ## PART I - Basic function with s3 jssdk
+
 ### [Step 0 Create React App](https://github.com/us3r-network/s3-jssdk/commit/007fc5a4622c708d43e64db0009049e36853b9a4).
 
 Create a new React typescript project with [Create React App](https://create-react-app.dev/)
@@ -20,7 +20,7 @@ npx create-react-app link-collections --template typescript
 
 We use [React Aria](https://react-spectrum.adobe.com/react-aria/react-aria-components.html) as our UI component library.
 
-```javascript
+```bash
 yarn add react-aria-components
 ```
 
@@ -29,18 +29,19 @@ yarn add react-aria-components
 As a Dapp using Ceramic ComposeDB, authentication is needed to enable mutations on data controlled by a user’s account.
 You can use either @us3r-network/auth or @us3r-network/auth-with-rainbowkit to set up user authentication in your ComposeDB app.
 
-```javascript
+```bash
 yarn add @us3r-network/auth-with-rainbowkit
 ```
 
 Create components/AuthButton
+
 ```javascript
 import {
   useAuthentication,
   useSession,
 } from "@us3r-network/auth-with-rainbowkit";
 import { useCallback } from "react";
-import {Button} from 'react-aria-components'
+import { Button } from "react-aria-components";
 
 export default function AuthButton() {
   const { ready, signIn, signOut } = useAuthentication();
@@ -68,20 +69,21 @@ export default function AuthButton() {
 ```
 
 Modify App.tsx
-```javascript
-import { Us3rAuthWithRainbowkitProvider } from '@us3r-network/auth-with-rainbowkit'
-import AuthButton from './components/AuthButton'
-import './App.css'
 
-function App () {
+```javascript
+import { Us3rAuthWithRainbowkitProvider } from "@us3r-network/auth-with-rainbowkit";
+import AuthButton from "./components/AuthButton";
+import "./App.css";
+
+function App() {
   return (
     <Us3rAuthWithRainbowkitProvider>
       <AuthButton />
     </Us3rAuthWithRainbowkitProvider>
-  )
+  );
 }
 
-export default App
+export default App;
 ```
 
 ### [Step 2 show link list](https://github.com/us3r-network/s3-jssdk/commit/98239ecd0ce64c1712246ff81ead56f1f6dd3ff8).
@@ -93,6 +95,7 @@ yarn add @us3r-network/data-model
 ```
 
 Create components/Links
+
 ```javascript
 import { S3LinkModel, Link } from '@us3r-network/data-model'
 import { useEffect, useState } from 'react'
@@ -231,26 +234,28 @@ export default function Links () {
 ```
 
 Create constants/index.ts
+
 ```javascript
 export const CERAMIC_HOST =
-  process.env.CERAMIC_HOST || 'https://gcp-ceramic-testnet-dev.s3.xyz'
+  process.env.CERAMIC_HOST || "https://gcp-ceramic-testnet-dev.s3.xyz";
 ```
 
 Modify App.tsx
-```javascript
-import { Us3rAuthWithRainbowkitProvider } from '@us3r-network/auth-with-rainbowkit'
-import AuthButton from './components/AuthButton'
-import './App.css'
 
-function App () {
+```javascript
+import { Us3rAuthWithRainbowkitProvider } from "@us3r-network/auth-with-rainbowkit";
+import AuthButton from "./components/AuthButton";
+import "./App.css";
+
+function App() {
   return (
     <Us3rAuthWithRainbowkitProvider>
       <AuthButton />
     </Us3rAuthWithRainbowkitProvider>
-  )
+  );
 }
 
-export default App
+export default App;
 ```
 
 ### [Step 3 add create link](https://github.com/us3r-network/s3-jssdk/commit/b4d05feccc185d1ebe9fb2484b65532627967703).
@@ -258,10 +263,11 @@ export default App
 Next, we need to add the function to create links.
 
 Create components/CreateLink.tsx
+
 ```javascript
-import { useSession } from '@us3r-network/auth-with-rainbowkit'
-import { S3LinkModel } from '@us3r-network/data-model'
-import { useState } from 'react'
+import { useSession } from "@us3r-network/auth-with-rainbowkit";
+import { S3LinkModel } from "@us3r-network/data-model";
+import { useState } from "react";
 import {
   Button,
   DialogTrigger,
@@ -270,19 +276,19 @@ import {
   Heading,
   TextField,
   Label,
-  Input
-} from 'react-aria-components'
-import { CERAMIC_HOST } from '../constants'
+  Input,
+} from "react-aria-components";
+import { CERAMIC_HOST } from "../constants";
 
-const s3LinkModel = new S3LinkModel(CERAMIC_HOST)
+const s3LinkModel = new S3LinkModel(CERAMIC_HOST);
 
-export default function CreateLink () {
-  const [title, setTitle] = useState('')
-  const [url, setUrl] = useState('')
-  const session = useSession()
+export default function CreateLink() {
+  const [title, setTitle] = useState("");
+  const [url, setUrl] = useState("");
+  const session = useSession();
 
   return (
-    <div className='createLink'>
+    <div className="createLink">
       {session && (
         <DialogTrigger>
           <Button>Create New Link</Button>
@@ -294,38 +300,38 @@ export default function CreateLink () {
                   <TextField autoFocus>
                     <Label>URL:</Label>
                     <Input
-                      type='url'
+                      type="url"
                       value={url}
-                      onChange={e => setUrl(e.target.value)}
+                      onChange={(e) => setUrl(e.target.value)}
                     />
                   </TextField>
                   <TextField>
                     <Label>Title:</Label>
                     <Input
-                      type='text'
+                      type="text"
                       value={title}
-                      onChange={e => setTitle(e.target.value)}
+                      onChange={(e) => setTitle(e.target.value)}
                     />
                   </TextField>
-                  <div className='create-link-buttons'>
+                  <div className="create-link-buttons">
                     <Button
                       onPress={() => {
-                        close()
+                        close();
                       }}
                     >
                       Cancel
                     </Button>
                     <Button
                       onPress={() => {
-                        if (!session) return
-                        s3LinkModel.authComposeClient(session)
+                        if (!session) return;
+                        s3LinkModel.authComposeClient(session);
                         s3LinkModel.createLink({
                           title: title,
                           url: url,
-                          type: 'example',
-                          createAt: new Date().toISOString()
-                        })
-                        close()
+                          type: "example",
+                          createAt: new Date().toISOString(),
+                        });
+                        close();
                       }}
                     >
                       Submit
@@ -338,27 +344,28 @@ export default function CreateLink () {
         </DialogTrigger>
       )}
     </div>
-  )
+  );
 }
 ```
 
 Modify App.tsx
-```javascript
-import { Us3rAuthWithRainbowkitProvider } from '@us3r-network/auth-with-rainbowkit'
-import AuthButton from './components/AuthButton'
-import './App.css'
 
-function App () {
+```javascript
+import { Us3rAuthWithRainbowkitProvider } from "@us3r-network/auth-with-rainbowkit";
+import AuthButton from "./components/AuthButton";
+import "./App.css";
+
+function App() {
   return (
     <Us3rAuthWithRainbowkitProvider>
       <AuthButton />
       <Links />
       <CreateLink />
     </Us3rAuthWithRainbowkitProvider>
-  )
+  );
 }
 
-export default App
+export default App;
 ```
 
 ### [Step 4 add personal links](https://github.com/us3r-network/s3-jssdk/commit/72edd5d6e97ada51410bba958fe12b6bee036e7e).
@@ -373,6 +380,7 @@ Modify components/Links.tsx
 we'll adjust the layout and style of the app to create a clean and visually appealing UI.
 
 ## PART II - More functions using s3 components
+
 ### [Step 6 use profile components](https://github.com/us3r-network/s3-jssdk/commit/fd6c2bc7db3c01689809aad0dc8dd116e9a3dee5).
 
 To optimize creator user information in the user login and link list, consider using the @us3r-network/link library. It is a good choice.
@@ -382,31 +390,32 @@ yarn add @us3r-network/profile
 ```
 
 Modify App.tsx
-```javascript
-import { Us3rAuthWithRainbowkitProvider } from '@us3r-network/auth-with-rainbowkit'
-import AuthButton from './components/AuthButton'
-import Links from './components/Links'
-import './App.css'
-import CreateLink from './components/CreateLink'
-import { CERAMIC_HOST } from './constants'
-import { ProfileStateProvider } from '@us3r-network/profile'
-import { LinkStateProvider } from '@us3r-network/link'
 
-function App () {
+```javascript
+import { Us3rAuthWithRainbowkitProvider } from "@us3r-network/auth-with-rainbowkit";
+import AuthButton from "./components/AuthButton";
+import Links from "./components/Links";
+import "./App.css";
+import CreateLink from "./components/CreateLink";
+import { CERAMIC_HOST } from "./constants";
+import { ProfileStateProvider } from "@us3r-network/profile";
+import { LinkStateProvider } from "@us3r-network/link";
+
+function App() {
   return (
     <Us3rAuthWithRainbowkitProvider>
       <ProfileStateProvider ceramicHost={CERAMIC_HOST}>
-          <div className='app'>
-            <AuthButton />
-            <Links />
-            <CreateLink />
-          </div>
+        <div className="app">
+          <AuthButton />
+          <Links />
+          <CreateLink />
+        </div>
       </ProfileStateProvider>
     </Us3rAuthWithRainbowkitProvider>
-  )
+  );
 }
 
-export default App
+export default App;
 ```
 
 Modify components/AuthButton
@@ -414,6 +423,7 @@ Modify components/AuthButton
 
 Modify components/Links.tsx
 <https://github.com/us3r-network/s3-jssdk/commit/fd6c2bc7db3c01689809aad0dc8dd116e9a3dee5#diff-31074d88a6d6b6b8649e734b8466a2fc1a6dd8bc482a0ed1b6b083b9f935fc57>
+
 ### [Step 7 use link component to favor](https://github.com/us3r-network/s3-jssdk/commit/42ec1614680421018c0e6c85293bfa521c429717).
 
 We also need to add the functions of bookmarking, voting, and commenting to each link. We can use the pre-existing components in @us3r-network/link.
@@ -423,22 +433,23 @@ yarn add @us3r-network/link
 ```
 
 Modify App.tsx
-```javascript
-import { Us3rAuthWithRainbowkitProvider } from '@us3r-network/auth-with-rainbowkit'
-import AuthButton from './components/AuthButton'
-import Links from './components/Links'
-import './App.css'
-import CreateLink from './components/CreateLink'
-import { CERAMIC_HOST } from './constants'
-import { ProfileStateProvider } from '@us3r-network/profile'
-import { LinkStateProvider } from '@us3r-network/link'
 
-function App () {
+```javascript
+import { Us3rAuthWithRainbowkitProvider } from "@us3r-network/auth-with-rainbowkit";
+import AuthButton from "./components/AuthButton";
+import Links from "./components/Links";
+import "./App.css";
+import CreateLink from "./components/CreateLink";
+import { CERAMIC_HOST } from "./constants";
+import { ProfileStateProvider } from "@us3r-network/profile";
+import { LinkStateProvider } from "@us3r-network/link";
+
+function App() {
   return (
     <Us3rAuthWithRainbowkitProvider>
       <ProfileStateProvider ceramicHost={CERAMIC_HOST}>
         <LinkStateProvider ceramicHost={CERAMIC_HOST}>
-          <div className='app'>
+          <div className="app">
             <AuthButton />
             <Links />
             <CreateLink />
@@ -446,12 +457,11 @@ function App () {
         </LinkStateProvider>
       </ProfileStateProvider>
     </Us3rAuthWithRainbowkitProvider>
-  )
+  );
 }
 
-export default App
+export default App;
 ```
-
 
 Modify components/Links.tsx
 <https://github.com/us3r-network/s3-jssdk/commit/42ec1614680421018c0e6c85293bfa521c429717#diff-31074d88a6d6b6b8649e734b8466a2fc1a6dd8bc482a0ed1b6b083b9f935fc57>

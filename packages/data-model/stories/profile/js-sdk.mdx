@@ -1,0 +1,152 @@
+import { Meta, Source, ArgTypes, Canvas, Story } from "@storybook/blocks";
+import ExampleCode from "!!raw-loader!./example.tsx";
+import {
+    CreateProfileParams,
+    CreateProfileReturns,
+    WalletParams,
+    QueryProfileReturns,
+    QueryProfileParams,
+    UpdateProfileParams,
+    UpdateProfileReturns,
+    QueryProfileWithDIDParams,
+    QueryProfileWithDIDReturns
+} from "./TypeTable";
+
+# Profile JS-SDK
+
+## Usage
+Before using the SDK, you need to create a Ceramic instance and pass it to the SDK. and you need to create a [DID Session](https://developers.ceramic.network/reference/accounts/did-session/) and pass it to the SDK for writing
+
+### Unit Profile instance
+
+```ts
+...
+
+import {S3ProfileModel} from '@us3r-network/data-model'
+
+const CERAMIC_HOST = process.env.CERAMIC_HOST
+
+const s3Profile = new S3ProfileModel(CERAMIC_HOST)
+...
+
+```
+
+### Auth Profile instance
+
+ `authComposeClient` methods need a DID Session to sign the message for the write and update operation.
+
+```ts
+... // Some code to get gen the DID Session
+let _ = s3Profile.authComposeClient(session);
+...
+```
+
+
+## Type
+
+### Profile
+
+```ts 
+export type WalletChainType = "EVM" | "SOLANA";
+export type Profile = {
+  name?: string;
+  avatar?: string;
+  wallets?: Wallet[];
+  bio?: string;
+  tags?: string[];
+};
+```
+
+## Method
+
+Profile JS-SDK provides `queryPersonalProfile`, `mutationUpdatePersonalProfile`, `mutationPersonalProfile` and other methods for developers to use. 
+
+### createProfile
+
+For use the `createProfile` method that you can create a profile document for the user must be authenticated with DID Session.
+
+```ts
+...
+  const resp = await s3Profile.mutationPersonalProfile({
+    name: "Luffy",
+    bio: "I am Luffy",
+  });
+...
+```
+
+the prams is a `Partial<Profile>` object, the response is a Graphql response object, you can get the result by `resp.data.createProfile`, and the data is `document: { id: string }`.
+
+#### Params
+
+<ArgTypes of={CreateProfileParams} />
+
+and the `Wallet` is:
+<ArgTypes of={WalletParams} />
+
+#### Returns
+<ArgTypes of={CreateProfileReturns} />
+
+
+### queryPersonalProfile
+
+For use the `queryPersonalProfile` method that you can get the personal profile data of the user must be authenticated with DID Session.
+
+```ts
+...
+const resp = await s3Profile.queryPersonalProfile()
+...
+```
+
+the **resp** is a Graphql response object, you can get the data by `resp.data.viewer.profile`, and the data is a `Profile` object.
+
+#### Returns
+<ArgTypes of={QueryProfileReturns} />
+
+### mutationUpdatePersonalProfile
+
+For use the `mutationUpdatePersonalProfile` method that you can update the personal profile data of the user must be authenticated with DID Session.
+
+```ts
+...
+const resp = await s3Profile.mutationUpdatePersonalProfile({
+  name: "test",
+  avatar: "test",
+  bio: "test",
+  tags: ["test"],
+  wallets: [
+    {
+      chain: "EVM",
+      address: "test",
+    },
+  ],
+});
+```
+
+the prams is a `Partial<Profile>` object, the response is a Graphql response object, you can get the result by `resp.data.updateProfile`, and the data is `document: { id: string }`.
+
+#### Params
+<ArgTypes of={UpdateProfileParams} />
+#### Returns
+<ArgTypes of={UpdateProfileReturns} />
+
+### queryProfileWithDid
+
+For use the `queryProfileWithDid` method that you can get others profile data of the user by the did.
+
+```ts
+...
+const resp = await s3Profile.queryProfileWithDid(/* did-string */)
+...
+
+```
+
+the **resp** is a Graphql response object, you can get the data by `resp.data.node`, and the data is a `node` object with `Profile`.
+
+#### Returns
+<ArgTypes of={QueryProfileWithDIDReturns} />
+
+
+## Examples
+
+<Source code={ExampleCode} />
+

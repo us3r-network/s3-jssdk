@@ -16,17 +16,28 @@ const authToolStories = authToolPkg.map((pkgDir) => ({
   directory: path.join(__dirname, `../packages/${pkgDir}`),
 }));
 
-// model definition
-const modelDefDoc = ["Profile", "Link"];
-const modelDefTitlePrefix = "model definition";
+// models
+
+const modelPkgs = ["profile", "link"];
 const modelDefDirectory = path.join(__dirname, `../packages/data-model`);
-const modelDefStories = modelDefDoc
-  // Generate the story navigation bar in the specified order
-  .map((file) => ({
-    titlePrefix: modelDefTitlePrefix,
-    directory: `${modelDefDirectory}/stories`,
-    files: `${file}.mdx`,
-  }));
+const modelDefStories = modelPkgs
+  .map((dir) => {
+    const story = {
+      titlePrefix: `Models/${capitalizedStr(dir)}`,
+      directory: `${modelDefDirectory}/stories/${dir}`,
+    };
+    return [
+      {
+        ...story,
+        files: `**/definition.mdx`,
+      },
+      {
+        ...story,
+        files: `**/*.{stories.@(js|jsx|ts|tsx),mdx}`,
+      },
+    ];
+  })
+  .reduce((acc, val) => acc.concat(val), []);
 
 // components
 const componentPkgs = ["profile", "link"];
@@ -71,9 +82,17 @@ const componentStories = componentPkgs
   })
   .reduce((acc, val) => acc.concat(val), []);
 
+// examples
+const examplePkgs = ["link-collections"];
+const exampleStories = examplePkgs.map((pkgDir) => ({
+  titlePrefix: `example`,
+  directory: path.join(__dirname, `../packages/examples/${pkgDir}`),
+}));
+
 export default [
   ...prodGuideStories,
   ...authToolStories,
   ...modelDefStories,
   ...componentStories,
+  ...exampleStories,
 ];
