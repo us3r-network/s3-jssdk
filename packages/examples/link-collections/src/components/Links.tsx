@@ -63,6 +63,13 @@ const unique = (arr: any[], filed: string) => {
   return arr.filter(item => !res.has(item[filed]) && res.set(item[filed], 1))
 }
 
+const shortStreamID = (id: string | undefined, len = 4) => {
+  if (id) {
+    return id.slice(0, len) + "..".repeat(len / 4) + id.slice(-len);
+  }
+  return ''
+}
+
 export default function Links () {
   const [links, setLinks] = useState<Link[]>([])
 
@@ -199,6 +206,7 @@ export default function Links () {
           <Column isRowHeader>Link</Column>
           <Column>Creator</Column>
           <Column>Date</Column>
+          <Column>Stream</Column>
         </TableHeader>
         <TableBody>
           {links.map(link => (
@@ -265,6 +273,11 @@ export default function Links () {
                 <UserName did={link?.creator?.id} />
               </Cell>
               <Cell aria-label='createAt'>{link?.createAt}</Cell>
+              <Cell>
+                <a href={`https://scan.s3.xyz/streams/stream/${link?.id}`} target='_blank' rel='noreferrer'>
+                  {shortStreamID(link?.id)}
+                </a>
+              </Cell>
             </Row>
           ))}
         </TableBody>
