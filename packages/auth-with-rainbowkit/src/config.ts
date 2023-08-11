@@ -41,7 +41,7 @@ export const getDefaultWagmiConfig = () => {
   ]);
 
   return createConfig({
-    autoConnect: false,
+    autoConnect: true,
     connectors,
     publicClient,
     webSocketPublicClient,
@@ -78,7 +78,7 @@ export const getWagmiConfigByProjectId = (
   ]);
 
   return createConfig({
-    autoConnect: false,
+    autoConnect: true,
     connectors,
     publicClient,
     webSocketPublicClient,
