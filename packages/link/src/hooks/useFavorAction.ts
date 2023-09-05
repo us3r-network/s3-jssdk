@@ -6,6 +6,7 @@ import {
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
 import { useLinkFavors } from "./useLinkFavors";
+import { getLinkWithLinkModel } from "../utils/getLinkWithLinkModel";
 
 export const useFavorAction = (
   linkId: string,
@@ -70,6 +71,7 @@ export const useFavorAction = (
       signIn();
       return;
     }
+    if (!s3LinkModel) return;
     try {
       addOneToFavoringLinkIds(linkId);
       if (findCurrUserFavor) {
@@ -86,7 +88,9 @@ export const useFavorAction = (
         if (revoke) {
           removeOneFromPersonalFavors(id);
         } else {
-          addOneToPersonalFavors({ ...findCurrUserFavor });
+          const linkRes = await getLinkWithLinkModel(s3LinkModel, linkId);
+          const link = linkRes.data?.node;
+          addOneToPersonalFavors({ ...findCurrUserFavor, link });
         }
         if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(!revoke);
       } else {
@@ -100,6 +104,8 @@ export const useFavorAction = (
         }
         const id = res?.data?.createFavor.document.id;
         if (id) {
+          const linkRes = await getLinkWithLinkModel(s3LinkModel, linkId);
+          const link = linkRes.data?.node;
           const favorData = {
             id,
             linkID: linkId,
@@ -109,6 +115,7 @@ export const useFavorAction = (
             creator: {
               id: session.id,
             },
+            link,
           };
           // update store
           addFavorToCacheLinkFavors(linkId, favorData);

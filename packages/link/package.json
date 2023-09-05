@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/link",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "the us3r link components",
   "type": "module",
   "main": "dist/cjs/index.js",
