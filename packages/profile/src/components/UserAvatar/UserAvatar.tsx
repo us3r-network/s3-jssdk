@@ -31,7 +31,7 @@ export interface UserAvatarProps
 export function UserAvatar({ children, ...props }: UserAvatarProps) {
   const session = useSession();
   const { profile, profileLoading, getProfileWithDid } = useProfileState();
-  const isLoginUser = !props.hasOwnProperty("did");
+  const isLoginUser = !props.hasOwnProperty("did") || props.did === session?.id;
   const did = (isLoginUser ? session?.id : props.did) || "";
   const defaultAvatarUrl = useMemo(
     () => getDefaultUserAvatarWithDid(did),
