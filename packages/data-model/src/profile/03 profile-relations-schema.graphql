@@ -1,0 +1,8 @@
+type BioLink @loadModel(id: "") {
+  id: ID!
+}
+
+type Profile @loadModel(id: "" ) {
+  bioLinksCount: Int! @relationCountFrom(model: "BioLink", property: "bioLinkID")
+  bioLinks: [BioLink]! @relationFrom(model: "BioLink", property: "bioLinkID")
+}
