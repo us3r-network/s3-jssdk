@@ -241,3 +241,8 @@ await s3Profile.queryProfileWithDid(/** did */)
   }
   ...
 ```
+
+# data model UT
+
+1. `yarn install` in root directory
+2. `yarn test` in `packages/data-model` directory
