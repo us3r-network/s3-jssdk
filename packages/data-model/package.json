@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/data-model",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -34,11 +34,11 @@
   },
   "homepage": "https://github.com/us3r-network/s3-jssdk/tree/main/packages/data-model",
   "dependencies": {
-    "@ceramicnetwork/common": "^2.24.0",
-    "@composedb/client": "^0.4.3",
-    "@composedb/types": "^0.4.3",
+    "@ceramicnetwork/common": "^2.34.0",
+    "@composedb/client": "^0.5.1",
+    "@composedb/types": "^0.5.1",
     "did-session": "^2.0.0",
-    "dids": "^4.0.0"
+    "dids": "^4.0.4"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.1",
