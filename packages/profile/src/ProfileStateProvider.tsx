@@ -34,6 +34,7 @@ const defaultContextValue: ProfileStateContextValue = {
 const ProfileStateContext = createContext(defaultContextValue);
 
 const defaultNewProfile: Profile = {
+  id: "",
   name: "",
   avatar: "",
   bio: "",
@@ -124,7 +125,7 @@ export default function ProfileStateProvider({
       if (res?.errors && res.errors.length > 0) {
         throw Error(res.errors[0].message);
       }
-      setProfile(newProfile);
+      setProfile((prev) => ({ ...prev, ...newProfile }));
     },
     [session, s3ProfileModalAuthed, profile]
   );

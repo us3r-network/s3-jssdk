@@ -1,0 +1,21 @@
+type Profile @loadModel(id: "") {
+  id: ID!
+}
+
+type BioLink
+  @createModel(
+    accountRelation: LIST,
+    description: "social links for us3r-network"
+  )
+  @createIndex(fields: [{ path: "platform" }])
+  @createIndex(fields: [{ path: "network" }])
+  @createIndex(fields: [{ path: "handle" }]) {
+  version: CommitID! @documentVersion
+  creator: DID! @documentAccount
+  platform: String! @string(maxLength: 100)
+  network: String @string(maxLength: 100)
+  handle: String! @string(maxLength: 100) 
+  data: String @string(maxLength: 100000)
+  profileID: StreamID! @documentReference(model: "Profile")
+  profile: Profile @relationDocument(property: "profileID")
+}
