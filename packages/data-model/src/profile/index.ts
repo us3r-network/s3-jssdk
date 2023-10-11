@@ -35,12 +35,6 @@ export type BioLinkInput = {
   data?: string;
 };
 
-export type BioLinksEqualToFilters = {
-  platform?: string;
-  network?: string;
-  handle?: string;
-};
-
 export class S3ProfileModel extends S3Model {
   constructor(
     ceramic: CeramicApi | string,
@@ -329,12 +323,12 @@ export class S3ProfileModel extends S3Model {
     return res;
   }
 
-  public async queryBioLinksWithEqualToFilters({
+  public async queryBioLinksWithFilters({
     filters,
     first = 10,
     after = "",
   }: {
-    filters: BioLinksEqualToFilters;
+    filters: any;
     first?: number;
     after?: string;
   }) {
@@ -363,23 +357,11 @@ export class S3ProfileModel extends S3Model {
         }
       }
     `;
-    let inputAnd = [];
-    for (const key in filters) {
-      inputAnd.push({
-        where: {
-          [key]: {
-            equalTo: filters[key as keyof BioLinksEqualToFilters],
-          },
-        },
-      });
-    }
     const composeClient = this.composeClient;
     const res = await composeClient.executeQuery<{
       bioLinkIndex: Page<BioLink>;
     }>(query, {
-      input: {
-        and: inputAnd,
-      },
+      input: filters,
     });
     return res;
   }

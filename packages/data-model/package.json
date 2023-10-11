@@ -36,7 +36,7 @@
   "dependencies": {
     "@ceramicnetwork/common": "^2.34.0",
     "@composedb/client": "^0.5.1",
-    "@composedb/devtools": "^0.5.0",
+    "@composedb/devtools": "^0.5.1",
     "@composedb/types": "^0.5.1",
     "did-session": "^2.0.0",
     "dids": "^4.0.4"
