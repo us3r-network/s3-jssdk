@@ -8,7 +8,8 @@
     "packages/auth-with-rainbowkit",
     "packages/data-model",
     "packages/profile",
-    "packages/link"
+    "packages/link",
+    "packages/jest-environment-s3network"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
