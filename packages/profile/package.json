@@ -21,7 +21,7 @@
   "dependencies": {
     "@material-design-icons/svg": "^0.14.7",
     "@multiavatar/multiavatar": "^1.0.7",
-    "@us3r-network/data-model": "^0.6.0",
+    "@us3r-network/data-model": "^0.6.0-alpha.0",
     "lodash.isfunction": "^3.0.9",
     "react-aria": "^3.24.0",
     "react-aria-components": "^1.0.0-alpha.3",
