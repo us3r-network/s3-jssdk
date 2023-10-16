@@ -2,11 +2,11 @@
 export const definition = {
   models: {
     Profile: {
-      id: "kjzl6hvfrbw6c6vwzcigxgsnskmtkwodxnxzy0fzasxs6apumpv67q9sip974ry",
+      id: "kjzl6hvfrbw6c8qj2r0l59n7zu6g1i7bdw6nswexyy3gbpybn6pllxhqfn9dud3",
       accountRelation: { type: "single" },
     },
     BioLink: {
-      id: "kjzl6hvfrbw6c5sfh4zjss0pmc5x99sjdjbcu7zz8up5t7k0yvsybwvn2701o6k",
+      id: "kjzl6hvfrbw6c5ctgt9xvj23sr6vokrtmvuokegz5teojtr6nny5oxhcd5x3p7d",
       accountRelation: { type: "list" },
     },
   },
@@ -49,7 +49,7 @@ export const definition = {
         relation: {
           source: "queryCount",
           model:
-            "kjzl6hvfrbw6c5sfh4zjss0pmc5x99sjdjbcu7zz8up5t7k0yvsybwvn2701o6k",
+            "kjzl6hvfrbw6c5ctgt9xvj23sr6vokrtmvuokegz5teojtr6nny5oxhcd5x3p7d",
           property: "bioLinkID",
         },
       },
@@ -59,7 +59,7 @@ export const definition = {
         relation: {
           source: "queryConnection",
           model:
-            "kjzl6hvfrbw6c5sfh4zjss0pmc5x99sjdjbcu7zz8up5t7k0yvsybwvn2701o6k",
+            "kjzl6hvfrbw6c5ctgt9xvj23sr6vokrtmvuokegz5teojtr6nny5oxhcd5x3p7d",
           property: "bioLinkID",
         },
       },
@@ -77,7 +77,7 @@ export const definition = {
         relation: {
           source: "document",
           model:
-            "kjzl6hvfrbw6c6vwzcigxgsnskmtkwodxnxzy0fzasxs6apumpv67q9sip974ry",
+            "kjzl6hvfrbw6c8qj2r0l59n7zu6g1i7bdw6nswexyy3gbpybn6pllxhqfn9dud3",
           property: "profileID",
         },
       },

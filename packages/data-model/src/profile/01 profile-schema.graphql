@@ -13,7 +13,7 @@ type Wallet {
 }
 
 type Profile
-  @createModel(accountRelation: SINGLE, description: "profile for us3r-network")
+  @createModel(accountRelation: SINGLE, description: "profile for us3r-network v2")
   @createIndex(fields: [{ path: "name" }])
   @createIndex(fields: [{ path: "tags" }])
   @createIndex(fields: [{ path: "wallets" }]) {
