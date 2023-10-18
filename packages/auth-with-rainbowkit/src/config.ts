@@ -9,7 +9,7 @@ import {
   metaMaskWallet,
   trustWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { configureChains, createConfig } from "wagmi";
+import { Chain, configureChains, createConfig } from "wagmi";
 import {
   mainnet,
   goerli,
@@ -37,20 +37,14 @@ export const { chains, publicClient, webSocketPublicClient } = configureChains(
     arbitrum,
     base,
     zora,
-    ...(process.env.REACT_APP_ENABLE_TESTNETS === "true" ?
-      [
-        goerli,
-        polygonMumbai,
-        bscTestnet,
-        arbitrumGoerli,
-        optimismGoerli,
-        baseGoerli,
-        zoraTestnet
-      ]
-      :
-      []
-    ),
-  ],
+    goerli,
+    polygonMumbai,
+    bscTestnet,
+    arbitrumGoerli,
+    optimismGoerli,
+    baseGoerli,
+    zoraTestnet
+  ] as Chain[],
   [publicProvider()]
 );
 
