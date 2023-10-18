@@ -11,23 +11,45 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createConfig } from "wagmi";
 import {
-  arbitrum,
-  goerli,
   mainnet,
+  goerli,
+  bsc,
+  bscTestnet,
+  arbitrum,
+  arbitrumGoerli,
   optimism,
+  optimismGoerli,
   polygon,
   polygonMumbai,
-} from "wagmi/chains";
+  base,
+  baseGoerli,
+  zora,
+  zoraTestnet,
+} from "viem/chains";
 import { publicProvider } from "wagmi/providers/public";
 
 export const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     mainnet,
     polygon,
-    polygonMumbai,
+    bsc,
     optimism,
     arbitrum,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli] : []),
+    base,
+    zora,
+    ...(process.env.REACT_APP_ENABLE_TESTNETS === "true" ?
+      [
+        goerli,
+        polygonMumbai,
+        bscTestnet,
+        arbitrumGoerli,
+        optimismGoerli,
+        baseGoerli,
+        zoraTestnet
+      ]
+      :
+      []
+    ),
   ],
   [publicProvider()]
 );
