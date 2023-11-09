@@ -4,7 +4,6 @@ import {
   Button,
   Dialog,
   Heading,
-  Item,
   Modal,
   TextField,
 } from "react-aria-components";

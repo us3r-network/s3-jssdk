@@ -23,8 +23,8 @@
     "@multiavatar/multiavatar": "^1.0.7",
     "@us3r-network/data-model": "^0.2.0",
     "lodash.isfunction": "^3.0.9",
-    "react-aria": "^3.24.0",
-    "react-aria-components": "^1.0.0-alpha.3",
+    "react-aria": "^3.30.0",
+    "react-aria-components": "^1.0.0-rc.0",
     "styled-components": "^5.3.10"
   },
   "peerDependencies": {

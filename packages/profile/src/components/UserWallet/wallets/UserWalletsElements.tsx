@@ -1,5 +1,5 @@
 import {
-  Item as AriaItem,
+  ListBoxItem as AriaItem,
   ItemProps,
   ListBox,
   ListBoxProps,
