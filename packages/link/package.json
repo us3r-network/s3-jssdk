@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/link",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "the us3r link components",
   "type": "module",
   "main": "dist/cjs/index.js",
@@ -24,8 +24,8 @@
     "dayjs": "^2.0.0-alpha.4",
     "immer": "^10.0.2",
     "lodash.isequal": "^4.5.0",
-    "react-aria": "^3.24.0",
-    "react-aria-components": "^1.0.0-alpha.3",
+    "react-aria": "^3.30.0",
+    "react-aria-components": "^1.0.0-rc.0",
     "zustand": "^4.3.7"
   },
   "peerDependencies": {

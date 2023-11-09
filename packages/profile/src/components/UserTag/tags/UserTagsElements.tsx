@@ -1,6 +1,6 @@
 import {
-  Item as AriaItem,
-  ItemProps,
+  ListBoxItem as AriaItem,
+  ListBoxItemProps,
   ListBox,
   ListBoxProps,
 } from "react-aria-components";
@@ -30,7 +30,11 @@ function List(props: ListBoxProps<{ tag: string }>) {
   );
 }
 
-function Item({ children, value, ...props }: ItemProps<{ tag: string }>) {
+function Item({
+  children,
+  value,
+  ...props
+}: ListBoxItemProps<{ tag: string }>) {
   return (
     <AriaItem
       data-state-element="Item"
