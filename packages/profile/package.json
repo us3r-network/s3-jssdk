@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/profile",
-  "version": "0.5.7",
+  "version": "0.5.10-alpha.1",
   "description": "the us3r profile components",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -21,7 +21,7 @@
   "dependencies": {
     "@material-design-icons/svg": "^0.14.7",
     "@multiavatar/multiavatar": "^1.0.7",
-    "@us3r-network/data-model": "^0.2.0",
+    "@us3r-network/data-model": "^0.6.0-alpha.1",
     "lodash.isfunction": "^3.0.9",
     "react-aria": "^3.30.0",
     "react-aria-components": "^1.0.0-rc.0",

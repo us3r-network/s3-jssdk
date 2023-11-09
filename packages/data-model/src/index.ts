@@ -8,4 +8,10 @@ export type { Creator } from "./base";
 export type { Dapp, SocialLink } from "./dapp";
 export type { Link, Comment, Favor, Score, Vote } from "./link";
 export type { Collection } from "./model-collection";
-export type { Profile, Wallet, WalletChainType } from "./profile";
+export type {
+  Profile,
+  Wallet,
+  WalletChainType,
+  BioLink,
+  BioLinkInput,
+} from "./profile";

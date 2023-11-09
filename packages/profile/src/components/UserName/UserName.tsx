@@ -26,7 +26,7 @@ export interface UserNameProps
 export function UserName({ name, children, ...props }: UserNameProps) {
   const session = useSession();
   const { profile, profileLoading, getProfileWithDid } = useProfileState();
-  const isLoginUser = !props.hasOwnProperty("did");
+  const isLoginUser = !props.hasOwnProperty("did") || props.did === session?.id;
   const did = (isLoginUser ? session?.id : props.did) || "";
 
   const [isLoading, setIsLoading] = useState(true);
