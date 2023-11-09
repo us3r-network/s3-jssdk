@@ -1,6 +1,6 @@
 import {
   ListBoxItem as AriaItem,
-  ItemProps,
+  ListBoxItemProps,
   ListBox,
   ListBoxProps,
 } from "react-aria-components";
@@ -49,7 +49,7 @@ function List(props: ListBoxProps<Comment>) {
   );
 }
 
-function Item({ children, value, ...props }: ItemProps<Comment>) {
+function Item({ children, value, ...props }: ListBoxItemProps<Comment>) {
   if (!value) return null;
   return (
     <AriaItem

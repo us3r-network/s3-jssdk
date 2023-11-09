@@ -1,7 +1,7 @@
 import {
   ListBoxItem as AriaItem,
   Button,
-  ItemProps,
+  ListBoxItemProps,
   ItemRenderProps,
   ListBox,
   ListBoxProps,
@@ -48,7 +48,7 @@ function Item({
   value,
   ...props
 }: ChildrenRenderProps<
-  ItemProps<Score>,
+  ListBoxItemProps<Score>,
   ItemRenderProps & ScoreReviewsItemContextValue
 >) {
   if (!value) {

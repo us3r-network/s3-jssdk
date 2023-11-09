@@ -1,6 +1,6 @@
 import {
   ListBoxItem as AriaItem,
-  ItemProps,
+  ListBoxItemProps,
   ListBox,
   ListBoxProps,
 } from "react-aria-components";
@@ -36,7 +36,7 @@ function List(props: ListBoxProps<Wallet>) {
   );
 }
 
-function Item({ children, value, ...props }: ItemProps<Wallet>) {
+function Item({ children, value, ...props }: ListBoxItemProps<Wallet>) {
   if (!value) return null;
   return (
     <AriaItem
