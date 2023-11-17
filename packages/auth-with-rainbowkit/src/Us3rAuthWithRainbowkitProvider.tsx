@@ -65,7 +65,7 @@ function Us3rAuthWrap({
   setRainbowAuthenticationStatus: (status: AuthenticationStatus) => void;
 }) {
   const { openConnectModal } = useConnectModal();
-  const { disconnect } = useDisconnect();
+  const { disconnect, disconnectAsync } = useDisconnect();
   const [session, setSession] = useState<Session>();
   const [status, setStatus] = useState<AuthenticationStatus>("unauthenticated");
   const [ready, setReady] = useState(false);
@@ -109,9 +109,12 @@ function Us3rAuthWrap({
     },
   });
 
-  const signIn = useCallback(async () => {
-    if (openConnectModal) openConnectModal();
-  }, [openConnectModal]);
+  const signIn = async () => {
+    if (openConnectModal) {
+      await disconnectAsync();
+      openConnectModal();
+    }
+  };
 
   const signOut = useCallback(() => {
     if (us3rAuthInstance) {
