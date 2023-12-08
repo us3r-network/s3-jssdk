@@ -1,4 +1,10 @@
-type Link @createModel(accountRelation: LIST, description: "Links in us3r-network") {
+type Link
+  @createModel(accountRelation: LIST, description: "Links in us3r-network")
+  @createIndex(fields: [{ path: "url" }])
+  @createIndex(fields: [{ path: "type" }])
+  @createIndex(fields: [{ path: "title" }]) 
+  @createIndex(fields: [{ path: "createAt" }]) 
+  @createIndex(fields: [{ path: "modifiedAt" }]) {
   creator: DID! @documentAccount
   version: CommitID! @documentVersion
   type: String! @string(maxLength: 100)
