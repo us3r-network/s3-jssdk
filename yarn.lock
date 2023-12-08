@@ -1437,31 +1437,31 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@ceramicnetwork/anchor-listener@^1.24.0":
-  version "1.24.0"
-  resolved "https://registry.npmjs.org/@ceramicnetwork/anchor-listener/-/anchor-listener-1.24.0.tgz#e8ca3bbb0cc01fbe1d716692a6955167a15fe7ae"
-  integrity sha512-79+P0pF3PAgF0zP/T05gmQhZ3kz2HMqFNgW3kZdy5MO81L9yYNDvq0d5xeO+RhOWo37jobvarCLZdzI9EmSfPg==
+"@ceramicnetwork/anchor-listener@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/anchor-listener/-/anchor-listener-2.1.0.tgz#c6dd6521fa32a0381412590d2a6b2f83586b56ab"
+  integrity sha512-OnAwZa4kz58Y5JaVSmLjJYXHMBsa55SuAGcz/yJhUVC3pXqzupfJ0tl+7XLDfCWvU8aeIFdnk1oR4fTqjXBGQA==
   dependencies:
-    "@ceramicnetwork/anchor-utils" "^1.22.0"
+    "@ceramicnetwork/anchor-utils" "^2.1.0"
     "@ethersproject/providers" "^5.5.1"
     rxjs "^7.5.2"
 
-"@ceramicnetwork/anchor-utils@^1.22.0":
-  version "1.22.0"
-  resolved "https://registry.npmjs.org/@ceramicnetwork/anchor-utils/-/anchor-utils-1.22.0.tgz#5379db2b9cbba06eed0fd1a45017a544025d82c2"
-  integrity sha512-spkycwNXOvkrY44BLx9M+vVpplbZGMwtJhRx39UFRA0W3UbUHcQt31dcATT8f87mjlXtwHiXaJ9osI7ka4D+Zw==
+"@ceramicnetwork/anchor-utils@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/anchor-utils/-/anchor-utils-2.1.0.tgz#175eaa973d1f73618fd3e01a5b18c955ce3204e7"
+  integrity sha512-Bae8DstRjgWzNC/JE4B5JybmEsqKlRPWoqognRNaXngLikkRNeZyu3mpJIT1jhMWYKNtClOF2t+IYCIJ8Uit7g==
   dependencies:
-    "@ceramicnetwork/common" "^2.39.0"
+    "@ceramicnetwork/common" "^3.1.0"
     "@ethersproject/abi" "^5.7.0"
     multiformats "^11.0.1"
     uint8arrays "^4.0.3"
 
-"@ceramicnetwork/blockchain-utils-linking@^2.23.0":
-  version "2.23.0"
-  resolved "https://registry.npmjs.org/@ceramicnetwork/blockchain-utils-linking/-/blockchain-utils-linking-2.23.0.tgz#dc6fd86b6d6f919f89cb5eda8cae26c097387130"
-  integrity sha512-3GA2uZsR9u84Ebs6qszfiY1G1TMsB69A5ApfTzrSSWozvwKMRGj1UqKf55kVVHNLYAqjgtyyY0MWkJUeANs6fA==
+"@ceramicnetwork/blockchain-utils-linking@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/blockchain-utils-linking/-/blockchain-utils-linking-3.1.0.tgz#334443a75fd976cccf28bb33d3620684ea1f1a4c"
+  integrity sha512-88LgAY8o7UrQhY2XmAp2w07CeS1vdQCraZgk5/0IiZTYqGP4Gl707VUwhS0TkE3MTxGt/OVzrXZS3Hk71qYKKA==
   dependencies:
-    "@ceramicnetwork/streamid" "^2.17.0"
+    "@ceramicnetwork/streamid" "^3.1.0"
     "@didtools/cacao" "^2.1.0"
     "@stablelib/random" "^1.0.1"
     "@stablelib/sha256" "^1.0.1"
@@ -1469,13 +1469,13 @@
     near-api-js "^0.44.2"
     uint8arrays "^4.0.3"
 
-"@ceramicnetwork/blockchain-utils-validation@^2.31.0":
-  version "2.31.0"
-  resolved "https://registry.npmjs.org/@ceramicnetwork/blockchain-utils-validation/-/blockchain-utils-validation-2.31.0.tgz#6a58eb15de9a57005148e85c3c2d9bc1283340ad"
-  integrity sha512-bfZrMZZWUQpPrWtRh5a9K3Jd5FtlxGjSaMx1k93lV66AeI/Fyfvd/3/VSONsyQ4ncg9ZTcmNZuut8KuqeH6QhQ==
+"@ceramicnetwork/blockchain-utils-validation@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/blockchain-utils-validation/-/blockchain-utils-validation-3.1.0.tgz#c2863606bedb07c9a4e7a926b561f82fc17cfcbd"
+  integrity sha512-JLCL3oAB/uxt/E+PooFUcGyF2VjtPWkFeUViBnwVcu1sqccggl0UlSyzt1UndiS5d+I8ZtNr6lNg+rWnDUYn8g==
   dependencies:
-    "@ceramicnetwork/blockchain-utils-linking" "^2.23.0"
-    "@ceramicnetwork/common" "^2.39.0"
+    "@ceramicnetwork/blockchain-utils-linking" "^3.1.0"
+    "@ceramicnetwork/common" "^3.1.0"
     "@ethersproject/contracts" "^5.5.0"
     "@ethersproject/providers" "^5.5.1"
     "@ethersproject/wallet" "^5.5.0"
@@ -1486,7 +1486,6 @@
     "@tendermint/sig" "^0.6.0"
     "@zondax/filecoin-signing-tools" "^0.18.2"
     caip "~1.1.0"
-    cross-fetch "^3.1.4"
     tweetnacl "^1.0.3"
     uint8arrays "^4.0.3"
 
@@ -1502,7 +1501,19 @@
     multiformats "^11.0.1"
     uint8arrays "^4.0.3"
 
-"@ceramicnetwork/common@^2.24.0", "@ceramicnetwork/common@^2.34.0", "@ceramicnetwork/common@^2.35.0", "@ceramicnetwork/common@^2.39.0":
+"@ceramicnetwork/codecs@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/codecs/-/codecs-2.1.0.tgz#f1fb0d717b2f03785c11ee64609d7c277a336e15"
+  integrity sha512-N4tpsJOHRb4Qk56c+LGcVhoxjHwH8v+cs0CkSw1LFut+58FkDr4asWCdk7R/f/4DmteS1LPzt/yd6e+QcF/2Xg==
+  dependencies:
+    "@ceramicnetwork/streamid" "^3.1.0"
+    cartonne "^2.1.1"
+    codeco "^1.1.0"
+    dag-jose "^4.0.0"
+    multiformats "^11.0.1"
+    uint8arrays "^4.0.3"
+
+"@ceramicnetwork/common@^2.24.0", "@ceramicnetwork/common@^2.39.0":
   version "2.39.0"
   resolved "https://registry.npmjs.org/@ceramicnetwork/common/-/common-2.39.0.tgz#7c1349b2aa5892bef74569504d6686c4a8aaff7c"
   integrity sha512-NB/6XzPqualWK5Kyti664VHhJug3Z8XDFNpYxM0dLz13lgtNnLWUt6xFG0I7chB0ecbhexanKRE/dh7Ltjczvw==
@@ -1526,30 +1537,53 @@
     rxjs "^7.5.2"
     uint8arrays "^4.0.3"
 
-"@ceramicnetwork/core@^2.31.0":
-  version "2.46.0"
-  resolved "https://registry.npmjs.org/@ceramicnetwork/core/-/core-2.46.0.tgz#59f993d5a159851b7680adbce0f2d617d1839a5c"
-  integrity sha512-N0IlNPwLYozXku9LX0pQ1a+18RWlqcvKTtJl1xy4GPef2aK6k/xdlsi6h/0yZrTRBRYXxTkFE8ZItb2p6r0rvA==
+"@ceramicnetwork/common@^3.0.5", "@ceramicnetwork/common@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/common/-/common-3.1.0.tgz#6d951c7a5bc4518f593038c40b4063ea07376305"
+  integrity sha512-HS5Vdos+v17pVd1mK7//gKnR5NXw4ZQqt0LY9d8eNF6d97KtMh6OWr2nIZMhGfnH4BqUXULM+7V71nzU1aM/cw==
   dependencies:
-    "@ceramicnetwork/anchor-listener" "^1.24.0"
-    "@ceramicnetwork/anchor-utils" "^1.22.0"
-    "@ceramicnetwork/codecs" "^1.14.0"
-    "@ceramicnetwork/common" "^2.39.0"
-    "@ceramicnetwork/indexing" "^1.5.0"
-    "@ceramicnetwork/ipfs-topology" "^2.33.0"
-    "@ceramicnetwork/job-queue" "^1.6.0"
+    "@ceramicnetwork/codecs" "^2.1.0"
+    "@ceramicnetwork/streamid" "^3.1.0"
+    "@didtools/cacao" "^2.1.0"
+    "@didtools/pkh-ethereum" "^0.1.0"
+    "@didtools/pkh-solana" "^0.1.0"
+    "@didtools/pkh-stacks" "^0.1.0"
+    "@didtools/pkh-tezos" "^0.2.1"
+    "@stablelib/random" "^1.0.1"
+    caip "~1.1.0"
+    flat "^5.0.2"
+    it-first "^1.0.7"
+    jet-logger "1.2.2"
+    lodash.clonedeep "^4.5.0"
+    logfmt "^1.3.2"
+    multiformats "^11.0.1"
+    rxjs "^7.5.2"
+    uint8arrays "^4.0.3"
+
+"@ceramicnetwork/core@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/core/-/core-3.1.0.tgz#e0962fd8012056238d803451370099ef55af5732"
+  integrity sha512-1AHQRz1ugCc9KA/DNCowuPKgYxAqJQ4ds9XGliZGHa0AMeJ1vIzDGloTNv1zDM1D8sf60A/XIfaXtaIOSh9UAQ==
+  dependencies:
+    "@ceramicnetwork/anchor-listener" "^2.1.0"
+    "@ceramicnetwork/anchor-utils" "^2.1.0"
+    "@ceramicnetwork/codecs" "^2.1.0"
+    "@ceramicnetwork/common" "^3.1.0"
+    "@ceramicnetwork/indexing" "^2.1.0"
+    "@ceramicnetwork/ipfs-topology" "^3.1.0"
+    "@ceramicnetwork/job-queue" "^2.1.0"
     "@ceramicnetwork/observability" "^1.4.1"
-    "@ceramicnetwork/pinning-aggregation" "^2.31.0"
-    "@ceramicnetwork/pinning-ipfs-backend" "^2.31.0"
-    "@ceramicnetwork/stream-caip10-link" "^2.34.0"
-    "@ceramicnetwork/stream-caip10-link-handler" "^2.32.0"
-    "@ceramicnetwork/stream-model" "^1.21.0"
-    "@ceramicnetwork/stream-model-handler" "^1.21.0"
-    "@ceramicnetwork/stream-model-instance" "^1.21.0"
-    "@ceramicnetwork/stream-model-instance-handler" "^1.21.0"
-    "@ceramicnetwork/stream-tile" "^2.35.0"
-    "@ceramicnetwork/stream-tile-handler" "^2.34.0"
-    "@ceramicnetwork/streamid" "^2.17.0"
+    "@ceramicnetwork/pinning-aggregation" "^3.1.0"
+    "@ceramicnetwork/pinning-ipfs-backend" "^3.1.0"
+    "@ceramicnetwork/stream-caip10-link" "^3.1.0"
+    "@ceramicnetwork/stream-caip10-link-handler" "^3.1.0"
+    "@ceramicnetwork/stream-model" "^2.1.0"
+    "@ceramicnetwork/stream-model-handler" "^2.1.0"
+    "@ceramicnetwork/stream-model-instance" "^2.1.0"
+    "@ceramicnetwork/stream-model-instance-handler" "^2.1.0"
+    "@ceramicnetwork/stream-tile" "^3.1.0"
+    "@ceramicnetwork/stream-tile-handler" "^3.1.0"
+    "@ceramicnetwork/streamid" "^3.1.0"
     "@ceramicnetwork/wasm-bloom-filter" "^0.1.0"
     "@datastructures-js/priority-queue" "^6.1.0"
     "@ethersproject/providers" "^5.5.1"
@@ -1594,7 +1628,7 @@
     query-string "^7.1.0"
     rxjs "^7.5.2"
 
-"@ceramicnetwork/http-client@^2.21.0", "@ceramicnetwork/http-client@^2.32.0":
+"@ceramicnetwork/http-client@^2.21.0":
   version "2.36.0"
   resolved "https://registry.npmjs.org/@ceramicnetwork/http-client/-/http-client-2.36.0.tgz#5efbd6ef9f7cb40f2a496a6a1bfeacd1521f788a"
   integrity sha512-N2iTPPAYER81PiU21tIVE7eh8PpNhSXaV7qsOdOZb2F3fmgcbO7PpOHki/1AaaAZUAXUNb0SOOjZGKIzJR1bhw==
@@ -1609,17 +1643,32 @@
     query-string "^7.1.0"
     rxjs "^7.5.2"
 
-"@ceramicnetwork/indexing@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.npmjs.org/@ceramicnetwork/indexing/-/indexing-1.5.0.tgz#6a6d71490b17259faac12fc3cd08bfe71383e095"
-  integrity sha512-QL3S4EZwQhMnTWzv0gG63BSO0R+2DKAJQav6ZzNu5iQIVt2rdkziqzf+T1oukz2dwTc7h1JY3zmXVCNP/WnV9g==
+"@ceramicnetwork/http-client@^3.0.5":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/http-client/-/http-client-3.1.0.tgz#7c5c93e4c95db6da6112c45c1a1097bc9a914d2b"
+  integrity sha512-vgMRWO8QGXmlwLWMMFIqRVJRwDUzPlGT6mF9O6f+pup2e3GQJnFtvbqz6usMjn40eSAjpa1uGiErWMk3719E+Q==
   dependencies:
-    "@ceramicnetwork/anchor-listener" "^1.24.0"
-    "@ceramicnetwork/anchor-utils" "^1.22.0"
-    "@ceramicnetwork/common" "^2.39.0"
-    "@ceramicnetwork/job-queue" "^1.6.0"
-    "@ceramicnetwork/stream-model" "^1.21.0"
-    "@ceramicnetwork/streamid" "^2.17.0"
+    "@ceramicnetwork/common" "^3.1.0"
+    "@ceramicnetwork/stream-caip10-link" "^3.1.0"
+    "@ceramicnetwork/stream-model" "^2.1.0"
+    "@ceramicnetwork/stream-model-instance" "^2.1.0"
+    "@ceramicnetwork/stream-tile" "^3.1.0"
+    "@ceramicnetwork/streamid" "^3.1.0"
+    "@scarf/scarf" "^1.1.1"
+    query-string "^7.1.0"
+    rxjs "^7.5.2"
+
+"@ceramicnetwork/indexing@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/indexing/-/indexing-2.1.0.tgz#c57c1ea99e8a05759922a82e6dd369652427f437"
+  integrity sha512-5i0xjRxmTkj+7mqtZ1dkUWMXy5wBdoZ4vffWnpFpyOXQ/fJgeUteJC4xUNcFany/nhO9vQNgLIFdeSQxSuQgxA==
+  dependencies:
+    "@ceramicnetwork/anchor-listener" "^2.1.0"
+    "@ceramicnetwork/anchor-utils" "^2.1.0"
+    "@ceramicnetwork/common" "^3.1.0"
+    "@ceramicnetwork/job-queue" "^2.1.0"
+    "@ceramicnetwork/stream-model" "^2.1.0"
+    "@ceramicnetwork/streamid" "^3.1.0"
     "@ethersproject/providers" "^5.5.1"
     knex "^2.5.1"
     lodash.clonedeep "^4.5.0"
@@ -1629,20 +1678,19 @@
     rxjs "^7.8.1"
     uint8arrays "^4.0.6"
 
-"@ceramicnetwork/ipfs-topology@^2.33.0":
-  version "2.33.0"
-  resolved "https://registry.npmjs.org/@ceramicnetwork/ipfs-topology/-/ipfs-topology-2.33.0.tgz#6ee0202af9528b6b43ca56a7d9845422f9555095"
-  integrity sha512-4yrgbKyHcHpoFcBknJWSMjl5fcKMfwWGBhfKktLTUPQ+i49xKChgNcixMj/nW9pnlCeMS4kzbTsW2HsqnjAtfQ==
+"@ceramicnetwork/ipfs-topology@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/ipfs-topology/-/ipfs-topology-3.1.0.tgz#28591f550cfc29911470bb351b0054c96d7122ae"
+  integrity sha512-jfOqTFQVcHrluIJsT5k9p6RjNCPf+EGs8kGFE3bsyCFGVMAOf4gjwQ+xpn5wBbXYKVwS/VuqQRog3CFCzJfwnQ==
   dependencies:
-    "@ceramicnetwork/common" "^2.39.0"
-    cross-fetch "^3.1.4"
+    "@ceramicnetwork/common" "^3.1.0"
 
-"@ceramicnetwork/job-queue@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.npmjs.org/@ceramicnetwork/job-queue/-/job-queue-1.6.0.tgz#6a5d6602e4efe39d75292d927a6eb0bee19e391a"
-  integrity sha512-NwCmW4AQSOc/LjZhBcneNNqlUvCwb8Z45qVog6IBlX9SLNCejaALbXbPLBc2Mq9k/IJD/VO2zxKzb3BZeyiEaA==
+"@ceramicnetwork/job-queue@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/job-queue/-/job-queue-2.1.0.tgz#e80c7d6c85078ad257106a58c4448c9f94fb95ec"
+  integrity sha512-FKKkxmne+dkFA4N4aMtQzRn+7+P4BEd1FMXqJZLNJzT1yCuHiQsGSGb8C/+/q/cMklHg7LXNkai+iOytjE1auA==
   dependencies:
-    "@ceramicnetwork/common" "^2.39.0"
+    "@ceramicnetwork/common" "^3.1.0"
     pg "^8.11.3"
     pg-boss "^8.2.0"
     rxjs "^7.8.1"
@@ -1661,32 +1709,32 @@
     "@opentelemetry/sdk-trace-base" "1.15.0"
     "@opentelemetry/semantic-conventions" "1.15.0"
 
-"@ceramicnetwork/pinning-aggregation@^2.31.0":
-  version "2.31.0"
-  resolved "https://registry.npmjs.org/@ceramicnetwork/pinning-aggregation/-/pinning-aggregation-2.31.0.tgz#fd2d0590fb92346761acaf3d5ac73d6feba414fe"
-  integrity sha512-MkEgtihToxyYjxNR15An9KiKvATgYd3bmSAYkSNZO3IypIoeuYCn7Z/Fjlw5MKDlH5fCggsNmWfEhdwjv/B+ww==
+"@ceramicnetwork/pinning-aggregation@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/pinning-aggregation/-/pinning-aggregation-3.1.0.tgz#59900060889b78476bf4fab8c587ffa8d82de257"
+  integrity sha512-xf4PybZ3Zm0UynW3SgBU4HEsvt1Vlnxc7oHhj+A9+ybQHpcnPokq2SfKEsbnLAvOlu2D/OLQaZ1WL45SGoKj8w==
   dependencies:
     "@stablelib/sha256" "^1.0.1"
     uint8arrays "^4.0.3"
 
-"@ceramicnetwork/pinning-ipfs-backend@^2.31.0":
-  version "2.31.0"
-  resolved "https://registry.npmjs.org/@ceramicnetwork/pinning-ipfs-backend/-/pinning-ipfs-backend-2.31.0.tgz#a4885620a90747d4481710d51886f3182e144643"
-  integrity sha512-RwyXwpCqXHzhn3a950VxVebq0yoY4IEdOrPtBvGKjm/hsbqKxmqKN4twGOcAsq+bwMGPKhBUOdDl9K6d88mkig==
+"@ceramicnetwork/pinning-ipfs-backend@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/pinning-ipfs-backend/-/pinning-ipfs-backend-3.1.0.tgz#f0fb0ae6856a1dc1964f33adddf52d6ccf18e30b"
+  integrity sha512-rpRFlOz4d+ITLxheaabFS4bgw4cXURm/kZNS0/spxDdCUsgG7AqNEbG2rGETIhGpjzGyvgM/g0ax9srdZ4uHKA==
   dependencies:
     "@stablelib/sha256" "^1.0.1"
     ipfs-http-client "^60.0.0"
     uint8arrays "^4.0.3"
 
-"@ceramicnetwork/stream-caip10-link-handler@^2.32.0":
-  version "2.32.0"
-  resolved "https://registry.npmjs.org/@ceramicnetwork/stream-caip10-link-handler/-/stream-caip10-link-handler-2.32.0.tgz#e441da48ddb0fe256547ee296e239d0cf96b2f7c"
-  integrity sha512-b+aXcASy4iF95ugaQUQh6vQjpnZtLs6tRs8J8h9pGH1byxW/+ESVgHrOKJo9OdvcSpQzweqxAoEBA3MXH2KexQ==
+"@ceramicnetwork/stream-caip10-link-handler@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/stream-caip10-link-handler/-/stream-caip10-link-handler-3.1.0.tgz#2ca359a19eb1b0755905cc0d6680568f5e62cc72"
+  integrity sha512-2yJI58EqF85PVCVbGMyzsOqFw3dXwkkzKlDnhZZ8AX86z7nwVzKyOLEtuQSxOBG9Whs8sMqopvnWt1ILWLBjUw==
   dependencies:
-    "@ceramicnetwork/blockchain-utils-validation" "^2.31.0"
-    "@ceramicnetwork/common" "^2.39.0"
-    "@ceramicnetwork/stream-caip10-link" "^2.34.0"
-    "@ceramicnetwork/stream-handler-common" "^1.29.0"
+    "@ceramicnetwork/blockchain-utils-validation" "^3.1.0"
+    "@ceramicnetwork/common" "^3.1.0"
+    "@ceramicnetwork/stream-caip10-link" "^3.1.0"
+    "@ceramicnetwork/stream-handler-common" "^2.1.0"
 
 "@ceramicnetwork/stream-caip10-link@^2.19.0", "@ceramicnetwork/stream-caip10-link@^2.34.0":
   version "2.34.0"
@@ -1699,24 +1747,35 @@
     did-resolver "^4.0.1"
     lodash.clonedeep "^4.5.0"
 
-"@ceramicnetwork/stream-handler-common@^1.29.0":
-  version "1.29.0"
-  resolved "https://registry.npmjs.org/@ceramicnetwork/stream-handler-common/-/stream-handler-common-1.29.0.tgz#cf6dd505dddfada3e8cc0d359b5275ee04ccd223"
-  integrity sha512-DCrGiziIar+WEVNbSv1mW4TGIDVezFdgcfJc4rkSko13EZSCNlS9217cr4PLaq7i0ZGODhZIZxU8Ug68gsaxwQ==
+"@ceramicnetwork/stream-caip10-link@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/stream-caip10-link/-/stream-caip10-link-3.1.0.tgz#ebec04cda54c2898771ebd70907def287dab29c5"
+  integrity sha512-sBFlfHU93ichovoL8gvuas1x7qu0JJUnc9K/itbiAunUMLJiZ6BGsIhpn/uoZ5UlRLwG5RskbInJuwrhtOhdAg==
   dependencies:
-    "@ceramicnetwork/common" "^2.39.0"
-    "@ceramicnetwork/streamid" "^2.17.0"
+    "@ceramicnetwork/common" "^3.1.0"
+    "@ceramicnetwork/streamid" "^3.1.0"
+    caip "~1.1.0"
+    did-resolver "^4.0.1"
     lodash.clonedeep "^4.5.0"
 
-"@ceramicnetwork/stream-model-handler@^1.21.0":
-  version "1.21.0"
-  resolved "https://registry.npmjs.org/@ceramicnetwork/stream-model-handler/-/stream-model-handler-1.21.0.tgz#3730c22cde3eece484778a7185154f0fdcb0e9b5"
-  integrity sha512-tzuvnrGdjxiLIt2S7LsSU88N1kjh0/DX9rtwnu/U2DMC62lFOvqNrXVsk6kfs1L+njb3VH0K/AvKJFsnO4LjoQ==
+"@ceramicnetwork/stream-handler-common@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/stream-handler-common/-/stream-handler-common-2.1.0.tgz#b3daad91c600a0b7a22c351d83a5e23948455c0f"
+  integrity sha512-uchnDl52Uqv41it/zrg2pPcnBNemZZSheouC6n6gdvyALdXpWr1uaqXEBaPo8my2I/qSE33eSNyanlc/gFQmcQ==
   dependencies:
-    "@ceramicnetwork/common" "^2.39.0"
-    "@ceramicnetwork/stream-handler-common" "^1.29.0"
-    "@ceramicnetwork/stream-model" "^1.21.0"
-    "@ceramicnetwork/streamid" "^2.17.0"
+    "@ceramicnetwork/common" "^3.1.0"
+    "@ceramicnetwork/streamid" "^3.1.0"
+    lodash.clonedeep "^4.5.0"
+
+"@ceramicnetwork/stream-model-handler@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/stream-model-handler/-/stream-model-handler-2.1.0.tgz#e12cc60e59892dbca77f9ac1bdb088cdc9d0a3ba"
+  integrity sha512-C0r5RFQUMO1idqWfRmjgZpbk0fC1LBGBalwhs4bX4c+FWlDiTzvsO2CHjn+oHx9tfNa/DgIs9ROah2pNHxlpJw==
+  dependencies:
+    "@ceramicnetwork/common" "^3.1.0"
+    "@ceramicnetwork/stream-handler-common" "^2.1.0"
+    "@ceramicnetwork/stream-model" "^2.1.0"
+    "@ceramicnetwork/streamid" "^3.1.0"
     ajv "^8.8.2"
     ajv-formats "^2.1.1"
     fast-json-patch "^3.1.0"
@@ -1725,15 +1784,15 @@
     lodash.ismatch "^4.4.0"
     uint8arrays "^4.0.3"
 
-"@ceramicnetwork/stream-model-instance-handler@^1.21.0":
-  version "1.21.0"
-  resolved "https://registry.npmjs.org/@ceramicnetwork/stream-model-instance-handler/-/stream-model-instance-handler-1.21.0.tgz#d7bd4324243989468cd6d6ac585d8dbbda48af82"
-  integrity sha512-okluCX7/LLEcFOh/yXRLm3uKLn4bWnRC+OnRkavoaFQ+4CzXousxDZunKMNOkaRRXU1MPlhTp367Vx5ns1ZAaw==
+"@ceramicnetwork/stream-model-instance-handler@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/stream-model-instance-handler/-/stream-model-instance-handler-2.1.0.tgz#ce770e11ef5381aab6cf5c7fa0ad2b7d179e824e"
+  integrity sha512-3l3uobcsL6Dw1FEb9SqtkFrn6uNgJy45dWUWTriZtExBvHBBpLQcQMYz1SJvh8ZzSEnEqIxrFd8z6BioChOP4Q==
   dependencies:
-    "@ceramicnetwork/common" "^2.39.0"
-    "@ceramicnetwork/stream-handler-common" "^1.29.0"
-    "@ceramicnetwork/stream-model-instance" "^1.21.0"
-    "@ceramicnetwork/streamid" "^2.17.0"
+    "@ceramicnetwork/common" "^3.1.0"
+    "@ceramicnetwork/stream-handler-common" "^2.1.0"
+    "@ceramicnetwork/stream-model-instance" "^2.1.0"
+    "@ceramicnetwork/streamid" "^3.1.0"
     ajv "^8.8.2"
     ajv-formats "^2.1.1"
     fast-json-patch "^3.1.0"
@@ -1754,13 +1813,26 @@
     object-sizeof "^2.6.1"
     uint8arrays "^4.0.3"
 
-"@ceramicnetwork/stream-model-instance@^1.17.0", "@ceramicnetwork/stream-model-instance@^1.21.0", "@ceramicnetwork/stream-model-instance@^1.6.0":
+"@ceramicnetwork/stream-model-instance@^1.21.0", "@ceramicnetwork/stream-model-instance@^1.6.0":
   version "1.21.0"
   resolved "https://registry.npmjs.org/@ceramicnetwork/stream-model-instance/-/stream-model-instance-1.21.0.tgz#52a409bfb99aa2749acd9d40b10c3b532b397209"
   integrity sha512-XxnLSv9HvzIuAYGlwSh/ODLolzgxrqnflk3rVj0cYODOmFYHi0/cYr2Sh/TTR7VpE3Xm6o1ch8BeLNozx6NGvg==
   dependencies:
     "@ceramicnetwork/common" "^2.39.0"
     "@ceramicnetwork/streamid" "^2.17.0"
+    "@ipld/dag-cbor" "^7.0.0"
+    "@stablelib/random" "^1.0.1"
+    fast-json-patch "^3.1.0"
+    object-sizeof "^2.6.1"
+    uint8arrays "^4.0.3"
+
+"@ceramicnetwork/stream-model-instance@^2.0.5", "@ceramicnetwork/stream-model-instance@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/stream-model-instance/-/stream-model-instance-2.1.0.tgz#c6bb3ce2a3f29169e4a45f9d07bc5203ae025a3e"
+  integrity sha512-TZax3oFr+d+TpMaSMyGL/RUmQ2iIImJdx2Zw+Jn33a02u0IhGsMydy7M/AyWnTCLlH/5c6gSI5j1abmDqeQqjQ==
+  dependencies:
+    "@ceramicnetwork/common" "^3.1.0"
+    "@ceramicnetwork/streamid" "^3.1.0"
     "@ipld/dag-cbor" "^7.0.0"
     "@stablelib/random" "^1.0.1"
     fast-json-patch "^3.1.0"
@@ -1782,7 +1854,7 @@
     multihashes "^4.0.3"
     uint8arrays "^4.0.3"
 
-"@ceramicnetwork/stream-model@^1.17.0", "@ceramicnetwork/stream-model@^1.21.0", "@ceramicnetwork/stream-model@^1.6.0":
+"@ceramicnetwork/stream-model@^1.21.0", "@ceramicnetwork/stream-model@^1.6.0":
   version "1.21.0"
   resolved "https://registry.npmjs.org/@ceramicnetwork/stream-model/-/stream-model-1.21.0.tgz#fa445322e61d525cb5a71d0759bae19a0b29dee6"
   integrity sha512-OOIG7LU5XlBKi+7+lb5o1vtfJI9yblIzww1G7yeLW8W3axEzvnkrk/Hyyeeg1R2R7B6zE+AEWi93mBE1FP96VA==
@@ -1800,15 +1872,33 @@
     multiformats "^11.0.1"
     uint8arrays "^4.0.3"
 
-"@ceramicnetwork/stream-tile-handler@^2.34.0":
-  version "2.34.0"
-  resolved "https://registry.npmjs.org/@ceramicnetwork/stream-tile-handler/-/stream-tile-handler-2.34.0.tgz#6d3faf5017785c1ed1b52ee3886164d7ba8e5592"
-  integrity sha512-9CfeSUsSJGT59p58TzC9CcwlzQqL10RwgrbKegXG2sLxqmZzr+u0B7l2cDwb+Vcek0bJZem0rvjnwi/Gv8ejdg==
+"@ceramicnetwork/stream-model@^2.0.5", "@ceramicnetwork/stream-model@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/stream-model/-/stream-model-2.1.0.tgz#8cf5cf3710a4244930fba9455d2e19a97eb5d163"
+  integrity sha512-OTxwrp/mZaXkdFAHmwLen3R5TzKov/q74+qVHnHxUIberwAl6buNLz3nfIOULcJJY6wCEAMxznBRUSpTxcqT3A==
   dependencies:
-    "@ceramicnetwork/common" "^2.39.0"
-    "@ceramicnetwork/stream-handler-common" "^1.29.0"
-    "@ceramicnetwork/stream-tile" "^2.35.0"
-    "@ceramicnetwork/streamid" "^2.17.0"
+    "@ceramicnetwork/codecs" "^2.1.0"
+    "@ceramicnetwork/common" "^3.1.0"
+    "@ceramicnetwork/streamid" "^3.1.0"
+    "@ipld/dag-cbor" "^7.0.0"
+    "@stablelib/random" "^1.0.1"
+    ajv "^8.8.2"
+    ajv-formats "^2.1.1"
+    codeco "^1.1.0"
+    fast-json-patch "^3.1.0"
+    json-schema-typed "^8.0.1"
+    multiformats "^11.0.1"
+    uint8arrays "^4.0.3"
+
+"@ceramicnetwork/stream-tile-handler@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/stream-tile-handler/-/stream-tile-handler-3.1.0.tgz#7c2dce4b53e63ab8980625ceb96142106fdeee7f"
+  integrity sha512-wn1LkXKxWL7s12m6hGgVKKRJ7FOO1uTZtseblbxLpSeJdgPl1/RZH72Y9/1D00D7p0ba8sbOXsb5EMbdllrs8A==
+  dependencies:
+    "@ceramicnetwork/common" "^3.1.0"
+    "@ceramicnetwork/stream-handler-common" "^2.1.0"
+    "@ceramicnetwork/stream-tile" "^3.1.0"
+    "@ceramicnetwork/streamid" "^3.1.0"
     ajv "^8.8.2"
     ajv-formats "^2.1.1"
     fast-json-patch "^3.1.0"
@@ -1823,6 +1913,20 @@
   dependencies:
     "@ceramicnetwork/common" "^2.39.0"
     "@ceramicnetwork/streamid" "^2.17.0"
+    "@ipld/dag-cbor" "^7.0.0"
+    "@stablelib/random" "^1.0.1"
+    dids "^4.0.0"
+    fast-json-patch "^3.1.0"
+    lodash.clonedeep "^4.5.0"
+    uint8arrays "^4.0.3"
+
+"@ceramicnetwork/stream-tile@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/stream-tile/-/stream-tile-3.1.0.tgz#5d832ef7db5bda224a1b9ad94a14385ab8aac0be"
+  integrity sha512-32OenmbcPGgbowYmgfCO289OuVeLFCPThLR9hNXLSkde83euyV8fdIeXnNBziFSwSVZvBUbrBLbEEyFuUKONeA==
+  dependencies:
+    "@ceramicnetwork/common" "^3.1.0"
+    "@ceramicnetwork/streamid" "^3.1.0"
     "@ipld/dag-cbor" "^7.0.0"
     "@stablelib/random" "^1.0.1"
     dids "^4.0.0"
@@ -1852,6 +1956,19 @@
     mapmoize "^1.2.1"
     multiformats "^11.0.1"
     uint8arrays "^4.0.3"
+    varint "^6.0.0"
+
+"@ceramicnetwork/streamid@^3.0.5", "@ceramicnetwork/streamid@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@ceramicnetwork/streamid/-/streamid-3.1.0.tgz#bb45b1ab9b4b3f8e5819aace392b9ea26eb4b055"
+  integrity sha512-qLUnFV2Dc63/6dMX0CnmsDrn8IPTU5V02rjDBcX0fLAemvtNFTCSCpYN9qpvwTUhmMJFrWfgib1UTmvGLiy4gg==
+  dependencies:
+    "@ipld/dag-cbor" "^7.0.0"
+    "@stablelib/sha256" "^1.0.1"
+    cborg "^1.10.2"
+    mapmoize "^1.2.1"
+    multiformats "^11.0.1"
+    uint8arrays "^4.0.9"
     varint "^6.0.0"
 
 "@ceramicnetwork/wasm-bloom-filter@^0.1.0":
@@ -1971,20 +2088,20 @@
     graphql "^16.5.0"
     graphql-relay "^0.10.0"
 
-"@composedb/client@^0.5.1":
-  version "0.5.2"
-  resolved "https://registry.npmjs.org/@composedb/client/-/client-0.5.2.tgz#f229286e360a6f1514819fb9f1e762c358a9d5e6"
-  integrity sha512-SoDWCGvok3Yt5+9o/agyvU4oCxk/pAzhe6bnpbT8dQDnm4E9b0+YU/6VSb2CD8/28RaYEqDDXPM6ctZuhvvY+w==
+"@composedb/client@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.npmjs.org/@composedb/client/-/client-0.6.0.tgz#25f7b2057962d49ab852effdc68ce671e4eda1e1"
+  integrity sha512-vqA7gMxdUq9UATM4bgvFx5Wk2BFYoc/rmCceM9KqCaY3yHohtOPxlty1L6/Fl1Md98hmgQkY45lvHiD4ajA1Kg==
   dependencies:
-    "@ceramicnetwork/http-client" "^2.32.0"
-    "@ceramicnetwork/stream-model" "^1.17.0"
-    "@ceramicnetwork/stream-model-instance" "^1.17.0"
-    "@composedb/constants" "^0.5.0"
-    "@composedb/graphql-scalars" "^0.5.0"
-    "@composedb/runtime" "^0.5.2"
+    "@ceramicnetwork/http-client" "^3.0.5"
+    "@ceramicnetwork/stream-model" "^2.0.5"
+    "@ceramicnetwork/stream-model-instance" "^2.0.5"
+    "@composedb/constants" "^0.6.0"
+    "@composedb/graphql-scalars" "^0.6.0"
+    "@composedb/runtime" "^0.6.0"
     "@graphql-tools/batch-execute" "^9.0.2"
     "@graphql-tools/stitch" "^9.0.3"
-    "@graphql-tools/utils" "^10.0.6"
+    "@graphql-tools/utils" "^10.0.11"
     dataloader "^2.2.2"
     graphql "^16.8.1"
     graphql-relay "^0.10.0"
@@ -1994,30 +2111,30 @@
   resolved "https://registry.npmjs.org/@composedb/constants/-/constants-0.4.0.tgz#67749c629580e7fb0271401a06e949ed979b6f9f"
   integrity sha512-juphxE0LPqzOh9Yojw6JrkvV3UI1RIhiI11MUHfsxC4m6KP8uxq0or1xKP7jQPNHGhqgtOomMezCXFUTcPVotQ==
 
-"@composedb/constants@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.npmjs.org/@composedb/constants/-/constants-0.5.0.tgz#0d0a05c90a324a461880afbb1918c5c9e3c19d43"
-  integrity sha512-FzoSJS644pSQyv4WlfXKxZ5pNfhvEGEWvSfPhe/NXLv5djK3JfeTtwb0NNvYviP4vUgT/9MYjZaHTewtKXVfng==
+"@composedb/constants@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.npmjs.org/@composedb/constants/-/constants-0.6.0.tgz#e853265328524b0c103757b8913986565e356417"
+  integrity sha512-18rysTgKUTgapwaDEJOI063WSWlwbvowEnRZkFrZpciHPHjgfdry9XTht4ygYkGzx9TE+zGsVmgJfF0LlbTFMg==
 
-"@composedb/devtools@^0.5.1":
-  version "0.5.1"
-  resolved "https://registry.npmjs.org/@composedb/devtools/-/devtools-0.5.1.tgz#050d226a50124f8b6f7499c336ca324e61b82450"
-  integrity sha512-4hvoPcZHsm8UOgpFN2iaUbAYl9NWxzs6DsxrPLIM3ipJByynFMnSxs2LkUjCZDCY8JmmszNvzxbtvolW6rs/Zw==
+"@composedb/devtools@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.npmjs.org/@composedb/devtools/-/devtools-0.6.1.tgz#752ffd103abb7600578924cf6e03ed184a8b94f8"
+  integrity sha512-584a6Zg4AYWhGhyhvq6Ac/YdHpgHTqRf9HgtS5IglJDyVV2DGKvVAXg4bYv7hGa6zrppelHOlNQ99U3ICizPXw==
   dependencies:
-    "@ceramicnetwork/common" "^2.35.0"
-    "@ceramicnetwork/stream-model" "^1.17.0"
-    "@ceramicnetwork/streamid" "^2.17.0"
-    "@composedb/graphql-scalars" "^0.5.0"
+    "@ceramicnetwork/common" "^3.0.5"
+    "@ceramicnetwork/stream-model" "^2.0.5"
+    "@ceramicnetwork/streamid" "^3.0.5"
+    "@composedb/graphql-scalars" "^0.6.0"
     "@didtools/cacao" "^2.0.0"
-    "@graphql-tools/schema" "^10.0.0"
-    "@graphql-tools/utils" "^10.0.6"
-    change-case "^4.1.2"
+    "@graphql-tools/schema" "^10.0.2"
+    "@graphql-tools/utils" "^10.0.11"
+    change-case "^5.3.0"
     json-ptr "^3.1.1"
     lodash-es "^4.17.21"
-    multiformats "^12.1.1"
+    multiformats "^12.1.3"
     object-hash "^3.0.0"
-    type-fest "^4.3.2"
-    uint8arrays "^4.0.6"
+    type-fest "^4.8.3"
+    uint8arrays "^4.0.9"
 
 "@composedb/graphql-scalars@^0.4.4":
   version "0.4.4"
@@ -2031,17 +2148,17 @@
     graphql-scalars "^1.21.3"
     multiformats "^11.0.2"
 
-"@composedb/graphql-scalars@^0.5.0":
-  version "0.5.1"
-  resolved "https://registry.npmjs.org/@composedb/graphql-scalars/-/graphql-scalars-0.5.1.tgz#4e88b369db09dbc1ee041466efeb127a2b80dfc6"
-  integrity sha512-/TRjRqUMOqomt662ghgQRp0CzcPZVHHwnyEY8gVXwJiCH6xddxSFY0Jdfam8H8J4JUxP8o7rcm3COs5k0GpY5Q==
+"@composedb/graphql-scalars@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.npmjs.org/@composedb/graphql-scalars/-/graphql-scalars-0.6.0.tgz#54e6437914d3356f2f5286bda9c0dbe8cc7a6adc"
+  integrity sha512-9GssARG72pXb2SEYK6Zozz92tl37WnI9fCgKiTKBIjisoUGpUnTv2sRNRJV8X9j4CgawvCm4Yb/SH+CtUXuZew==
   dependencies:
-    "@ceramicnetwork/streamid" "^2.17.0"
-    "@composedb/types" "^0.5.1"
+    "@ceramicnetwork/streamid" "^3.0.5"
+    "@composedb/types" "^0.6.0"
     caip "^1.1.0"
     graphql "^16.8.1"
-    graphql-scalars "^1.22.2"
-    multiformats "^12.1.1"
+    graphql-scalars "^1.22.4"
+    multiformats "^12.1.3"
 
 "@composedb/runtime@^0.4.2":
   version "0.4.2"
@@ -2057,16 +2174,16 @@
     graphql "^16.5.0"
     graphql-relay "^0.10.0"
 
-"@composedb/runtime@^0.5.2":
-  version "0.5.2"
-  resolved "https://registry.npmjs.org/@composedb/runtime/-/runtime-0.5.2.tgz#742165caee1decd6d6582e12f8d7a1241d11129e"
-  integrity sha512-88eiQpLcwWIn9aTEDIcu8Y/a3kBxzoh/cROBmnB8ztIdWnbRco2Q9FWcOZYdG733jm71mMPjU/AYTAGCbF3yZQ==
+"@composedb/runtime@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.npmjs.org/@composedb/runtime/-/runtime-0.6.0.tgz#a7b0816500e3696cac18dcb6208ac52a48c20f3f"
+  integrity sha512-HZRFa7KVqEPAQY9umPzpdRoblHIn/QVk/55T5TPLv6VTEDmUmw0W3Nv+vNH7kvq++SdIuikbRPSW7eci9wUTCw==
   dependencies:
-    "@ceramicnetwork/http-client" "^2.32.0"
-    "@ceramicnetwork/stream-model" "^1.17.0"
-    "@ceramicnetwork/stream-model-instance" "^1.17.0"
-    "@ceramicnetwork/streamid" "^2.17.0"
-    "@composedb/graphql-scalars" "^0.5.0"
+    "@ceramicnetwork/http-client" "^3.0.5"
+    "@ceramicnetwork/stream-model" "^2.0.5"
+    "@ceramicnetwork/stream-model-instance" "^2.0.5"
+    "@ceramicnetwork/streamid" "^3.0.5"
+    "@composedb/graphql-scalars" "^0.6.0"
     dataloader "^2.2.2"
     graphql "^16.8.1"
     graphql-relay "^0.10.0"
@@ -2081,14 +2198,14 @@
     dids "^4.0.0"
     json-schema-typed "^8.0.1"
 
-"@composedb/types@^0.5.1":
-  version "0.5.1"
-  resolved "https://registry.npmjs.org/@composedb/types/-/types-0.5.1.tgz#beacf5614879a0d65a15791f2378d3241ce197b6"
-  integrity sha512-xgFwR+10Un+iQVj8Kl9n1w1hqMp8r1yIDSacZ/o5x4Yz0kWuHLPvLKUYdK0gP5dMiJPAhWAxvXVSbfkY+OmnmQ==
+"@composedb/types@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.npmjs.org/@composedb/types/-/types-0.6.0.tgz#21eaf27fbc1c877a6a96440cef4056d275d282b5"
+  integrity sha512-Bpt85C/bIByqFx87OC14DBGfXCV7tj9IsZ5AQ0fv53bGATs+otEj+tnz5UxDRcSSuT9iLOLa8XLLKiEKkwmecQ==
   dependencies:
-    "@ceramicnetwork/common" "^2.35.0"
-    "@ceramicnetwork/stream-model" "^1.17.0"
-    "@ceramicnetwork/stream-model-instance" "^1.17.0"
+    "@ceramicnetwork/common" "^3.0.5"
+    "@ceramicnetwork/stream-model" "^2.0.5"
+    "@ceramicnetwork/stream-model-instance" "^2.0.5"
     dids "^4.0.4"
     json-schema-typed "^8.0.1"
 
@@ -2140,6 +2257,16 @@
     fast-json-stable-stringify "^2.1.0"
     rpc-utils "^0.6.2"
     uint8arrays "^4.0.3"
+    varint "^6.0.0"
+
+"@didtools/key-webcrypto@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.npmjs.org/@didtools/key-webcrypto/-/key-webcrypto-0.1.2.tgz#8a9da10367ace17c1616a297577b40137c15f97e"
+  integrity sha512-ZDlwl2TnITDA6R/FpZVh3YbgRIIaJ9rCzA49wUd/EYlK0CGD8d6HQSB9hMdX0ht+paRE+9AD/YNewkppktEUKQ==
+  dependencies:
+    fast-json-stable-stringify "^2.1.0"
+    rpc-utils "^0.6.2"
+    uint8arrays "^4.0.9"
     varint "^6.0.0"
 
 "@didtools/pkh-ethereum@^0.1.0":
@@ -2843,6 +2970,14 @@
     "@graphql-tools/utils" "^10.0.0"
     tslib "^2.4.0"
 
+"@graphql-tools/merge@^9.0.1":
+  version "9.0.1"
+  resolved "https://registry.npmjs.org/@graphql-tools/merge/-/merge-9.0.1.tgz#693f15da152339284469b1ce5c6827e3ae350a29"
+  integrity sha512-hIEExWO9fjA6vzsVjJ3s0cCQ+Q/BEeMVJZtMXd7nbaVefVy0YDyYlEkeoYYNV3NVVvu1G9lr6DM1Qd0DGo9Caw==
+  dependencies:
+    "@graphql-tools/utils" "^10.0.10"
+    tslib "^2.4.0"
+
 "@graphql-tools/schema@^10.0.0":
   version "10.0.0"
   resolved "https://registry.npmjs.org/@graphql-tools/schema/-/schema-10.0.0.tgz#7b5f6b6a59f51c927de8c9069bde4ebbfefc64b3"
@@ -2850,6 +2985,16 @@
   dependencies:
     "@graphql-tools/merge" "^9.0.0"
     "@graphql-tools/utils" "^10.0.0"
+    tslib "^2.4.0"
+    value-or-promise "^1.0.12"
+
+"@graphql-tools/schema@^10.0.2":
+  version "10.0.2"
+  resolved "https://registry.npmjs.org/@graphql-tools/schema/-/schema-10.0.2.tgz#21bc2ee25a65fb4890d2e5f9f22ef1f733aa81da"
+  integrity sha512-TbPsIZnWyDCLhgPGnDjt4hosiNU2mF/rNtSk5BVaXWnZqvKJ6gzJV4fcHcvhRIwtscDMW2/YTnK6dLVnk8pc4w==
+  dependencies:
+    "@graphql-tools/merge" "^9.0.1"
+    "@graphql-tools/utils" "^10.0.10"
     tslib "^2.4.0"
     value-or-promise "^1.0.12"
 
@@ -2893,10 +3038,20 @@
     tslib "^2.4.0"
     value-or-promise "^1.0.11"
 
-"@graphql-tools/utils@^10.0.0", "@graphql-tools/utils@^10.0.5", "@graphql-tools/utils@^10.0.6":
+"@graphql-tools/utils@^10.0.0", "@graphql-tools/utils@^10.0.5":
   version "10.0.8"
   resolved "https://registry.npmjs.org/@graphql-tools/utils/-/utils-10.0.8.tgz#c7b84275ec83dc42ad9f3d4ffc424ff682075759"
   integrity sha512-yjyA8ycSa1WRlJqyX/aLqXeE5DvF/H02+zXMUFnCzIDrj0UvLMUrxhmVFnMK0Q2n3bh4uuTeY3621m5za9ovXw==
+  dependencies:
+    "@graphql-typed-document-node/core" "^3.1.1"
+    cross-inspect "1.0.0"
+    dset "^3.1.2"
+    tslib "^2.4.0"
+
+"@graphql-tools/utils@^10.0.10", "@graphql-tools/utils@^10.0.11":
+  version "10.0.11"
+  resolved "https://registry.npmjs.org/@graphql-tools/utils/-/utils-10.0.11.tgz#1238fbe37e8d6c662c48ab2477c98269d6fd851a"
+  integrity sha512-vVjXgKn6zjXIlYBd7yJxCVMYGb5j18gE3hx3Qw3mNsSEsYQXbJbPdlwb7Fc9FogsJei5AaqiQerqH4kAosp1nQ==
   dependencies:
     "@graphql-typed-document-node/core" "^3.1.1"
     cross-inspect "1.0.0"
@@ -10039,15 +10194,6 @@ capability@^0.2.5:
   resolved "https://registry.npmjs.org/capability/-/capability-0.2.5.tgz#51ad87353f1936ffd77f2f21c74633a4dea88801"
   integrity sha512-rsJZYVCgXd08sPqwmaIqjAd5SUTfonV0z/gDJ8D6cN8wQphky1kkAYEqQ+hmDxTw7UihvBfjUVUSY+DBEe44jg==
 
-capital-case@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.npmjs.org/capital-case/-/capital-case-1.0.4.tgz#9d130292353c9249f6b00fa5852bee38a717e669"
-  integrity sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==
-  dependencies:
-    no-case "^3.0.4"
-    tslib "^2.0.3"
-    upper-case-first "^2.0.2"
-
 cartonne@^2.1.1:
   version "2.2.0"
   resolved "https://registry.npmjs.org/cartonne/-/cartonne-2.2.0.tgz#29cb4b7a34fe1185172fe815a7bbb79b42bf8477"
@@ -10095,23 +10241,10 @@ chalk@^4.0.0, chalk@^4.0.2, chalk@^4.1.0, chalk@^4.1.1, chalk@^4.1.2:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-change-case@^4.1.2:
-  version "4.1.2"
-  resolved "https://registry.npmjs.org/change-case/-/change-case-4.1.2.tgz#fedfc5f136045e2398c0410ee441f95704641e12"
-  integrity sha512-bSxY2ws9OtviILG1EiY5K7NNxkqg/JnRnFxLtKQ96JaviiIxi7djMrSd0ECT9AC+lttClmYwKw53BWpOMblo7A==
-  dependencies:
-    camel-case "^4.1.2"
-    capital-case "^1.0.4"
-    constant-case "^3.0.4"
-    dot-case "^3.0.4"
-    header-case "^2.0.4"
-    no-case "^3.0.4"
-    param-case "^3.0.4"
-    pascal-case "^3.1.2"
-    path-case "^3.0.4"
-    sentence-case "^3.0.4"
-    snake-case "^3.0.4"
-    tslib "^2.0.3"
+change-case@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.npmjs.org/change-case/-/change-case-5.3.0.tgz#b2fc5a8bea0cf8b4856a5a9aaf79abd8ea5309f6"
+  integrity sha512-Eykca0fGS/xYlx2fG5NqnGSnsWauhSGiSXYhB1kO6E909GUfo8S54u4UZNS7lMJmgZumZ2SUpWaoLgAcfQRICg==
 
 char-regex@^1.0.2:
   version "1.0.2"
@@ -10408,15 +10541,6 @@ console-control-strings@^1.0.0, console-control-strings@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
   integrity sha512-ty/fTekppD2fIwRvnZAVdeOiGd1c7YXEixbgJTNzqcxJWKQnjJ/V1bNEEE6hygpM3WjwHFUVK6HTjWSzV4a8sQ==
-
-constant-case@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.npmjs.org/constant-case/-/constant-case-3.0.4.tgz#3b84a9aeaf4cf31ec45e6bf5de91bdfb0589faf1"
-  integrity sha512-I2hSBi7Vvs7BEuJDr5dDHfzb/Ruj3FyvFyh7KLilAjNQw3Be+xgqUBA2W6scVEcL0hL1dwPRtIqEPVUCKkSsyQ==
-  dependencies:
-    no-case "^3.0.4"
-    tslib "^2.0.3"
-    upper-case "^2.0.2"
 
 content-disposition@0.5.4, content-disposition@^0.5.4:
   version "0.5.4"
@@ -11128,6 +11252,19 @@ did-session@^2.0.0:
     key-did-provider-ed25519 "^3.0.1"
     key-did-resolver "^3.0.0"
     uint8arrays "^4.0.3"
+
+did-session@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.npmjs.org/did-session/-/did-session-2.1.2.tgz#563576b581fe31b6d01234b8b7603afd2926003e"
+  integrity sha512-6tMGZ6Q4gRJYjH5bocwL4Te55UF0MIA+fNOaEAhK0Xbq4PAYxCnL1e0zhe4jwSbTqU8ilaoUoE2r6McAFZTDMQ==
+  dependencies:
+    "@didtools/key-webcrypto" "^0.1.2"
+    "@stablelib/random" "^1.0.1"
+    caip "^1.1.0"
+    dids "^4.0.3"
+    key-did-provider-ed25519 "^3.0.1"
+    key-did-resolver "^3.0.0"
+    uint8arrays "^4.0.9"
 
 dids@^4.0.0, dids@^4.0.3, dids@^4.0.4:
   version "4.0.4"
@@ -12531,7 +12668,7 @@ graphql-relay@^0.10.0:
   resolved "https://registry.npmjs.org/graphql-relay/-/graphql-relay-0.10.0.tgz#3b661432edf1cb414cd4a132cf595350e524db2b"
   integrity sha512-44yBuw2/DLNEiMypbNZBt1yMDbBmyVPVesPywnteGGALiBmdyy1JP8jSg8ClLePg8ZZxk0O4BLhd1a6U/1jDOQ==
 
-graphql-scalars@^1.21.3, graphql-scalars@^1.22.2:
+graphql-scalars@^1.21.3, graphql-scalars@^1.22.4:
   version "1.22.4"
   resolved "https://registry.npmjs.org/graphql-scalars/-/graphql-scalars-1.22.4.tgz#af092b142bcfd5c1f8c53cb70ee1955ecd4ddb03"
   integrity sha512-ILnv7jq5VKHLUyoaTFX7lgYrjCd6vTee9i8/B+D4zJKJT5TguOl0KkpPEbXHjmeor8AZYrVsrYUHdqRBMX1pjA==
@@ -12652,14 +12789,6 @@ he@^1.2.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
-
-header-case@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.npmjs.org/header-case/-/header-case-2.0.4.tgz#5a42e63b55177349cf405beb8d775acabb92c063"
-  integrity sha512-H/vuk5TEEVZwrR0lp2zed9OCo1uAILMlx0JEMgC26rzyJJ3N1v6XkwHHXJQdR2doSjcGPM6OKPYoJgf0plJ11Q==
-  dependencies:
-    capital-case "^1.0.4"
-    tslib "^2.0.3"
 
 hey-listen@^1.0.8:
   version "1.0.8"
@@ -14782,7 +14911,7 @@ keccak@^3.0.1:
     node-gyp-build "^4.2.0"
     readable-stream "^3.6.0"
 
-key-did-provider-ed25519@^3.0.0, key-did-provider-ed25519@^3.0.1:
+key-did-provider-ed25519@^3.0.1, key-did-provider-ed25519@^3.0.2:
   version "3.0.2"
   resolved "https://registry.npmjs.org/key-did-provider-ed25519/-/key-did-provider-ed25519-3.0.2.tgz#5c336954680db2ae03e9d4a25cdbde30b72062b5"
   integrity sha512-4Yw0CeO1hKRaUsh9NIz4tn4Ysr09CdoJItyT0vHjd5iedJ+FvVt7pTbNr7IY0/+8mWvYslutAK5LFrwu5agpsA==
@@ -15772,7 +15901,7 @@ multiformats@^11.0.0, multiformats@^11.0.1, multiformats@^11.0.2:
   resolved "https://registry.npmjs.org/multiformats/-/multiformats-11.0.2.tgz#b14735efc42cd8581e73895e66bebb9752151b60"
   integrity sha512-b5mYMkOkARIuVZCpvijFj9a6m5wMVLC7cf/jIPd5D/ARDOfLC5+IFkbgDXQgcU2goIsTD/O9NY4DI/Mt4OGvlg==
 
-multiformats@^12.0.1, multiformats@^12.1.0, multiformats@^12.1.1:
+multiformats@^12.0.1, multiformats@^12.1.0, multiformats@^12.1.3:
   version "12.1.3"
   resolved "https://registry.npmjs.org/multiformats/-/multiformats-12.1.3.tgz#cbf7a9861e11e74f8228b21376088cb43ba8754e"
   integrity sha512-eajQ/ZH7qXZQR2AgtfpmSMizQzmyYVmCql7pdhldPuYQi4atACekbJaQplk6dWyIi10jCaFnd6pqvcEFXjbaJw==
@@ -16411,14 +16540,6 @@ path-browserify@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/path-browserify/-/path-browserify-1.0.1.tgz#d98454a9c3753d5790860f16f68867b9e46be1fd"
   integrity sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==
-
-path-case@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.npmjs.org/path-case/-/path-case-3.0.4.tgz#9168645334eb942658375c56f80b4c0cb5f82c6f"
-  integrity sha512-qO4qCFjXqVTrcbPt/hQfhTQ+VhFsqNKOPtytgNKkKxSoEp3XPUQ8ObFuePylOIok5gjn69ry8XiULxCwot3Wfg==
-  dependencies:
-    dot-case "^3.0.4"
-    tslib "^2.0.3"
 
 path-exists@^3.0.0:
   version "3.0.0"
@@ -18182,15 +18303,6 @@ send@0.18.0:
     range-parser "~1.2.1"
     statuses "2.0.1"
 
-sentence-case@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.npmjs.org/sentence-case/-/sentence-case-3.0.4.tgz#3645a7b8c117c787fde8702056225bb62a45131f"
-  integrity sha512-8LS0JInaQMCRoQ7YUytAo/xUu5W2XnQxV2HI/6uM6U7CITS1RqPElr30V6uIqyMKM9lJGRVFy5/4CuzcixNYSg==
-  dependencies:
-    no-case "^3.0.4"
-    tslib "^2.0.3"
-    upper-case-first "^2.0.2"
-
 serialize-error@^8.1.0:
   version "8.1.0"
   resolved "https://registry.npmjs.org/serialize-error/-/serialize-error-8.1.0.tgz#3a069970c712f78634942ddd50fbbc0eaebe2f67"
@@ -19139,10 +19251,10 @@ type-fest@^2.19.0:
   resolved "https://registry.npmjs.org/type-fest/-/type-fest-2.19.0.tgz#88068015bb33036a598b952e55e9311a60fd3a9b"
   integrity sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==
 
-type-fest@^4.3.2:
-  version "4.7.1"
-  resolved "https://registry.npmjs.org/type-fest/-/type-fest-4.7.1.tgz#dbe462c5f350d708ec6ca6fe8925b5b6541ca9a7"
-  integrity sha512-iWr8RUmzAJRfhZugX9O7nZE6pCxDU8CZ3QxsLuTnGcBLJpCaP2ll3s4eMTBoFnU/CeXY/5rfQSuAEsTGJO4y8A==
+type-fest@^4.8.3:
+  version "4.8.3"
+  resolved "https://registry.npmjs.org/type-fest/-/type-fest-4.8.3.tgz#6db08d9f44d596cd953f83020c7c56310c368d1c"
+  integrity sha512-//BaTm14Q/gHBn09xlnKNqfI8t6bmdzx2DXYfPBNofN0WUybCEUDcbCWcTa0oF09lzLjZgPphXAsvRiMK0V6Bw==
 
 type-is@~1.6.18:
   version "1.6.18"
@@ -19249,6 +19361,13 @@ uint8arrays@^4.0.2, uint8arrays@^4.0.3, uint8arrays@^4.0.6:
   version "4.0.6"
   resolved "https://registry.npmjs.org/uint8arrays/-/uint8arrays-4.0.6.tgz#bae68b536c2e87147045b95d73d29e503e45ecab"
   integrity sha512-4ZesjQhqOU2Ip6GPReIwN60wRxIupavL8T0Iy36BBHr2qyMrNxsPJvr7vpS4eFt8F8kSguWUPad6ZM9izs/vyw==
+  dependencies:
+    multiformats "^12.0.1"
+
+uint8arrays@^4.0.9:
+  version "4.0.10"
+  resolved "https://registry.npmjs.org/uint8arrays/-/uint8arrays-4.0.10.tgz#3ec5cde3348903c140e87532fc53f46b8f2e921f"
+  integrity sha512-AnJNUGGDJAgFw/eWu/Xb9zrVKEGlwJJCaeInlf3BkecE/zcTobk5YXYIPNQJO1q5Hh1QZrQQHf0JvcHqz2hqoA==
   dependencies:
     multiformats "^12.0.1"
 
@@ -19367,20 +19486,6 @@ update-browserslist-db@^1.0.13:
   dependencies:
     escalade "^3.1.1"
     picocolors "^1.0.0"
-
-upper-case-first@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.npmjs.org/upper-case-first/-/upper-case-first-2.0.2.tgz#992c3273f882abd19d1e02894cc147117f844324"
-  integrity sha512-514ppYHBaKwfJRK/pNC6c/OxfGa0obSnAl106u97Ed0I625Nin96KAjttZF6ZL3e1XLtphxnqrOi9iWgm+u+bg==
-  dependencies:
-    tslib "^2.0.3"
-
-upper-case@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.npmjs.org/upper-case/-/upper-case-2.0.2.tgz#d89810823faab1df1549b7d97a76f8662bae6f7a"
-  integrity sha512-KgdgDGJt2TpuwBUIjgG6lzw2GWFRCW9Qkfkiv0DxqHHLYJHmtmdUIKcZd8rHgFSjopVTlw6ggzCm1b8MFQwikg==
-  dependencies:
-    tslib "^2.0.3"
 
 uri-js@^4.2.2:
   version "4.4.1"

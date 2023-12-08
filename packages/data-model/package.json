@@ -34,11 +34,11 @@
   },
   "homepage": "https://github.com/us3r-network/s3-jssdk/tree/main/packages/data-model",
   "dependencies": {
-    "@ceramicnetwork/common": "^2.34.0",
-    "@composedb/client": "^0.5.1",
-    "@composedb/devtools": "^0.5.1",
-    "@composedb/types": "^0.5.1",
-    "did-session": "^2.0.0",
+    "@ceramicnetwork/common": "^3.1.0",
+    "@composedb/client": "^0.6.0",
+    "@composedb/devtools": "^0.6.1",
+    "@composedb/types": "^0.6.0",
+    "did-session": "^2.1.2",
     "dids": "^4.0.4"
   },
   "devDependencies": {
