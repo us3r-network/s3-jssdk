@@ -123,9 +123,6 @@ describe("links testing", () => {
       setTimeout(async () => {
         const resp = await s3Link.queryLinks({});
         const linkIndex = resp.data?.linkIndex;
-        console.log(linkIndex?.edges[0].node)
-        console.log(linkIndex?.edges[1].node)
-        console.log(linkIndex?.edges[2].node)
         expect(linkIndex).not.toBeNull();
         expect(linkIndex?.edges.length).toBe(3);
         expect(linkIndex?.edges[0].node.title).toBe(testTitle + '-' + 3 + '-upsert');
@@ -136,21 +133,20 @@ describe("links testing", () => {
     });
   },10000);
 
-  return;
   test("query personal link", async () => {
     const resp = await s3Link.queryPersonalLinks({ first: 10 });
     const linkList = resp.data?.viewer.linkList;
     expect(linkList).not.toBeNull();
-    expect(linkList?.edges.length).toBe(1);
+    expect(linkList?.edges.length).toBe(3);
   });
 
   //create 11 more links
   test("create links", async () => {
-    const arr: number[] = new Array(11).fill(0).map((_, i) => i+3);
+    const arr: number[] = new Array(10).fill(0).map((_, i) => i+4);
     for await (const i of arr) {
       const data = {
         url: testURL + '/' + i,
-        type: testType + '-' + i%3,
+        type: testType + '-' + String(i%3+1),
         title: testTitle + '-' + i,
       };
       const resp = await s3Link.createLink(data);
@@ -183,15 +179,15 @@ describe("links testing", () => {
     expect(linkList_asc).not.toBeNull();
     expect(linkList_asc?.edges.length).toBe(2);
 
-    expect(linkList_asc?.edges[0].node.title).toBe("title-1");
-    expect(linkList_asc?.edges[1].node.title).toBe("title-2");
+    expect(linkList_asc?.edges[0].node.title).toBe("title-1-update");
+    expect(linkList_asc?.edges[1].node.title).toBe("title-2-upsert");
   });
 
   test("query linkIndex with filter", async () => {
     const resp = await s3Link.queryLinks({ first: 20 });
     const linkIndex = resp.data?.linkIndex;
     expect(linkIndex).not.toBeNull();
-    expect(linkIndex?.edges.length).toBe(14);
+    expect(linkIndex?.edges.length).toBe(13);
 
     const resp_filter = await s3Link.queryLinks(
       { 
@@ -204,9 +200,8 @@ describe("links testing", () => {
       }
     );
     const linkIndex_filter = resp_filter.data?.linkIndex;
-    console.log(linkIndex_filter);
     expect(linkIndex_filter).not.toBeNull();
-    expect(linkIndex_filter?.edges.length).toBe(5);
+    expect(linkIndex_filter?.edges.length).toBe(3);
   });
 
   test("query linkIndex", async () => {
@@ -220,7 +215,7 @@ describe("links testing", () => {
     expect(linkIndex?.edges.length).toBe(3);
     expect(linkIndex?.edges[0].node.title).toBe("title-1-update");
     expect(linkIndex?.edges[1].node.title).toBe("title-2-upsert");
-    expect(linkIndex?.edges[2].node.title).toBe("title-3");
+    expect(linkIndex?.edges[2].node.title).toBe("title-3-upsert");
   });
 
   test("query linkIndex desc", async () => {
