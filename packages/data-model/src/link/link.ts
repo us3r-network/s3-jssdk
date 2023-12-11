@@ -59,7 +59,7 @@ export class S3LinkModel extends S3Model {
   ) {
     super(
       ceramic,
-      definition ?? (linkDefinition as RuntimeCompositeDefinition)
+      definition ?? (linkDefinition as unknown as RuntimeCompositeDefinition)
     );
   }
 
@@ -70,14 +70,18 @@ export class S3LinkModel extends S3Model {
   }
 
   /**
-   *
+   * link
    */
   public async queryPersonalLinks({
+    filters = {"where":{"url":{"isNull":false}}},
+    sort = {"createAt":"DESC"},
     first = 10,
     after = "",
     linkFields = DEFAULT_LINK_FIELDS,
   }: {
-    first: number;
+    filters?: any;
+    sort?: any;
+    first?: number;
     after?: string;
     linkFields?: LinkField[];
   }) {
@@ -87,9 +91,9 @@ export class S3LinkModel extends S3Model {
         linkList: Page<Link>;
       };
     }>(`
-      query {
+      query ($input: LinkFiltersInput!, $sortInput: LinkSortingInput!) {
         viewer {
-          linkList(first: ${first}, after: "${after}") {
+          linkList(filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
             edges {
               node {
                 id,
@@ -108,65 +112,34 @@ export class S3LinkModel extends S3Model {
           }
         }
       }
-    `);
-    return linkListData;
-  }
-
-  public async queryPersonalLinksDesc({
-    last = 10,
-    before = "",
-    linkFields = DEFAULT_LINK_FIELDS,
-  }: {
-    last: number;
-    before?: string;
-    linkFields?: LinkField[];
-  }) {
-    const composeClient = this.composeClient;
-    const linkListData = await composeClient.executeQuery<{
-      viewer: {
-        linkList: Page<Link>;
-      };
-    }>(`
-      query {
-        viewer {
-          linkList(last: ${last}, before: "${before}") {
-            edges {
-              node {
-                id,
-                creator {
-                  id
-                },
-                ${linkFields.join(",")}
-              }
-            }
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-              startCursor
-              endCursor
-            }
-          }
-        }
-      }
-    `);
+    `, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
     return linkListData;
   }
 
   public async queryLinks({
+    filters = {"where":{"url":{"isNull":false}}},
+    sort = {"createAt":"DESC"},
     first = 10,
     after = "",
     linkFields = DEFAULT_LINK_FIELDS,
   }: {
-    first: number;
+    filters?: any;
+    sort?: any;
+    first?: number;
     after?: string;
     linkFields?: LinkField[];
   }) {
+    // console.log("queryLinks", filters, sort, first, after, linkFields);
     const composeClient = this.composeClient;
     const res = await composeClient.executeQuery<{
       linkIndex: Page<Link>;
     }>(`
-      query {
-        linkIndex(first: ${first}, after: "${after}") {
+      query ($input: LinkFiltersInput!, $sortInput: LinkSortingInput!) {
+        linkIndex(filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
           edges {
             node {
               id,
@@ -184,44 +157,11 @@ export class S3LinkModel extends S3Model {
           }
         }
       }
-    `);
-
-    return res;
-  }
-
-  public async queryLinksDesc({
-    last = 10,
-    before = "",
-    linkFields = DEFAULT_LINK_FIELDS,
-  }: {
-    last: number;
-    before?: string;
-    linkFields?: LinkField[];
-  }) {
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      linkIndex: Page<Link>;
-    }>(`
-      query {
-        linkIndex(last: ${last}, before: "${before}") {
-          edges {
-            node {
-              id,
-              creator {
-                id
-              },
-              ${linkFields.join(",")}
-            }
-          }
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-        }
-      }
-    `);
+    `, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
 
     return res;
   }
@@ -269,6 +209,33 @@ export class S3LinkModel extends S3Model {
     });
 
     return res;
+  }
+
+  public async upsertLink(link: Link) {
+    // console.log("upsertLink", link)
+    const resp = await this.queryLinks(
+      { 
+        filters: {
+            "where" : {
+              "url" : { 
+                "equalTo" : link.url
+              },
+              
+              "type" : { 
+                "equalTo" : link.type
+              }
+            },
+          },
+        first: 20 
+      }
+    );
+    const existLinkIndex = resp.data?.linkIndex;
+    if (existLinkIndex && existLinkIndex.edges.length > 0) {
+      const existLink = existLinkIndex.edges[0].node;
+      if (existLink?.id)
+        return this.updateLink(existLink.id, link);
+    }
+    return this.createLink(link);
   }
 
   public async queryLink(

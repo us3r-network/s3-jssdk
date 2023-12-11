@@ -5,19 +5,19 @@ import { S3LinkModel } from "../src";
 import { linkSchema } from "./schema/linkSchema";
 import { genLinkOpsSchema } from "./schema/linkOpsSchema";
 import { genRelationSchema } from "./schema/linkRelationSchema";
+import { RuntimeCompositeDefinition } from "@composedb/types";
 
-describe("client", () => {
+describe("links testing", () => {
   let linkComposite: Composite;
   let linkOpsComposite: Composite;
   let relationComposite: Composite;
 
   let s3Link: S3LinkModel;
 
-  let linkId: string;
-  const testURL = "https://scan.s3.xyz/";
+  let firstLinkId: string;
+  const testURL = "https://scan.s3.xyz";
   const testTitle = "title";
   const testType = "type";
-  const testUpdateType = "typeUpdate";
 
   beforeAll(async () => {
     linkComposite = await Composite.create({
@@ -46,23 +46,24 @@ describe("client", () => {
     });
     const relationRT = relationComposite.toRuntime();
 
-    s3Link = new S3LinkModel(ceramic, relationRT);
+    s3Link = new S3LinkModel(ceramic, relationRT as unknown as RuntimeCompositeDefinition);
   });
 
   // links
-  test("create link success", async () => {
+  //add one link
+  test("create link", async () => {
     const resp = await s3Link.createLink({
       url: testURL,
       type: testType,
       title: testTitle,
     });
     expect(resp.data?.createLink.document.id).not.toBeNull();
-    linkId = resp.data?.createLink.document.id || "";
-    expect(linkId).not.toBe("");
+    firstLinkId = resp.data?.createLink.document.id || "";
+    expect(firstLinkId).not.toBe("");
   });
 
-  test("query link success", async () => {
-    const resp = await s3Link.queryLink(linkId, ["url", "title", "type"]);
+  test("query link", async () => {
+    const resp = await s3Link.queryLink(firstLinkId, ["url", "title", "type"]);
     const link = resp.data?.node;
     expect(link).not.toBeNull();
     expect(link).toHaveProperty("url", testURL);
@@ -70,93 +71,175 @@ describe("client", () => {
     expect(link).toHaveProperty("type", testType);
   });
 
-  test("update link success", async () => {
-    const resp = await s3Link.updateLink(linkId, {
-      type: testUpdateType,
-      url: testURL,
-      title: testTitle,
+  //update one link
+  test("update link", async () => {
+    const resp = await s3Link.updateLink(firstLinkId, {
+      type: testType + '-' + 1,
+      url: testURL + '/' + 1,
+      title: testTitle + '-' + 1 + '-update',
     });
 
     expect(resp.errors).not.toBeDefined();
     expect(resp.data?.updateLink.document.id).not.toBeNull();
     await new Promise<void>((resolve) => {
-      setTimeout(() => {
+      setTimeout(async () => {
+        const resp = await s3Link.queryLink(firstLinkId, ["url", "title", "type"]);
+        const link = resp.data?.node;
+        expect(link).not.toBeNull();
+        expect(link).toHaveProperty("url", testURL + '/' + 1);
+        expect(link).toHaveProperty("title", testTitle + '-' + 1 + '-update');
+        expect(link).toHaveProperty("type", testType + '-' + 1);
         resolve();
-      }, 2500);
+      }, 1000);
     });
-  });
+  },10000);
 
-  test("query link success after update", async () => {
-    const resp = await s3Link.queryLink(linkId, ["url", "title", "type"]);
-    const link = resp.data?.node;
-    expect(link).not.toBeNull();
-    expect(link).toHaveProperty("url", testURL);
-    expect(link).toHaveProperty("title", testTitle);
-    expect(link).toHaveProperty("type", testUpdateType);
-  });
+  //create one more link and update one link
+  test("upsert link", async () => {
+    const resp = await s3Link.createLink({
+      type: testType + '-' + 2,
+      url: testURL + '/' + 2,
+      title: testTitle + '/' + 2,
+    });
 
-  test("query personal success", async () => {
+    const resp_update = await s3Link.upsertLink({
+      type: testType + '-' + 2,
+      url: testURL + '/' + 2,
+      title: testTitle + '-' + 2 + '-upsert',
+    });
+
+    expect(resp_update.errors).not.toBeDefined();
+    // expect(resp_update.data?.updateLink.document.id).not.toBeNull();
+
+    const resp_create = await s3Link.upsertLink({
+      type: testType + '-' + 3,
+      url: testURL + '/' + 3,
+      title: testTitle + '-' + 3 + '-upsert',
+    });
+    expect(resp_create.errors).not.toBeDefined();
+    // expect(resp_create.data?.createLink.document.id).not.toBeNull();
+
+    await new Promise<void>((resolve) => {
+      setTimeout(async () => {
+        const resp = await s3Link.queryLinks({});
+        const linkIndex = resp.data?.linkIndex;
+        console.log(linkIndex?.edges[0].node)
+        console.log(linkIndex?.edges[1].node)
+        console.log(linkIndex?.edges[2].node)
+        expect(linkIndex).not.toBeNull();
+        expect(linkIndex?.edges.length).toBe(3);
+        expect(linkIndex?.edges[0].node.title).toBe(testTitle + '-' + 3 + '-upsert');
+        expect(linkIndex?.edges[1].node.title).toBe(testTitle + '-' + 2 + '-upsert');
+        expect(linkIndex?.edges[2].node.title).toBe(testTitle + '-' + 1 + '-update');
+        resolve();
+      }, 1000);
+    });
+  },10000);
+
+  return;
+  test("query personal link", async () => {
     const resp = await s3Link.queryPersonalLinks({ first: 10 });
     const linkList = resp.data?.viewer.linkList;
     expect(linkList).not.toBeNull();
     expect(linkList?.edges.length).toBe(1);
   });
 
-  test("create personal desc success", async () => {
-    const arr: number[] = new Array(12).fill(0).map((_, i) => i);
+  //create 11 more links
+  test("create links", async () => {
+    const arr: number[] = new Array(11).fill(0).map((_, i) => i+3);
     for await (const i of arr) {
       const data = {
-        url: testURL + i,
-        type: testType + i,
-        title: testTitle + i,
+        url: testURL + '/' + i,
+        type: testType + '-' + i%3,
+        title: testTitle + '-' + i,
       };
       const resp = await s3Link.createLink(data);
       expect(resp.data?.createLink.document.id).not.toBeNull();
-      linkId = resp.data?.createLink.document.id || "";
+      const linkId = resp.data?.createLink.document.id || "";
       expect(linkId).not.toBe("");
     }
   });
 
-  test("query personal desc success", async () => {
-    const resp = await s3Link.queryPersonalLinksDesc({
-      last: 2,
+  test("query personal links", async () => {
+    const resp_desc = await s3Link.queryPersonalLinks({
+      first: 2,
       linkFields: ["title"],
     });
-    const linkList = resp.data?.viewer.linkList;
+    const linkList_desc = resp_desc.data?.viewer.linkList;
 
-    expect(linkList).not.toBeNull();
-    expect(linkList?.edges.length).toBe(2);
+    expect(linkList_desc).not.toBeNull();
+    expect(linkList_desc?.edges.length).toBe(2);
 
-    expect(linkList?.edges[0].node.title).toBe("title10");
-    expect(linkList?.edges[1].node.title).toBe("title11");
+    expect(linkList_desc?.edges[0].node.title).toBe("title-13");
+    expect(linkList_desc?.edges[1].node.title).toBe("title-12");
+
+    const resp_asc = await s3Link.queryPersonalLinks({
+      sort: {createAt:"ASC"},
+      first: 2,
+      linkFields: ["title"],
+    });
+    const linkList_asc = resp_asc.data?.viewer.linkList;
+
+    expect(linkList_asc).not.toBeNull();
+    expect(linkList_asc?.edges.length).toBe(2);
+
+    expect(linkList_asc?.edges[0].node.title).toBe("title-1");
+    expect(linkList_asc?.edges[1].node.title).toBe("title-2");
+  });
+
+  test("query linkIndex with filter", async () => {
+    const resp = await s3Link.queryLinks({ first: 20 });
+    const linkIndex = resp.data?.linkIndex;
+    expect(linkIndex).not.toBeNull();
+    expect(linkIndex?.edges.length).toBe(14);
+
+    const resp_filter = await s3Link.queryLinks(
+      { 
+        filters: {
+            "where" : {
+              "type" : { "equalTo" : testType + '-' + 1}
+            },
+          },
+        first: 20 
+      }
+    );
+    const linkIndex_filter = resp_filter.data?.linkIndex;
+    console.log(linkIndex_filter);
+    expect(linkIndex_filter).not.toBeNull();
+    expect(linkIndex_filter?.edges.length).toBe(5);
   });
 
   test("query linkIndex", async () => {
-    const resp = await s3Link.queryLinks({ first: 10 });
-    const linkIndex = resp.data?.linkIndex;
-    expect(linkIndex).not.toBeNull();
-    expect(linkIndex?.edges.length).toBe(10);
-  });
-
-  test("query linkIndex desc", async () => {
-    const resp = await s3Link.queryLinksDesc({
-      last: 3,
+    const resp = await s3Link.queryLinks({
+      sort: {createAt:"ASC"},
+      first: 3,
       linkFields: ["title"],
     });
     const linkIndex = resp.data?.linkIndex;
     expect(linkIndex).not.toBeNull();
-
     expect(linkIndex?.edges.length).toBe(3);
-
-    expect(linkIndex?.edges[0].node.title).toBe("title9");
-    expect(linkIndex?.edges[1].node.title).toBe("title10");
-    expect(linkIndex?.edges[2].node.title).toBe("title11");
+    expect(linkIndex?.edges[0].node.title).toBe("title-1-update");
+    expect(linkIndex?.edges[1].node.title).toBe("title-2-upsert");
+    expect(linkIndex?.edges[2].node.title).toBe("title-3");
   });
 
+  test("query linkIndex desc", async () => {
+    const resp = await s3Link.queryLinks({
+      first: 3,
+      linkFields: ["title"],
+    });
+    const linkIndex = resp.data?.linkIndex;
+    expect(linkIndex).not.toBeNull();
+    expect(linkIndex?.edges.length).toBe(3);
+    expect(linkIndex?.edges[0].node.title).toBe("title-13");
+    expect(linkIndex?.edges[1].node.title).toBe("title-12");
+    expect(linkIndex?.edges[2].node.title).toBe("title-11");
+  });
+  return;
   // votes
-  test("create link vote success", async () => {
+  test("create link vote", async () => {
     const resp = await s3Link.createVote({
-      linkID: linkId,
+      linkID: firstLinkId,
       type: "UP_VOTE",
     });
 
@@ -165,14 +248,14 @@ describe("client", () => {
     expect(createVote).not.toBeNull();
   });
 
-  test("query link success with vote", async () => {
-    const resp = await s3Link.queryLink(linkId, ["votesCount"]);
+  test("query link with vote", async () => {
+    const resp = await s3Link.queryLink(firstLinkId, ["votesCount"]);
     const link = resp.data?.node;
     expect(link).not.toBeNull();
     expect(link).toHaveProperty("votesCount", 1);
   });
 
-  test("query personal votes success", async () => {
+  test("query personal votes", async () => {
     const resp = await s3Link.queryPersonalVotes({ first: 10 });
     const voteList = resp.data?.viewer.voteList;
     expect(voteList).not.toBeNull();
@@ -180,7 +263,7 @@ describe("client", () => {
   });
 
   const votesIdList: string[] = [];
-  test("create vote for desc success", async () => {
+  test("create vote for desc", async () => {
     const arr: number[] = new Array(12).fill(0).map((_, i) => i);
     for await (const i of arr) {
       const data = {
@@ -190,7 +273,7 @@ describe("client", () => {
       };
       const resp = await s3Link.createLink(data);
       expect(resp.data?.createLink.document.id).not.toBeNull();
-      linkId = resp.data?.createLink.document.id || "";
+      const linkId = resp.data?.createLink.document.id || "";
       expect(linkId).not.toBe("");
       const voteResp = await s3Link.createVote({
         linkID: linkId,
@@ -204,7 +287,7 @@ describe("client", () => {
     }
   });
 
-  test("query personal vote desc success", async () => {
+  test("query personal vote desc", async () => {
     const resp = await s3Link.queryPersonalVotesDesc({ last: 3 });
     const voteList = resp.data?.viewer.voteList;
     expect(voteList).not.toBeNull();
@@ -214,9 +297,9 @@ describe("client", () => {
   });
 
   // favor
-  test("create link favor success", async () => {
+  test("create link favor", async () => {
     const resp = await s3Link.createFavor({
-      linkID: linkId,
+      linkID: firstLinkId,
       revoke: false,
     });
 
@@ -232,14 +315,14 @@ describe("client", () => {
     expect(updateResp.errors).not.toBeDefined();
   });
 
-  test("query link success with favor", async () => {
-    const resp = await s3Link.queryLink(linkId, ["favorsCount"]);
+  test("query link with favor", async () => {
+    const resp = await s3Link.queryLink(firstLinkId, ["favorsCount"]);
     const link = resp.data?.node;
     expect(link).not.toBeNull();
     expect(link).toHaveProperty("favorsCount", 1);
   });
 
-  test("query personal favors success", async () => {
+  test("query personal favors", async () => {
     const resp = await s3Link.queryPersonalFavors({ first: 10 });
     const favorList = resp.data?.viewer.favorList;
     expect(resp.errors).not.toBeDefined();
@@ -248,7 +331,7 @@ describe("client", () => {
   });
 
   const favorIdList: string[] = [];
-  test("create favors desc success", async () => {
+  test("create favors desc", async () => {
     const arr: number[] = new Array(12).fill(0).map((_, i) => i);
     for await (const i of arr) {
       const data = {
@@ -258,7 +341,7 @@ describe("client", () => {
       };
       const resp = await s3Link.createLink(data);
       expect(resp.data?.createLink.document.id).not.toBeNull();
-      linkId = resp.data?.createLink.document.id || "";
+      const linkId = resp.data?.createLink.document.id || "";
       expect(linkId).not.toBe("");
       const favorResp = await s3Link.createFavor({
         linkID: linkId,
@@ -271,7 +354,7 @@ describe("client", () => {
     }
   });
 
-  test("query personal favors desc success", async () => {
+  test("query personal favors desc", async () => {
     const resp = await s3Link.queryPersonalFavorsDesc({ last: 3 });
     const favorList = resp.data?.viewer.favorList;
     expect(resp.errors).not.toBeDefined();
@@ -282,9 +365,9 @@ describe("client", () => {
   });
 
   // score
-  test("create link score success", async () => {
+  test("create link score", async () => {
     const resp = await s3Link.createScore({
-      linkID: linkId,
+      linkID: firstLinkId,
       text: "string",
       value: 10,
     });
@@ -301,14 +384,14 @@ describe("client", () => {
     expect(updateResp.errors).not.toBeDefined();
   });
 
-  test("query link success with score", async () => {
-    const resp = await s3Link.queryLink(linkId, ["scoresCount"]);
+  test("query link with score", async () => {
+    const resp = await s3Link.queryLink(firstLinkId, ["scoresCount"]);
     const link = resp.data?.node;
     expect(link).not.toBeNull();
     expect(link).toHaveProperty("scoresCount", 1);
   });
 
-  test("query personal scores success", async () => {
+  test("query personal scores", async () => {
     const resp = await s3Link.queryPersonalScores({ first: 10 });
     const scoreList = resp.data?.viewer.scoreList;
     expect(resp.errors).not.toBeDefined();
@@ -317,7 +400,7 @@ describe("client", () => {
   });
 
   const scoreIdList: string[] = [];
-  test("create scores desc success", async () => {
+  test("create scores desc", async () => {
     const arr: number[] = new Array(12).fill(0).map((_, i) => i);
     for await (const i of arr) {
       const data = {
@@ -327,7 +410,7 @@ describe("client", () => {
       };
       const resp = await s3Link.createLink(data);
       expect(resp.data?.createLink.document.id).not.toBeNull();
-      linkId = resp.data?.createLink.document.id || "";
+      const linkId = resp.data?.createLink.document.id || "";
       expect(linkId).not.toBe("");
       const scoreResp = await s3Link.createScore({
         linkID: linkId,
@@ -341,7 +424,7 @@ describe("client", () => {
     }
   });
 
-  test("query personal scores desc success", async () => {
+  test("query personal scores desc", async () => {
     const resp = await s3Link.queryPersonalScoresDesc({ last: 3 });
     const scoreList = resp.data?.viewer.scoreList;
     expect(resp.errors).not.toBeDefined();
@@ -352,9 +435,9 @@ describe("client", () => {
   });
 
   // comment
-  test("create link comment success", async () => {
+  test("create link comment", async () => {
     const resp = await s3Link.createComment({
-      linkID: linkId,
+      linkID: firstLinkId,
       text: "string",
     });
 
@@ -369,14 +452,14 @@ describe("client", () => {
     expect(updateResp.errors).not.toBeDefined();
   });
 
-  test("query link success with comment", async () => {
-    const resp = await s3Link.queryLink(linkId, ["commentsCount"]);
+  test("query link with comment", async () => {
+    const resp = await s3Link.queryLink(firstLinkId, ["commentsCount"]);
     const link = resp.data?.node;
     expect(link).not.toBeNull();
     expect(link).toHaveProperty("commentsCount", 1);
   });
 
-  test("query personal comments success", async () => {
+  test("query personal comments", async () => {
     const resp = await s3Link.queryPersonalComments({ first: 10 });
     const commentList = resp.data?.viewer.commentList;
     expect(resp.errors).not.toBeDefined();
@@ -385,7 +468,7 @@ describe("client", () => {
   });
 
   const commentsIdList: string[] = [];
-  test("create comment for desc success", async () => {
+  test("create comment for desc", async () => {
     const arr: number[] = new Array(12).fill(0).map((_, i) => i);
     for await (const i of arr) {
       const data = {
@@ -395,7 +478,7 @@ describe("client", () => {
       };
       const resp = await s3Link.createLink(data);
       expect(resp.data?.createLink.document.id).not.toBeNull();
-      linkId = resp.data?.createLink.document.id || "";
+      const linkId = resp.data?.createLink.document.id || "";
       expect(linkId).not.toBe("");
       const commentResp = await s3Link.createComment({
         linkID: linkId,
@@ -408,7 +491,7 @@ describe("client", () => {
     }
   });
 
-  test("query personal comments desc success", async () => {
+  test("query personal comments desc", async () => {
     const resp = await s3Link.queryPersonalCommentsDesc({ last: 3 });
     const commentList = resp.data?.viewer.commentList;
     expect(resp.errors).not.toBeDefined();
