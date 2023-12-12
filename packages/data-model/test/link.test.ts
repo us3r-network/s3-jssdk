@@ -50,7 +50,7 @@ describe("links testing", () => {
   });
 
   // links
-  //add one link
+  // add one link
   test("create link", async () => {
     const resp = await s3Link.createLink({
       url: testURL,
@@ -71,7 +71,7 @@ describe("links testing", () => {
     expect(link).toHaveProperty("type", testType);
   });
 
-  //update one link
+  // update one link, now we have 1 link
   test("update link", async () => {
     const resp = await s3Link.updateLink(firstLinkId, {
       type: testType + '-' + 1,
@@ -94,7 +94,8 @@ describe("links testing", () => {
     });
   },10000);
 
-  //create one more link and update one link
+  // create one more link
+  // upsert 2 link (1 new 1 update), now we have 3 links
   test("upsert link", async () => {
     const resp = await s3Link.createLink({
       type: testType + '-' + 2,
@@ -140,7 +141,7 @@ describe("links testing", () => {
     expect(linkList?.edges.length).toBe(3);
   });
 
-  //create 11 more links
+  // create 10 more links, now we have 13 links
   test("create links", async () => {
     const arr: number[] = new Array(10).fill(0).map((_, i) => i+4);
     for await (const i of arr) {
@@ -230,6 +231,48 @@ describe("links testing", () => {
     expect(linkIndex?.edges[1].node.title).toBe("title-12");
     expect(linkIndex?.edges[2].node.title).toBe("title-11");
   });
+
+  test("get linkId by exist link", async () => {
+    const link = {
+      url: testURL + '/' + 1,
+      type: testType + '-' + String(1),
+      title: testTitle + '-' + 1,
+    };
+    const linkId = await s3Link.getIdByLink(link);
+    expect(linkId).not.toBeNull();
+
+    const resp = await s3Link.queryLinks({
+      filters: {
+        "where" : {
+          "url" : { "equalTo" : link.url},
+          "type" : { "equalTo" : link.type}
+        }
+      },
+    });
+    const linkIndex = resp.data?.linkIndex;
+    expect(linkIndex?.edges[0].node.id).toBe(linkId);
+  });
+
+  test("get linkId by non exist link", async () => {
+    const link = {
+      url: testURL + '/' + 99,
+      type: testType + '-' + String(99),
+      title: testTitle + '-' + 99,
+    };
+    const linkId = await s3Link.getIdByLink(link);
+    expect(linkId).not.toBeNull();
+
+    const resp = await s3Link.queryLinks({
+      filters: {
+        "where" : {
+          "url" : { "equalTo" : link.url},
+          "type" : { "equalTo" : link.type}
+        }
+      },
+    });
+    const linkIndex = resp.data?.linkIndex;
+    expect(linkIndex?.edges[0].node.id).toBe(linkId);
+  });
   return;
   // votes
   test("create link vote", async () => {
@@ -251,14 +294,14 @@ describe("links testing", () => {
   });
 
   test("query personal votes", async () => {
-    const resp = await s3Link.queryPersonalVotes({ first: 10 });
+    const resp = await s3Link.queryPersonalVotes({sort: {createAt:"ASC"}, first: 10 });
     const voteList = resp.data?.viewer.voteList;
     expect(voteList).not.toBeNull();
     expect(voteList?.edges.length).toBe(1);
   });
 
   const votesIdList: string[] = [];
-  test("create vote for desc", async () => {
+  test("create votes", async () => {
     const arr: number[] = new Array(12).fill(0).map((_, i) => i);
     for await (const i of arr) {
       const data = {
@@ -282,13 +325,13 @@ describe("links testing", () => {
     }
   });
 
-  test("query personal vote desc", async () => {
-    const resp = await s3Link.queryPersonalVotesDesc({ last: 3 });
+  test("query personal votes desc", async () => {
+    const resp = await s3Link.queryPersonalVotes({ first: 3 });
     const voteList = resp.data?.viewer.voteList;
     expect(voteList).not.toBeNull();
     expect(voteList?.edges.length).toBe(3);
     const last3LinkId = voteList?.edges.map((e) => e.node.link?.id);
-    expect(last3LinkId).toStrictEqual(votesIdList.slice(-3));
+    expect(last3LinkId).toStrictEqual(votesIdList.slice(-3).reverse());
   });
 
   // favor
@@ -322,7 +365,7 @@ describe("links testing", () => {
     const favorList = resp.data?.viewer.favorList;
     expect(resp.errors).not.toBeDefined();
     expect(favorList).not.toBeNull();
-    expect(favorList?.edges.length).toBe(1);
+    expect(favorList?.edges.length).toBe(0); //because we revoke it
   });
 
   const favorIdList: string[] = [];
@@ -350,13 +393,13 @@ describe("links testing", () => {
   });
 
   test("query personal favors desc", async () => {
-    const resp = await s3Link.queryPersonalFavorsDesc({ last: 3 });
+    const resp = await s3Link.queryPersonalFavors({ first: 3 });
     const favorList = resp.data?.viewer.favorList;
     expect(resp.errors).not.toBeDefined();
     expect(favorList).not.toBeNull();
     expect(favorList?.edges.length).toBe(3);
     const last3LinkId = favorList?.edges.map((e) => e.node.link?.id);
-    expect(last3LinkId).toStrictEqual(favorIdList.slice(-3));
+    expect(last3LinkId).toStrictEqual(favorIdList.slice(-3).reverse());
   });
 
   // score
@@ -420,13 +463,13 @@ describe("links testing", () => {
   });
 
   test("query personal scores desc", async () => {
-    const resp = await s3Link.queryPersonalScoresDesc({ last: 3 });
+    const resp = await s3Link.queryPersonalScores({ first: 3 });
     const scoreList = resp.data?.viewer.scoreList;
     expect(resp.errors).not.toBeDefined();
     expect(scoreList).not.toBeNull();
     expect(scoreList?.edges.length).toBe(3);
     const last3LinkId = scoreList?.edges.map((e) => e.node.link?.id);
-    expect(last3LinkId).toStrictEqual(scoreIdList.slice(-3));
+    expect(last3LinkId).toStrictEqual(scoreIdList.slice(-3).reverse());
   });
 
   // comment
@@ -487,12 +530,12 @@ describe("links testing", () => {
   });
 
   test("query personal comments desc", async () => {
-    const resp = await s3Link.queryPersonalCommentsDesc({ last: 3 });
+    const resp = await s3Link.queryPersonalComments({ first: 3 });
     const commentList = resp.data?.viewer.commentList;
     expect(resp.errors).not.toBeDefined();
     expect(commentList).not.toBeNull();
     expect(commentList?.edges.length).toBe(3);
     const last3LinkId = commentList?.edges.map((e) => e.node.link?.id);
-    expect(last3LinkId).toStrictEqual(commentsIdList.slice(-3));
+    expect(last3LinkId).toStrictEqual(commentsIdList.slice(-3).reverse());
   });
 });

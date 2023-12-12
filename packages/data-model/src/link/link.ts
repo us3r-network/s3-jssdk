@@ -41,7 +41,11 @@ export type LinkField =
   | "votesCount"
   | "commentsCount"
   | "favorsCount"
-  | "scoresCount";
+  | "scoresCount"
+  | "votes"
+  | "comments"
+  | "favors"
+  | "scores";
 
 const DEFAULT_LINK_FIELDS: LinkField[] = [
   "url",
@@ -50,6 +54,12 @@ const DEFAULT_LINK_FIELDS: LinkField[] = [
   "title",
   "createAt",
   "modifiedAt",
+];
+
+const ALL_LINK_FIELDS: LinkField[] = [
+  ...DEFAULT_LINK_FIELDS,
+  "votesCount","commentsCount","favorsCount","scoresCount",
+  "votes","comments","favors","scores"
 ];
 
 export class S3LinkModel extends S3Model {
@@ -240,7 +250,7 @@ export class S3LinkModel extends S3Model {
 
   public async queryLink(
     id: string,
-    linkFields: LinkField[] = DEFAULT_LINK_FIELDS
+    linkFields: LinkField[] = ALL_LINK_FIELDS
   ) {
     const composeClient = this.composeClient;
     const res = await composeClient.executeQuery<{
@@ -262,7 +272,37 @@ export class S3LinkModel extends S3Model {
 
     return res;
   }
-
+  public async getIdByLink(link: Link) {
+    try {
+      const filters = {
+        "where" : {
+          "url" : { 
+            "equalTo" : link.url
+          },
+          "type" : { 
+            "equalTo" : link.type
+          }
+        },
+      };
+      const resp = await this.queryLinks(
+        { 
+          filters
+        }
+      );
+      let linkID: string | undefined = undefined;
+      if (resp.data?.linkIndex.edges.length === 0) {
+        const newLinkResp = await this.createLink(link);
+        linkID = newLinkResp.data?.createLink.document.id;
+      }else{
+        const existLink = resp.data?.linkIndex.edges[0].node;
+        linkID = existLink?.id;
+      }
+      return linkID;
+    } catch (error) {
+      console.log("createVoteByLink", error);
+      return Promise.reject(error);
+    }
+  }
   /**
    * vote
    */
@@ -316,9 +356,13 @@ export class S3LinkModel extends S3Model {
   }
 
   public async queryPersonalVotes({
+    filters = {"or":[{"where":{"revoke":{"isNull":true}},},{"where":{"revoke":{"equalTo":false}},}]},
+    sort = {"createAt":"DESC"},
     first = 10,
     after = "",
   }: {
+    filters?: any;
+    sort?: any;
     first: number;
     after?: string;
   }) {
@@ -328,9 +372,9 @@ export class S3LinkModel extends S3Model {
         voteList: Page<Vote>;
       };
     }>(`
-      query {
+      query ($input: VoteFiltersInput!, $sortInput: VoteSortingInput!) {
         viewer {
-          voteList(first: ${first}, after: "${after}") {
+          voteList(filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
             edges {
               node {
                 id
@@ -360,366 +404,11 @@ export class S3LinkModel extends S3Model {
           }
         }
       }
-    `);
-    return res;
-  }
-
-  public async queryPersonalVotesDesc({
-    last = 10,
-    before = "",
-  }: {
-    last: number;
-    before?: string;
-  }) {
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      viewer: {
-        voteList: Page<Vote>;
-      };
-    }>(`
-      query {
-        viewer {
-          voteList(last: ${last}, before: "${before}") {
-            edges {
-              node {
-                id
-                type
-                creator {
-                    id
-                }
-                revoke
-                createAt
-                modifiedAt
-                link {
-                  id
-                  title
-                  createAt
-                  creator {
-                    id
-                  }
-                }
-              }
-            }
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-              startCursor
-              endCursor
-            }
-          }
-        }
-      }
-    `);
-    return res;
-  }
-
-  /**
-   * score
-   */
-  public async createScore(input: ScoreInput) {
-    const createMutation = `
-      mutation CreateScore($input: CreateScoreInput!) {
-        createScore(input: $input) {
-          document {
-            id
-          }
-        }
-      }
-    `;
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      createScore: { document: { id: string } };
-    }>(createMutation, {
-      input: {
-        content: {
-          ...input,
-          createAt: new Date().toISOString(),
-        },
-      },
+    `, 
+    {
+      input: filters,
+      sortInput: sort,
     });
-    return res;
-  }
-
-  public async updateScore(id: string, input: Partial<ScoreInput>) {
-    const updateMutation = `
-      mutation UpdateScore($input: UpdateScoreInput!) {
-        updateScore(input: $input) {
-          document {
-            id
-          }
-        }
-      }
-    `;
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      updateScore: { document: { id: string } };
-    }>(updateMutation, {
-      input: {
-        id: id,
-        content: {
-          ...input,
-          modifiedAt: new Date().toISOString(),
-        },
-      },
-    });
-    return res;
-  }
-
-  public async queryPersonalScores({
-    first = 10,
-    after = "",
-  }: {
-    first: number;
-    after?: string;
-  }) {
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      viewer: {
-        scoreList: Page<Score>;
-      };
-    }>(`
-      query {
-        viewer {
-          scoreList(first: ${first}, after: "${after}") {
-            edges {
-              node {
-                id
-                text
-                value
-                creator {
-                  id
-                }
-                revoke
-                createAt
-                modifiedAt
-                link {
-                  id
-                  title
-                  createAt
-                  creator {
-                    id
-                  }
-                  url
-                  data
-                  type
-                  
-                }
-              }
-            }
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-              startCursor
-              endCursor
-            }
-          }
-        }
-      }
-    `);
-    return res;
-  }
-
-  public async queryPersonalScoresDesc({
-    last = 10,
-    before = "",
-  }: {
-    last: number;
-    before?: string;
-  }) {
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      viewer: {
-        scoreList: Page<Score>;
-      };
-    }>(`
-      query {
-        viewer {
-          scoreList(last: ${last}, before: "${before}") {
-            edges {
-              node {
-                id
-                text
-                value
-                creator {
-                  id
-                }
-                revoke
-                createAt
-                modifiedAt
-                link {
-                  id
-                  title
-                  createAt
-                  creator {
-                    id
-                  }
-                  url
-                  data
-                  type
-                  
-                }
-              }
-            }
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-              startCursor
-              endCursor
-            }
-          }
-        }
-      }
-    `);
-    return res;
-  }
-
-  /**
-   * comment
-   */
-  public async createComment(input: CommentInput) {
-    const createMutation = `
-      mutation CreateComment($input: CreateCommentInput!) {
-        createComment(input: $input) {
-          document {
-            id
-          }
-        }
-      }
-    `;
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      createComment: { document: { id: string } };
-    }>(createMutation, {
-      input: {
-        content: {
-          ...input,
-          createAt: new Date().toISOString(),
-        },
-      },
-    });
-    return res;
-  }
-
-  public async updateComment(commentId: string, input: Partial<CommentInput>) {
-    const updateMutation = `
-      mutation UpdateComment($input: UpdateCommentInput!) {
-        updateComment(input: $input) {
-          document {
-            id
-          }
-        }
-      }
-    `;
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      updateComment: { document: { id: string } };
-    }>(updateMutation, {
-      input: {
-        id: commentId,
-        content: {
-          ...input,
-          modifiedAt: new Date().toISOString(),
-        },
-      },
-    });
-    return res;
-  }
-
-  public async queryPersonalComments({
-    first = 10,
-    after = "",
-  }: {
-    first: number;
-    after?: string;
-  }) {
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      viewer: {
-        commentList: Page<Comment>;
-      };
-    }>(`
-      query {
-        viewer {
-          commentList(first: ${first}, after: "${after}") {
-            edges {
-              node {
-                id
-                text
-                creator {
-                  id
-                }
-                revoke
-                createAt
-                modifiedAt
-                link {
-                  id
-                  title
-                  createAt
-                  creator {
-                    id
-                  }
-                }
-              }
-            }
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-              startCursor
-              endCursor
-            }
-          }
-        }
-      }
-    `);
-    return res;
-  }
-
-  public async queryPersonalCommentsDesc({
-    last = 10,
-    before = "",
-  }: {
-    last: number;
-    before?: string;
-  }) {
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      viewer: {
-        commentList: Page<Comment>;
-      };
-    }>(`
-      query {
-        viewer {
-          commentList(last: ${last}, before: "${before}") {
-            edges {
-              node {
-                id
-                text
-                creator {
-                  id
-                }
-                revoke
-                createAt
-                modifiedAt
-                link {
-                  id
-                  title
-                  createAt
-                  creator {
-                    id
-                  }
-                }
-              }
-            }
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-              startCursor
-              endCursor
-            }
-          }
-        }
-      }
-    `);
     return res;
   }
 
@@ -776,9 +465,13 @@ export class S3LinkModel extends S3Model {
   }
 
   public async queryPersonalFavors({
+    filters = {"or":[{"where":{"revoke":{"isNull":true}},},{"where":{"revoke":{"equalTo":false}},}]},
+    sort = {"createAt":"DESC"},
     first = 10,
     after = "",
   }: {
+    filters?: any;
+    sort?: any;
     first: number;
     after?: string;
   }) {
@@ -788,9 +481,9 @@ export class S3LinkModel extends S3Model {
         favorList: Page<Favor>;
       };
     }>(`
-      query {
+      query ($input: FavorFiltersInput!, $sortInput: FavorSortingInput!) {
         viewer {
-          favorList(first: ${first}, after: "${after}") {
+          favorList(filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
             edges {
               node {
                 id
@@ -822,29 +515,90 @@ export class S3LinkModel extends S3Model {
           }
         }
       }
-    `);
+    `, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
     return res;
   }
 
-  public async queryPersonalFavorsDesc({
-    last = 10,
-    before = "",
+  /**
+   * comment
+   */
+  public async createComment(input: CommentInput) {
+    const createMutation = `
+      mutation CreateComment($input: CreateCommentInput!) {
+        createComment(input: $input) {
+          document {
+            id
+          }
+        }
+      }
+    `;
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      createComment: { document: { id: string } };
+    }>(createMutation, {
+      input: {
+        content: {
+          ...input,
+          createAt: new Date().toISOString(),
+        },
+      },
+    });
+    return res;
+  }
+
+  public async updateComment(commentId: string, input: Partial<CommentInput>) {
+    const updateMutation = `
+      mutation UpdateComment($input: UpdateCommentInput!) {
+        updateComment(input: $input) {
+          document {
+            id
+          }
+        }
+      }
+    `;
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      updateComment: { document: { id: string } };
+    }>(updateMutation, {
+      input: {
+        id: commentId,
+        content: {
+          ...input,
+          modifiedAt: new Date().toISOString(),
+        },
+      },
+    });
+    return res;
+  }
+
+  public async queryPersonalComments({
+    filters = {"or":[{"where":{"revoke":{"isNull":true}},},{"where":{"revoke":{"equalTo":false}},}]},
+    sort = {"createAt":"DESC"},
+    first = 10,
+    after = "",
   }: {
-    last: number;
-    before?: string;
+    filters?: any;
+    sort?: any;
+    first: number;
+    after?: string;
   }) {
     const composeClient = this.composeClient;
     const res = await composeClient.executeQuery<{
       viewer: {
-        favorList: Page<Favor>;
+        commentList: Page<Comment>;
       };
     }>(`
-      query {
+      query ($input: CommentFiltersInput!, $sortInput: CommentSortingInput!) {
         viewer {
-          favorList(last: ${last}, before: "${before}") {
+          commentList(filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
             edges {
               node {
                 id
+                text
                 creator {
                   id
                 }
@@ -853,14 +607,11 @@ export class S3LinkModel extends S3Model {
                 modifiedAt
                 link {
                   id
-                  url
-                  type
+                  title
                   createAt
                   creator {
                     id
                   }
-                  data
-                  title
                 }
               }
             }
@@ -873,7 +624,125 @@ export class S3LinkModel extends S3Model {
           }
         }
       }
-    `);
+    `, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
+    return res;
+  }
+
+  /**
+   * score
+   */
+  public async createScore(input: ScoreInput) {
+    const createMutation = `
+      mutation CreateScore($input: CreateScoreInput!) {
+        createScore(input: $input) {
+          document {
+            id
+          }
+        }
+      }
+    `;
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      createScore: { document: { id: string } };
+    }>(createMutation, {
+      input: {
+        content: {
+          ...input,
+          createAt: new Date().toISOString(),
+        },
+      },
+    });
+    return res;
+  }
+
+  public async updateScore(id: string, input: Partial<ScoreInput>) {
+    const updateMutation = `
+      mutation UpdateScore($input: UpdateScoreInput!) {
+        updateScore(input: $input) {
+          document {
+            id
+          }
+        }
+      }
+    `;
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      updateScore: { document: { id: string } };
+    }>(updateMutation, {
+      input: {
+        id: id,
+        content: {
+          ...input,
+          modifiedAt: new Date().toISOString(),
+        },
+      },
+    });
+    return res;
+  }
+
+  public async queryPersonalScores({
+    filters = {"or":[{"where":{"revoke":{"isNull":true}},},{"where":{"revoke":{"equalTo":false}},}]},
+    sort = {"createAt":"DESC"},
+    first = 10,
+    after = "",
+  }: {
+    filters?: any;
+    sort?: any;
+    first: number;
+    after?: string;
+  }) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      viewer: {
+        scoreList: Page<Score>;
+      };
+    }>(`
+      query ($input: ScoreFiltersInput!, $sortInput: ScoreSortingInput!) {
+        viewer {
+          scoreList(filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
+            edges {
+              node {
+                id
+                text
+                value
+                creator {
+                  id
+                }
+                revoke
+                createAt
+                modifiedAt
+                link {
+                  id
+                  title
+                  createAt
+                  creator {
+                    id
+                  }
+                  url
+                  data
+                  type
+                  
+                }
+              }
+            }
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
+              startCursor
+              endCursor
+            }
+          }
+        }
+      }
+    `, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
     return res;
   }
 }
