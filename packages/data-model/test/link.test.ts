@@ -273,7 +273,7 @@ describe("links testing", () => {
     const linkIndex = resp.data?.linkIndex;
     expect(linkIndex?.edges[0].node.id).toBe(linkLoaded?.id);
   });
-  return;
+
   // votes
   test("create link vote", async () => {
     const resp = await s3Link.createVote({
