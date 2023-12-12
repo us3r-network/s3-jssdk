@@ -238,8 +238,8 @@ describe("links testing", () => {
       type: testType + '-' + String(1),
       title: testTitle + '-' + 1,
     };
-    const linkId = await s3Link.getIdByLink(link);
-    expect(linkId).not.toBeNull();
+    const linkLoaded = await s3Link.fetchLink(link);
+    expect(linkLoaded).not.toBeNull();
 
     const resp = await s3Link.queryLinks({
       filters: {
@@ -250,7 +250,7 @@ describe("links testing", () => {
       },
     });
     const linkIndex = resp.data?.linkIndex;
-    expect(linkIndex?.edges[0].node.id).toBe(linkId);
+    expect(linkIndex?.edges[0].node.id).toBe(linkLoaded?.id);
   });
 
   test("get linkId by non exist link", async () => {
@@ -259,8 +259,8 @@ describe("links testing", () => {
       type: testType + '-' + String(99),
       title: testTitle + '-' + 99,
     };
-    const linkId = await s3Link.getIdByLink(link);
-    expect(linkId).not.toBeNull();
+    const linkLoaded = await s3Link.fetchLink(link);
+    expect(linkLoaded).not.toBeNull();
 
     const resp = await s3Link.queryLinks({
       filters: {
@@ -271,7 +271,7 @@ describe("links testing", () => {
       },
     });
     const linkIndex = resp.data?.linkIndex;
-    expect(linkIndex?.edges[0].node.id).toBe(linkId);
+    expect(linkIndex?.edges[0].node.id).toBe(linkLoaded?.id);
   });
   return;
   // votes

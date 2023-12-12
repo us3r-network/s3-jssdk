@@ -272,7 +272,8 @@ export class S3LinkModel extends S3Model {
 
     return res;
   }
-  public async getIdByLink(link: Link) {
+  
+  public async fetchLink(link: Link) {
     try {
       const filters = {
         "where" : {
@@ -289,17 +290,21 @@ export class S3LinkModel extends S3Model {
           filters
         }
       );
-      let linkID: string | undefined = undefined;
       if (resp.data?.linkIndex.edges.length === 0) {
+        link.createAt = new Date().toISOString();
         const newLinkResp = await this.createLink(link);
-        linkID = newLinkResp.data?.createLink.document.id;
+        const linkId = newLinkResp.data?.createLink.document.id;
+        if (linkId){
+          const newLink = await this.queryLink(linkId, DEFAULT_LINK_FIELDS);
+          return newLink.data?.node;
+        }else{
+          return Promise.reject("createLink failed");
+        }
       }else{
-        const existLink = resp.data?.linkIndex.edges[0].node;
-        linkID = existLink?.id;
+        return resp.data?.linkIndex.edges[0].node;
       }
-      return linkID;
     } catch (error) {
-      console.log("createVoteByLink", error);
+      console.log("fetchLink", error);
       return Promise.reject(error);
     }
   }
