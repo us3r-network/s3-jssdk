@@ -7,9 +7,11 @@ import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
 import { useLinkFavors } from "./useLinkFavors";
 import { getLinkWithLinkModel } from "../utils/getLinkWithLinkModel";
+import { Link } from "@us3r-network/data-model";
 
 export const useFavorAction = (
   linkId: string,
+  unknownLinkParam: Link | undefined,
   opts?: {
     onSuccessfullyFavor?: (isFavored: boolean) => void;
     onFailedFavor?: (errMsg: string) => void;
@@ -22,6 +24,9 @@ export const useFavorAction = (
   const { s3LinkModalAuthed } = useLinkState();
 
   const favoringLinkIds = useStore((state) => state.favoringLinkIds);
+  const upsertOneInCacheLinkFavors = useStore(
+    (state) => state.upsertOneInCacheLinkFavors
+  );
   const addOneToFavoringLinkIds = useStore(
     (state) => state.addOneToFavoringLinkIds
   );
@@ -61,8 +66,8 @@ export const useFavorAction = (
   );
 
   const isDisabled = useMemo(
-    () => !isFetched || isFavoring,
-    [isFetched, isFavoring]
+    () => (!isFetched && unknownLinkParam?.url === "") || isFavoring,
+    [isFetched, isFavoring, unknownLinkParam?.url]
   );
 
   const onFavor = useCallback(async () => {
@@ -94,6 +99,12 @@ export const useFavorAction = (
         }
         if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(!revoke);
       } else {
+        // create link if not exist
+        if (!linkId && unknownLinkParam && unknownLinkParam.url && unknownLinkParam.type) {
+          const unknownLink = await s3LinkModel?.fetchLink(unknownLinkParam);
+          if (unknownLink && unknownLink?.id) linkId = unknownLink?.id;
+          upsertOneInCacheLinkFavors(linkId,{})
+        }
         // create favor
         const res = await s3LinkModel?.createFavor({
           linkID: linkId,
@@ -135,6 +146,8 @@ export const useFavorAction = (
     s3LinkModalAuthed,
     signIn,
     linkId,
+    unknownLinkParam?.url,
+    unknownLinkParam?.type,
     findCurrUserFavor,
     addOneToFavoringLinkIds,
     removeOneFromFavoringLinkIds,
@@ -148,3 +161,4 @@ export const useFavorAction = (
 
   return { isFavored, isFavoring, isDisabled, onFavor };
 };
+
