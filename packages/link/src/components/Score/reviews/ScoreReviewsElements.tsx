@@ -2,7 +2,7 @@ import {
   ListBoxItem as AriaItem,
   Button,
   ListBoxItemProps,
-  ItemRenderProps,
+  ListBoxItemRenderProps,
   ListBox,
   ListBoxProps,
 } from "react-aria-components";
@@ -49,7 +49,7 @@ function Item({
   ...props
 }: ChildrenRenderProps<
   ListBoxItemProps<Score>,
-  ItemRenderProps & ScoreReviewsItemContextValue
+  ListBoxItemRenderProps & ScoreReviewsItemContextValue
 >) {
   if (!value) {
     throw new Error("ScoreReviews.Item must have a value");
