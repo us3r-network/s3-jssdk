@@ -2,7 +2,7 @@
  * @Author: bufan bufan@hotmail.com
  * @Date: 2023-07-26 14:57:29
  * @LastEditors: bufan bufan@hotmail.com
- * @LastEditTime: 2023-12-13 11:52:26
+ * @LastEditTime: 2023-12-13 17:14:02
  * @FilePath: /s3-jssdk/packages/link/src/components/Score/reviews/ScoreReviews.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -46,13 +46,8 @@ function ScoreReviewsRoot({
   children,
   ...props
 }: ScoreReviewsProps) {
-  const [currentLinkId, setCurrentLinkId] = useState<string>(linkId);
-  const {getLinkId} = useLinks()
-  if (!linkId && link)
-    getLinkId(link).then((id) => {
-      if(id) setCurrentLinkId(id);
-    });
-  const { isFetching, scores } = useLinkScores(currentLinkId, { order });
+  const {linkId:unknownLinkId} = useLinks(link);
+  const { isFetching, scores } = useLinkScores(linkId||unknownLinkId, { order });
 
   const businessProps = {
     "data-us3r-component": "ScoreReviews",

@@ -2,7 +2,7 @@
  * @Author: bufan bufan@hotmail.com
  * @Date: 2023-07-26 14:57:29
  * @LastEditors: bufan bufan@hotmail.com
- * @LastEditTime: 2023-12-13 10:31:41
+ * @LastEditTime: 2023-12-13 17:12:14
  * @FilePath: /s3-jssdk/packages/link/src/components/FavorButton/FavorButton.tsx
  * @Description: FavorButton component.
  */
@@ -60,15 +60,10 @@ export function FavorButton({
   ...props
 }: FavorButtonProps) {
   const isAuthenticated = useIsAuthenticated();
-  const [currentLinkId, setCurrentLinkId] = useState<string>(linkId);
-  const {getLinkId} = useLinks()
-  if (!linkId && link)
-    getLinkId(link).then((id) => {
-      if(id) setCurrentLinkId(id);
-    });
-  const { favorsCount } = useLinkFavors(currentLinkId);
+  const {linkId:unknownLinkId} = useLinks(link);
+  const { favorsCount } = useLinkFavors(linkId||unknownLinkId);
   const { isFavored, isFavoring, isDisabled, onFavor } = useFavorAction(
-    currentLinkId,
+    linkId||unknownLinkId,
     link,
     {
       onSuccessfullyFavor,

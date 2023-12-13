@@ -36,13 +36,8 @@ function ScoreDashboardRoot({
   children,
   ...props
 }: ScoreDashboardProps) {
-  const [currentLinkId, setCurrentLinkId] = useState<string>(linkId);
-  const {getLinkId} = useLinks()
-  if (!linkId && link)
-    getLinkId(link).then((id) => {
-      if(id) setCurrentLinkId(id);
-    });
-  const { isFetching, scores, scoresCount } = useLinkScores(currentLinkId);
+  const {linkId:unknownLinkId} = useLinks(link);
+  const { isFetching, scores, scoresCount } = useLinkScores(linkId||unknownLinkId);
   const scoresAvg = useMemo(
     () => getScoresAvgFromScores(scores, scoresCount),
     [scores, scoresCount]

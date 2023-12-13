@@ -1,3 +1,11 @@
+/*
+ * @Author: bufan bufan@hotmail.com
+ * @Date: 2023-07-26 14:57:29
+ * @LastEditors: bufan bufan@hotmail.com
+ * @LastEditTime: 2023-12-13 17:13:50
+ * @FilePath: /s3-jssdk/packages/link/src/components/Score/avg/ScoresAvg.tsx
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import { HTMLAttributes, useMemo, useState } from "react";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import { getScoresAvgFromScores } from "../../../utils/score";
@@ -33,13 +41,8 @@ export function ScoresAvg({
     children,
     ...props 
 }: ScoresAvgProps) {
-  const [currentLinkId, setCurrentLinkId] = useState<string>(linkId);
-  const {getLinkId} = useLinks()
-  if (!linkId && link)
-    getLinkId(link).then((id) => {
-      if(id) setCurrentLinkId(id);
-    });
-  const { isFetching, scores, scoresCount } = useLinkScores(currentLinkId);
+  const {linkId:unknownLinkId} = useLinks(link);
+  const { isFetching, scores, scoresCount } = useLinkScores(linkId||unknownLinkId);
   const scoresAvg = useMemo(
     () => getScoresAvgFromScores(scores, scoresCount) || 0,
     [scores, scoresCount]
