@@ -66,7 +66,7 @@ export const useFavorAction = (
   );
 
   const isDisabled = useMemo(
-    () => (!isFetched && unknownLinkParam?.url === "") || isFavoring,
+    () => (!isFetched && !unknownLinkParam?.url) || isFavoring,
     [isFetched, isFavoring, unknownLinkParam?.url]
   );
 

@@ -2,7 +2,7 @@
  * @Author: bufan bufan@hotmail.com
  * @Date: 2023-07-26 14:57:29
  * @LastEditors: bufan bufan@hotmail.com
- * @LastEditTime: 2023-12-12 18:10:16
+ * @LastEditTime: 2023-12-13 10:31:41
  * @FilePath: /s3-jssdk/packages/link/src/components/FavorButton/FavorButton.tsx
  * @Description: FavorButton component.
  */
@@ -66,7 +66,6 @@ export function FavorButton({
     getLinkId(link).then((id) => {
       if(id) setCurrentLinkId(id);
     });
-  console.log("currentLinkId", currentLinkId);
   const { favorsCount } = useLinkFavors(currentLinkId);
   const { isFavored, isFavoring, isDisabled, onFavor } = useFavorAction(
     currentLinkId,

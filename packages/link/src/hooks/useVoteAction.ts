@@ -58,7 +58,7 @@ export const useVoteAction = (
   );
 
   const isDisabled = useMemo(
-    () => (!isFetched && unknownLinkParam?.url === "") || isVoting,
+    () => (!isFetched && !unknownLinkParam?.url) || isVoting,
     [isFetched, isVoting, unknownLinkParam?.url]
   );
 
