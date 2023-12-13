@@ -16,7 +16,8 @@
   ],
   "scripts": {
     "build": "rimraf ./dist && rollup -c",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest -i --forceExit"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest -i --forceExit",
+    "pub": "npm publish --access public --tag latest"
   },
   "keywords": [
     "ceramic",

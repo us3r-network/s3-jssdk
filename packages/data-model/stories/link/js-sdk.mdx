@@ -260,10 +260,6 @@ The **resp** is a GraphQL response object which contains the data and errors.
 #### Returns
 <ArgTypes of={QueryPersonalLinkReturns} />
 
-### queryPersonalLinksDesc
-
-Like `queryPersonalLinks`, but the result is sorted in descending order.
-
 ### queryLinks
 
 The `queryLinks` method is used to query the links. For example, if you want to query the links with the following code:
@@ -276,15 +272,6 @@ The **resp** is a GraphQL response object which contains the data and errors.
 
 #### Returns
 <ArgTypes of={QueryLinksReturns} />
-
-
-### queryLinksDesc
-
-Like `queryLinks`, but the result is sorted in descending order.
-
-```ts
-const resp = await s3Link.queryLinksDesc({ last: 10 });
-```
 
 ### createVote
 
@@ -335,14 +322,6 @@ The **resp** is a GraphQL response object which contains the data and errors.
 #### Returns
 <ArgTypes of={QueryPersonalVoteReturns} />
 
-### queryPersonalVotesDesc
-
-Like `queryPersonalVotes`, but the result is sorted in descending order.
-
-```ts
-const resp = await s3Link.queryPersonalVotesDesc({ last: 3 });
-```
-
 ### createFavor
 
 The `createFavor` method is used to create a favor for a Link. For example, if you want to create a favor with the following code:
@@ -392,14 +371,6 @@ The **resp** is a GraphQL response object which contains the data and errors.
 
 #### Returns
 <ArgTypes of={QueryPersonalFavorReturns} />
-
-### queryPersonalFavorsDesc
-
-Like `queryPersonalFavors`, but the result is sorted in descending order.
-
-```ts
-const resp = await s3Link.queryPersonalFavorsDesc({ last: 3 });
-```
 
 ### createScore
 
@@ -452,14 +423,6 @@ The **resp** is a GraphQL response object which contains the data and errors.
 #### Returns
 <ArgTypes of={QueryPersonalScoreReturns} />
 
-### queryPersonalScoresDesc
-
-Like `queryPersonalScores`, but the result is sorted in descending order.
-
-```ts
-const resp = await s3Link.queryPersonalScoresDesc({ last: 3 });
-```
-
 ### createComment
 
 The `createComment` method is used to create a comment for a Link. For example, if you want to create a comment with the following code:
@@ -508,14 +471,6 @@ The **resp** is a GraphQL response object which contains the data and errors.
 
 #### Returns
 <ArgTypes of={QueryPersonalCommentReturns} />
-
-### queryPersonalCommentsDesc
-
-Like `queryPersonalComments`, but the result is sorted in descending order.
-
-```ts
-const resp = await s3Link.queryPersonalCommentsDesc({ last: 3 });
-```
 
 
 ## Examples
