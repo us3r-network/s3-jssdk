@@ -11,7 +11,7 @@ import { Link } from "@us3r-network/data-model";
 
 export const useFavorAction = (
   linkId: string,
-  unknownLinkParam: Link | undefined,
+  unknownLinkParam?: Link | undefined,
   opts?: {
     onSuccessfullyFavor?: (isFavored: boolean) => void;
     onFailedFavor?: (errMsg: string) => void;

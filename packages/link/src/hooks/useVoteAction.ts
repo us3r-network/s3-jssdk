@@ -6,9 +6,11 @@ import {
   useSession,
 } from "@us3r-network/auth-with-rainbowkit";
 import { useLinkVotes } from "./useLinkVotes";
+import { Link } from "@us3r-network/data-model";
 
 export const useVoteAction = (
   linkId: string,
+  unknownLinkParam?: Link | undefined,
   opts?: {
     onSuccessfullyVote?: (isVoted: boolean) => void;
     onFailedVote?: (errMsg: string) => void;
@@ -21,6 +23,9 @@ export const useVoteAction = (
   const { s3LinkModalAuthed } = useLinkState();
 
   const votingLinkIds = useStore((state) => state.votingLinkIds);
+  const upsertOneInCacheLinkVotes = useStore(
+    (state) => state.upsertOneInCacheLinkVotes
+  );
   const addOneToVotingLinkIds = useStore(
     (state) => state.addOneToVotingLinkIds
   );
@@ -53,8 +58,8 @@ export const useVoteAction = (
   );
 
   const isDisabled = useMemo(
-    () => !isFetched || isVoting,
-    [isFetched, isVoting]
+    () => (!isFetched && unknownLinkParam?.url === "") || isVoting,
+    [isFetched, isVoting, unknownLinkParam?.url]
   );
 
   const onVote = useCallback(async () => {
@@ -82,6 +87,12 @@ export const useVoteAction = (
         });
         if (opts?.onSuccessfullyVote) opts.onSuccessfullyVote(!revoke);
       } else {
+        // create link if not exist
+        if (!linkId && unknownLinkParam && unknownLinkParam.url && unknownLinkParam.type) {
+          const unknownLink = await s3LinkModel?.fetchLink(unknownLinkParam);
+          if (unknownLink && unknownLink?.id) linkId = unknownLink?.id;
+          upsertOneInCacheLinkVotes(linkId,{})
+        }
         // create vote
         const revoke = false;
         const type = "UP_VOTE";
@@ -128,6 +139,8 @@ export const useVoteAction = (
     updateVoteInCacheLinkVotes,
     opts?.onSuccessfullyVote,
     opts?.onFailedVote,
+    unknownLinkParam?.url,
+    unknownLinkParam?.type,
   ]);
 
   return { isVoted, isVoting, isDisabled, onVote };

@@ -1,4 +1,12 @@
-import { useMemo } from "react";
+/*
+ * @Author: bufan bufan@hotmail.com
+ * @Date: 2023-07-26 14:57:29
+ * @LastEditors: bufan bufan@hotmail.com
+ * @LastEditTime: 2023-12-13 10:23:23
+ * @FilePath: /s3-jssdk/packages/link/src/components/VoteButton/VoteButton.tsx
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+import { useMemo, useState } from "react";
 import { useIsAuthenticated } from "@us3r-network/auth-with-rainbowkit";
 import { Button, ButtonRenderProps } from "react-aria-components";
 import { ChildrenRenderProps, childrenRender } from "../../utils/props";
@@ -6,12 +14,17 @@ import { AriaButtonProps } from "react-aria";
 import { VoteButtonChildren } from "./VoteButtonChildren";
 import { useVoteAction } from "../../hooks/useVoteAction";
 import { useLinkVotes } from "../../hooks/useLinkVotes";
-
+import { Link } from "@us3r-network/data-model";
+import { useLinks } from "../../hooks/useLinks";
 export interface VoteButtonIncomingProps {
   /**
    * link stream id.
    */
   linkId: string;
+  /**
+   * link params include url and type.
+   */
+  link?: Link;
   /**
    * callback when vote is successfully added or removed.
    * @param isVoted is voted or not.
@@ -39,17 +52,28 @@ export interface VoteButtonProps
 
 export function VoteButton({
   linkId,
+  link,
   onSuccessfullyVote,
   onFailedVote,
   children,
   ...props
 }: VoteButtonProps) {
   const isAuthenticated = useIsAuthenticated();
-  const { votesCount } = useLinkVotes(linkId);
-  const { isVoted, isVoting, isDisabled, onVote } = useVoteAction(linkId, {
-    onSuccessfullyVote,
-    onFailedVote,
-  });
+  const [currentLinkId, setCurrentLinkId] = useState<string>(linkId);
+  const {getLinkId} = useLinks()
+  if (!linkId && link)
+    getLinkId(link).then((id) => {
+      if(id) setCurrentLinkId(id);
+    });
+  const { votesCount } = useLinkVotes(currentLinkId);
+  const { isVoted, isVoting, isDisabled, onVote } = useVoteAction(
+    currentLinkId, 
+    link,
+    {
+      onSuccessfullyVote,
+      onFailedVote,
+    }
+  );
 
   const businessProps = {
     "data-us3r-component": "VoteButton",
