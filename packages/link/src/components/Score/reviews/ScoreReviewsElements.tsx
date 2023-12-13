@@ -155,7 +155,7 @@ function CreateAt({
 }
 
 function ItemDefaultChildren() {
-  const { linkId } = useScoreReviewsState();
+  const { linkId, link } = useScoreReviewsState();
   const { data, isLoginUserScore } = useScoreReviewsItemState();
   const { id } = data;
   const [isOpenEdit, setIsOpenEdit] = useState(false);
@@ -184,6 +184,7 @@ function ItemDefaultChildren() {
             >
               <ScoreForm
                 linkId={linkId}
+                link={link}
                 scoreId={id}
                 onSuccessfullyScore={() => {
                   setIsOpenEdit(false);
