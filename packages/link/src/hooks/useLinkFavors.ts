@@ -1,5 +1,12 @@
+/*
+ * @Author: bufan bufan@hotmail.com
+ * @Date: 2023-12-12 17:35:33
+ * @LastEditors: bufan bufan@hotmail.com
+ * @LastEditTime: 2023-12-14 15:29:23
+ * @FilePath: /s3-jssdk/packages/link/src/hooks/useLinkFavors.ts
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import { useEffect, useMemo } from "react";
-import { Page } from "@ceramicnetwork/common";
 import { Favor } from "@us3r-network/data-model";
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
@@ -60,35 +67,7 @@ export const useLinkFavors = (linkId: string) => {
           status: "loading",
           errMsg: "",
         });
-        const res = await s3LinkModel.executeQuery<{
-          node: {
-            favors: Page<Favor>;
-            favorsCount: number;
-          };
-        }>(`
-          query {
-            node(id: "${linkId}") {
-              ...on Link {
-                favorsCount
-                favors (first: 1000) {
-                  edges {
-                    node {
-                      id
-                      linkID
-                      revoke
-                      createAt
-                      modifiedAt
-                      creator {
-                        id
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        `);
-
+        const res = await s3LinkModel.queryLinkFavors({linkId});
         if (res?.errors && res?.errors.length > 0) {
           throw new Error(res?.errors[0]?.message);
         }
