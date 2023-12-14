@@ -1,3 +1,11 @@
+/*
+ * @Author: bufan bufan@hotmail.com
+ * @Date: 2023-07-26 14:57:29
+ * @LastEditors: bufan bufan@hotmail.com
+ * @LastEditTime: 2023-12-14 17:45:20
+ * @FilePath: /s3-jssdk/packages/link/src/hooks/useLinkVotes.ts
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import { useEffect, useMemo } from "react";
 import { Page } from "@ceramicnetwork/common";
 import { Vote } from "@us3r-network/data-model";
@@ -60,35 +68,7 @@ export const useLinkVotes = (linkId: string) => {
           status: "loading",
           errMsg: "",
         });
-        const res = await s3LinkModel.executeQuery<{
-          node: {
-            votes: Page<Vote>;
-            votesCount: number;
-          };
-        }>(`
-          query {
-            node(id: "${linkId}") {
-              ...on Link {
-                votesCount
-                votes (first: 1000) {
-                  edges {
-                    node {
-                      id
-                      linkID
-                      type
-                      revoke
-                      createAt
-                      modifiedAt
-                      creator {
-                        id
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        `);
+        const res = await s3LinkModel.queryLinkVotes({linkId});
 
         if (res?.errors && res?.errors.length > 0) {
           throw new Error(res?.errors[0]?.message);

@@ -417,6 +417,57 @@ export class S3LinkModel extends S3Model {
     return res;
   }
 
+  public async queryLinkVotes({
+    linkId,
+    filters = {"where":{"revoke":{"equalTo":false}}},
+    sort = {"createAt":"DESC"},
+    first = 10,
+    after = "",
+  }: {
+    linkId: string;
+    filters?: any;
+    sort?: any;
+    first?: number;
+    after?: string;
+    linkFields?: LinkField[];
+  }) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      node: {
+        votes: Page<Vote>;
+        votesCount: number; // this count is including revoked votes
+      };
+    }>(`
+      query ($input: VoteFiltersInput!, $sortInput: VoteSortingInput!) {
+        node(id: "${linkId}") {
+          ...on Link {
+            votesCount
+            votes (filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
+              edges {
+                node {
+                  id
+                  linkID
+                  type
+                  revoke
+                  createAt
+                  modifiedAt
+                  creator {
+                    id
+                  }
+                }
+              }
+            }
+          }
+        }
+      }`, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
+
+    return res;
+  }
+
   /**
    * favor
    */
@@ -687,6 +738,57 @@ export class S3LinkModel extends S3Model {
     return res;
   }
 
+  public async queryLinkComments({
+    linkId,
+    filters = {"where":{"revoke":{"equalTo":false}}},
+    sort = {"createAt":"DESC"},
+    first = 10,
+    after = "",
+  }: {
+    linkId: string;
+    filters?: any;
+    sort?: any;
+    first?: number;
+    after?: string;
+    linkFields?: LinkField[];
+  }) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      node: {
+        comments: Page<Comment>;
+        commentsCount: number; // this count is including revoked comments
+      };
+    }>(`
+      query ($input: CommentFiltersInput!, $sortInput: CommentSortingInput!) {
+        node(id: "${linkId}") {
+          ...on Link {
+            commentsCount
+            comments (filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
+              edges {
+                node {
+                  id
+                  linkID
+                  text
+                  revoke
+                  createAt
+                  modifiedAt
+                  creator {
+                    id
+                  }
+                }
+              }
+            }
+          }
+        }
+      }`, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
+
+    return res;
+  }
+
   /**
    * score
    */
@@ -800,4 +902,57 @@ export class S3LinkModel extends S3Model {
     });
     return res;
   }
+
+  public async queryLinkScores({
+    linkId,
+    filters = {"where":{"revoke":{"equalTo":false}}},
+    sort = {"createAt":"DESC"},
+    first = 10,
+    after = "",
+  }: {
+    linkId: string;
+    filters?: any;
+    sort?: any;
+    first?: number;
+    after?: string;
+    linkFields?: LinkField[];
+  }) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      node: {
+        scores: Page<Score>;
+        scoresCount: number; // this count is including revoked scores
+      };
+    }>(`
+      query ($input: ScoreFiltersInput!, $sortInput: ScoreSortingInput!) {
+        node(id: "${linkId}") {
+          ...on Link {
+            scoresCount
+            scores (filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
+              edges {
+                node {
+                  id
+                  text
+                  value
+                  linkID
+                  revoke
+                  createAt
+                  modifiedAt
+                  creator {
+                    id
+                  }
+                }
+              }
+            }
+          }
+        }
+      }`, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
+
+    return res;
+  }
+
 }
