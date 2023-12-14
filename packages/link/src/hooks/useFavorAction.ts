@@ -13,7 +13,7 @@ export const useFavorAction = (
   linkId: string,
   unknownLinkParam?: Link | undefined,
   opts?: {
-    onSuccessfullyFavor?: (isFavored: boolean) => void;
+    onSuccessfullyFavor?: (isFavored:boolean, linkId: string) => void;
     onFailedFavor?: (errMsg: string) => void;
   }
 ) => {
@@ -78,6 +78,13 @@ export const useFavorAction = (
     }
     if (!s3LinkModel) return;
     try {
+      // create link if not exist
+      if (!linkId && unknownLinkParam && unknownLinkParam.url && unknownLinkParam.type) {
+        const unknownLink = await s3LinkModel?.fetchLink(unknownLinkParam);
+        if (unknownLink && unknownLink?.id){
+          linkId = unknownLink?.id;
+        }
+      }
       addOneToFavoringLinkIds(linkId);
       if (findCurrUserFavor) {
         // update favor
@@ -97,14 +104,8 @@ export const useFavorAction = (
           const link = linkRes.data?.node;
           addOneToPersonalFavors({ ...findCurrUserFavor, link });
         }
-        if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(!revoke);
+        if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(!revoke, linkId);
       } else {
-        // create link if not exist
-        if (!linkId && unknownLinkParam && unknownLinkParam.url && unknownLinkParam.type) {
-          const unknownLink = await s3LinkModel?.fetchLink(unknownLinkParam);
-          if (unknownLink && unknownLink?.id) linkId = unknownLink?.id;
-          upsertOneInCacheLinkFavors(linkId,{})
-        }
         // create favor
         const res = await s3LinkModel?.createFavor({
           linkID: linkId,
@@ -132,7 +133,7 @@ export const useFavorAction = (
           addFavorToCacheLinkFavors(linkId, favorData);
           addOneToPersonalFavors({ ...favorData });
         }
-        if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(true);
+        if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(true, linkId);
       }
     } catch (error) {
       const errMsg = (error as any)?.message;

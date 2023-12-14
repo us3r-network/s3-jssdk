@@ -75,6 +75,8 @@ export const createCommentSlice: StateCreator<
   // comments
   addCommentToCacheLinkComments: (linkId, comment) => {
     set((state) => {
+      if (!state.cacheLinkComments.get(linkId))
+        state.cacheLinkComments.set(linkId, defaultLinkComments);
       const linkComments = state.cacheLinkComments.get(linkId);
       if (!linkComments) return;
       linkComments.comments.push(comment);

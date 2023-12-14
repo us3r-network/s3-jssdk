@@ -11,7 +11,7 @@ export const useScoreAction = (
   linkId: string,
   unknownLinkParam?: Link | undefined,
   opts?: {
-    onSuccessfullyScore?: () => void;
+    onSuccessfullyScore?: (linkId: string) => void;
     onFailedScore?: (errMsg: string) => void;
   }
 ) => {
@@ -111,7 +111,7 @@ export const useScoreAction = (
           addOneToPersonalScores({ ...scoreData });
         }
 
-        if (opts?.onSuccessfullyScore) opts.onSuccessfullyScore();
+        if (opts?.onSuccessfullyScore) opts.onSuccessfullyScore(linkId);
       } catch (error) {
         const errMsg = (error as any)?.message;
         if (opts?.onFailedScore) opts.onFailedScore(errMsg);
@@ -172,7 +172,7 @@ export const useScoreAction = (
           updateOneInPersonalScores(scoreId, scoreData);
         }
 
-        if (opts?.onSuccessfullyScore) opts.onSuccessfullyScore();
+        if (opts?.onSuccessfullyScore) opts.onSuccessfullyScore(linkId);
       } catch (error) {
         const errMsg = (error as any)?.message;
         if (opts?.onFailedScore) opts.onFailedScore(errMsg);

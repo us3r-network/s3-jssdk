@@ -65,6 +65,8 @@ export const createVoteSlice: StateCreator<
   // votes mutations
   addVoteToCacheLinkVotes: (linkId, vote) => {
     set((state) => {
+      if (!state.cacheLinkVotes.get(linkId))
+        state.cacheLinkVotes.set(linkId, defaultLinkVotes);
       const linkVotes = state.cacheLinkVotes.get(linkId);
       if (!linkVotes) return;
       linkVotes.votes.push(vote);

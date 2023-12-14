@@ -72,6 +72,8 @@ export const createScoreSlice: StateCreator<
   // scores
   addScoreToCacheLinkScores: (linkId, score) => {
     set((state) => {
+      if (!state.cacheLinkScores.get(linkId))
+        state.cacheLinkScores.set(linkId, defaultLinkScores);
       const linkScores = state.cacheLinkScores.get(linkId);
       if (!linkScores) return;
       linkScores.scores.push(score);

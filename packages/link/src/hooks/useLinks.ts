@@ -2,7 +2,7 @@
  * @Author: bufan bufan@hotmail.com
  * @Date: 2023-12-12 16:52:40
  * @LastEditors: bufan bufan@hotmail.com
- * @LastEditTime: 2023-12-13 17:07:40
+ * @LastEditTime: 2023-12-14 16:45:53
  * @FilePath: /s3-jssdk/packages/link/src/hooks/useLinks.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -46,6 +46,7 @@ export const useLinks = (link:Link|undefined) => {
         else setLinkId('');
       });
     }
-  }, [link]);
-  return { getLinkId, linkId };
+  }, [link?.url]);
+
+  return { getLinkId, setLinkId, linkId };
 };

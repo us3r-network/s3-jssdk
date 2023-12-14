@@ -12,7 +12,7 @@ export const useVoteAction = (
   linkId: string,
   unknownLinkParam?: Link | undefined,
   opts?: {
-    onSuccessfullyVote?: (isVoted: boolean) => void;
+    onSuccessfullyVote?: (isVoted: boolean, linkId:any) => void;
     onFailedVote?: (errMsg: string) => void;
   }
 ) => {
@@ -69,6 +69,12 @@ export const useVoteAction = (
       return;
     }
     try {
+      // create link if not exist
+      if (!linkId && unknownLinkParam && unknownLinkParam.url && unknownLinkParam.type) {
+        const unknownLink = await s3LinkModel?.fetchLink(unknownLinkParam);
+        if (unknownLink && unknownLink?.id) linkId = unknownLink?.id;
+        upsertOneInCacheLinkVotes(linkId,{})
+      }
       addOneToVotingLinkIds(linkId);
       if (findCurrUserVote) {
         // update vote
@@ -85,14 +91,8 @@ export const useVoteAction = (
           type,
           modifiedAt: new Date().toDateString(),
         });
-        if (opts?.onSuccessfullyVote) opts.onSuccessfullyVote(!revoke);
+        if (opts?.onSuccessfullyVote) opts.onSuccessfullyVote(!revoke,linkId);
       } else {
-        // create link if not exist
-        if (!linkId && unknownLinkParam && unknownLinkParam.url && unknownLinkParam.type) {
-          const unknownLink = await s3LinkModel?.fetchLink(unknownLinkParam);
-          if (unknownLink && unknownLink?.id) linkId = unknownLink?.id;
-          upsertOneInCacheLinkVotes(linkId,{})
-        }
         // create vote
         const revoke = false;
         const type = "UP_VOTE";
@@ -119,7 +119,7 @@ export const useVoteAction = (
             },
           });
         }
-        if (opts?.onSuccessfullyVote) opts.onSuccessfullyVote(!revoke);
+        if (opts?.onSuccessfullyVote) opts.onSuccessfullyVote(!revoke,linkId);
       }
     } catch (error) {
       const errMsg = (error as any)?.message;

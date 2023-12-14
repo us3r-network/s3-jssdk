@@ -11,7 +11,7 @@ export const useCommentAction = (
   linkId: string,
   unknownLinkParam?: Link | undefined,
   opts?: {
-    onSuccessfullyComment?: () => void;
+    onSuccessfullyComment?: (linkId: string) => void;
     onFailedComment?: (errMsg: string) => void;
   }
 ) => {
@@ -86,7 +86,7 @@ export const useCommentAction = (
             },
           });
         }
-        if (opts?.onSuccessfullyComment) opts.onSuccessfullyComment();
+        if (opts?.onSuccessfullyComment) opts.onSuccessfullyComment(linkId);
       } catch (error) {
         const errMsg = (error as any)?.message;
         if (opts?.onFailedComment) opts.onFailedComment(errMsg);

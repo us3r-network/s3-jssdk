@@ -2,7 +2,7 @@
  * @Author: bufan bufan@hotmail.com
  * @Date: 2023-07-26 14:57:29
  * @LastEditors: bufan bufan@hotmail.com
- * @LastEditTime: 2023-12-13 17:14:14
+ * @LastEditTime: 2023-12-14 17:25:09
  * @FilePath: /s3-jssdk/packages/link/src/components/VoteButton/VoteButton.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -59,13 +59,16 @@ export function VoteButton({
   ...props
 }: VoteButtonProps) {
   const isAuthenticated = useIsAuthenticated();
-  const {linkId:unknownLinkId} = useLinks(link);
+  const {linkId:unknownLinkId, setLinkId} = useLinks(link);
   const { votesCount } = useLinkVotes(linkId||unknownLinkId);
   const { isVoted, isVoting, isDisabled, onVote } = useVoteAction(
     linkId||unknownLinkId, 
     link,
     {
-      onSuccessfullyVote,
+      onSuccessfullyVote:(isFavored:boolean, newLinkId:string) => {
+        setLinkId(newLinkId)
+        onSuccessfullyVote?.(isFavored);
+      },
       onFailedVote,
     }
   );
