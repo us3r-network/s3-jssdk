@@ -528,6 +528,56 @@ export class S3LinkModel extends S3Model {
     return res;
   }
 
+  public async queryLinkFavors({
+    linkId,
+    filters = {"where":{"revoke":{"equalTo":false}}},
+    sort = {"createAt":"DESC"},
+    first = 10,
+    after = "",
+  }: {
+    linkId: string;
+    filters?: any;
+    sort?: any;
+    first?: number;
+    after?: string;
+    linkFields?: LinkField[];
+  }) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      node: {
+        favors: Page<Favor>;
+        favorsCount: number; // this count is including revoked favors
+      };
+    }>(`
+      query ($input: FavorFiltersInput!, $sortInput: FavorSortingInput!) {
+        node(id: "${linkId}") {
+          ...on Link {
+            favorsCount
+            favors (filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
+              edges {
+                node {
+                  id
+                  linkID
+                  revoke
+                  createAt
+                  modifiedAt
+                  creator {
+                    id
+                  }
+                }
+              }
+            }
+          }
+        }
+      }`, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
+
+    return res;
+  }
+
   /**
    * comment
    */
