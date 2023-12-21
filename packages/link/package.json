@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/link",
-  "version": "0.3.0-alpha.1",
+  "version": "0.7.0",
   "description": "the us3r link components",
   "type": "module",
   "main": "dist/cjs/index.js",
@@ -20,18 +20,18 @@
   "license": "ISC",
   "dependencies": {
     "@material-design-icons/svg": "^0.14.7",
-    "@us3r-network/data-model": "^0.7.0-alpha.1",
+    "@us3r-network/data-model": "^0.7.0",
     "dayjs": "^2.0.0-alpha.4",
     "immer": "^10.0.2",
     "lodash.isequal": "^4.5.0",
     "multihashes": "^4.0.3",
-    "react-aria": "^3.30.0",
-    "react-aria-components": "^1.0.0-rc.0",
+    "react-aria": "^3.31.0",
+    "react-aria-components": "^1.0.0",
     "zustand": "^4.3.7"
   },
   "peerDependencies": {
     "@us3r-network/auth-with-rainbowkit": "^0.2.1",
-    "@us3r-network/profile": "^0.4.2",
+    "@us3r-network/profile": "^0.7.0",
     "react": "^18.2.0"
   },
   "devDependencies": {

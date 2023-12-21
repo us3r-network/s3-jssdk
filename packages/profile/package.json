@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/profile",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "the us3r profile components",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -21,10 +21,10 @@
   "dependencies": {
     "@material-design-icons/svg": "^0.14.13",
     "@multiavatar/multiavatar": "^1.0.7",
-    "@us3r-network/data-model": "^0.7.0-alpha.0",
+    "@us3r-network/data-model": "^0.7.0",
     "lodash.isfunction": "^3.0.9",
-    "react-aria": "^3.30.0",
-    "react-aria-components": "^1.0.0-rc.0",
+    "react-aria": "^3.31.0",
+    "react-aria-components": "^1.0.0",
     "styled-components": "^6.1.1"
   },
   "peerDependencies": {
