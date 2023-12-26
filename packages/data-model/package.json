@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/data-model",
-  "version": "0.6.0-alpha.1",
+  "version": "0.7.0",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -16,7 +16,8 @@
   ],
   "scripts": {
     "build": "rimraf ./dist && rollup -c",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest -i --forceExit"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest -i --forceExit",
+    "pub": "npm publish --access public --tag latest"
   },
   "keywords": [
     "ceramic",
@@ -34,21 +35,21 @@
   },
   "homepage": "https://github.com/us3r-network/s3-jssdk/tree/main/packages/data-model",
   "dependencies": {
-    "@ceramicnetwork/common": "^2.34.0",
-    "@composedb/client": "^0.5.1",
-    "@composedb/devtools": "^0.5.1",
-    "@composedb/types": "^0.5.1",
-    "did-session": "^2.0.0",
+    "@ceramicnetwork/common": "^3.2.0",
+    "@composedb/client": "^0.6.0",
+    "@composedb/devtools": "^0.6.1",
+    "@composedb/types": "^0.6.0",
+    "did-session": "^2.1.2",
     "dids": "^4.0.4"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^24.0.1",
-    "@rollup/plugin-json": "^6.0.0",
-    "@rollup/plugin-typescript": "^11.1.0",
-    "@swc/cli": "^0.1.62",
-    "rollup": "^3.20.2",
-    "rollup-plugin-dts": "^5.3.0",
-    "typescript": "^5.0.4"
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.0.1",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@swc/cli": "^0.1.63",
+    "rollup": "^4.8.0",
+    "rollup-plugin-dts": "^6.1.0",
+    "typescript": "^5.3.3"
   },
   "jest": {
     "testEnvironment": "s3network",

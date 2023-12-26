@@ -8,8 +8,7 @@
     "packages/auth-with-rainbowkit",
     "packages/data-model",
     "packages/profile",
-    "packages/link",
-    "packages/jest-environment-s3network"
+    "packages/link"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -33,27 +32,30 @@
     "@babel/preset-env": "^7.21.4",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.21.4",
-    "@storybook/addon-essentials": "7.0.5",
-    "@storybook/addon-interactions": "7.0.5",
-    "@storybook/addon-links": "7.0.5",
-    "@storybook/blocks": "7.0.5",
-    "@storybook/manager-api": "^7.0.5",
-    "@storybook/react": "7.0.4",
-    "@storybook/react-webpack5": "7.0.4",
-    "@storybook/testing-library": "0.0.14-next.2",
-    "@storybook/theming": "^7.0.5",
+    "@storybook/addon-essentials": "^7.6.4",
+    "@storybook/addon-interactions": "^7.6.4",
+    "@storybook/addon-links": "^7.6.4",
+    "@storybook/blocks": "^7.6.4",
+    "@storybook/manager-api": "^7.6.4",
+    "@storybook/react": "^7.6.4",
+    "@storybook/react-webpack5": "^7.6.4",
+    "@storybook/testing-library": "^0.2.2",
+    "@storybook/theming": "^7.6.4",
     "prop-types": "15.8.1",
     "raw-loader": "^4.0.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "storybook": "7.0.5",
+    "storybook": "^7.6.4",
     "url-loader": "^4.1.1",
-    "wagmi": "^1.0.7",
-    "viem": "^0.3.37",
-    "@rainbow-me/rainbowkit": "1.0.2"
+    "wagmi": "^1.4.10",
+    "viem": "^1.19.13",
+    "@rainbow-me/rainbowkit": "^1.3.0",
+    "json-stringify-pretty-compact": "^4.0.0",
+    "@svgr/webpack": "^7.0.0"
   },
   "dependencies": {
-    "@svgr/webpack": "^7.0.0",
-    "json-stringify-pretty-compact": "^4.0.0"
+  },
+  "resolutions": {
+    "jackspeak": "2.1.1"
   }
 }

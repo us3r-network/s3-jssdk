@@ -1,3 +1,11 @@
+/*
+ * @Author: bufan bufan@hotmail.com
+ * @Date: 2023-07-19 11:24:59
+ * @LastEditors: bufan bufan@hotmail.com
+ * @LastEditTime: 2023-12-13 12:49:59
+ * @FilePath: /s3-jssdk/packages/link/src/ui/Score/reviews/ScoreReviews.tsx
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import { useState } from "react";
 import { Button } from "react-aria-components";
 import {
@@ -24,16 +32,16 @@ export default function ({ className = "", ...props }: ScoreReviewsProps) {
   const { signIn } = useAuthentication();
   const session = useSession();
   const { s3LinkModalAuthed } = useLinkState();
-  const { isScored, isDisabled } = useScoreAction(props.linkId);
+  const { isScored, isDisabled } = useScoreAction(props.linkId, props.link);
   return (
     <ScoreReviews className={`${styles.ScoreReviews} ${className}`} {...props}>
-      {({ isLoading, linkId }) => {
+      {({ isLoading, linkId, link }) => {
         if (isLoading) {
           return <LoadingSpokes className={styles.LoadingSpokes} />;
         }
         return (
           <div className={styles.CompositeWrap}>
-            <ScoreDashboard linkId={linkId} />
+            <ScoreDashboard linkId={linkId} link={link}/>
             <Button
               className={styles.RatingAndReviewWrapButton}
               isDisabled={isDisabled || isScored}
@@ -85,6 +93,7 @@ export default function ({ className = "", ...props }: ScoreReviewsProps) {
             >
               <ScoreForm
                 linkId={linkId}
+                link={link}
                 onSuccessfullyScore={() => {
                   setIsOpenAdd(false);
                 }}

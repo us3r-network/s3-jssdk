@@ -6,11 +6,13 @@ import {
   useSession,
 } from "@us3r-network/auth-with-rainbowkit";
 import { useLinkVotes } from "./useLinkVotes";
+import { Link } from "@us3r-network/data-model";
 
 export const useVoteAction = (
   linkId: string,
+  unknownLinkParam?: Link | undefined,
   opts?: {
-    onSuccessfullyVote?: (isVoted: boolean) => void;
+    onSuccessfullyVote?: (isVoted: boolean, linkId:any) => void;
     onFailedVote?: (errMsg: string) => void;
   }
 ) => {
@@ -21,6 +23,9 @@ export const useVoteAction = (
   const { s3LinkModalAuthed } = useLinkState();
 
   const votingLinkIds = useStore((state) => state.votingLinkIds);
+  const upsertOneInCacheLinkVotes = useStore(
+    (state) => state.upsertOneInCacheLinkVotes
+  );
   const addOneToVotingLinkIds = useStore(
     (state) => state.addOneToVotingLinkIds
   );
@@ -53,8 +58,8 @@ export const useVoteAction = (
   );
 
   const isDisabled = useMemo(
-    () => !isFetched || isVoting,
-    [isFetched, isVoting]
+    () => (!isFetched && !unknownLinkParam?.url) || isVoting,
+    [isFetched, isVoting, unknownLinkParam?.url]
   );
 
   const onVote = useCallback(async () => {
@@ -64,6 +69,12 @@ export const useVoteAction = (
       return;
     }
     try {
+      // create link if not exist
+      if (!linkId && unknownLinkParam && unknownLinkParam.url && unknownLinkParam.type) {
+        const unknownLink = await s3LinkModel?.fetchLink(unknownLinkParam);
+        if (unknownLink && unknownLink?.id) linkId = unknownLink?.id;
+        upsertOneInCacheLinkVotes(linkId,{})
+      }
       addOneToVotingLinkIds(linkId);
       if (findCurrUserVote) {
         // update vote
@@ -80,7 +91,7 @@ export const useVoteAction = (
           type,
           modifiedAt: new Date().toDateString(),
         });
-        if (opts?.onSuccessfullyVote) opts.onSuccessfullyVote(!revoke);
+        if (opts?.onSuccessfullyVote) opts.onSuccessfullyVote(!revoke,linkId);
       } else {
         // create vote
         const revoke = false;
@@ -108,7 +119,7 @@ export const useVoteAction = (
             },
           });
         }
-        if (opts?.onSuccessfullyVote) opts.onSuccessfullyVote(!revoke);
+        if (opts?.onSuccessfullyVote) opts.onSuccessfullyVote(!revoke,linkId);
       }
     } catch (error) {
       const errMsg = (error as any)?.message;
@@ -128,6 +139,8 @@ export const useVoteAction = (
     updateVoteInCacheLinkVotes,
     opts?.onSuccessfullyVote,
     opts?.onFailedVote,
+    unknownLinkParam?.url,
+    unknownLinkParam?.type,
   ]);
 
   return { isVoted, isVoting, isDisabled, onVote };

@@ -5,22 +5,48 @@ export const genRelationSchema = (
   scoreModelId: string,
   favorModelId: string
 ) => `
-  type Favor @loadModel(id: "${favorModelId}") {
+  type Favor 
+  @loadModel(id: "${favorModelId}")
+    @createIndex(fields: [{ path: "revoke" }]) 
+    @createIndex(fields: [{ path: "createAt" }]) 
+    @createIndex(fields: [{ path: "modifiedAt" }]) {
     id: ID!
   }
   
-  type Score @loadModel(id: "${scoreModelId}") {
+  type Score 
+    @loadModel(id: "${scoreModelId}")
+    @createIndex(fields: [{ path: "value" }])
+    @createIndex(fields: [{ path: "text" }])
+    @createIndex(fields: [{ path: "revoke" }]) 
+    @createIndex(fields: [{ path: "createAt" }]) 
+    @createIndex(fields: [{ path: "modifiedAt" }]) {
     id: ID!
   }
   
-  type Comment @loadModel(id: "${commentModelId}") {
+  type Comment
+    @loadModel(id: "${commentModelId}")
+    @createIndex(fields: [{ path: "text" }])
+    @createIndex(fields: [{ path: "revoke" }]) 
+    @createIndex(fields: [{ path: "createAt" }]) 
+    @createIndex(fields: [{ path: "modifiedAt" }]) {
     id: ID!
   }
   
-  type Vote @loadModel(id: "${voteModelId}") {
+  type Vote 
+    @loadModel(id: "${voteModelId}") 
+    @createIndex(fields: [{ path: "revoke" }]) 
+    @createIndex(fields: [{ path: "createAt" }]) 
+    @createIndex(fields: [{ path: "modifiedAt" }]) {
     id: ID!
   }
-  type Link @loadModel(id: "${linkModelId}" ) {
+
+  type Link
+    @loadModel(id: "${linkModelId}" )
+    @createIndex(fields: [{ path: "url" }])
+    @createIndex(fields: [{ path: "type" }])
+    @createIndex(fields: [{ path: "title" }]) 
+    @createIndex(fields: [{ path: "createAt" }]) 
+    @createIndex(fields: [{ path: "modifiedAt" }]) {
     votesCount: Int! @relationCountFrom(model: "Vote", property: "linkID")
     votes: [Vote]! @relationFrom(model: "Vote", property: "linkID")
     commentsCount: Int! @relationCountFrom(model: "Comment", property: "linkID")

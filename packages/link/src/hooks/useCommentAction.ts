@@ -6,11 +6,12 @@ import {
 import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
 import { useLinkComments } from "./useLinkComments";
-
+import { Link } from "@us3r-network/data-model";
 export const useCommentAction = (
   linkId: string,
+  unknownLinkParam?: Link | undefined,
   opts?: {
-    onSuccessfullyComment?: () => void;
+    onSuccessfullyComment?: (linkId: string) => void;
     onFailedComment?: (errMsg: string) => void;
   }
 ) => {
@@ -21,6 +22,9 @@ export const useCommentAction = (
   const { s3LinkModalAuthed } = useLinkState();
 
   const commentingLinkIds = useStore((state) => state.commentingLinkIds);
+  const upsertOneInCacheLinkComments = useStore(
+    (state) => state.upsertOneInCacheLinkComments
+  );
   const addOneToCommentingLinkIds = useStore(
     (state) => state.addOneToCommentingLinkIds
   );
@@ -40,8 +44,8 @@ export const useCommentAction = (
   );
 
   const isDisabled = useMemo(
-    () => !isFetched || isCommenting,
-    [isFetched, isCommenting]
+    () => (!isFetched && !unknownLinkParam?.url) || isCommenting,
+    [isFetched, isCommenting, unknownLinkParam?.url]
   );
 
   const onComment = useCallback(
@@ -52,6 +56,12 @@ export const useCommentAction = (
         return;
       }
       try {
+        // create link if not exist
+        if (!linkId && unknownLinkParam && unknownLinkParam.url && unknownLinkParam.type) {
+          const unknownLink = await s3LinkModel?.fetchLink(unknownLinkParam);
+          if (unknownLink && unknownLink?.id) linkId = unknownLink?.id;
+          upsertOneInCacheLinkComments(linkId,{})
+        }
         addOneToCommentingLinkIds(linkId);
         const res = await s3LinkModel?.createComment({
           text,
@@ -76,7 +86,7 @@ export const useCommentAction = (
             },
           });
         }
-        if (opts?.onSuccessfullyComment) opts.onSuccessfullyComment();
+        if (opts?.onSuccessfullyComment) opts.onSuccessfullyComment(linkId);
       } catch (error) {
         const errMsg = (error as any)?.message;
         if (opts?.onFailedComment) opts.onFailedComment(errMsg);
@@ -96,6 +106,8 @@ export const useCommentAction = (
       updateCommentInCacheLinkComments,
       opts?.onSuccessfullyComment,
       opts?.onFailedComment,
+      unknownLinkParam?.url,
+      unknownLinkParam?.type,
     ]
   );
 

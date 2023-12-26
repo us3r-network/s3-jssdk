@@ -65,6 +65,8 @@ export const createFavorSlice: StateCreator<
   // favors mutations
   addFavorToCacheLinkFavors: (linkId, favor) => {
     set((state) => {
+      if (!state.cacheLinkFavors.get(linkId))
+        state.cacheLinkFavors.set(linkId, defaultLinkFavors);
       const linkFavors = state.cacheLinkFavors.get(linkId);
       if (!linkFavors) return;
       linkFavors.favors.push(favor);

@@ -1,8 +1,19 @@
-type Link @loadModel(id: "kjzl6hvfrbw6c5k700w9ff9o7y243g2wifpx9bdmdrvnjteu3annxfd3kljtp6w") {
+type Link 
+  @loadModel(id: "kjzl6hvfrbw6c5k700w9ff9o7y243g2wifpx9bdmdrvnjteu3annxfd3kljtp6w")
+  @createIndex(fields: [{ path: "url" }])
+  @createIndex(fields: [{ path: "type" }])
+  @createIndex(fields: [{ path: "title" }]) 
+  @createIndex(fields: [{ path: "createAt" }]) 
+  @createIndex(fields: [{ path: "modifiedAt" }]) {
   id: ID!
 }
 
-type Comment @createModel(accountRelation: LIST, description: "Comment on a link of us3r.network") {
+type Comment 
+  @createModel(accountRelation: LIST, description: "Comment on a link of us3r.network")
+  @createIndex(fields: [{ path: "text" }])
+  @createIndex(fields: [{ path: "revoke" }]) 
+  @createIndex(fields: [{ path: "createAt" }]) 
+  @createIndex(fields: [{ path: "modifiedAt" }]) {
   creator: DID! @documentAccount
   version: CommitID! @documentVersion
   linkID: StreamID! @documentReference(model: "Link")
@@ -18,7 +29,11 @@ enum VoteType {
   DOWN_VOTE
 }
 
-type Vote @createModel(accountRelation: LIST, description: "Vote on a link of us3r.network") {
+type Vote
+  @createModel(accountRelation: LIST, description: "Vote on a link of us3r.network") 
+  @createIndex(fields: [{ path: "revoke" }]) 
+  @createIndex(fields: [{ path: "createAt" }]) 
+  @createIndex(fields: [{ path: "modifiedAt" }]) {
   creator: DID! @documentAccount
   version: CommitID! @documentVersion
   linkID: StreamID! @documentReference(model: "Link")
@@ -29,7 +44,11 @@ type Vote @createModel(accountRelation: LIST, description: "Vote on a link of us
   modifiedAt: DateTime
 }
 
-type Favor @createModel(accountRelation: LIST, description: "Favor on a link of us3r.network") {
+type Favor 
+  @createModel(accountRelation: LIST, description: "Favor on a link of us3r.network") 
+  @createIndex(fields: [{ path: "revoke" }]) 
+  @createIndex(fields: [{ path: "createAt" }]) 
+  @createIndex(fields: [{ path: "modifiedAt" }]) {
   creator: DID! @documentAccount
   version: CommitID! @documentVersion
   linkID: StreamID! @documentReference(model: "Link")
@@ -39,7 +58,13 @@ type Favor @createModel(accountRelation: LIST, description: "Favor on a link of 
   modifiedAt: DateTime
 }
 
-type Score @createModel(accountRelation: LIST, description: "Score on a link of us3r.network") {
+type Score 
+  @createModel(accountRelation: LIST, description: "Score on a link of us3r.network") 
+  @createIndex(fields: [{ path: "value" }])
+  @createIndex(fields: [{ path: "text" }])
+  @createIndex(fields: [{ path: "revoke" }])
+  @createIndex(fields: [{ path: "createAt" }]) 
+  @createIndex(fields: [{ path: "modifiedAt" }]) {
   creator: DID! @documentAccount
   version: CommitID! @documentVersion
   linkID: StreamID! @documentReference(model: "Link")

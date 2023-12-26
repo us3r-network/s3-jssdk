@@ -1,25 +1,51 @@
-type Favor @loadModel(id: "kjzl6hvfrbw6cb7lwvteayki4ox8s3lupuewby4gfjlxrkfegbhmodmokdz7596") {
-  id: ID!
-}
+type Favor 
+  @loadModel(id: "kjzl6hvfrbw6cb7lwvteayki4ox8s3lupuewby4gfjlxrkfegbhmodmokdz7596")
+    @createIndex(fields: [{ path: "revoke" }]) 
+    @createIndex(fields: [{ path: "createAt" }]) 
+    @createIndex(fields: [{ path: "modifiedAt" }]) {
+    id: ID!
+  }
+  
+  type Score 
+    @loadModel(id: "kjzl6hvfrbw6c7rikzda322kjfonr67looylk4nivze2wr7cgm861yjepl1qjpu")
+    @createIndex(fields: [{ path: "value" }])
+    @createIndex(fields: [{ path: "text" }])
+    @createIndex(fields: [{ path: "revoke" }]) 
+    @createIndex(fields: [{ path: "createAt" }]) 
+    @createIndex(fields: [{ path: "modifiedAt" }]) {
+    id: ID!
+  }
+  
+  type Comment
+    @loadModel(id: "kjzl6hvfrbw6c6mg1xohqe4eukt3hauxgsgdhwqvcevjgdlrj6b7s7rqsjcwyl2")
+    @createIndex(fields: [{ path: "text" }])
+    @createIndex(fields: [{ path: "revoke" }]) 
+    @createIndex(fields: [{ path: "createAt" }]) 
+    @createIndex(fields: [{ path: "modifiedAt" }]) {
+    id: ID!
+  }
+  
+  type Vote 
+    @loadModel(id: "kjzl6hvfrbw6c8o023d8jq7hdy0tac2icdw7ac44r9esf0htu3xmxlgzadfratb") 
+    @createIndex(fields: [{ path: "revoke" }]) 
+    @createIndex(fields: [{ path: "createAt" }]) 
+    @createIndex(fields: [{ path: "modifiedAt" }]) {
+    id: ID!
+  }
 
-type Score @loadModel(id: "kjzl6hvfrbw6c7rikzda322kjfonr67looylk4nivze2wr7cgm861yjepl1qjpu") {
-  id: ID!
-}
-
-type Comment @loadModel(id: "kjzl6hvfrbw6c6mg1xohqe4eukt3hauxgsgdhwqvcevjgdlrj6b7s7rqsjcwyl2") {
-  id: ID!
-}
-
-type Vote @loadModel(id: "kjzl6hvfrbw6c8o023d8jq7hdy0tac2icdw7ac44r9esf0htu3xmxlgzadfratb") {
-  id: ID!
-}
-type Link @loadModel(id: "kjzl6hvfrbw6c5k700w9ff9o7y243g2wifpx9bdmdrvnjteu3annxfd3kljtp6w" ) {
-  votesCount: Int! @relationCountFrom(model: "Vote", property: "linkID")
-  votes: [Vote]! @relationFrom(model: "Vote", property: "linkID")
-	commentsCount: Int! @relationCountFrom(model: "Comment", property: "linkID")
-  comments: [Comment]! @relationFrom(model: "Comment", property: "linkID")
-	favorsCount: Int! @relationCountFrom(model: "Favor", property: "linkID")
-  favors: [Favor]! @relationFrom(model: "Favor", property: "linkID")
-  scoresCount: Int! @relationCountFrom(model: "Score", property: "linkID")
-  scores: [Score]! @relationFrom(model: "Score", property: "linkID")
-}
+  type Link
+    @loadModel(id: "kjzl6hvfrbw6c5k700w9ff9o7y243g2wifpx9bdmdrvnjteu3annxfd3kljtp6w" )
+    @createIndex(fields: [{ path: "url" }])
+    @createIndex(fields: [{ path: "type" }])
+    @createIndex(fields: [{ path: "title" }]) 
+    @createIndex(fields: [{ path: "createAt" }]) 
+    @createIndex(fields: [{ path: "modifiedAt" }]) {
+    votesCount: Int! @relationCountFrom(model: "Vote", property: "linkID")
+    votes: [Vote]! @relationFrom(model: "Vote", property: "linkID")
+    commentsCount: Int! @relationCountFrom(model: "Comment", property: "linkID")
+    comments: [Comment]! @relationFrom(model: "Comment", property: "linkID")
+    favorsCount: Int! @relationCountFrom(model: "Favor", property: "linkID")
+    favors: [Favor]! @relationFrom(model: "Favor", property: "linkID")
+    scoresCount: Int! @relationCountFrom(model: "Score", property: "linkID")
+    scores: [Score]! @relationFrom(model: "Score", property: "linkID")
+  }

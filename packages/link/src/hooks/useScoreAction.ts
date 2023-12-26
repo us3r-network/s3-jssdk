@@ -6,11 +6,12 @@ import {
   useSession,
 } from "@us3r-network/auth-with-rainbowkit";
 import { useLinkScores } from "./useLinkScores";
-
+import { Link } from "@us3r-network/data-model";
 export const useScoreAction = (
   linkId: string,
+  unknownLinkParam?: Link | undefined,
   opts?: {
-    onSuccessfullyScore?: () => void;
+    onSuccessfullyScore?: (linkId: string) => void;
     onFailedScore?: (errMsg: string) => void;
   }
 ) => {
@@ -20,7 +21,10 @@ export const useScoreAction = (
   const session = useSession();
   const { s3LinkModalAuthed } = useLinkState();
 
-  const scoringLinkIds = useStore((state) => state.scoringLinkIds);
+  const scoringLinkIds = useStore((state) => state.scoringLinkIds);  
+  const upsertOneInCacheLinkScores = useStore(
+    (state) => state.upsertOneInCacheLinkScores
+  );
   const addOneToScoringLinkIds = useStore(
     (state) => state.addOneToScoringLinkIds
   );
@@ -47,8 +51,8 @@ export const useScoreAction = (
   );
 
   const isDisabled = useMemo(
-    () => !isFetched || isScoring,
-    [isFetched, isScoring]
+    () => (!isFetched && !unknownLinkParam?.url) || isScoring,
+    [isFetched, isScoring, unknownLinkParam?.url]
   );
 
   const findCurrUserScore = useMemo(
@@ -72,6 +76,12 @@ export const useScoreAction = (
         return;
       }
       try {
+        // create link if not exist
+        if (!linkId && unknownLinkParam && unknownLinkParam.url && unknownLinkParam.type) {
+          const unknownLink = await s3LinkModel?.fetchLink(unknownLinkParam);
+          if (unknownLink && unknownLink?.id) linkId = unknownLink?.id;
+          upsertOneInCacheLinkScores(linkId,{})
+        }
         addOneToScoringLinkIds(linkId);
         const res = await s3LinkModel?.createScore({
           value,
@@ -101,7 +111,7 @@ export const useScoreAction = (
           addOneToPersonalScores({ ...scoreData });
         }
 
-        if (opts?.onSuccessfullyScore) opts.onSuccessfullyScore();
+        if (opts?.onSuccessfullyScore) opts.onSuccessfullyScore(linkId);
       } catch (error) {
         const errMsg = (error as any)?.message;
         if (opts?.onFailedScore) opts.onFailedScore(errMsg);
@@ -121,6 +131,8 @@ export const useScoreAction = (
       opts?.onSuccessfullyScore,
       opts?.onFailedScore,
       addOneToPersonalScores,
+      unknownLinkParam?.url,
+      unknownLinkParam?.type,
     ]
   );
 
@@ -160,7 +172,7 @@ export const useScoreAction = (
           updateOneInPersonalScores(scoreId, scoreData);
         }
 
-        if (opts?.onSuccessfullyScore) opts.onSuccessfullyScore();
+        if (opts?.onSuccessfullyScore) opts.onSuccessfullyScore(linkId);
       } catch (error) {
         const errMsg = (error as any)?.message;
         if (opts?.onFailedScore) opts.onFailedScore(errMsg);

@@ -2,7 +2,7 @@ import {
   ListBoxItem as AriaItem,
   Button,
   ListBoxItemProps,
-  ItemRenderProps,
+  ListBoxItemRenderProps,
   ListBox,
   ListBoxProps,
 } from "react-aria-components";
@@ -49,7 +49,7 @@ function Item({
   ...props
 }: ChildrenRenderProps<
   ListBoxItemProps<Score>,
-  ItemRenderProps & ScoreReviewsItemContextValue
+  ListBoxItemRenderProps & ScoreReviewsItemContextValue
 >) {
   if (!value) {
     throw new Error("ScoreReviews.Item must have a value");
@@ -155,7 +155,7 @@ function CreateAt({
 }
 
 function ItemDefaultChildren() {
-  const { linkId } = useScoreReviewsState();
+  const { linkId, link } = useScoreReviewsState();
   const { data, isLoginUserScore } = useScoreReviewsItemState();
   const { id } = data;
   const [isOpenEdit, setIsOpenEdit] = useState(false);
@@ -184,6 +184,7 @@ function ItemDefaultChildren() {
             >
               <ScoreForm
                 linkId={linkId}
+                link={link}
                 scoreId={id}
                 onSuccessfullyScore={() => {
                   setIsOpenEdit(false);

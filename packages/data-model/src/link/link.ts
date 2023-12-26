@@ -41,7 +41,11 @@ export type LinkField =
   | "votesCount"
   | "commentsCount"
   | "favorsCount"
-  | "scoresCount";
+  | "scoresCount"
+  | "votes"
+  | "comments"
+  | "favors"
+  | "scores";
 
 const DEFAULT_LINK_FIELDS: LinkField[] = [
   "url",
@@ -52,6 +56,12 @@ const DEFAULT_LINK_FIELDS: LinkField[] = [
   "modifiedAt",
 ];
 
+const ALL_LINK_FIELDS: LinkField[] = [
+  ...DEFAULT_LINK_FIELDS,
+  "votesCount","commentsCount","favorsCount","scoresCount",
+  "votes","comments","favors","scores"
+];
+
 export class S3LinkModel extends S3Model {
   constructor(
     ceramic: CeramicApi | string,
@@ -59,7 +69,7 @@ export class S3LinkModel extends S3Model {
   ) {
     super(
       ceramic,
-      definition ?? (linkDefinition as RuntimeCompositeDefinition)
+      definition ?? (linkDefinition as unknown as RuntimeCompositeDefinition)
     );
   }
 
@@ -70,14 +80,18 @@ export class S3LinkModel extends S3Model {
   }
 
   /**
-   *
+   * link
    */
   public async queryPersonalLinks({
+    filters = {"where":{"url":{"isNull":false}}},
+    sort = {"createAt":"DESC"},
     first = 10,
     after = "",
     linkFields = DEFAULT_LINK_FIELDS,
   }: {
-    first: number;
+    filters?: any;
+    sort?: any;
+    first?: number;
     after?: string;
     linkFields?: LinkField[];
   }) {
@@ -87,9 +101,9 @@ export class S3LinkModel extends S3Model {
         linkList: Page<Link>;
       };
     }>(`
-      query {
+      query ($input: LinkFiltersInput!, $sortInput: LinkSortingInput!) {
         viewer {
-          linkList(first: ${first}, after: "${after}") {
+          linkList(filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
             edges {
               node {
                 id,
@@ -108,65 +122,34 @@ export class S3LinkModel extends S3Model {
           }
         }
       }
-    `);
-    return linkListData;
-  }
-
-  public async queryPersonalLinksDesc({
-    last = 10,
-    before = "",
-    linkFields = DEFAULT_LINK_FIELDS,
-  }: {
-    last: number;
-    before?: string;
-    linkFields?: LinkField[];
-  }) {
-    const composeClient = this.composeClient;
-    const linkListData = await composeClient.executeQuery<{
-      viewer: {
-        linkList: Page<Link>;
-      };
-    }>(`
-      query {
-        viewer {
-          linkList(last: ${last}, before: "${before}") {
-            edges {
-              node {
-                id,
-                creator {
-                  id
-                },
-                ${linkFields.join(",")}
-              }
-            }
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-              startCursor
-              endCursor
-            }
-          }
-        }
-      }
-    `);
+    `, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
     return linkListData;
   }
 
   public async queryLinks({
+    filters = {"where":{"url":{"isNull":false}}},
+    sort = {"createAt":"DESC"},
     first = 10,
     after = "",
     linkFields = DEFAULT_LINK_FIELDS,
   }: {
-    first: number;
+    filters?: any;
+    sort?: any;
+    first?: number;
     after?: string;
     linkFields?: LinkField[];
   }) {
+    // console.log("queryLinks", filters, sort, first, after, linkFields);
     const composeClient = this.composeClient;
     const res = await composeClient.executeQuery<{
       linkIndex: Page<Link>;
     }>(`
-      query {
-        linkIndex(first: ${first}, after: "${after}") {
+      query ($input: LinkFiltersInput!, $sortInput: LinkSortingInput!) {
+        linkIndex(filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
           edges {
             node {
               id,
@@ -184,44 +167,11 @@ export class S3LinkModel extends S3Model {
           }
         }
       }
-    `);
-
-    return res;
-  }
-
-  public async queryLinksDesc({
-    last = 10,
-    before = "",
-    linkFields = DEFAULT_LINK_FIELDS,
-  }: {
-    last: number;
-    before?: string;
-    linkFields?: LinkField[];
-  }) {
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      linkIndex: Page<Link>;
-    }>(`
-      query {
-        linkIndex(last: ${last}, before: "${before}") {
-          edges {
-            node {
-              id,
-              creator {
-                id
-              },
-              ${linkFields.join(",")}
-            }
-          }
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-        }
-      }
-    `);
+    `, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
 
     return res;
   }
@@ -271,9 +221,36 @@ export class S3LinkModel extends S3Model {
     return res;
   }
 
+  public async upsertLink(link: Link) {
+    // console.log("upsertLink", link)
+    const resp = await this.queryLinks(
+      { 
+        filters: {
+            "where" : {
+              "url" : { 
+                "equalTo" : link.url
+              },
+              
+              "type" : { 
+                "equalTo" : link.type
+              }
+            },
+          },
+        first: 20 
+      }
+    );
+    const existLinkIndex = resp.data?.linkIndex;
+    if (existLinkIndex && existLinkIndex.edges.length > 0) {
+      const existLink = existLinkIndex.edges[0].node;
+      if (existLink?.id)
+        return this.updateLink(existLink.id, link);
+    }
+    return this.createLink(link);
+  }
+
   public async queryLink(
     id: string,
-    linkFields: LinkField[] = DEFAULT_LINK_FIELDS
+    linkFields: LinkField[] = ALL_LINK_FIELDS
   ) {
     const composeClient = this.composeClient;
     const res = await composeClient.executeQuery<{
@@ -295,7 +272,42 @@ export class S3LinkModel extends S3Model {
 
     return res;
   }
-
+  
+  public async fetchLink(link: Link) {
+    try {
+      const filters = {
+        "where" : {
+          "url" : { 
+            "equalTo" : link.url
+          },
+          "type" : { 
+            "equalTo" : link.type
+          }
+        },
+      };
+      const resp = await this.queryLinks(
+        { 
+          filters
+        }
+      );
+      if (resp.data?.linkIndex.edges.length === 0) {
+        link.createAt = new Date().toISOString();
+        const newLinkResp = await this.createLink(link);
+        const linkId = newLinkResp.data?.createLink.document.id;
+        if (linkId){
+          const newLink = await this.queryLink(linkId, DEFAULT_LINK_FIELDS);
+          return newLink.data?.node;
+        }else{
+          return Promise.reject("createLink failed");
+        }
+      }else{
+        return resp.data?.linkIndex.edges[0].node;
+      }
+    } catch (error) {
+      console.log("fetchLink", error);
+      return Promise.reject(error);
+    }
+  }
   /**
    * vote
    */
@@ -349,9 +361,13 @@ export class S3LinkModel extends S3Model {
   }
 
   public async queryPersonalVotes({
+    filters = {"or":[{"where":{"revoke":{"isNull":true}},},{"where":{"revoke":{"equalTo":false}},}]},
+    sort = {"createAt":"DESC"},
     first = 10,
     after = "",
   }: {
+    filters?: any;
+    sort?: any;
     first: number;
     after?: string;
   }) {
@@ -361,9 +377,9 @@ export class S3LinkModel extends S3Model {
         voteList: Page<Vote>;
       };
     }>(`
-      query {
+      query ($input: VoteFiltersInput!, $sortInput: VoteSortingInput!) {
         viewer {
-          voteList(first: ${first}, after: "${after}") {
+          voteList(filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
             edges {
               node {
                 id
@@ -393,366 +409,62 @@ export class S3LinkModel extends S3Model {
           }
         }
       }
-    `);
-    return res;
-  }
-
-  public async queryPersonalVotesDesc({
-    last = 10,
-    before = "",
-  }: {
-    last: number;
-    before?: string;
-  }) {
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      viewer: {
-        voteList: Page<Vote>;
-      };
-    }>(`
-      query {
-        viewer {
-          voteList(last: ${last}, before: "${before}") {
-            edges {
-              node {
-                id
-                type
-                creator {
-                    id
-                }
-                revoke
-                createAt
-                modifiedAt
-                link {
-                  id
-                  title
-                  createAt
-                  creator {
-                    id
-                  }
-                }
-              }
-            }
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-              startCursor
-              endCursor
-            }
-          }
-        }
-      }
-    `);
-    return res;
-  }
-
-  /**
-   * score
-   */
-  public async createScore(input: ScoreInput) {
-    const createMutation = `
-      mutation CreateScore($input: CreateScoreInput!) {
-        createScore(input: $input) {
-          document {
-            id
-          }
-        }
-      }
-    `;
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      createScore: { document: { id: string } };
-    }>(createMutation, {
-      input: {
-        content: {
-          ...input,
-          createAt: new Date().toISOString(),
-        },
-      },
+    `, 
+    {
+      input: filters,
+      sortInput: sort,
     });
     return res;
   }
 
-  public async updateScore(id: string, input: Partial<ScoreInput>) {
-    const updateMutation = `
-      mutation UpdateScore($input: UpdateScoreInput!) {
-        updateScore(input: $input) {
-          document {
-            id
-          }
-        }
-      }
-    `;
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      updateScore: { document: { id: string } };
-    }>(updateMutation, {
-      input: {
-        id: id,
-        content: {
-          ...input,
-          modifiedAt: new Date().toISOString(),
-        },
-      },
-    });
-    return res;
-  }
-
-  public async queryPersonalScores({
+  public async queryLinkVotes({
+    linkId,
+    filters = {"where":{"revoke":{"equalTo":false}}},
+    sort = {"createAt":"DESC"},
     first = 10,
     after = "",
   }: {
-    first: number;
+    linkId: string;
+    filters?: any;
+    sort?: any;
+    first?: number;
     after?: string;
+    linkFields?: LinkField[];
   }) {
     const composeClient = this.composeClient;
     const res = await composeClient.executeQuery<{
-      viewer: {
-        scoreList: Page<Score>;
+      node: {
+        votes: Page<Vote>;
+        votesCount: number; // this count is including revoked votes
       };
     }>(`
-      query {
-        viewer {
-          scoreList(first: ${first}, after: "${after}") {
-            edges {
-              node {
-                id
-                text
-                value
-                creator {
+      query ($input: VoteFiltersInput!, $sortInput: VoteSortingInput!) {
+        node(id: "${linkId}") {
+          ...on Link {
+            votesCount
+            votes (filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
+              edges {
+                node {
                   id
-                }
-                revoke
-                createAt
-                modifiedAt
-                link {
-                  id
-                  title
-                  createAt
-                  creator {
-                    id
-                  }
-                  url
-                  data
+                  linkID
                   type
-                  
-                }
-              }
-            }
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-              startCursor
-              endCursor
-            }
-          }
-        }
-      }
-    `);
-    return res;
-  }
-
-  public async queryPersonalScoresDesc({
-    last = 10,
-    before = "",
-  }: {
-    last: number;
-    before?: string;
-  }) {
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      viewer: {
-        scoreList: Page<Score>;
-      };
-    }>(`
-      query {
-        viewer {
-          scoreList(last: ${last}, before: "${before}") {
-            edges {
-              node {
-                id
-                text
-                value
-                creator {
-                  id
-                }
-                revoke
-                createAt
-                modifiedAt
-                link {
-                  id
-                  title
+                  revoke
                   createAt
+                  modifiedAt
                   creator {
                     id
                   }
-                  url
-                  data
-                  type
-                  
                 }
               }
             }
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-              startCursor
-              endCursor
-            }
           }
         }
-      }
-    `);
-    return res;
-  }
-
-  /**
-   * comment
-   */
-  public async createComment(input: CommentInput) {
-    const createMutation = `
-      mutation CreateComment($input: CreateCommentInput!) {
-        createComment(input: $input) {
-          document {
-            id
-          }
-        }
-      }
-    `;
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      createComment: { document: { id: string } };
-    }>(createMutation, {
-      input: {
-        content: {
-          ...input,
-          createAt: new Date().toISOString(),
-        },
-      },
+      }`, 
+    {
+      input: filters,
+      sortInput: sort,
     });
-    return res;
-  }
 
-  public async updateComment(commentId: string, input: Partial<CommentInput>) {
-    const updateMutation = `
-      mutation UpdateComment($input: UpdateCommentInput!) {
-        updateComment(input: $input) {
-          document {
-            id
-          }
-        }
-      }
-    `;
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      updateComment: { document: { id: string } };
-    }>(updateMutation, {
-      input: {
-        id: commentId,
-        content: {
-          ...input,
-          modifiedAt: new Date().toISOString(),
-        },
-      },
-    });
-    return res;
-  }
-
-  public async queryPersonalComments({
-    first = 10,
-    after = "",
-  }: {
-    first: number;
-    after?: string;
-  }) {
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      viewer: {
-        commentList: Page<Comment>;
-      };
-    }>(`
-      query {
-        viewer {
-          commentList(first: ${first}, after: "${after}") {
-            edges {
-              node {
-                id
-                text
-                creator {
-                  id
-                }
-                revoke
-                createAt
-                modifiedAt
-                link {
-                  id
-                  title
-                  createAt
-                  creator {
-                    id
-                  }
-                }
-              }
-            }
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-              startCursor
-              endCursor
-            }
-          }
-        }
-      }
-    `);
-    return res;
-  }
-
-  public async queryPersonalCommentsDesc({
-    last = 10,
-    before = "",
-  }: {
-    last: number;
-    before?: string;
-  }) {
-    const composeClient = this.composeClient;
-    const res = await composeClient.executeQuery<{
-      viewer: {
-        commentList: Page<Comment>;
-      };
-    }>(`
-      query {
-        viewer {
-          commentList(last: ${last}, before: "${before}") {
-            edges {
-              node {
-                id
-                text
-                creator {
-                  id
-                }
-                revoke
-                createAt
-                modifiedAt
-                link {
-                  id
-                  title
-                  createAt
-                  creator {
-                    id
-                  }
-                }
-              }
-            }
-            pageInfo {
-              hasNextPage
-              hasPreviousPage
-              startCursor
-              endCursor
-            }
-          }
-        }
-      }
-    `);
     return res;
   }
 
@@ -809,9 +521,13 @@ export class S3LinkModel extends S3Model {
   }
 
   public async queryPersonalFavors({
+    filters = {"or":[{"where":{"revoke":{"isNull":true}},},{"where":{"revoke":{"equalTo":false}},}]},
+    sort = {"createAt":"DESC"},
     first = 10,
     after = "",
   }: {
+    filters?: any;
+    sort?: any;
     first: number;
     after?: string;
   }) {
@@ -821,9 +537,9 @@ export class S3LinkModel extends S3Model {
         favorList: Page<Favor>;
       };
     }>(`
-      query {
+      query ($input: FavorFiltersInput!, $sortInput: FavorSortingInput!) {
         viewer {
-          favorList(first: ${first}, after: "${after}") {
+          favorList(filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
             edges {
               node {
                 id
@@ -855,29 +571,140 @@ export class S3LinkModel extends S3Model {
           }
         }
       }
-    `);
+    `, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
     return res;
   }
 
-  public async queryPersonalFavorsDesc({
-    last = 10,
-    before = "",
+  public async queryLinkFavors({
+    linkId,
+    filters = {"where":{"revoke":{"equalTo":false}}},
+    sort = {"createAt":"DESC"},
+    first = 10,
+    after = "",
   }: {
-    last: number;
-    before?: string;
+    linkId: string;
+    filters?: any;
+    sort?: any;
+    first?: number;
+    after?: string;
+    linkFields?: LinkField[];
+  }) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      node: {
+        favors: Page<Favor>;
+        favorsCount: number; // this count is including revoked favors
+      };
+    }>(`
+      query ($input: FavorFiltersInput!, $sortInput: FavorSortingInput!) {
+        node(id: "${linkId}") {
+          ...on Link {
+            favorsCount
+            favors (filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
+              edges {
+                node {
+                  id
+                  linkID
+                  revoke
+                  createAt
+                  modifiedAt
+                  creator {
+                    id
+                  }
+                }
+              }
+            }
+          }
+        }
+      }`, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
+
+    return res;
+  }
+
+  /**
+   * comment
+   */
+  public async createComment(input: CommentInput) {
+    const createMutation = `
+      mutation CreateComment($input: CreateCommentInput!) {
+        createComment(input: $input) {
+          document {
+            id
+          }
+        }
+      }
+    `;
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      createComment: { document: { id: string } };
+    }>(createMutation, {
+      input: {
+        content: {
+          ...input,
+          createAt: new Date().toISOString(),
+        },
+      },
+    });
+    return res;
+  }
+
+  public async updateComment(commentId: string, input: Partial<CommentInput>) {
+    const updateMutation = `
+      mutation UpdateComment($input: UpdateCommentInput!) {
+        updateComment(input: $input) {
+          document {
+            id
+          }
+        }
+      }
+    `;
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      updateComment: { document: { id: string } };
+    }>(updateMutation, {
+      input: {
+        id: commentId,
+        content: {
+          ...input,
+          modifiedAt: new Date().toISOString(),
+        },
+      },
+    });
+    return res;
+  }
+
+  public async queryPersonalComments({
+    filters = {"or":[{"where":{"revoke":{"isNull":true}},},{"where":{"revoke":{"equalTo":false}},}]},
+    sort = {"createAt":"DESC"},
+    first = 10,
+    after = "",
+  }: {
+    filters?: any;
+    sort?: any;
+    first: number;
+    after?: string;
   }) {
     const composeClient = this.composeClient;
     const res = await composeClient.executeQuery<{
       viewer: {
-        favorList: Page<Favor>;
+        commentList: Page<Comment>;
       };
     }>(`
-      query {
+      query ($input: CommentFiltersInput!, $sortInput: CommentSortingInput!) {
         viewer {
-          favorList(last: ${last}, before: "${before}") {
+          commentList(filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
             edges {
               node {
                 id
+                text
                 creator {
                   id
                 }
@@ -886,14 +713,11 @@ export class S3LinkModel extends S3Model {
                 modifiedAt
                 link {
                   id
-                  url
-                  type
+                  title
                   createAt
                   creator {
                     id
                   }
-                  data
-                  title
                 }
               }
             }
@@ -906,7 +730,229 @@ export class S3LinkModel extends S3Model {
           }
         }
       }
-    `);
+    `, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
     return res;
   }
+
+  public async queryLinkComments({
+    linkId,
+    filters = {"where":{"revoke":{"equalTo":false}}},
+    sort = {"createAt":"DESC"},
+    first = 10,
+    after = "",
+  }: {
+    linkId: string;
+    filters?: any;
+    sort?: any;
+    first?: number;
+    after?: string;
+    linkFields?: LinkField[];
+  }) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      node: {
+        comments: Page<Comment>;
+        commentsCount: number; // this count is including revoked comments
+      };
+    }>(`
+      query ($input: CommentFiltersInput!, $sortInput: CommentSortingInput!) {
+        node(id: "${linkId}") {
+          ...on Link {
+            commentsCount
+            comments (filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
+              edges {
+                node {
+                  id
+                  linkID
+                  text
+                  revoke
+                  createAt
+                  modifiedAt
+                  creator {
+                    id
+                  }
+                }
+              }
+            }
+          }
+        }
+      }`, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
+
+    return res;
+  }
+
+  /**
+   * score
+   */
+  public async createScore(input: ScoreInput) {
+    const createMutation = `
+      mutation CreateScore($input: CreateScoreInput!) {
+        createScore(input: $input) {
+          document {
+            id
+          }
+        }
+      }
+    `;
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      createScore: { document: { id: string } };
+    }>(createMutation, {
+      input: {
+        content: {
+          ...input,
+          createAt: new Date().toISOString(),
+        },
+      },
+    });
+    return res;
+  }
+
+  public async updateScore(id: string, input: Partial<ScoreInput>) {
+    const updateMutation = `
+      mutation UpdateScore($input: UpdateScoreInput!) {
+        updateScore(input: $input) {
+          document {
+            id
+          }
+        }
+      }
+    `;
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      updateScore: { document: { id: string } };
+    }>(updateMutation, {
+      input: {
+        id: id,
+        content: {
+          ...input,
+          modifiedAt: new Date().toISOString(),
+        },
+      },
+    });
+    return res;
+  }
+
+  public async queryPersonalScores({
+    filters = {"or":[{"where":{"revoke":{"isNull":true}},},{"where":{"revoke":{"equalTo":false}},}]},
+    sort = {"createAt":"DESC"},
+    first = 10,
+    after = "",
+  }: {
+    filters?: any;
+    sort?: any;
+    first: number;
+    after?: string;
+  }) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      viewer: {
+        scoreList: Page<Score>;
+      };
+    }>(`
+      query ($input: ScoreFiltersInput!, $sortInput: ScoreSortingInput!) {
+        viewer {
+          scoreList(filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
+            edges {
+              node {
+                id
+                text
+                value
+                creator {
+                  id
+                }
+                revoke
+                createAt
+                modifiedAt
+                link {
+                  id
+                  title
+                  createAt
+                  creator {
+                    id
+                  }
+                  url
+                  data
+                  type
+                  
+                }
+              }
+            }
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
+              startCursor
+              endCursor
+            }
+          }
+        }
+      }
+    `, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
+    return res;
+  }
+
+  public async queryLinkScores({
+    linkId,
+    filters = {"where":{"revoke":{"equalTo":false}}},
+    sort = {"createAt":"DESC"},
+    first = 10,
+    after = "",
+  }: {
+    linkId: string;
+    filters?: any;
+    sort?: any;
+    first?: number;
+    after?: string;
+    linkFields?: LinkField[];
+  }) {
+    const composeClient = this.composeClient;
+    const res = await composeClient.executeQuery<{
+      node: {
+        scores: Page<Score>;
+        scoresCount: number; // this count is including revoked scores
+      };
+    }>(`
+      query ($input: ScoreFiltersInput!, $sortInput: ScoreSortingInput!) {
+        node(id: "${linkId}") {
+          ...on Link {
+            scoresCount
+            scores (filters: $input, sorting: $sortInput, first: ${first}, after: "${after}") {
+              edges {
+                node {
+                  id
+                  text
+                  value
+                  linkID
+                  revoke
+                  createAt
+                  modifiedAt
+                  creator {
+                    id
+                  }
+                }
+              }
+            }
+          }
+        }
+      }`, 
+    {
+      input: filters,
+      sortInput: sort,
+    });
+
+    return res;
+  }
+
 }

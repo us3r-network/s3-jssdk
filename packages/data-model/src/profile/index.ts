@@ -42,7 +42,7 @@ export class S3ProfileModel extends S3Model {
   ) {
     super(
       ceramic,
-      definition ?? (profileDefinition as RuntimeCompositeDefinition)
+      definition ?? (profileDefinition as unknown as RuntimeCompositeDefinition)
     );
   }
   public async queryPersonalProfile() {

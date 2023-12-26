@@ -31,8 +31,8 @@ export class S3ModelCollectionModel extends S3Model {
       ceramic,
       definition ??
         (network === "mainnet"
-          ? (collectionDefinitionMainnet as RuntimeCompositeDefinition)
-          : (collectionDefinitionTestnet as RuntimeCompositeDefinition))
+          ? (collectionDefinitionMainnet as unknown as RuntimeCompositeDefinition)
+          : (collectionDefinitionTestnet as unknown as RuntimeCompositeDefinition))
     );
   }
 

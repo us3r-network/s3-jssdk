@@ -11,11 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@ceramicnetwork/core": "^2.31.0",
-    "dids": "^4.0.0",
+    "@ceramicnetwork/core": "^3.1.0",
+    "dids": "^4.0.4",
     "ipfs-core": "0.17",
     "jest-environment-node": "^29.5.0",
-    "key-did-provider-ed25519": "^3.0.0",
+    "key-did-provider-ed25519": "^3.0.2",
     "key-did-resolver": "^3.0.0",
     "tmp-promise": "^3.0.3",
     "uint8arrays": "^4.0.3"

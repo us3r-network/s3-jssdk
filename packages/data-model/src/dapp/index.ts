@@ -33,8 +33,8 @@ export class S3DappModel extends S3Model {
       ceramic,
       definition ??
         (network === "mainnet"
-          ? (dappDefinitionMainnet as RuntimeCompositeDefinition)
-          : (dappDefinitionTestnet as RuntimeCompositeDefinition))
+          ? (dappDefinitionMainnet as unknown as RuntimeCompositeDefinition)
+          : (dappDefinitionTestnet as unknown as RuntimeCompositeDefinition))
     );
   }
 

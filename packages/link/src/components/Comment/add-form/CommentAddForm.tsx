@@ -1,3 +1,11 @@
+/*
+ * @Author: bufan bufan@hotmail.com
+ * @Date: 2023-07-19 11:24:59
+ * @LastEditors: bufan bufan@hotmail.com
+ * @LastEditTime: 2023-12-14 17:28:20
+ * @FilePath: /s3-jssdk/packages/link/src/components/Comment/add-form/CommentAddForm.tsx
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import { HTMLAttributes, useCallback, useEffect, useState } from "react";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import CommentAddFormElements from "./CommentAddFormElements";
@@ -8,12 +16,18 @@ import {
 import { CommentAddFormDefaultChildren } from "./CommentAddFormDefaultChildren";
 import { useIsAuthenticated } from "@us3r-network/auth-with-rainbowkit";
 import { useCommentAction } from "../../../hooks/useCommentAction";
+import { Link } from "@us3r-network/data-model";
+import { useLinks } from "../../../hooks/useLinks";
 
 export interface CommentAddFormIncomingProps {
   /**
    * link stream id.
    */
-  linkId: string;
+  linkId: string;  
+  /**
+   * link params include url and type.
+   */
+  link?: Link;
   /**
    * callback when comment is successfully added.
    */
@@ -34,6 +48,7 @@ export interface CommentAddFormProps
 
 function CommentAddFormRoot({
   linkId,
+  link,
   children,
   onSuccessfullyComment,
   onFailedComment,
@@ -42,13 +57,19 @@ function CommentAddFormRoot({
   const isAuthenticated = useIsAuthenticated();
   const [text, setText] = useState("");
   const [errMsg, setErrMsg] = useState("");
-
+  const {linkId:unknownLinkId, setLinkId} = useLinks(link);
   useEffect(() => {
     setErrMsg("");
   }, [text]);
 
-  const { isCommenting, isDisabled, onComment } = useCommentAction(linkId, {
-    onSuccessfullyComment,
+  const { isCommenting, isDisabled, onComment } = useCommentAction(
+    linkId || unknownLinkId, 
+    link, 
+    {
+    onSuccessfullyComment: (newLinkId:string) => {
+      setLinkId(newLinkId)
+      onSuccessfullyComment?.();
+    },
     onFailedComment: (errMsg) => {
       setErrMsg(errMsg);
       onFailedComment?.(errMsg);

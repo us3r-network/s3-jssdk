@@ -1,3 +1,11 @@
+/*
+ * @Author: bufan bufan@hotmail.com
+ * @Date: 2023-07-26 14:57:29
+ * @LastEditors: bufan bufan@hotmail.com
+ * @LastEditTime: 2023-12-14 17:28:36
+ * @FilePath: /s3-jssdk/packages/link/src/components/Score/form/ScoreForm.tsx
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import {
   HTMLAttributes,
   useCallback,
@@ -12,12 +20,17 @@ import { ScoreFormDefaultChildren } from "./ScoreFormDefaultChildren";
 import { useIsAuthenticated } from "@us3r-network/auth-with-rainbowkit";
 import { useScoreAction } from "../../../hooks/useScoreAction";
 import { useLinkScores } from "../../../hooks/useLinkScores";
-
+import { Link } from "@us3r-network/data-model";
+import { useLinks } from "../../../hooks/useLinks";
 export interface ScoreFormIncomingProps {
   /**
    * link stream id.
    */
   linkId: string;
+  /**
+   * link params include url and type.
+   */
+  link?: Link;
   /**
    * score stream id.
    * if provided, the form will be in edit mode
@@ -43,6 +56,7 @@ export interface ScoreFormProps
 
 function ScoreFormRoot({
   linkId,
+  link,
   scoreId,
   children,
   onSuccessfullyScore,
@@ -50,7 +64,8 @@ function ScoreFormRoot({
   ...props
 }: ScoreFormProps) {
   const isAuthenticated = useIsAuthenticated();
-  const { scores } = useLinkScores(linkId);
+  const {linkId:unknownLinkId, setLinkId} = useLinks(link);
+  const { scores } = useLinkScores(linkId||unknownLinkId);
   const score = useMemo(
     () => (scoreId ? scores.find((s) => s.id === scoreId) : null),
     [scores, scoreId]
@@ -72,9 +87,13 @@ function ScoreFormRoot({
   }, [text]);
 
   const { isScoring, isDisabled, onScoreAdd, onScoreEdit } = useScoreAction(
-    linkId,
+    linkId || unknownLinkId,
+    link,
     {
-      onSuccessfullyScore,
+      onSuccessfullyScore: (newLinkId:string) => {
+        setLinkId(newLinkId)
+        onSuccessfullyScore?.();
+      },
       onFailedScore: (errMsg) => {
         setErrMsg(errMsg);
         onFailedScore?.(errMsg);

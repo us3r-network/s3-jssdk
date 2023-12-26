@@ -7,11 +7,13 @@ import { getS3LinkModel, useLinkState } from "../LinkStateProvider";
 import { useStore } from "../store";
 import { useLinkFavors } from "./useLinkFavors";
 import { getLinkWithLinkModel } from "../utils/getLinkWithLinkModel";
+import { Link } from "@us3r-network/data-model";
 
 export const useFavorAction = (
   linkId: string,
+  unknownLinkParam?: Link | undefined,
   opts?: {
-    onSuccessfullyFavor?: (isFavored: boolean) => void;
+    onSuccessfullyFavor?: (isFavored:boolean, linkId: string) => void;
     onFailedFavor?: (errMsg: string) => void;
   }
 ) => {
@@ -22,6 +24,9 @@ export const useFavorAction = (
   const { s3LinkModalAuthed } = useLinkState();
 
   const favoringLinkIds = useStore((state) => state.favoringLinkIds);
+  const upsertOneInCacheLinkFavors = useStore(
+    (state) => state.upsertOneInCacheLinkFavors
+  );
   const addOneToFavoringLinkIds = useStore(
     (state) => state.addOneToFavoringLinkIds
   );
@@ -61,8 +66,8 @@ export const useFavorAction = (
   );
 
   const isDisabled = useMemo(
-    () => !isFetched || isFavoring,
-    [isFetched, isFavoring]
+    () => (!isFetched && !unknownLinkParam?.url) || isFavoring,
+    [isFetched, isFavoring, unknownLinkParam?.url]
   );
 
   const onFavor = useCallback(async () => {
@@ -73,6 +78,13 @@ export const useFavorAction = (
     }
     if (!s3LinkModel) return;
     try {
+      // create link if not exist
+      if (!linkId && unknownLinkParam && unknownLinkParam.url && unknownLinkParam.type) {
+        const unknownLink = await s3LinkModel?.fetchLink(unknownLinkParam);
+        if (unknownLink && unknownLink?.id){
+          linkId = unknownLink?.id;
+        }
+      }
       addOneToFavoringLinkIds(linkId);
       if (findCurrUserFavor) {
         // update favor
@@ -92,7 +104,7 @@ export const useFavorAction = (
           const link = linkRes.data?.node;
           addOneToPersonalFavors({ ...findCurrUserFavor, link });
         }
-        if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(!revoke);
+        if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(!revoke, linkId);
       } else {
         // create favor
         const res = await s3LinkModel?.createFavor({
@@ -121,7 +133,7 @@ export const useFavorAction = (
           addFavorToCacheLinkFavors(linkId, favorData);
           addOneToPersonalFavors({ ...favorData });
         }
-        if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(true);
+        if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(true, linkId);
       }
     } catch (error) {
       const errMsg = (error as any)?.message;
@@ -135,6 +147,8 @@ export const useFavorAction = (
     s3LinkModalAuthed,
     signIn,
     linkId,
+    unknownLinkParam?.url,
+    unknownLinkParam?.type,
     findCurrUserFavor,
     addOneToFavoringLinkIds,
     removeOneFromFavoringLinkIds,
@@ -148,3 +162,4 @@ export const useFavorAction = (
 
   return { isFavored, isFavoring, isDisabled, onFavor };
 };
+

@@ -1,4 +1,4 @@
-import { HTMLAttributes, useMemo } from "react";
+import { HTMLAttributes, useMemo, useState } from "react";
 import { ChildrenRenderProps, childrenRender } from "../../../utils/props";
 import ScoreDashboardElements from "./ScoreDashboardElements";
 import {
@@ -9,11 +9,18 @@ import { ScoreDashboardDefaultChildren } from "./ScoreDashboardDefaultChildren";
 import { SCORE_VALUE_MAX, SCORE_VALUE_MIN } from "../../../constants";
 import { getScoresAvgFromScores } from "../../../utils/score";
 import { useLinkScores } from "../../../hooks/useLinkScores";
+import { Link } from "@us3r-network/data-model";
+import { useLinks } from "../../../hooks/useLinks";
+
 export interface ScoreDashboardIncomingProps {
   /**
    * link stream id.
    */
   linkId: string;
+  /**
+   * link params include url and type.
+   */
+  link?: Link;
 }
 
 export interface ScoreDashboardProps
@@ -25,10 +32,12 @@ export interface ScoreDashboardProps
 
 function ScoreDashboardRoot({
   linkId,
+  link,
   children,
   ...props
 }: ScoreDashboardProps) {
-  const { isFetching, scores, scoresCount } = useLinkScores(linkId);
+  const {linkId:unknownLinkId} = useLinks(link);
+  const { isFetching, scores, scoresCount } = useLinkScores(linkId||unknownLinkId);
   const scoresAvg = useMemo(
     () => getScoresAvgFromScores(scores, scoresCount),
     [scores, scoresCount]
