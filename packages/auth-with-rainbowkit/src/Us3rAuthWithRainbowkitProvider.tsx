@@ -17,7 +17,7 @@ import {
   useState,
 } from "react";
 import { useAccount, useDisconnect, WagmiConfig } from "wagmi";
-import { Us3rAuth } from "@us3r-network/auth";
+import { Us3rAuth, AuthOpts } from "@us3r-network/auth";
 import {
   chains,
   getDefaultWagmiConfig,
@@ -61,8 +61,10 @@ const Us3rAuthWithRainbowkitContext = createContext(
 function Us3rAuthWrap({
   children,
   setRainbowAuthenticationStatus,
+  authOpts,
 }: PropsWithChildren & {
   setRainbowAuthenticationStatus: (status: AuthenticationStatus) => void;
+  authOpts?: AuthOpts | undefined;
 }) {
   const { openConnectModal } = useConnectModal();
   const { disconnect, disconnectAsync } = useDisconnect();
@@ -96,6 +98,7 @@ function Us3rAuthWrap({
         const provider = await connector?.getProvider();
         await us3rAuthInstance.auth("ethereum", {
           provider,
+          authOpts,
         });
         setStatus("authenticated");
         setRainbowAuthenticationStatus("authenticated");
@@ -181,12 +184,14 @@ export interface Us3rAuthWithRainbowkitProviderProps extends PropsWithChildren {
     darkTheme?: ThemeVars;
     lightTheme?: ThemeVars;
   };
+  authOpts?: AuthOpts ;
 }
 export default function Us3rAuthWithRainbowkitProvider({
   children,
   projectId,
   appName = "Us3rAuth",
   themeConfig,
+  authOpts,
 }: Us3rAuthWithRainbowkitProviderProps) {
   const wagmiConfig = useMemo(
     () =>
@@ -218,6 +223,7 @@ export default function Us3rAuthWithRainbowkitProvider({
         >
           <Us3rAuthWrap
             setRainbowAuthenticationStatus={setRainbowAuthenticationStatus}
+            authOpts={authOpts}
           >
             {children}
           </Us3rAuthWrap>
