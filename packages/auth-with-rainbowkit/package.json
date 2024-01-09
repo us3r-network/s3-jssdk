@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/auth-with-rainbowkit",
-  "version": "0.2.4-alpha.0",
+  "version": "0.2.4",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@us3r-network/auth": "^0.2.4-alpha.0",
+    "@us3r-network/auth": "^0.2.4",
     "buffer": "^6.0.3"
   },
   "peerDependencies": {
