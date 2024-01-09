@@ -22,6 +22,7 @@ const preview: Preview = {
           "c652d0148879353d7e965d7f6f361e59"
         }
         appName="S3 Docs"
+        authOpts={{resources:["ceramic://*"],expirationTime:''}} 
       >
         <ProfileStateProvider
           ceramicHost={

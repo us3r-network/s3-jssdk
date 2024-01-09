@@ -7,16 +7,27 @@ export const SessionAuthWithKey = "session-auth-with";
 
 export type BlockChain = "ethereum" | "solana";
 
-type EthereumAuthConfig = {
+export interface AuthOpts {
+  domain?: string
+  statement?: string
+  version?: string
+  nonce?: string
+  requestId?: string
+  expirationTime?: string
+  resources: Array<string>
+  expiresInSecs?: number
+}
+
+export type EthereumAuthConfig = {
   provider?: any;
   chainId?: string;
-  resources?: string[];
+  authOpts?: AuthOpts;
 };
 
 type SolanaAuthConfig = {
   provider?: any;
   network?: "mainnet" | "testnet" | "devnet";
-  resources?: string[];
+  authOpts?: AuthOpts;
 };
 
 type AuthConfigs = {
@@ -28,7 +39,7 @@ type AuthConfig<T extends BlockChain> = ReturnType<() => AuthConfigs[T]>;
 async function authWithEthProvider({
   provider,
   chainId,
-  resources,
+  authOpts
 }: Required<EthereumAuthConfig>) {
   const addresses = await provider.enable({
     method: "eth_requestAccounts",
@@ -36,15 +47,14 @@ async function authWithEthProvider({
   const accountId = await getAccountId(provider, addresses[0]);
   const authMethod = await EthereumWebAuth.getAuthMethod(provider, accountId);
   accountId.chainId.reference = chainId;
-  return await DIDSession.authorize(authMethod, {
-    resources,
-  });
+  console.log("authWithEthProvider", authMethod, authOpts)
+  return await DIDSession.authorize(authMethod, authOpts);
 }
 
 async function authWithSolProvider({
   provider,
   network,
-  resources,
+  authOpts
 }: Required<SolanaAuthConfig>) {
   const address = await provider.connect();
   const accountId = getAccountIdByNetwork(
@@ -52,12 +62,10 @@ async function authWithSolProvider({
     address.publicKey.toString()
   );
   const authMethod = await SolanaWebAuth.getAuthMethod(provider, accountId);
-  return await DIDSession.authorize(authMethod, {
-    resources,
-  });
+  return await DIDSession.authorize(authMethod, authOpts);
 }
 
-const defaultResources = ["ceramic://*"];
+const defaultAuthOpts = { resources: ["ceramic://*"] } as AuthOpts;
 
 export class Us3rAuth {
   session: DIDSession | undefined;
@@ -93,19 +101,20 @@ export class Us3rAuth {
     chain: T,
     config?: AuthConfig<T>
   ): Promise<void> {
+    console.log("auth", chain, config)
     switch (chain) {
       case "ethereum":
         this.session = await authWithEthProvider({
           provider: config?.provider || (window as any).ethereum,
           chainId: (config as EthereumAuthConfig)?.chainId || "1",
-          resources: config?.resources || defaultResources,
+          authOpts: config?.authOpts || defaultAuthOpts,
         });
         break;
       case "solana":
         this.session = await authWithSolProvider({
           provider: config?.provider || (window as any).phantom.solana,
           network: (config as SolanaAuthConfig)?.network || "mainnet",
-          resources: config?.resources || defaultResources,
+          authOpts: config?.authOpts || defaultAuthOpts,
         });
         break;
       default:
