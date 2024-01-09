@@ -69,7 +69,10 @@ export function VoteButton({
         setLinkId(newLinkId)
         onSuccessfullyVote?.(isFavored);
       },
-      onFailedVote,
+      onFailedVote: (err:string) => {
+        console.log("onFailedFavor", err);
+        onFailedVote?.(err);
+      },
     }
   );
 
@@ -80,7 +83,7 @@ export function VoteButton({
     "data-voting": isVoting || undefined,
     "data-disabled": isDisabled || undefined,
     isDisabled,
-    onClick: onVote,
+    onPress: onVote,
   };
 
   const businessRenderProps = {

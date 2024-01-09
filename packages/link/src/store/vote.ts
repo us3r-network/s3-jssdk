@@ -65,12 +65,20 @@ export const createVoteSlice: StateCreator<
   // votes mutations
   addVoteToCacheLinkVotes: (linkId, vote) => {
     set((state) => {
-      if (!state.cacheLinkVotes.get(linkId))
-        state.cacheLinkVotes.set(linkId, defaultLinkVotes);
-      const linkVotes = state.cacheLinkVotes.get(linkId);
-      if (!linkVotes) return;
-      linkVotes.votes.push(vote);
-      linkVotes.votesCount++;
+      if (!state.cacheLinkVotes.get(linkId)){
+        const newLinkVotes : LinkVotes = {
+          votes: [vote],
+          votesCount: 1,
+          status: "idle",
+          errMsg: "",
+        }
+        state.cacheLinkVotes.set(linkId, newLinkVotes);
+      }else{
+        const linkVotes = state.cacheLinkVotes.get(linkId);
+        if (!linkVotes) return;
+        linkVotes.votes.push(vote);
+        linkVotes.votesCount++;
+      }
     });
   },
   updateVoteInCacheLinkVotes: (linkId, voteId, vote) => {

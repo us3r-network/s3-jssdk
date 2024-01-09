@@ -107,6 +107,7 @@ export const useFavorAction = (
         if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(!revoke, linkId);
       } else {
         // create favor
+        // console.log('start favor', linkId)
         const res = await s3LinkModel?.createFavor({
           linkID: linkId,
           revoke: false,
@@ -115,6 +116,7 @@ export const useFavorAction = (
           throw new Error(res?.errors[0]?.message);
         }
         const id = res?.data?.createFavor.document.id;
+        // console.log('favoring ', res, id)
         if (id) {
           const linkRes = await getLinkWithLinkModel(s3LinkModel, linkId);
           const link = linkRes.data?.node;
@@ -131,7 +133,9 @@ export const useFavorAction = (
           };
           // update store
           addFavorToCacheLinkFavors(linkId, favorData);
-          addOneToPersonalFavors({ ...favorData });
+          // console.log('addFavorToCacheLinkFavors done! ', favorData)
+          addOneToPersonalFavors(favorData);
+          // console.log('addOneToPersonalFavors done! ', favorData)
         }
         if (opts?.onSuccessfullyFavor) opts.onSuccessfullyFavor(true, linkId);
       }
