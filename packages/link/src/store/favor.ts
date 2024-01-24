@@ -65,12 +65,20 @@ export const createFavorSlice: StateCreator<
   // favors mutations
   addFavorToCacheLinkFavors: (linkId, favor) => {
     set((state) => {
-      if (!state.cacheLinkFavors.get(linkId))
-        state.cacheLinkFavors.set(linkId, defaultLinkFavors);
-      const linkFavors = state.cacheLinkFavors.get(linkId);
-      if (!linkFavors) return;
-      linkFavors.favors.push(favor);
-      linkFavors.favorsCount++;
+      if (!state.cacheLinkFavors.get(linkId)){
+        const newLinkFavors : LinkFavors = {
+          favors: [favor],
+          favorsCount: 1,
+          status: "idle",
+          errMsg: "",
+        }
+        state.cacheLinkFavors.set(linkId, newLinkFavors);
+      }else{
+        const linkFavors = state.cacheLinkFavors.get(linkId);
+        if (!linkFavors) return;
+        linkFavors.favors.push(favor);
+        linkFavors.favorsCount++;
+      }
     });
   },
   updateFavorInCacheLinkFavors: (linkId, favorId, favor) => {

@@ -72,12 +72,23 @@ export const createScoreSlice: StateCreator<
   // scores
   addScoreToCacheLinkScores: (linkId, score) => {
     set((state) => {
-      if (!state.cacheLinkScores.get(linkId))
-        state.cacheLinkScores.set(linkId, defaultLinkScores);
-      const linkScores = state.cacheLinkScores.get(linkId);
-      if (!linkScores) return;
-      linkScores.scores.push(score);
-      linkScores.scoresCount++;
+      if (!state.cacheLinkScores.get(linkId)) {
+        const newLinkScores : LinkScores = {
+          scores: [score],
+          scoresCount: 1,
+          params: {
+            order: "desc",
+          },
+          status: "idle",
+          errMsg: "",
+        }
+        state.cacheLinkScores.set(linkId, newLinkScores);
+      } else {
+        const linkScores = state.cacheLinkScores.get(linkId);
+        if (!linkScores) return;
+        linkScores.scores.push(score);
+        linkScores.scoresCount++;
+      }
     });
   },
   updateScoreInCacheLinkScores: (linkId, scoreId, score) => {

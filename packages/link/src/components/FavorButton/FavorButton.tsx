@@ -67,10 +67,13 @@ export function FavorButton({
     link,
     {
       onSuccessfullyFavor: (isFavored:boolean, newLinkId:string) => {
-        setLinkId(newLinkId)
+        setLinkId(newLinkId);
         onSuccessfullyFavor?.(isFavored);
       },
-      onFailedFavor,
+      onFailedFavor: (err:string) => {
+        console.log("onFailedFavor", err);
+        onFailedFavor?.(err);
+      },
     }
   );
 
@@ -81,7 +84,7 @@ export function FavorButton({
     "data-favoring": isFavoring || undefined,
     "data-disabled": isDisabled || undefined,
     isDisabled,
-    onClick: onFavor,
+    onPress: onFavor,
   };
 
   const businessRenderProps = {

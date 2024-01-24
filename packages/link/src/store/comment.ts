@@ -75,12 +75,23 @@ export const createCommentSlice: StateCreator<
   // comments
   addCommentToCacheLinkComments: (linkId, comment) => {
     set((state) => {
-      if (!state.cacheLinkComments.get(linkId))
-        state.cacheLinkComments.set(linkId, defaultLinkComments);
-      const linkComments = state.cacheLinkComments.get(linkId);
-      if (!linkComments) return;
-      linkComments.comments.push(comment);
-      linkComments.commentsCount++;
+      if (!state.cacheLinkComments.get(linkId)) {
+        const newLinkComments : LinkComments = {
+          comments: [comment],
+          commentsCount: 1,
+          params: {
+            order: "desc",
+          },
+          status: "idle",
+          errMsg: "",
+        }
+        state.cacheLinkComments.set(linkId, newLinkComments);
+      } else {
+        const linkComments = state.cacheLinkComments.get(linkId);
+        if (!linkComments) return;
+        linkComments.comments.push(comment);
+        linkComments.commentsCount++;
+      }
     });
   },
   updateCommentInCacheLinkComments: (linkId, commentId, comment) => {
