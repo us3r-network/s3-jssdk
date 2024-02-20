@@ -1,0 +1,16 @@
+type Composite 
+@createModel(accountRelation: LIST, description: "Composite info of ComposeDB")
+@createIndex(fields: [{ path: "name" }])
+@createIndex(fields: [{ path: "revoke" }]) 
+@createIndex(fields: [{ path: "createAt" }]) 
+@createIndex(fields: [{ path: "modifiedAt" }]) {
+  creator: DID! @documentAccount
+  version: CommitID! @documentVersion
+  name: String! @string(minLength: 3, maxLength: 100)
+  description: String @string(maxLength: 10000)
+  schema: String! @string(maxLength: 100000)
+  encodedDefinition: String! @string(maxLength: 100000)
+  revoke: Boolean
+  createAt: DateTime
+  modifiedAt: DateTime
+}

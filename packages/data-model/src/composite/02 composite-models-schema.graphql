@@ -1,0 +1,11 @@
+type Composite 
+  @loadModel(id: "kjzl6hvfrbw6c9kigzo7cylhkiageuvjslfvj8gdouhqoo5n2iny4ny5i3lfh56") {
+  id: ID!
+}
+
+type CompositeModel @createModel(description: "Composite and Model relation", accountRelation: SET, accountRelationFields: ["compositeID", "modelID"]) {
+  compositeID: StreamID! @documentReference(model: "Composite")
+  # View to access the referenced Composite document
+  composite: Composite! @relationDocument(property: "compositeID")
+  modelID: StreamID!
+}

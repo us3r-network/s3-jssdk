@@ -1,0 +1,15 @@
+type CompositeModel 
+@loadModel(id: "kjzl6hvfrbw6c60mn52cwyzw9rpxlfdyb4tf2ppwag3pksnrcr6h8fz4pnvt3w8") {
+  id: ID!
+}
+
+type Composite 
+@loadModel(id: "kjzl6hvfrbw6c9kigzo7cylhkiageuvjslfvj8gdouhqoo5n2iny4ny5i3lfh56")
+@createIndex(fields: [{ path: "name" }])
+@createIndex(fields: [{ path: "revoke" }]) 
+@createIndex(fields: [{ path: "createAt" }]) 
+@createIndex(fields: [{ path: "modifiedAt" }]) {
+  id: ID!
+  # View to access the CompositeModel documents using this composite
+  compositeModels: [CompositeModel]! @relationFrom(model: "CompositeModel", property: "compositeID")
+}
