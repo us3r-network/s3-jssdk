@@ -1,80 +1,57 @@
 import {
-  connectorsForWallets,
-  getDefaultWallets,
+  getDefaultConfig
 } from "@rainbow-me/rainbowkit";
+import { _chains, _transports } from "@rainbow-me/rainbowkit/dist/config/getDefaultConfig";
+import { http } from "wagmi";
 import {
-  argentWallet,
-  omniWallet,
-  imTokenWallet,
-  metaMaskWallet,
-  trustWallet,
-} from "@rainbow-me/rainbowkit/wallets";
-import { Chain, configureChains, createConfig } from "wagmi";
-import {
-  mainnet,
-  goerli,
-  bsc,
-  bscTestnet,
   arbitrum,
   arbitrumGoerli,
+  base,
+  baseGoerli,
+  bsc,
+  bscTestnet,
+  goerli,
+  mainnet,
   optimism,
   optimismGoerli,
   polygon,
   polygonMumbai,
-  base,
-  baseGoerli,
   zora,
   zoraTestnet,
-} from "viem/chains";
-import { publicProvider } from "wagmi/providers/public";
+} from "wagmi/chains";
 
-export const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [
-    mainnet,
-    polygon,
-    bsc,
-    optimism,
-    arbitrum,
-    base,
-    zora,
-    goerli,
-    polygonMumbai,
-    bscTestnet,
-    arbitrumGoerli,
-    optimismGoerli,
-    baseGoerli,
-    zoraTestnet
-  ] as Chain[],
-  [publicProvider()]
-);
+export const defaultChains = [
+  mainnet,
+  polygon,
+  bsc,
+  optimism,
+  arbitrum,
+  base,
+  zora,
+  goerli,
+  polygonMumbai,
+  bscTestnet,
+  arbitrumGoerli,
+  optimismGoerli,
+  baseGoerli,
+  zoraTestnet
+];
 
 export const getDefaultWagmiConfig = () => {
-  const connectors = connectorsForWallets([
-    {
-      groupName: "Popular",
-      wallets: [metaMaskWallet({ chains, walletConnectVersion: "1" })],
+  return getDefaultConfig({
+    appName: 'Us3rAuth',
+    projectId: '',
+    chains: [mainnet],
+    transports: {
+      [mainnet.id]: http(),
     },
-    {
-      groupName: "Other",
-      wallets: [
-        argentWallet({ chains, walletConnectVersion: "1" }),
-        omniWallet({ chains, walletConnectVersion: "1" }),
-        imTokenWallet({ chains, walletConnectVersion: "1" }),
-      ],
-    },
-  ]);
-
-  return createConfig({
-    autoConnect: true,
-    connectors,
-    publicClient,
-    webSocketPublicClient,
-  });
+  })
 };
 
 export const getWagmiConfigByProjectId = (
   projectId: string,
-  appName: string
+  appName: string,
+  chains?: _chains,
 ) => {
   if (!projectId) {
     throw new Error("projectId is required");
@@ -82,29 +59,17 @@ export const getWagmiConfigByProjectId = (
   if (!appName) {
     throw new Error("appName is required");
   }
-  const { wallets } = getDefaultWallets({
+  if (!chains) {
+    chains = defaultChains as unknown as _chains;
+  }
+  const transports:_transports = chains.reduce((acc, chain) => {
+    acc = {...acc, [chain.id] : http()};
+    return acc;
+  }, {});
+  return getDefaultConfig({
     appName,
     projectId,
-    chains,
-  });
-
-  const connectors = connectorsForWallets([
-    ...wallets,
-    {
-      groupName: "Other",
-      wallets: [
-        argentWallet({ projectId, chains }),
-        trustWallet({ projectId, chains }),
-        omniWallet({ projectId, chains }),
-        imTokenWallet({ projectId, chains }),
-      ],
-    },
-  ]);
-
-  return createConfig({
-    autoConnect: true,
-    connectors,
-    publicClient,
-    webSocketPublicClient,
-  });
+    chains: chains as _chains,
+    transports
+  })
 };

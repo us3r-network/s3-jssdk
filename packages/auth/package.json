@@ -1,6 +1,6 @@
 {
   "name": "@us3r-network/auth",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -32,6 +32,6 @@
   "dependencies": {
     "@didtools/pkh-ethereum": "^0.4.1",
     "@didtools/pkh-solana": "^0.1.1",
-    "did-session": "^2.1.2"
+    "did-session": "^3.0.2"
   }
 }
